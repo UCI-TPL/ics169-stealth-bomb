@@ -14,6 +14,7 @@ public class Tile : MonoBehaviour {
         }
     }
 
+  
     protected virtual void BreakingEffect() {
         GetComponent<MeshRenderer>().materials = new Material[2] { GetComponent<MeshRenderer>().material, Resources.Load<Material>("Red") };
     }
