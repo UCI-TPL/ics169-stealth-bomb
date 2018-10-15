@@ -100,7 +100,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!65 &65452142206678974
 BoxCollider:
@@ -126,7 +126,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
-  controller: 1
+  lerp: 0
+  playerNum: 0
+  left_Joystick_X_Axis: LeftJoystickX
+  left_Joystick_Y_Axis: LeftJoystickY
+  Dpad_X_Axis: DpadX
+  Dpad_Y_Axis: DpadY
 --- !u!136 &136472898366089320
 CapsuleCollider:
   m_ObjectHideFlags: 1

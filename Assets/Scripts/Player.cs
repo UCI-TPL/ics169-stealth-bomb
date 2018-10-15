@@ -83,11 +83,12 @@ public class Player : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        // uncomment for testing a single player with keyboard if you dont have an Xbox controller!
-        /*if (Input.GetAxis("Horizontal") != 0.0 | Input.GetAxis("Vertical") != 0.0) //Left Joystick and WASD
+        // only for testing a single player with keyboard if you dont have an Xbox controller!
+        // Otherwise, comment out the first if-else block.
+        if (Input.GetAxis("Horizontal") != 0.0 | Input.GetAxis("Vertical") != 0.0) //Left Joystick and WASD
             Move("Horizontal","Vertical");
         else if (Input.GetAxis("HorizontalKey") != 0.0 | Input.GetAxis("VerticalKey") != 0.0) //D-Pad
-            Move("HorizontalKey", "VerticalKey");*/
+            Move("HorizontalKey", "VerticalKey");
 
         if (Input.GetAxis(playerPrefix + left_Joystick_X_Axis) != 0.0 | Input.GetAxis(playerPrefix + left_Joystick_Y_Axis) != 0.0) //Left Joystick
             Move(playerPrefix + left_Joystick_X_Axis, playerPrefix + left_Joystick_Y_Axis);
