@@ -10,8 +10,59 @@ public class Player : MonoBehaviour {
    public bool lerp = false;
 
    Vector3 forward, right;
+
+   [Tooltip("Represents which player this is. Only put in 1-4. Do not put 0!!! This attribute must have a value in order to work or take in input properly!!! ")]
+   public int playerNum;
+   
+   // These are the suffixes used to form a string that represents a specific input on a specific Xbox controller.
+   // The suffixes represent the types of inputs found on an Xbox controller (NOTE: more might be added later in the script).
+   [HideInInspector]
+   public string left_Joystick_X_Axis = "LeftJoystickX";
+   [HideInInspector]
+   public string left_Joystick_Y_Axis = "LeftJoystickY";
+   [HideInInspector]
+   public string Dpad_X_Axis = "DpadX";
+   [HideInInspector]
+   public string Dpad_Y_Axis = "DpadY";
+
+   // These are the prefixes used to form a string that represents a specific input on a specific Xbox controller.
+   // The prefixes represent which Xbox controller an instance of this script should take input from.
+   [HideInInspector]
+   public const string Player_1_Str = "P1_";
+   [HideInInspector]
+   public const string Player_2_Str = "P2_";
+   [HideInInspector]
+   public const string Player_3_Str = "P3_";
+   [HideInInspector]
+   public const string Player_4_Str = "P4_";
+
+   private string playerPrefix;
     
 	void Start () {
+        playerPrefix = "";
+        // Decides which player to take input from if the correct input is given.
+        switch (playerNum)
+        {
+            case 0:
+                Debug.Log("Either the player number (playerNum) was not assigned or you put in 0. Both are in invalid");
+                break;
+            case 1:
+                playerPrefix = Player_1_Str;
+                break;
+            case 2:
+                playerPrefix = Player_2_Str;
+                break;
+            case 3:
+                playerPrefix = Player_3_Str;
+                break;
+            case 4:
+                playerPrefix = Player_4_Str;
+                break;
+            default:
+                Debug.Log("This game does not support more than 4 players.");
+                break;
+        }
+
         forward = Camera.main.transform.forward; 
         forward.y = 0;
         forward = Vector3.Normalize(forward);
@@ -32,9 +83,15 @@ public class Player : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetAxis("Horizontal") != 0.0 | Input.GetAxis("Vertical") != 0.0) //Left Joystick and WASD
+        // uncomment for testing a single player with keyboard if you dont have an Xbox controller!
+        /*if (Input.GetAxis("Horizontal") != 0.0 | Input.GetAxis("Vertical") != 0.0) //Left Joystick and WASD
             Move("Horizontal","Vertical");
         else if (Input.GetAxis("HorizontalKey") != 0.0 | Input.GetAxis("VerticalKey") != 0.0) //D-Pad
-            Move("HorizontalKey", "VerticalKey");
+            Move("HorizontalKey", "VerticalKey");*/
+
+        if (Input.GetAxis(playerPrefix + left_Joystick_X_Axis) != 0.0 | Input.GetAxis(playerPrefix + left_Joystick_Y_Axis) != 0.0) //Left Joystick
+            Move(playerPrefix + left_Joystick_X_Axis, playerPrefix + left_Joystick_Y_Axis);
+        else if (Input.GetAxis(playerPrefix + Dpad_X_Axis) != 0.0 | Input.GetAxis(playerPrefix + Dpad_Y_Axis) != 0.0) //D-Pad
+            Move(playerPrefix + Dpad_X_Axis, playerPrefix + Dpad_Y_Axis);
 	}
 }
