@@ -15,10 +15,12 @@ public class TileMapEditorInspector : Editor {
     private Vector3 mousePosition;
 
     Tool LastTool = Tool.None;
+    private GUIContent[] tileSelection;
 
     void OnEnable() {
         tiles = serializedObject.FindProperty("tiles");
         LastTool = Tools.current; // Save current tool to be able to restore later
+        UpdateTileSelection();
     }
 
     private void OnDisable() {
@@ -68,10 +70,6 @@ public class TileMapEditorInspector : Editor {
     }
 
     public override void OnInspectorGUI() {
-        serializedObject.Update();
-        EditorGUILayout.PropertyField(tiles, true);
-        serializedObject.ApplyModifiedProperties();
-
         // Display controls
         {
             GUILayout.BeginVertical(GUI.skin.box); // Create a box containing controls
@@ -85,12 +83,18 @@ public class TileMapEditorInspector : Editor {
             GUILayout.BeginHorizontal();
             GUIStyle style = new GUIStyle(GUI.skin.label); // Text style for content
             style.alignment = TextAnchor.MiddleRight;
-            GUILayout.Label("Place Tile\nDelete Tile", style);
-            GUILayout.Label(": Right Mouse Button\n: Shift + Right Mouse Button");
+            GUILayout.Label("Place Tile\nDelete Tile\nChange Tile", style);
+            GUILayout.Label(": Right Mouse Button\n: Shift + Right Mouse Button\n: Select From Tile Picker");
             GUILayout.EndHorizontal();
             GUILayout.Space(3);
             GUILayout.EndVertical();
         }
+
+        serializedObject.Update();
+        EditorGUILayout.PropertyField(tiles, true);
+        serializedObject.ApplyModifiedProperties();
+
+        TileSelectorGUI();
 
         // Edit Button
         {
@@ -113,6 +117,40 @@ public class TileMapEditorInspector : Editor {
         if (GUILayout.Button("clear tiles")) {
             script.ClearTiles();
         }
+    }
+
+    Vector2 hSbarValue;
+
+    private void TileSelectorGUI() {
+        GUIStyle style = new GUIStyle(GUI.skin.button);
+        style.imagePosition = ImagePosition.ImageAbove;
+        style.fixedWidth = 75;
+        GUIStyle box = new GUIStyle(GUI.skin.box);
+        box.padding = new RectOffset(5, 5, 5, 4);
+        hSbarValue = GUILayout.BeginScrollView(hSbarValue, box, GUILayout.Height(114));
+        GUILayout.BeginHorizontal();
+        script.selectTile = GUILayout.SelectionGrid(script.selectTile, tileSelection, tileSelection.Length, style, GUILayout.Height(90));
+        GUIStyle plusButtonStyle = new GUIStyle(GUI.skin.button);
+        plusButtonStyle.fontSize = 25;
+        if (GUILayout.Button("+", plusButtonStyle, GUILayout.Height(90), GUILayout.Width(75)))
+            EditorGUIUtility.ShowObjectPicker<GameObject>(null, false, "", 0);
+        GUILayout.EndHorizontal();
+        GUILayout.EndScrollView();
+
+        // Handle Object picker
+        if (Event.current.type == EventType.ExecuteCommand && Event.current.commandName == "ObjectSelectorClosed") {
+            GameObject g = (GameObject)EditorGUIUtility.GetObjectPickerObject();
+            if (g != null && g.GetComponent<Tile>() != null) {
+                script.tiles.Add(g.GetComponent<Tile>());
+                UpdateTileSelection();
+            }
+        }
+    }
+
+    private void UpdateTileSelection() {
+        tileSelection = new GUIContent[script.tiles.Count];
+        for (int i = 0; i < tileSelection.Length; ++i)
+            tileSelection[i] = new GUIContent(script.tiles[i].gameObject.name, AssetPreview.GetAssetPreview(script.tiles[i].gameObject));
     }
 
     private Vector3 round(Vector3 v3) {

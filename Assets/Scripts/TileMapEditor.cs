@@ -5,8 +5,9 @@ using UnityEngine;
 
 public class TileMapEditor : MonoBehaviour {
 
-    public Tile[] tiles;
+    public List<Tile> tiles;
     //public HashSet<Tile> createdTiles = new HashSet<Tile>();
+    public int selectTile = 0;
     
     private GameObject _terrainParent;
     private GameObject terrainParrent {
@@ -22,7 +23,7 @@ public class TileMapEditor : MonoBehaviour {
     }
 
     public void CreateTile(Vector3 pos) {
-        GameObject g = Instantiate<GameObject>(tiles[0].gameObject, pos, Quaternion.identity, terrainParrent.transform);
+        GameObject g = Instantiate<GameObject>(tiles[selectTile].gameObject, pos, Quaternion.identity, terrainParrent.transform);
         Undo.RegisterCreatedObjectUndo(g, "Undo Create Tile");
         //createdTiles.Add(g.GetComponent<Tile>());
     }
