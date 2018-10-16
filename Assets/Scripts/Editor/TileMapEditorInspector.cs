@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using Vector3Extensions;
 
 [CustomEditor(typeof(TileMapEditor))]
 public class TileMapEditorInspector : Editor {
@@ -42,13 +43,13 @@ public class TileMapEditorInspector : Editor {
             if (Physics.Raycast(HandleUtility.GUIPointToWorldRay(mousePosition), out hit) && (tile = hit.collider.GetComponent<Tile>()) != null) {
                 Handles.zTest = UnityEngine.Rendering.CompareFunction.LessEqual; // Set drawing to check depth, otherwise it would overlay
                 if (!e.shift) { // When shift is not held
-                    targetGrid = round(hit.point + hit.normal * 0.1f);
+                    targetGrid = (hit.point + hit.normal * 0.1f).Round();
                     DrawCubeWithWire(targetGrid, 1, Color.white, new Color(1, 1, 1, 0.1f));
                     if (e.button == 0 && e.type == EventType.MouseDown) {
                         script.CreateTile(targetGrid);
                     }
                 } else {        // When shift is held
-                    targetGrid = round(hit.point - hit.normal * 0.1f);
+                    targetGrid = (hit.point - hit.normal * 0.1f).Round();
                     DrawCubeWithWire(targetGrid, 1, Color.red, new Color(1, 0, 0, 0.25f));
                     if (e.button == 0 && e.type == EventType.MouseDown) {
                         script.DeleteTile(tile);
@@ -89,6 +90,8 @@ public class TileMapEditorInspector : Editor {
             GUILayout.Space(3);
             GUILayout.EndVertical();
         }
+        
+        GUILayout.Label("Map Size:");
 
         serializedObject.Update();
         EditorGUILayout.PropertyField(tiles, true);
@@ -109,6 +112,18 @@ public class TileMapEditorInspector : Editor {
                     Tools.current = Tool.None; // remove current tool to hide UI handles
                 } else
                     Tools.current = LastTool; // restore tool to before edit
+            }
+            GUI.backgroundColor = defaultColor; // reset gui color
+        }
+
+        // Save Button
+        {
+            GUIStyle style = new GUIStyle(GUI.skin.button); // set button font size
+            style.fontSize = 16;
+            Color defaultColor = GUI.backgroundColor;
+            GUI.backgroundColor = new Color(0.25f, 0.55f, 1); // set button color to blue
+            if (GUILayout.Button("Save Tile Map", style, GUILayout.MinHeight(36))) {
+                script.SaveTileMap();
             }
             GUI.backgroundColor = defaultColor; // reset gui color
         }
@@ -151,9 +166,5 @@ public class TileMapEditorInspector : Editor {
         tileSelection = new GUIContent[script.tiles.Count];
         for (int i = 0; i < tileSelection.Length; ++i)
             tileSelection[i] = new GUIContent(script.tiles[i].gameObject.name, AssetPreview.GetAssetPreview(script.tiles[i].gameObject));
-    }
-
-    private Vector3 round(Vector3 v3) {
-        return new Vector3(Mathf.Round(v3.x), Mathf.Round(v3.y), Mathf.Round(v3.z));
     }
 }

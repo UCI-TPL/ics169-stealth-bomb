@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour {
 
+    public GameObject prefab;
     private bool destroying = false;
 
     public void Destroy(float timer = 0) {

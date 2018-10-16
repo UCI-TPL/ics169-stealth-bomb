@@ -1,11 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Vector3Extensions;
 
 public class TerrainManager : MonoBehaviour {
 
     public Tile[,,] tileMap;
-    //private float startTime;
     public float timer;
 
     private static TerrainManager _terrainManager;
@@ -35,7 +35,16 @@ public class TerrainManager : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        //startTime = Time.time;
+        if (tileMap != null)
+            LoadTerrain();
+        else {
+            CreateRandomTerrain c = GetComponent<CreateRandomTerrain>();
+            if (c != null)
+                c.GenerateTerrain();
+            else
+                Debug.Log("No tile Map loaded and Random Terrain Component not included");
+        }
+
         Invoke("StartCountdown", timer);
 	}
 
@@ -55,7 +64,7 @@ public class TerrainManager : MonoBehaviour {
 
             for (int col = 0; col < tileMap.GetLength(0); ++col) { // check chance to destroy for every block
                 for (int row = 0; row < tileMap.GetLength(2); ++row) {
-                    Vector3 distToRing = Abs(new Vector3(col, 0, row) - center) - newRadius; // Tile distance from collapsing area
+                    Vector3 distToRing = (new Vector3(col, 0, row) - center).Abs() - newRadius; // Tile distance from collapsing area
                     Vector3 tileProb = (distToRing + new Vector3(collapseBuffer, 0, collapseBuffer)) / (collapseBuffer * 2); // Probability of tile collapsing based on distance from ring of collapse
                     if (Random.Range(0f, 1f) < Mathf.Max(tileProb.x * tPerS.x, tileProb.z * tPerS.z, 0) * updateRate * 4 || Mathf.Max(distToRing.x, distToRing.z) > collapseBuffer) // Check chance to collapse or if block is too far out
                         for (int height = 0; height < tileMap.GetLength(1); ++height)
@@ -88,9 +97,5 @@ public class TerrainManager : MonoBehaviour {
     
     public void LoadTerrain() {
         
-    }
-
-    private Vector3 Abs(Vector3 v3) {
-        return new Vector3(Mathf.Abs(v3.x), Mathf.Abs(v3.y), Mathf.Abs(v3.z));
     }
 }

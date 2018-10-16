@@ -8,6 +8,7 @@ public class TileMapEditor : MonoBehaviour {
     public List<Tile> tiles;
     //public HashSet<Tile> createdTiles = new HashSet<Tile>();
     public int selectTile = 0;
+    public Vector3Int mapsize;
     
     private GameObject _terrainParent;
     private GameObject terrainParrent {
@@ -40,5 +41,9 @@ public class TileMapEditor : MonoBehaviour {
         for (int i = terrainParrent.transform.childCount-1; i >= 0; --i)
             if (terrainParrent.transform.GetChild(i).GetComponent<Tile>() != null)
                 Undo.DestroyObjectImmediate(terrainParrent.transform.GetChild(i).gameObject);
+    }
+
+    public void SaveTileMap() {
+        TerrainManager.terrainManager.tileMap = TileMap.ReadMap(terrainParrent.transform);
     }
 }

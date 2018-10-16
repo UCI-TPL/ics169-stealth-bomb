@@ -7,11 +7,9 @@ public class CreateRandomTerrain : MonoBehaviour {
     public GameObject floorTile;
     public GameObject wallTile;
     [Header("Map Size")]
-    public Vector3 size;
+    public Vector3Int size;
     void OnValidate() {
-        size.x = (int)size.x;
-        size.y = (int)Mathf.Max(size.y, 1);
-        size.z = (int)size.z;
+        size.y = Mathf.Max(size.y, 1);
     }
     [Space]
     [Range(0,1)]
@@ -31,8 +29,8 @@ public class CreateRandomTerrain : MonoBehaviour {
         }
     }
     
-    void Start() {
-        tileMap = TerrainManager.terrainManager.tileMap = new Tile[(int)size.x, (int)size.y, (int)size.z];
+    public void GenerateTerrain() {
+        tileMap = TerrainManager.terrainManager.tileMap = new Tile[size.x, size.y, size.z];
         GenerateFloor();
         GenerateWalls(wallProb);
     }
