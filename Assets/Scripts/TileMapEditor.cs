@@ -15,9 +15,9 @@ public class TileMapEditor : MonoBehaviour {
         get {
             if (_terrainParent != null)
                 return _terrainParent;
-            _terrainParent = GameObject.Find("TerrainEditor");
+            _terrainParent = GameObject.Find("Tile Map");
             if (_terrainParent == null) {
-                _terrainParent = new GameObject("TerrainEditor");
+                _terrainParent = new GameObject("Tile Map");
             }
             return _terrainParent;
         }
@@ -41,9 +41,5 @@ public class TileMapEditor : MonoBehaviour {
         for (int i = terrainParrent.transform.childCount-1; i >= 0; --i)
             if (terrainParrent.transform.GetChild(i).GetComponent<Tile>() != null)
                 Undo.DestroyObjectImmediate(terrainParrent.transform.GetChild(i).gameObject);
-    }
-
-    public void SaveTileMap() {
-        TerrainManager.terrainManager.tileMap = TileMap.ReadMap(terrainParrent.transform);
     }
 }

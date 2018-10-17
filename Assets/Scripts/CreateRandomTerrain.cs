@@ -21,9 +21,9 @@ public class CreateRandomTerrain : MonoBehaviour {
         get {
             if (_terrainParent != null)
                 return _terrainParent;
-            _terrainParent = GameObject.Find("Terrain");
+            _terrainParent = GameObject.Find("Tile Map");
             if (_terrainParent == null) {
-                _terrainParent = new GameObject("Terrain");
+                _terrainParent = new GameObject("Tile Map");
             }
             return _terrainParent;
         }
