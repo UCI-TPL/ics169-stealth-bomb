@@ -5,18 +5,9 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
   - enabled: 1
-    path: Assets/Scenes/kyle_MainMenu.unity
+    path: Assets/Scenes/mainMenu.unity
     guid: d9bb0dc8c74064735acd3c65d0bdd411
-  - enabled: 1
-    path: Assets/Scenes/kyle_PrepMenu.unity
-    guid: 9876b0b8bc30548a0b17435293db6c37
-  - enabled: 1
-    path: Assets/Scenes/kyle_tmpEmptyGameScene.unity
-    guid: 35ce16776197c43c8badbbd5180e4e4f
   - enabled: 1
     path: Assets/Scenes/TowerLevel.unity
     guid: 6ae6bd2a171b5814b83dfb0c6d6a5bda
