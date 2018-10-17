@@ -102,9 +102,9 @@ public class TerrainManager : MonoBehaviour {
     }
     
     public Tile[,,] ReadTileMap() {
-        Transform t = GameObject.Find("Tile Map").transform;
-        if (t != null)
-            return TileMap.ReadMap(GameObject.Find("Tile Map").transform);
+        GameObject g = GameObject.Find("Tile Map");
+        if (g != null)
+            return TileMap.ReadMap(g.transform);
         return null;
     }
 
