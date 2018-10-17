@@ -45,14 +45,14 @@ public class TileMapEditorInspector : Editor {
             if (Physics.Raycast(ray, out hit) ) {
                 if ((tile = hit.collider.GetComponent<Tile>()) != null) {
                     if (!e.shift) { // When shift is not held
-                        targetGrid = (hit.point + hit.normal * 0.1f).Round();
+                        targetGrid = (hit.point - Tile.TileOffset + hit.normal * 0.1f).Round() + Tile.TileOffset;
                         DrawCubeWithWire(targetGrid, 1, Color.white, new Color(1, 1, 1, 0.1f));
                         if (e.button == 0 && e.type == EventType.MouseDown) {
                             script.CreateTile(targetGrid);
                         }
                     }
                     else {        // When shift is held
-                        targetGrid = (hit.point - hit.normal * 0.1f).Round();
+                        targetGrid = (hit.point - Tile.TileOffset - hit.normal * 0.1f).Round() + Tile.TileOffset;
                         DrawCubeWithWire(targetGrid, 1, Color.red, new Color(1, 0, 0, 0.25f));
                         if (e.button == 0 && e.type == EventType.MouseDown) {
                             script.DeleteTile(tile);
@@ -61,7 +61,7 @@ public class TileMapEditorInspector : Editor {
                 }
             } else if (!e.shift) { // When shift is not held
                 float magnitude = -ray.origin.y / ray.direction.y;
-                targetGrid = (ray.origin + (ray.direction * magnitude) + Vector3.up * 0.1f).Round();
+                targetGrid = (ray.origin + (ray.direction * magnitude) - Tile.TileOffset + Vector3.up * 0.1f).Round() + Tile.TileOffset;
                 DrawCubeWithWire(targetGrid, 1, Color.white, new Color(1, 1, 1, 0.1f));
                 if (e.button == 0 && e.type == EventType.MouseDown) {
                     script.CreateTile(targetGrid);

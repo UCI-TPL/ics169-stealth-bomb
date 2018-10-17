@@ -24,7 +24,7 @@ public class TileMapEditor : MonoBehaviour {
     }
 
     public void CreateTile(Vector3 pos) {
-        GameObject g = Instantiate<GameObject>(tiles[selectTile].gameObject, pos, Quaternion.identity, terrainParrent.transform);
+        GameObject g = Tile.Create(tiles[selectTile].gameObject, pos, terrainParrent.transform);
         Undo.RegisterCreatedObjectUndo(g, "Undo Create Tile");
         //createdTiles.Add(g.GetComponent<Tile>());
     }
