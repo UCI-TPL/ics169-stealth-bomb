@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
+#if UNITY_EDITOR //Editor only tag
+using UnityEditor;
+#endif //Editor only tag
 
 public class TileMapEditor : MonoBehaviour {
-
+#if UNITY_EDITOR //Editor only tag
     public List<Tile> tiles;
     //public HashSet<Tile> createdTiles = new HashSet<Tile>();
     public int selectTile = 0;
@@ -15,16 +17,16 @@ public class TileMapEditor : MonoBehaviour {
         get {
             if (_terrainParent != null)
                 return _terrainParent;
-            _terrainParent = GameObject.Find("TerrainEditor");
+            _terrainParent = GameObject.Find("Tile Map");
             if (_terrainParent == null) {
-                _terrainParent = new GameObject("TerrainEditor");
+                _terrainParent = new GameObject("Tile Map");
             }
             return _terrainParent;
         }
     }
 
     public void CreateTile(Vector3 pos) {
-        GameObject g = Instantiate<GameObject>(tiles[selectTile].gameObject, pos, Quaternion.identity, terrainParrent.transform);
+        GameObject g = Tile.Create(tiles[selectTile].gameObject, pos, terrainParrent.transform);
         Undo.RegisterCreatedObjectUndo(g, "Undo Create Tile");
         //createdTiles.Add(g.GetComponent<Tile>());
     }
@@ -42,8 +44,5 @@ public class TileMapEditor : MonoBehaviour {
             if (terrainParrent.transform.GetChild(i).GetComponent<Tile>() != null)
                 Undo.DestroyObjectImmediate(terrainParrent.transform.GetChild(i).gameObject);
     }
-
-    public void SaveTileMap() {
-        TerrainManager.terrainManager.tileMap = TileMap.ReadMap(terrainParrent.transform);
-    }
+#endif //Editor only tag
 }

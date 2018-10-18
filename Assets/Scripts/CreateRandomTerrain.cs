@@ -21,9 +21,9 @@ public class CreateRandomTerrain : MonoBehaviour {
         get {
             if (_terrainParent != null)
                 return _terrainParent;
-            _terrainParent = GameObject.Find("Terrain");
+            _terrainParent = GameObject.Find("Tile Map");
             if (_terrainParent == null) {
-                _terrainParent = new GameObject("Terrain");
+                _terrainParent = new GameObject("Tile Map");
             }
             return _terrainParent;
         }
@@ -38,7 +38,7 @@ public class CreateRandomTerrain : MonoBehaviour {
     private void GenerateFloor() {
         for (int col = 0; col < tileMap.GetLength(0); ++col) {
             for (int row = 0; row < tileMap.GetLength(2); ++row) {
-                tileMap[col, 0, row] = Instantiate<GameObject>(floorTile, new Vector3(transform.position.x + col, transform.position.y, transform.position.z + row), Quaternion.identity, terrainParrent.transform).GetComponent<Tile>();
+                tileMap[col, 0, row] = Tile.Create(floorTile, new Vector3(transform.position.x + col, transform.position.y, transform.position.z + row), terrainParrent.transform).GetComponent<Tile>();
             }
         }
     }
@@ -48,7 +48,7 @@ public class CreateRandomTerrain : MonoBehaviour {
             for (int col = 0; col < tileMap.GetLength(0); ++col) {
                 for (int row = 0; row < tileMap.GetLength(2); ++row) {
                     if (Random.Range(0f,1f) < prob && tileMap[col, height, row] == null && tileMap[col, height-1, row] != null)
-                        tileMap[col, height, row] = Instantiate<GameObject>(wallTile, new Vector3(transform.position.x + col, transform.position.y + height, transform.position.z + row), Quaternion.identity, terrainParrent.transform).GetComponent<Tile>();
+                        tileMap[col, height, row] = Tile.Create(wallTile, new Vector3(transform.position.x + col, transform.position.y + height, transform.position.z + row), terrainParrent.transform).GetComponent<Tile>();
                 }
             }
         }

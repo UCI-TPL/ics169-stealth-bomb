@@ -40,20 +40,31 @@ public class TileMapEditorInspector : Editor {
 
             RaycastHit hit; // position at mouse cursor
             Tile tile; // Tile at mouse cursor
-            if (Physics.Raycast(HandleUtility.GUIPointToWorldRay(mousePosition), out hit) && (tile = hit.collider.GetComponent<Tile>()) != null) {
-                Handles.zTest = UnityEngine.Rendering.CompareFunction.LessEqual; // Set drawing to check depth, otherwise it would overlay
-                if (!e.shift) { // When shift is not held
-                    targetGrid = (hit.point + hit.normal * 0.1f).Round();
-                    DrawCubeWithWire(targetGrid, 1, Color.white, new Color(1, 1, 1, 0.1f));
-                    if (e.button == 0 && e.type == EventType.MouseDown) {
-                        script.CreateTile(targetGrid);
+            Ray ray = HandleUtility.GUIPointToWorldRay(mousePosition);
+            Handles.zTest = UnityEngine.Rendering.CompareFunction.LessEqual; // Set drawing to check depth, otherwise it would overlay
+            if (Physics.Raycast(ray, out hit) ) {
+                if ((tile = hit.collider.GetComponent<Tile>()) != null) {
+                    if (!e.shift) { // When shift is not held
+                        targetGrid = (hit.point - Tile.TileOffset + hit.normal * 0.1f).Round();
+                        DrawCubeWithWire(targetGrid + Tile.TileOffset, 1, Color.white, new Color(1, 1, 1, 0.1f));
+                        if (e.button == 0 && e.type == EventType.MouseDown) {
+                            script.CreateTile(targetGrid);
+                        }
                     }
-                } else {        // When shift is held
-                    targetGrid = (hit.point - hit.normal * 0.1f).Round();
-                    DrawCubeWithWire(targetGrid, 1, Color.red, new Color(1, 0, 0, 0.25f));
-                    if (e.button == 0 && e.type == EventType.MouseDown) {
-                        script.DeleteTile(tile);
+                    else {        // When shift is held
+                        targetGrid = (hit.point - Tile.TileOffset - hit.normal * 0.1f).Round();
+                        DrawCubeWithWire(targetGrid + Tile.TileOffset, 1, Color.red, new Color(1, 0, 0, 0.25f));
+                        if (e.button == 0 && e.type == EventType.MouseDown) {
+                            script.DeleteTile(tile);
+                        }
                     }
+                }
+            } else if (!e.shift) { // When shift is not held
+                float magnitude = -ray.origin.y / ray.direction.y;
+                targetGrid = (ray.origin + (ray.direction * magnitude) - Tile.TileOffset + Vector3.up * 0.1f).Round();
+                DrawCubeWithWire(targetGrid + Tile.TileOffset, 1, Color.white, new Color(1, 1, 1, 0.1f));
+                if (e.button == 0 && e.type == EventType.MouseDown) {
+                    script.CreateTile(targetGrid);
                 }
             }
 
@@ -112,18 +123,6 @@ public class TileMapEditorInspector : Editor {
                     Tools.current = Tool.None; // remove current tool to hide UI handles
                 } else
                     Tools.current = LastTool; // restore tool to before edit
-            }
-            GUI.backgroundColor = defaultColor; // reset gui color
-        }
-
-        // Save Button
-        {
-            GUIStyle style = new GUIStyle(GUI.skin.button); // set button font size
-            style.fontSize = 16;
-            Color defaultColor = GUI.backgroundColor;
-            GUI.backgroundColor = new Color(0.25f, 0.55f, 1); // set button color to blue
-            if (GUILayout.Button("Save Tile Map", style, GUILayout.MinHeight(36))) {
-                script.SaveTileMap();
             }
             GUI.backgroundColor = defaultColor; // reset gui color
         }

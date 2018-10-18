@@ -1,11 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Vector3Extensions;
 
 public class Tile : MonoBehaviour {
-
-    public GameObject prefab;
+    
+    public static Vector3 TileOffset = new Vector3(0.5f, 0.5f, 0.5f);
     private bool destroying = false;
+
+    public Vector3 position {
+        get { return transform.localPosition - TileOffset; }
+    }
 
     public void Destroy(float timer = 0) {
         if (!destroying) {
@@ -35,5 +40,13 @@ public class Tile : MonoBehaviour {
             yield return null;
         }
         Destroy(gameObject);
+    }
+
+    public static GameObject Create(GameObject prefab, Vector3 pos, Quaternion rotation, Transform parent) {
+        return Instantiate<GameObject>(prefab, pos.Round() + TileOffset, rotation, parent);
+    }
+
+    public static GameObject Create(GameObject prefab, Vector3 pos, Transform parent) {
+        return Create(prefab, pos, Quaternion.identity, parent);
     }
 }

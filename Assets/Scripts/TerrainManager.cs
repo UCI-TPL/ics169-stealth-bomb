@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Vector3Extensions;
 
 public class TerrainManager : MonoBehaviour {
 
     public Tile[,,] tileMap;
     public float timer;
+    private string pastLevel = null;
 
     private static TerrainManager _terrainManager;
     public static TerrainManager terrainManager {
@@ -35,9 +37,12 @@ public class TerrainManager : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        if (tileMap != null)
-            LoadTerrain();
-        else {
+        StartGame();
+	}
+
+    public void StartGame() {
+        tileMap = ReadTileMap(); // Read Tile Map currently in scene into memory
+        if (tileMap == null || tileMap.Length == 0) { // If no map, create a random map
             CreateRandomTerrain c = GetComponent<CreateRandomTerrain>();
             if (c != null)
                 c.GenerateTerrain();
@@ -46,7 +51,7 @@ public class TerrainManager : MonoBehaviour {
         }
 
         Invoke("StartCountdown", timer);
-	}
+    }
 
     public void StartCountdown() {
         StartCoroutine("CollapseTerrain", collapseTime);
@@ -78,11 +83,12 @@ public class TerrainManager : MonoBehaviour {
             DebugShrinkTerrain(center + transform.position, newRadius); // Display visual area of where shrinking is happening in editor
             yield return new WaitForSeconds(updateRate);
         } while (ratio > -0.2); // quit loop if something goes wrong
+        LoadLevel("TowerLevel");
     }
 
     private void DebugShrinkTerrain(Vector3 center, Vector3 radius) { // Display visual area of where shrinking is happening in editor
-        Vector3 botleft = center - radius - new Vector3(collapseBuffer, 0, collapseBuffer);
-        Vector3 topRight = center + radius + new Vector3(collapseBuffer, 0, collapseBuffer);
+        Vector3 botleft = center - radius - new Vector3(collapseBuffer, 0, collapseBuffer) + Tile.TileOffset;
+        Vector3 topRight = center + radius + new Vector3(collapseBuffer, 0, collapseBuffer) + Tile.TileOffset;
         Debug.DrawLine(botleft, new Vector3(botleft.x, botleft.y, topRight.z), Color.red, 0.1f, false);
         Debug.DrawLine(topRight, new Vector3(botleft.x, botleft.y, topRight.z), Color.red, 0.1f, false);
         Debug.DrawLine(topRight, new Vector3(topRight.x, botleft.y, botleft.z), Color.red, 0.1f, false);
@@ -95,7 +101,32 @@ public class TerrainManager : MonoBehaviour {
         Debug.DrawLine(botleft, new Vector3(topRight.x, botleft.y, botleft.z), Color.green, 0.1f, false);
     }
     
-    public void LoadTerrain() {
-        
+    public Tile[,,] ReadTileMap() {
+        GameObject g = GameObject.Find("Tile Map");
+        if (g != null)
+            return TileMap.ReadMap(g.transform);
+        return null;
+    }
+
+    public void LoadLevel(string name) { // Removes the old level and loads in new level
+        GameObject g = GameObject.Find("Tile Map");
+        if (g != null)
+            Destroy(g);
+        if (pastLevel != null)
+            DeleteOldLevel();
+        pastLevel = name;
+        StartCoroutine("LoadLevelAsync", name);
+    }
+
+    private IEnumerator LoadLevelAsync(string name) { // Loads scene and starts game once finished
+        AsyncOperation asyncLoadLevel = SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
+        while (!asyncLoadLevel.isDone) {
+            yield return new WaitForEndOfFrame();
+        }
+        StartGame();
+    }
+
+    private void DeleteOldLevel() { // Remove old scene
+        SceneManager.UnloadSceneAsync(pastLevel);
     }
 }
