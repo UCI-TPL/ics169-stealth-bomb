@@ -10,6 +10,8 @@ public class Player : MonoBehaviour {
     [SerializeField]
     float jumpForce;
 
+    public bool isGrounded;
+
 
     Vector3 forward, right;
 
@@ -22,6 +24,18 @@ public class Player : MonoBehaviour {
     public string left_Joystick_X_Axis = "LeftJoystickX";
     [HideInInspector]
     public string left_Joystick_Y_Axis = "LeftJoystickY";
+    [HideInInspector]
+    public string right_Joystick_X_Axis = "RightJoystickX";
+    [HideInInspector]
+    public string right_Joystick_Y_Axis = "RightJoystickY";
+    [HideInInspector]
+    public string leftBumper = "LeftBumper";
+    [HideInInspector]
+    public string rightBumper = "RightBumper";
+    [HideInInspector]
+    public string leftTrigger = "LeftTrigger";
+    [HideInInspector]
+    public string rightTrigger = "RightTrigger";
     [HideInInspector]
     public string Dpad_X_Axis = "DpadX";
     [HideInInspector]
@@ -77,12 +91,8 @@ public class Player : MonoBehaviour {
 
     void Move(string horizontal, string vertical)
     {
-        //Debug.Log(horizontal);
-        Vector3 direction = new Vector3(Input.GetAxis(horizontal), 0, Input.GetAxis(vertical));
         Vector3 rightMovement = right * speed * Time.deltaTime * Input.GetAxis(horizontal);
         Vector3 upMovement = forward * speed * Time.deltaTime * Input.GetAxis(vertical);
-        Vector3 heading = Vector3.Normalize(rightMovement + upMovement);
-        transform.forward = heading;
         transform.position += rightMovement;
         transform.position += upMovement;
     }
@@ -90,15 +100,28 @@ public class Player : MonoBehaviour {
     void Jump()
     {
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        isGrounded = false;
     }
 
     void Attack()
     {
 
     }
-	
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        isGrounded = true;
+    }
+
+    void RotatePlayer(string horizontal, string vertical)
+    {
+        Vector3 rightMovement = right * Time.deltaTime * Input.GetAxis(horizontal);
+        Vector3 upMovement = forward * Time.deltaTime * Input.GetAxis(vertical);
+        transform.forward = Vector3.Normalize(rightMovement - upMovement);
+    }
+
     // Update is called once per frame
-	void Update () {
+    void Update () {
 
         //Checking for Movement
         // only for testing a single player with keyboard if you dont have an Xbox controller!
@@ -111,15 +134,19 @@ public class Player : MonoBehaviour {
         else if (Input.GetAxis(playerPrefix + Dpad_X_Axis) != 0.0 | Input.GetAxis(playerPrefix + Dpad_Y_Axis) != 0.0) //D-Pad
             Move(playerPrefix + Dpad_X_Axis, playerPrefix + Dpad_Y_Axis);
         
+        if(Input.GetAxis(playerPrefix + right_Joystick_X_Axis) != 0.0 | Input.GetAxis(playerPrefix + right_Joystick_Y_Axis) != 0.0) //rotation of player with right stick
+        {
+            RotatePlayer(playerPrefix + right_Joystick_X_Axis, playerPrefix + right_Joystick_Y_Axis);
+        }
         
         //Checking for jumping
-        if (Input.GetButtonDown(playerPrefix + "A"))
+        if (Input.GetButtonDown(playerPrefix + rightBumper) && isGrounded)
         {
             Jump();
         }
 
         //Checking for attacking
-        if (Input.GetButtonDown(playerPrefix + "RightBumper"))
+        if (Input.GetAxis(playerPrefix + rightTrigger) != 0.0)
         {
             Debug.Log("Trying to attack!");
         }
