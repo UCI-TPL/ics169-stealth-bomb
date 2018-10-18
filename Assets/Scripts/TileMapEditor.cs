@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
+#if UNITY_EDITOR //Editor only tag
+using UnityEditor;
+#endif //Editor only tag
 
 public class TileMapEditor : MonoBehaviour {
-
+#if UNITY_EDITOR //Editor only tag
     public List<Tile> tiles;
     //public HashSet<Tile> createdTiles = new HashSet<Tile>();
     public int selectTile = 0;
@@ -42,4 +44,5 @@ public class TileMapEditor : MonoBehaviour {
             if (terrainParrent.transform.GetChild(i).GetComponent<Tile>() != null)
                 Undo.DestroyObjectImmediate(terrainParrent.transform.GetChild(i).gameObject);
     }
+#endif //Editor only tag
 }
