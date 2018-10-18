@@ -24,7 +24,6 @@ GameObject:
   - component: {fileID: 54631217233156534}
   - component: {fileID: 65452142206678974}
   - component: {fileID: 114343147660848492}
-  - component: {fileID: 136472898366089320}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -213,7 +212,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 10
   jumpForce: 5
-  isGrounded: 0
+  health: 100
+  rb: {fileID: 0}
+  arrow: {fileID: 114721991009535130, guid: 111ada6a1cfa3e64abadaf4254cad72b, type: 2}
   playerNum: 1
   left_Joystick_X_Axis: LeftJoystickX
   left_Joystick_Y_Axis: LeftJoystickY
@@ -221,19 +222,7 @@ MonoBehaviour:
   right_Joystick_Y_Axis: RightJoystickY
   leftBumper: LeftBumper
   rightBumper: RightBumper
+  leftTrigger: LeftTrigger
+  rightTrigger: RightTrigger
   Dpad_X_Axis: DpadX
   Dpad_Y_Axis: DpadY
-  rb: {fileID: 0}
---- !u!136 &136472898366089320
-CapsuleCollider:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1202046562799644}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}

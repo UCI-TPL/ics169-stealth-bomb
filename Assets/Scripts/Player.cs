@@ -9,9 +9,18 @@ public class Player : MonoBehaviour {
     float speed;
     [SerializeField]
     float jumpForce;
+    [SerializeField]
+    int health = 100;
+    [SerializeField]
+    float shootRate = 0.2f;
 
-    public bool isGrounded;
+    float shootTime = 0.0f;
 
+    bool isGrounded;
+
+    public GameObject ShootPoint;
+    public Rigidbody rb;
+    public Projectile arrow; //this is used for the Basic Attack
 
     Vector3 forward, right;
 
@@ -54,7 +63,7 @@ public class Player : MonoBehaviour {
 
     private string playerPrefix;
 
-    public Rigidbody rb;
+    
 
     void Start() {
         rb = GetComponent<Rigidbody>();
@@ -105,6 +114,18 @@ public class Player : MonoBehaviour {
 
     void Attack()
     {
+        StartCoroutine("Shoot");   
+    }
+
+    IEnumerator Shoot()
+    {
+        if(shootTime <= Time.time)
+        {
+            Instantiate(arrow, ShootPoint.transform.position, transform.rotation, null); //this instantiates the arrow as an attack
+            shootTime = Time.time + shootRate;
+            yield return new WaitForSeconds(shootRate);
+        }
+        //yield return new WaitForSeconds(shootRate);
 
     }
 
@@ -118,6 +139,21 @@ public class Player : MonoBehaviour {
         Vector3 rightMovement = right * Time.deltaTime * Input.GetAxis(horizontal);
         Vector3 upMovement = forward * Time.deltaTime * Input.GetAxis(vertical);
         transform.forward = Vector3.Normalize(rightMovement - upMovement);
+    }
+
+
+    public void HurtPlayer(int damage)
+    {
+        health -= damage;
+    }
+
+    void CheckDeath()
+    {
+        if (health <= 0)
+        {
+            //Debug.Log("D E A T H ");
+            Destroy(gameObject);
+        }
     }
 
     // Update is called once per frame
@@ -148,10 +184,10 @@ public class Player : MonoBehaviour {
         //Checking for attacking
         if (Input.GetAxis(playerPrefix + rightTrigger) != 0.0)
         {
-            Debug.Log("Trying to attack!");
+            Attack();
         }
 
 
-
+        CheckDeath();
     }
 }
