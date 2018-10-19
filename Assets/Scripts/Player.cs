@@ -7,30 +7,46 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerStats))]
 public class Player : MonoBehaviour {
 
-    private PlayerStats _playerStats;
-    public PlayerStats playerStats {
-        get { return _playerStats; }
+    private PlayerStats _stats;
+    public PlayerStats stats {
+        get { return _stats; }
+        private set { _stats = value; }
     }
-    private PlayerController _playerController;
-    public PlayerController playerController {
-        get { return _playerController; }
+    private PlayerController _controller;
+    public PlayerController controller {
+        get { return _controller; }
+        private set { _controller = value; }
+    }
+
+    private float _health;
+    public float health {
+        get { return _health; }
+        private set { _health = value; }
     }
 
     private void Awake() {
-        _playerStats = GetComponent<PlayerStats>();
-        if (playerStats == null) // Check to ensure PlayerStats component is present, since PlayerStats is a dependency this will never happen, but just in case
+        stats = GetComponent<PlayerStats>();
+        if (stats == null) // Check to ensure PlayerStats component is present, since PlayerStats is a dependency this will never happen, but just in case
             Debug.LogError(gameObject.name + " missing PlayerStats Component");
-        _playerController = GetComponent<PlayerController>();
-        if (playerController == null) // Check to ensure PlayerController component is present, since PlayerController is a dependency this will never happen, but just in case
+        controller = GetComponent<PlayerController>();
+        if (controller == null) // Check to ensure PlayerController component is present, since PlayerController is a dependency this will never happen, but just in case
             Debug.LogError(gameObject.name + " missing PlayerController Component");
     }
 
+    private void Start() {
+        resetHealth();
+    }
+
+    public void resetHealth() {
+        health = stats.maxHealth;
+    }
+
     public void HurtPlayer(int damage) {
-        playerStats.health -= damage;
+        health -= damage;
     }
 
     private void CheckDeath() {
-        if (playerStats.health <= 0) {
+        if (health <= 0) {
             //Debug.Log("D E A T H ");
             Destroy(gameObject);
         }

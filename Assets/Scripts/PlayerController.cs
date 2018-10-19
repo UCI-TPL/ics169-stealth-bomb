@@ -7,10 +7,11 @@ public class PlayerController : MonoBehaviour {
     private Player _player;
     public Player player {
         get { return _player; }
+        private set { _player = value; }
     }
 
     private void Awake() {
-        _player = GetComponent<Player>();
+        player = GetComponent<Player>();
         if (player == null) // Check to ensure Player component is present, since PlayerStats is a dependency of Player this will never happen, but just in case
             Debug.LogError(gameObject.name + " missing Player Component");
     }
@@ -102,14 +103,14 @@ public class PlayerController : MonoBehaviour {
     }
 
     void Move(string horizontal, string vertical) {
-        Vector3 rightMovement = right * player.playerStats.speed * Time.deltaTime * Input.GetAxis(horizontal);
-        Vector3 upMovement = forward * player.playerStats.speed * Time.deltaTime * Input.GetAxis(vertical);
+        Vector3 rightMovement = right * player.stats.moveSpeed * Time.deltaTime * Input.GetAxis(horizontal);
+        Vector3 upMovement = forward * player.stats.moveSpeed * Time.deltaTime * Input.GetAxis(vertical);
         transform.position += rightMovement;
         transform.position += upMovement;
     }
 
     void Jump() {
-        rb.AddForce(Vector3.up * player.playerStats.jumpForce, ForceMode.Impulse);
+        rb.AddForce(Vector3.up * player.stats.jumpForce, ForceMode.Impulse);
         isGrounded = false;
     }
 
