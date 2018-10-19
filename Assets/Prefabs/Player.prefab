@@ -11,6 +11,21 @@ Prefab:
   m_SourcePrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1202046562799644}
   m_IsPrefabAsset: 1
+--- !u!1 &1036957429546458
+GameObject:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4717069647750178}
+  m_Layer: 0
+  m_Name: ShootPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1202046562799644
 GameObject:
   m_ObjectHideFlags: 0
@@ -24,6 +39,8 @@ GameObject:
   - component: {fileID: 54631217233156534}
   - component: {fileID: 65452142206678974}
   - component: {fileID: 114343147660848492}
+  - component: {fileID: 114067377986542440}
+  - component: {fileID: 114594017746325064}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -58,8 +75,22 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.45, z: 0.35}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
-  m_Children: []
+  m_Children:
+  - {fileID: 4717069647750178}
   m_Father: {fileID: 4778755862382544}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4717069647750178
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1036957429546458}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 1.59}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4324850134295638}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4778755862382544
@@ -199,6 +230,32 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 2, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114067377986542440
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1202046562799644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4bb3aceb1022e94d91c1eebfc3cee76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shootRate: 0.3
+  ShootPoint: {fileID: 1036957429546458}
+  rb: {fileID: 0}
+  arrow: {fileID: 114721991009535130, guid: 111ada6a1cfa3e64abadaf4254cad72b, type: 2}
+  playerNum: 1
+  left_Joystick_X_Axis: LeftJoystickX
+  left_Joystick_Y_Axis: LeftJoystickY
+  right_Joystick_X_Axis: RightJoystickX
+  right_Joystick_Y_Axis: RightJoystickY
+  leftBumper: LeftBumper
+  rightBumper: RightBumper
+  leftTrigger: LeftTrigger
+  rightTrigger: RightTrigger
+  Dpad_X_Axis: DpadX
+  Dpad_Y_Axis: DpadY
 --- !u!114 &114343147660848492
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -213,6 +270,8 @@ MonoBehaviour:
   speed: 10
   jumpForce: 5
   health: 100
+  shootRate: 0.3
+  ShootPoint: {fileID: 1036957429546458}
   rb: {fileID: 0}
   arrow: {fileID: 114721991009535130, guid: 111ada6a1cfa3e64abadaf4254cad72b, type: 2}
   playerNum: 1
@@ -226,3 +285,17 @@ MonoBehaviour:
   rightTrigger: RightTrigger
   Dpad_X_Axis: DpadX
   Dpad_Y_Axis: DpadY
+--- !u!114 &114594017746325064
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1202046562799644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ec9adae1957a014cb7fdb95d56e15d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 10
+  jumpForce: 5
+  health: 100
