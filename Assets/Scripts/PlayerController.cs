@@ -23,14 +23,21 @@ public class PlayerController : MonoBehaviour {
 
     bool isGrounded;
 
+    public bool newMovement = true; //this varialbe is temporary and for testing only
+
+    private Vector3 _inputs = Vector3.zero;
+
     public GameObject ShootPoint;
     public Rigidbody rb;
     public Projectile arrow; //this is used for the Basic Attack
 
     Vector3 forward, right;
 
+    public float speed;
+
     [Tooltip("Represents which player this is. Only put in 1-4. Do not put 0!!! This attribute must have a value in order to work or take in input properly!!! ")]
     public int playerNum;
+   
 
     // These are the suffixes used to form a string that represents a specific input on a specific Xbox controller.
     // The suffixes represent the types of inputs found on an Xbox controller (NOTE: more might be added later in the script).
@@ -71,8 +78,9 @@ public class PlayerController : MonoBehaviour {
 
 
     void Start() {
+        speed = player.stats.moveSpeed;
         rb = GetComponent<Rigidbody>();
-        //Physics.gravity = new Vector3(0, -15, 0);
+        Physics.gravity = new Vector3(0, -60, 0);
         playerPrefix = "";
         // Decides which player to take input from if the correct input is given.
         switch (playerNum) {
@@ -103,13 +111,14 @@ public class PlayerController : MonoBehaviour {
     }
 
     void Move(string horizontal, string vertical) {
-        Vector3 rightMovement = right * player.stats.moveSpeed * Time.deltaTime * Input.GetAxis(horizontal);
-        Vector3 upMovement = forward * player.stats.moveSpeed * Time.deltaTime * Input.GetAxis(vertical);
-        transform.position += rightMovement;
-        transform.position += upMovement;
+        Vector3 rightMovement = right * Input.GetAxis(horizontal);
+        Vector3 upMovement = forward * Input.GetAxis(vertical);
+        Vector3 direction = rightMovement + upMovement;
+        transform.position += direction * player.stats.moveSpeed * Time.fixedDeltaTime;
     }
 
     void Jump() {
+        speed = player.stats.airSpeed;
         rb.AddForce(Vector3.up * player.stats.jumpForce, ForceMode.Impulse);
         isGrounded = false;
     }
@@ -130,6 +139,7 @@ public class PlayerController : MonoBehaviour {
 
     private void OnCollisionEnter(Collision collision) {
         isGrounded = true;
+        speed = player.stats.moveSpeed;
     }
 
     void RotatePlayer(string horizontal, string vertical) {
@@ -137,6 +147,15 @@ public class PlayerController : MonoBehaviour {
         Vector3 upMovement = forward * Time.deltaTime * Input.GetAxis(vertical);
         transform.forward = Vector3.Normalize(rightMovement - upMovement);
     }
+
+
+    private void FixedUpdate() //Physics things are supposed to be in FixedUpdate
+    {
+      
+        rb.AddForce((_inputs * speed * 900 * Time.fixedDeltaTime)); //using the Physics System to move 
+    }
+
+
 
     // Update is called once per frame
     void Update() {
@@ -147,10 +166,22 @@ public class PlayerController : MonoBehaviour {
         if (Input.GetAxis("Horizontal") != 0.0 | Input.GetAxis("Vertical") != 0.0) //WASD only for the first player
             if (playerNum == 1)
                 Move("Horizontal", "Vertical");
-        if (Input.GetAxis(playerPrefix + left_Joystick_X_Axis) != 0.0 | Input.GetAxis(playerPrefix + left_Joystick_Y_Axis) != 0.0) //Left Joystick
-            Move(playerPrefix + left_Joystick_X_Axis, playerPrefix + left_Joystick_Y_Axis);
-        else if (Input.GetAxis(playerPrefix + Dpad_X_Axis) != 0.0 | Input.GetAxis(playerPrefix + Dpad_Y_Axis) != 0.0) //D-Pad
-            Move(playerPrefix + Dpad_X_Axis, playerPrefix + Dpad_Y_Axis);
+
+        _inputs = Vector3.zero;
+        if (newMovement) //this is just for testing purposes. Set this to false in the inspector to get back to the previous movement system (and set drag to 0 like before)
+        {
+            Vector3 rightMovement = right * Input.GetAxis(playerPrefix + left_Joystick_X_Axis);
+            Vector3 upMovement = forward * Input.GetAxis(playerPrefix + left_Joystick_Y_Axis);
+            _inputs = (rightMovement + upMovement);
+        }
+        else
+        {
+            Debug.Log("Hey");
+            if (Input.GetAxis(playerPrefix + left_Joystick_X_Axis) != 0.0 | Input.GetAxis(playerPrefix + left_Joystick_Y_Axis) != 0.0) //Left Joystick
+                Move(playerPrefix + left_Joystick_X_Axis, playerPrefix + left_Joystick_Y_Axis);
+            else if (Input.GetAxis(playerPrefix + Dpad_X_Axis) != 0.0 | Input.GetAxis(playerPrefix + Dpad_Y_Axis) != 0.0) //D-Pad
+                Move(playerPrefix + Dpad_X_Axis, playerPrefix + Dpad_Y_Axis);
+        }
 
         if (Input.GetAxis(playerPrefix + right_Joystick_X_Axis) != 0.0 | Input.GetAxis(playerPrefix + right_Joystick_Y_Axis) != 0.0) //rotation of player with right stick
         {

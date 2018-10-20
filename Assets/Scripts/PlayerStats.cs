@@ -14,7 +14,8 @@ public class PlayerStats : MonoBehaviour {
 
     private void Awake() {
         stats.Add("move_speed", 10);
-        stats.Add("jump_force", 5);
+        stats.Add("air_speed", 3);
+        stats.Add("jump_force", 20);
         stats.Add("max_health", 100);
         player = GetComponent<Player>();
         if (player == null) // Check to ensure Player component is present, since PlayerStats is a dependency of Player this will never happen, but just in case
@@ -29,6 +30,11 @@ public class PlayerStats : MonoBehaviour {
     }
     public float maxHealth {
         get { return getStat("max_health"); }
+    }
+
+    public float airSpeed
+    {
+        get { return getStat("air_speed");  }
     }
 
     private float getStat(string name) { // Attempts to grab a stat, if that stat does not exist display error
