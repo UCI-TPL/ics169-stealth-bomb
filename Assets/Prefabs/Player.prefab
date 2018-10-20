@@ -243,10 +243,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shootRate: 0.3
   newMovement: 1
+  speed: 0
   ShootPoint: {fileID: 1036957429546458}
   rb: {fileID: 0}
   arrow: {fileID: 114721991009535130, guid: 111ada6a1cfa3e64abadaf4254cad72b, type: 2}
-  speed: 0
   playerNum: 1
   left_Joystick_X_Axis: LeftJoystickX
   left_Joystick_Y_Axis: LeftJoystickY

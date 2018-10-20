@@ -24,17 +24,12 @@ public class PlayerController : MonoBehaviour {
     bool isGrounded;
 
     public bool newMovement = true; //this varialbe is temporary and for testing only
-
+    public float speed;
     private Vector3 _inputs = Vector3.zero;
-
+    Vector3 forward, right;
     public GameObject ShootPoint;
     public Rigidbody rb;
     public Projectile arrow; //this is used for the Basic Attack
-
-    Vector3 forward, right;
-
-    public float speed;
-
     [Tooltip("Represents which player this is. Only put in 1-4. Do not put 0!!! This attribute must have a value in order to work or take in input properly!!! ")]
     public int playerNum;
    
@@ -75,6 +70,35 @@ public class PlayerController : MonoBehaviour {
 
     private string playerPrefix;
 
+    public float DpadX()
+    {
+        return Input.GetAxis(playerPrefix + "DpadX");
+    }
+
+    public float DpadY()
+    {
+        return Input.GetAxis(playerPrefix + "DpadY");
+    }
+
+    public float LeftStickX()
+    {
+        return Input.GetAxis(playerPrefix + left_Joystick_X_Axis);
+    }
+
+    public float LeftStickY()
+    {
+        return Input.GetAxis(playerPrefix + left_Joystick_Y_Axis);
+    }
+
+    public float RightStickX()
+    {
+        return Input.GetAxis(playerPrefix + right_Joystick_X_Axis);
+    }
+
+    public float RightStickY()
+    {
+        return Input.GetAxis(playerPrefix + right_Joystick_Y_Axis);
+    }
 
 
     void Start() {
@@ -110,11 +134,47 @@ public class PlayerController : MonoBehaviour {
         right = Quaternion.Euler(new Vector3(0, 90, 0)) * forward; // This right vector is -45 degrees from the world X axis 
     }
 
-    void Move(string horizontal, string vertical) {
+    void MoveWASD(string horizontal, string vertical) {
         Vector3 rightMovement = right * Input.GetAxis(horizontal);
         Vector3 upMovement = forward * Input.GetAxis(vertical);
         Vector3 direction = rightMovement + upMovement;
         transform.position += direction * player.stats.moveSpeed * Time.fixedDeltaTime;
+    }
+
+    void Move()
+    {
+        if (newMovement) //this is just for testing purposes. Set this to false in the inspector to get back to the previous movement system (and set drag to 0 like before)
+        {
+            if (LeftStickY() != 0.0 || LeftStickX() != 0.0)
+            {
+                Vector3 rightMovement = right * LeftStickX();
+                Vector3 upMovement = forward * LeftStickY();
+                _inputs = (rightMovement + upMovement);
+            }
+            else if (DpadX() != 0.0 || DpadY() != 0.0)
+            {
+                Vector3 rightMovement = right * DpadX();
+                Vector3 upMovement = forward * DpadY();
+                _inputs = (rightMovement + upMovement);
+            }
+        }
+        else
+        {
+            if (LeftStickX() != 0.0 || LeftStickY() != 0.0) //Left Joystick
+            {
+                Vector3 rightMovement = right * LeftStickX();
+                Vector3 upMovement = forward * LeftStickY();
+                Vector3 direction = rightMovement + upMovement;
+                transform.position += direction * player.stats.moveSpeed * Time.deltaTime;
+            }
+            else if (DpadX() != 0.0 | DpadY() != 0.0) //D-Pad
+            {
+                Vector3 rightMovement = right * DpadX();
+                Vector3 upMovement = forward * DpadY();
+                Vector3 direction = rightMovement + upMovement;
+                transform.position += direction * player.stats.moveSpeed * Time.deltaTime;
+            }
+        }
     }
 
     void Jump() {
@@ -142,9 +202,9 @@ public class PlayerController : MonoBehaviour {
         speed = player.stats.moveSpeed;
     }
 
-    void RotatePlayer(string horizontal, string vertical) {
-        Vector3 rightMovement = right * Time.deltaTime * Input.GetAxis(horizontal);
-        Vector3 upMovement = forward * Time.deltaTime * Input.GetAxis(vertical);
+    void RotatePlayer() {
+        Vector3 rightMovement = right * Time.deltaTime * RightStickX();
+        Vector3 upMovement = forward * Time.deltaTime * RightStickY();
         transform.forward = Vector3.Normalize(rightMovement - upMovement);
     }
 
@@ -159,33 +219,19 @@ public class PlayerController : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-
         //Checking for Movement
         // only for testing a single player with keyboard if you dont have an Xbox controller!
         // Otherwise, comment out the first if-else block.
         if (Input.GetAxis("Horizontal") != 0.0 | Input.GetAxis("Vertical") != 0.0) //WASD only for the first player
             if (playerNum == 1)
-                Move("Horizontal", "Vertical");
+                MoveWASD("Horizontal", "Vertical");
 
         _inputs = Vector3.zero;
-        if (newMovement) //this is just for testing purposes. Set this to false in the inspector to get back to the previous movement system (and set drag to 0 like before)
-        {
-            Vector3 rightMovement = right * Input.GetAxis(playerPrefix + left_Joystick_X_Axis);
-            Vector3 upMovement = forward * Input.GetAxis(playerPrefix + left_Joystick_Y_Axis);
-            _inputs = (rightMovement + upMovement);
-        }
-        else
-        {
-            Debug.Log("Hey");
-            if (Input.GetAxis(playerPrefix + left_Joystick_X_Axis) != 0.0 | Input.GetAxis(playerPrefix + left_Joystick_Y_Axis) != 0.0) //Left Joystick
-                Move(playerPrefix + left_Joystick_X_Axis, playerPrefix + left_Joystick_Y_Axis);
-            else if (Input.GetAxis(playerPrefix + Dpad_X_Axis) != 0.0 | Input.GetAxis(playerPrefix + Dpad_Y_Axis) != 0.0) //D-Pad
-                Move(playerPrefix + Dpad_X_Axis, playerPrefix + Dpad_Y_Axis);
-        }
+        Move();
 
-        if (Input.GetAxis(playerPrefix + right_Joystick_X_Axis) != 0.0 | Input.GetAxis(playerPrefix + right_Joystick_Y_Axis) != 0.0) //rotation of player with right stick
+        if (RightStickX() != 0.0 || RightStickY() != 0.0) //rotation of player with right stick
         {
-            RotatePlayer(playerPrefix + right_Joystick_X_Axis, playerPrefix + right_Joystick_Y_Axis);
+            RotatePlayer();
         }
 
         //Checking for jumping
