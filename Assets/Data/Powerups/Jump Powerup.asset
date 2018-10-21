@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dbd4135e9a119e4ab0bbc845e37c1db, type: 3}
+  m_Name: Jump Powerup
+  m_EditorClassIdentifier: 
+  name: Jump
+  image: {fileID: 2800000, guid: e9862c2350809c04d9c45e21c43a022f, type: 3}
+  description: Increases the player's jump height.
+  modifiers:
+  - name: jump_force
+    value: 5
+    type: 0

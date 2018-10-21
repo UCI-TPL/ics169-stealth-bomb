@@ -34,10 +34,10 @@ public class Player : MonoBehaviour {
     }
 
     private void Start() {
-        resetHealth();
+        ResetHealth();
     }
 
-    public void resetHealth() {
+    public void ResetHealth() {
         health = stats.maxHealth;
     }
 
@@ -54,5 +54,10 @@ public class Player : MonoBehaviour {
 
     void Update() {
         CheckDeath();
+    }
+
+    public void AddPowerup(Powerup powerup) {
+        foreach (PlayerStats.Modifier m in powerup.modifiers)
+            stats.AddModifier(m);
     }
 }
