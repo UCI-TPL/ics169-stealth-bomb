@@ -7,80 +7,62 @@ using UnityEngine.UI;
 public class MainMenuManager : MonoBehaviour {
 
 	/*
-	stage is an int representing the current stage
-	-1 - quit
-	0 - main menu
-	1 - prep menu
-	2 - game
+	int menu represents the current menu
+	0 - quit
+	1 - main menu
+	2 - prep menu
+	3 - game
 	 */
-	private static int stage = 0;
+	private static int menu = 0;
 	
-	private static int numOfPlayers = 2;
-	
-	//prep
-	public Text num;
-	public Slider s;
-
+	//GameObject reference to menu panels
 	public GameObject mainMenuPanel;
-	public GameObject prepMenuPanel;
+	public GameObject selectionMenuPanel;
+	public GameObject settingMenuPanel;
 
-	public int getMenuStage()
-	{ return stage; }
-
-	public int getPlayers()
-	{ return numOfPlayers; }
-
+	public int getCurrentPanel()
+	{ return menu; }
 
 	private void Start()
 	{
-		setMenu(0);
+		setMenu(1);
 	}
 
 	/*
 	public methods for external usage
 	 */
-	public void setMenu(int s)
+	//set menu to m and present to the corrsponding menu panel 
+	public void setMenu(int m)
 	{ 
-		stage = s; 
-
-		//Quit
-		if (stage == -1)
+		menu = m; 
+		switch(m)
 		{
-			Application.Quit();
+			//Quit
+			case 0:
+				Application.Quit();
+				break;
+
+			//Main menu
+			case 1:
+				mainMenuPanel.SetActive(true);
+				selectionMenuPanel.SetActive(false);
+				settingMenuPanel.SetActive(false);
+				break;
+			
+			//Game Preperation
+			case 2:
+				mainMenuPanel.SetActive(false);
+				selectionMenuPanel.SetActive(true);
+				settingMenuPanel.SetActive(false);
+				break;
+
+			//Setting Menu
+			case 3:
+				mainMenuPanel.SetActive(false);
+				selectionMenuPanel.SetActive(false);
+				settingMenuPanel.SetActive(true);
+				break;
 		}
-
-		//Main Menu
-		else if (stage == 0)
-		{
-			mainMenuPanel.SetActive(true);
-			prepMenuPanel.SetActive(false);
-		}
-
-		//Game Preperation
-		else if (stage == 1)
-		{
-			mainMenuPanel.SetActive(false);
-			prepMenuPanel.SetActive(true);
-			updateDisplayNum();
-		}
-
-		//Let Us Play Together!
-		else if (stage == 2)
-		{
-			mainMenuPanel.SetActive(false);
-			prepMenuPanel.SetActive(false);
-		}
-	}
-
-	public void setPlayers()
-	{ 
-		numOfPlayers = (int)s.value; 
-	}
-
-	public void updateDisplayNum()
-	{
-		num.text = s.value.ToString();
-		setPlayers();
 	}
 
 }
