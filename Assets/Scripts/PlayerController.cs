@@ -15,14 +15,16 @@ public class PlayerController : MonoBehaviour {
         if (player == null) // Check to ensure Player component is present, since PlayerStats is a dependency of Player this will never happen, but just in case
             Debug.LogError(gameObject.name + " missing Player Component");
     }
-
     [SerializeField]
     float shootRate = 0.2f;
-
+    float chargeTime = 0.5f;
     float shootTime = 0.0f;
-
+    float holdTime = 0.0f;
+    float holdStart = 0.0f;
+    float holdEnd = 0.0f;
     bool isGrounded;
-
+    //bool buttonHeldDown = false ;
+    //bool holdCheck = false;
     public bool newMovement = true; //this varialbe is temporary and for testing only
     public float speed;
     private Vector3 _inputs = Vector3.zero;
@@ -100,8 +102,14 @@ public class PlayerController : MonoBehaviour {
         return Input.GetAxis(playerPrefix + right_Joystick_Y_Axis);
     }
 
+    public float RightTrigger()
+    {
+        return Input.GetAxis(playerPrefix + rightTrigger);
+    }
+
 
     void Start() {
+        //shootRate = player.stats.shootTime;
         speed = player.stats.moveSpeed;
         rb = GetComponent<Rigidbody>();
         Physics.gravity = new Vector3(0, -60, 0);
@@ -178,15 +186,49 @@ public class PlayerController : MonoBehaviour {
     }
 
     void Jump() {
-        speed = player.stats.airSpeed;
-        rb.AddForce(Vector3.up * player.stats.jumpForce, ForceMode.Impulse);
-        isGrounded = false;
+        if (Input.GetButtonDown(playerPrefix + rightBumper) && isGrounded) //Checking for jumping
+        { 
+            speed = player.stats.airSpeed;
+            rb.AddForce(Vector3.up * player.stats.jumpForce, ForceMode.Impulse);
+            isGrounded = false;
+        }
     }
+
 
     void Attack() {
-        StartCoroutine("Shoot");
+        if (RightTrigger() != 0.0)
+        {
+            if(holdStart == 0.0)
+            {
+                holdStart = Time.time;
+            }
+            StartCoroutine("IsTriggerBeingHeldDown");
+        }
+        
     }
 
+    IEnumerator IsTriggerBeingHeldDown() //making Input.GetButtonDown/Up functionality for the Axis
+    {
+        if(holdTime <= Time.time)
+        {
+            holdTime = Time.time + 0.01f;
+            yield return new WaitForSeconds(0.01f);
+            if(RightTrigger() == 0.0)
+            {
+                holdEnd = Time.time - holdStart;
+                if(holdEnd >= chargeTime) 
+                {
+                    StartCoroutine("Shoot");
+                }
+              
+                holdStart = 0.0f;
+            }
+        }
+
+
+    }
+
+    //test to see if you can replace shootTime with player.stats.shootTime 
     IEnumerator Shoot() {
         if (shootTime <= Time.time) {
             Instantiate(arrow, ShootPoint.transform.position, transform.rotation, null); //this instantiates the arrow as an attack
@@ -197,21 +239,25 @@ public class PlayerController : MonoBehaviour {
 
     }
 
+    //change the way isGrounded is implemented 
     private void OnCollisionEnter(Collision collision) {
         isGrounded = true;
         speed = player.stats.moveSpeed;
     }
 
     void RotatePlayer() {
-        Vector3 rightMovement = right * Time.deltaTime * RightStickX();
-        Vector3 upMovement = forward * Time.deltaTime * RightStickY();
-        transform.forward = Vector3.Normalize(rightMovement - upMovement);
+        if(RightStickX() != 0.0 || RightStickY() != 0.0)
+        {
+            Vector3 rightMovement = right * Time.deltaTime * RightStickX();
+            Vector3 upMovement = forward * Time.deltaTime * RightStickY();
+            transform.forward = Vector3.Normalize(rightMovement - upMovement);
+        }
     }
 
 
     private void FixedUpdate() //Physics things are supposed to be in FixedUpdate
     {
-      
+       
         rb.AddForce((_inputs * speed * 900 * Time.fixedDeltaTime)); //using the Physics System to move 
     }
 
@@ -229,19 +275,15 @@ public class PlayerController : MonoBehaviour {
         _inputs = Vector3.zero;
         Move();
 
-        if (RightStickX() != 0.0 || RightStickY() != 0.0) //rotation of player with right stick
-        {
+        //if (RightStickX() != 0.0 || RightStickY() != 0.0) //rotation of player with right stick
+        //{
             RotatePlayer();
-        }
-
-        //Checking for jumping
-        if (Input.GetButtonDown(playerPrefix + rightBumper) && isGrounded) {
+        //}
+        //if (Input.GetButtonDown(playerPrefix + rightBumper) && isGrounded) { //Checking for jumping
             Jump();
-        }
-
-        //Checking for attacking
-        if (Input.GetAxis(playerPrefix + rightTrigger) != 0.0) {
+        //}
+        //if (Input.GetAxis(playerPrefix + rightTrigger) != 0.0) { //Checking for attacking
             Attack();
-        }
+        //}
     }
 }

@@ -1,10 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+[RequireComponent(typeof(Rigidbody))]
 
-public class Projectile : MonoBehaviour {
+public class Projectile : MonoBehaviour { //should this just be named arrow?
 
     // Use this for initialization
+
+    public Rigidbody rb;
 
     public int speed = 1;
     public int damage = 100;
@@ -12,8 +15,15 @@ public class Projectile : MonoBehaviour {
     public float lifetime = 3f;
 
 	void Start () {
+        rb = GetComponent<Rigidbody>();
         StartCoroutine("LifeTime");
-	}
+        Shoot();
+    }
+
+    void Shoot()
+    {
+        rb.AddForce(transform.forward * speed, ForceMode.Impulse);
+    }
 
     IEnumerator LifeTime()
     {
@@ -21,12 +31,13 @@ public class Projectile : MonoBehaviour {
         Destroy(gameObject);
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision other)
     {
-        if(other.tag == "Player")
+        if(other.gameObject.tag == "Player")
         {
-            Player player = other.GetComponent<Player>();
+            Player player = other.gameObject.GetComponent<Player>();
             player.HurtPlayer(damage);
+            Destroy(gameObject,0.01f);
         }
     }
 
@@ -34,6 +45,6 @@ public class Projectile : MonoBehaviour {
     // Update is called once per frame
     void Update () {
 
-        transform.Translate(Vector3.forward * speed);		
+        //transform.Translate(Vector3.forward * speed);		
 	}
 }
