@@ -22,20 +22,33 @@ public class characterSelection : MonoBehaviour {
 			Transform t = players.transform.GetChild(i).transform.GetChild(1);
 			playerOpList.Add(t.GetComponent<Text>());
 		}
+		playerIs(0);
+		playerConnected();
+
+		playerIs(1);
+		playerDisconnected();
+
+		playerIs(2);
+		playerIsNotReady();
+
+		playerIs(3);
+		playerIsReady();
 	}
 
 	/*
-	set player to p:
+	playerIs() set player to p:
 	0 - player 1
 	1 - player 2
 	2 - player 3
 	3 - player 4
+	
+	then call any followed public function to change corsponding UI
+
 	 */
 	public void playerIs(int p)
 	{
 		player = p;
 	}
-
 
 	public void playerConnected()
 	{
@@ -48,7 +61,7 @@ public class characterSelection : MonoBehaviour {
 		playerOpList[player].text = "Disconnected";
 	}
 
-	public void playerIsRead()
+	public void playerIsReady()
 	{
 		playerOpList[player].text = "Ready";
 	}
