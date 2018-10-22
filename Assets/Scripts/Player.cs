@@ -24,6 +24,8 @@ public class Player : MonoBehaviour {
         private set { _health = value; }
     }
 
+    private Queue<TempPowerup> tempPowerups = new Queue<TempPowerup>();
+
     private void Awake() {
         stats = GetComponent<PlayerStats>();
         if (stats == null) // Check to ensure PlayerStats component is present, since PlayerStats is a dependency this will never happen, but just in case
@@ -53,11 +55,31 @@ public class Player : MonoBehaviour {
     }
 
     void Update() {
+        print(stats.moveSpeed);
+        while (tempPowerups.Count > 0 && tempPowerups.Peek().endTime <= Time.time)
+             RemovePowerup(tempPowerups.Dequeue().powerup);
         CheckDeath();
     }
 
     public void AddPowerup(Powerup powerup) {
+        tempPowerups.Enqueue(new TempPowerup(powerup));
         foreach (PlayerStats.Modifier m in powerup.modifiers)
             stats.AddModifier(m);
+    }
+
+    public void RemovePowerup(Powerup powerup) {
+        foreach (PlayerStats.Modifier m in powerup.modifiers)
+            stats.RemoveModifier(m);
+    }
+
+    // Holds a powerup and its duration
+    private struct TempPowerup {
+        public Powerup powerup;
+        public float endTime;
+
+        public TempPowerup(Powerup powerup) {
+            this.powerup = powerup;
+            this.endTime = Time.time + Powerup.duration;
+        }
     }
 }

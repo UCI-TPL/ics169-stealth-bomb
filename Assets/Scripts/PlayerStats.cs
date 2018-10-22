@@ -70,19 +70,19 @@ public class PlayerStats : MonoBehaviour {
             get { return _value; }
             private set { _value = value; }
         }
-        private HashSet<Modifier> flatModifiers;
-        private HashSet<Modifier> incModifiers;
-        private HashSet<Modifier> moreModifiers;
-        private HashSet<Modifier> boolModifiers;
+        private Dictionary<Modifier, int> flatModifiers;
+        private Dictionary<Modifier, int> incModifiers;
+        private Dictionary<Modifier, int> moreModifiers;
+        private Dictionary<Modifier, int> boolModifiers;
 
         public Property(string name, float baseValue, Type type = Type.Numerical) {
             this.name = name;
             this.baseValue = baseValue;
             this.type = Type.Numerical;
-            flatModifiers = new HashSet<Modifier>();
-            incModifiers = new HashSet<Modifier>();
-            moreModifiers = new HashSet<Modifier>();
-            boolModifiers = new HashSet<Modifier>();
+            flatModifiers = new Dictionary<Modifier, int>();
+            incModifiers = new Dictionary<Modifier, int>();
+            moreModifiers = new Dictionary<Modifier, int>();
+            boolModifiers = new Dictionary<Modifier, int>();
             UpdateValue();
         }
 
@@ -90,16 +90,16 @@ public class PlayerStats : MonoBehaviour {
         public void AddModifier(Modifier modifier) {
             switch (modifier.type) {
                 case Modifier.Type.Flat:
-                    flatModifiers.Add(modifier);
+                    IncMod(flatModifiers, modifier);
                     break;
                 case Modifier.Type.Increased:
-                    incModifiers.Add(modifier);
+                    IncMod(incModifiers, modifier);
                     break;
                 case Modifier.Type.More:
-                    moreModifiers.Add(modifier);
+                    IncMod(moreModifiers, modifier);
                     break;
                 case Modifier.Type.Bool:
-                    boolModifiers.Add(modifier);
+                    IncMod(boolModifiers, modifier);
                     break;
             }
             UpdateValue();
@@ -109,19 +109,35 @@ public class PlayerStats : MonoBehaviour {
         public void RemoveModifier(Modifier modifier) {
             switch (modifier.type) {
                 case Modifier.Type.Flat:
-                    flatModifiers.Remove(modifier);
+                    DecMod(flatModifiers, modifier);
                     break;
                 case Modifier.Type.Increased:
-                    incModifiers.Remove(modifier);
+                    DecMod(incModifiers, modifier);
                     break;
                 case Modifier.Type.More:
-                    moreModifiers.Remove(modifier);
+                    DecMod(moreModifiers, modifier);
                     break;
                 case Modifier.Type.Bool:
-                    boolModifiers.Remove(modifier);
+                    DecMod(boolModifiers, modifier);
                     break;
             }
             UpdateValue();
+        }
+
+        // Adds the modifier to the dictionary incrementing the counter if it already exist
+        private void IncMod(Dictionary<Modifier, int> dict, Modifier mod) {
+            if (dict.ContainsKey(mod))
+                dict[mod] += 1;
+            else
+                dict.Add(mod, 1);
+        }
+
+        // Removes the modifier from the dictionary decresing the counter if there are more than 1
+        private void DecMod(Dictionary<Modifier, int> dict, Modifier mod) {
+            if (dict[mod] <= 1)
+                dict.Remove(mod);
+            else
+                dict[mod] -= 1;
         }
 
         // Updates the property's value
@@ -129,8 +145,8 @@ public class PlayerStats : MonoBehaviour {
             switch (type) { // Check the type of property (Numerical or Boolean)
                 case Type.Numerical:
                     value = (baseValue + TotalMods(flatModifiers)) * (1+TotalMods(incModifiers)); // Adds all flat modifiers and multiplies by increased modifiers
-                    foreach (Modifier m in moreModifiers) // Multiplies every more modifier separately
-                        value *= 1+m.value;
+                    foreach (KeyValuePair<Modifier, int> m in moreModifiers) // Multiplies every more modifier separately
+                        value *= Mathf.Pow(1+m.Key.value, m.Value);
                     break;
                 case Type.Bool:
                     if (TotalMods(boolModifiers) + baseValue > 0) // Check if boolean modifiers add up to true
@@ -140,10 +156,10 @@ public class PlayerStats : MonoBehaviour {
         }
 
         // Returns sum of all values in a set of modifiers 
-        private float TotalMods (HashSet<Modifier> modifiers) {
+        private float TotalMods (Dictionary<Modifier,int> modifiers) {
             float total = 0;
-            foreach (Modifier m in modifiers)
-                total += m.value;
+            foreach (KeyValuePair<Modifier, int> m in modifiers)
+                total += m.Key.value * m.Value;
             return total;
         }
 
