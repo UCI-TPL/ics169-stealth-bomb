@@ -34,3 +34,7 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+Assets/XInputDotNet/Plugins/.DS_Store
+Assets/XInputDotNet/.DS_Store
+Assets/.DS_Store
+.DS_Store
