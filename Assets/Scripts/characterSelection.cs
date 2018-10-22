@@ -11,7 +11,7 @@ public class characterSelection : MonoBehaviour {
 
 	private int player = 0;
 
-	private void Start()
+	private void Awake()
 	{
 		/*
 		go through players and add each player's opinfo (Text) to the playerOpList
@@ -22,17 +22,19 @@ public class characterSelection : MonoBehaviour {
 			Transform t = players.transform.GetChild(i).transform.GetChild(1);
 			playerOpList.Add(t.GetComponent<Text>());
 		}
-		playerIs(0);
-		playerConnected();
+		// playerIs(0);
+		// playerConnected();
 
-		playerIs(1);
-		playerDisconnected();
+		// playerIs(1);
+		// playerDisconnected();
 
-		playerIs(2);
-		playerIsNotReady();
+		// playerIs(2);
+		// playerIsNotReady();
 
-		playerIs(3);
-		playerIsReady();
+		// playerIs(3);
+		// playerIsReady();
+
+		// gameIsNotReady();
 	}
 
 	/*
@@ -48,17 +50,17 @@ public class characterSelection : MonoBehaviour {
 	public void playerIs(int p)
 	{
 		player = p;
-	}
-
-	public void playerConnected()
-	{
-		// uielement.gameObject.SetActive(true);
-		playerOpList[player].text = "Press A";
+		Debug.Log("player is: " + player);
 	}
 
 	public void playerDisconnected()
 	{
 		playerOpList[player].text = "Disconnected";
+	}
+
+	public void playerConnected()
+	{
+		playerOpList[player].text = "Press A";
 	}
 
 	public void playerIsReady()

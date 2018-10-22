@@ -73,8 +73,8 @@ public class MainMenuManager : MonoBehaviour {
 
 
 	/*
-	the three functions below will be called when the corrsponding panel is active
-	to enable the button highlight
+	the three functions below will be called when the corsponding panel is active
+	to enable the button highlight for controller
 	 */
 	private void mainMenuButtons( int i )
 	{
