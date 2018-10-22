@@ -58,7 +58,6 @@ public class Player : MonoBehaviour {
 
     private void CheckDeath() {
         if (health <= 0) {
-            //Debug.Log("D E A T H ");
             Destroy(gameObject);
         }
     }

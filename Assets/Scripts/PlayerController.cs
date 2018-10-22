@@ -15,22 +15,26 @@ public class PlayerController : MonoBehaviour {
         if (player == null) // Check to ensure Player component is present, since PlayerStats is a dependency of Player this will never happen, but just in case
             Debug.LogError(gameObject.name + " missing Player Component");
     }
-
     [SerializeField]
     float shootRate = 0.2f;
-
+    float chargeTime = 0.5f;
     float shootTime = 0.0f;
-
+    float holdTime = 0.0f;
+    float holdStart = 0.0f;
+    float holdEnd = 0.0f;
     bool isGrounded;
-
+    //bool buttonHeldDown = false ;
+    //bool holdCheck = false;
+    public bool newMovement = true; //this varialbe is temporary and for testing only
+    public float speed;
+    private Vector3 _inputs = Vector3.zero;
+    Vector3 forward, right;
     public GameObject ShootPoint;
     public Rigidbody rb;
     public Projectile arrow; //this is used for the Basic Attack
-
-    Vector3 forward, right;
-
     [Tooltip("Represents which player this is. Only put in 1-4. Do not put 0!!! This attribute must have a value in order to work or take in input properly!!! ")]
     public int playerNum;
+   
 
     // These are the suffixes used to form a string that represents a specific input on a specific Xbox controller.
     // The suffixes represent the types of inputs found on an Xbox controller (NOTE: more might be added later in the script).
@@ -68,11 +72,47 @@ public class PlayerController : MonoBehaviour {
 
     private string playerPrefix;
 
+    public float DpadX()
+    {
+        return Input.GetAxis(playerPrefix + "DpadX");
+    }
+
+    public float DpadY()
+    {
+        return Input.GetAxis(playerPrefix + "DpadY");
+    }
+
+    public float LeftStickX()
+    {
+        return Input.GetAxis(playerPrefix + left_Joystick_X_Axis);
+    }
+
+    public float LeftStickY()
+    {
+        return Input.GetAxis(playerPrefix + left_Joystick_Y_Axis);
+    }
+
+    public float RightStickX()
+    {
+        return Input.GetAxis(playerPrefix + right_Joystick_X_Axis);
+    }
+
+    public float RightStickY()
+    {
+        return Input.GetAxis(playerPrefix + right_Joystick_Y_Axis);
+    }
+
+    public float RightTrigger()
+    {
+        return Input.GetAxis(playerPrefix + rightTrigger);
+    }
 
 
     void Start() {
+        //shootRate = player.stats.shootTime;
+        speed = player.stats.moveSpeed;
         rb = GetComponent<Rigidbody>();
-        //Physics.gravity = new Vector3(0, -15, 0);
+        Physics.gravity = new Vector3(0, -60, 0);
         playerPrefix = "";
         // Decides which player to take input from if the correct input is given.
         switch (playerNum) {
@@ -102,22 +142,93 @@ public class PlayerController : MonoBehaviour {
         right = Quaternion.Euler(new Vector3(0, 90, 0)) * forward; // This right vector is -45 degrees from the world X axis 
     }
 
-    void Move(string horizontal, string vertical) {
-        Vector3 rightMovement = right * player.stats.moveSpeed * Time.deltaTime * Input.GetAxis(horizontal);
-        Vector3 upMovement = forward * player.stats.moveSpeed * Time.deltaTime * Input.GetAxis(vertical);
-        transform.position += rightMovement;
-        transform.position += upMovement;
+    void MoveWASD(string horizontal, string vertical) {
+        Vector3 rightMovement = right * Input.GetAxis(horizontal);
+        Vector3 upMovement = forward * Input.GetAxis(vertical);
+        Vector3 direction = rightMovement + upMovement;
+        transform.position += direction * player.stats.moveSpeed * Time.fixedDeltaTime;
+    }
+
+    void Move()
+    {
+        if (newMovement) //this is just for testing purposes. Set this to false in the inspector to get back to the previous movement system (and set drag to 0 like before)
+        {
+            if (LeftStickY() != 0.0 || LeftStickX() != 0.0)
+            {
+                Vector3 rightMovement = right * LeftStickX();
+                Vector3 upMovement = forward * LeftStickY();
+                _inputs = (rightMovement + upMovement);
+            }
+            else if (DpadX() != 0.0 || DpadY() != 0.0)
+            {
+                Vector3 rightMovement = right * DpadX();
+                Vector3 upMovement = forward * DpadY();
+                _inputs = (rightMovement + upMovement);
+            }
+        }
+        else
+        {
+            if (LeftStickX() != 0.0 || LeftStickY() != 0.0) //Left Joystick
+            {
+                Vector3 rightMovement = right * LeftStickX();
+                Vector3 upMovement = forward * LeftStickY();
+                Vector3 direction = rightMovement + upMovement;
+                transform.position += direction * player.stats.moveSpeed * Time.deltaTime;
+            }
+            else if (DpadX() != 0.0 | DpadY() != 0.0) //D-Pad
+            {
+                Vector3 rightMovement = right * DpadX();
+                Vector3 upMovement = forward * DpadY();
+                Vector3 direction = rightMovement + upMovement;
+                transform.position += direction * player.stats.moveSpeed * Time.deltaTime;
+            }
+        }
     }
 
     void Jump() {
-        rb.AddForce(Vector3.up * player.stats.jumpForce, ForceMode.Impulse);
-        isGrounded = false;
+        if (Input.GetButtonDown(playerPrefix + rightBumper) && isGrounded) //Checking for jumping
+        { 
+            speed = player.stats.airSpeed;
+            rb.AddForce(Vector3.up * player.stats.jumpForce, ForceMode.Impulse);
+            isGrounded = false;
+        }
     }
+
 
     void Attack() {
-        StartCoroutine("Shoot");
+        if (RightTrigger() != 0.0)
+        {
+            if(holdStart == 0.0)
+            {
+                holdStart = Time.time;
+            }
+            StartCoroutine("IsTriggerBeingHeldDown");
+        }
+        
     }
 
+    IEnumerator IsTriggerBeingHeldDown() //making Input.GetButtonDown/Up functionality for the Axis
+    {
+        if(holdTime <= Time.time)
+        {
+            holdTime = Time.time + 0.01f;
+            yield return new WaitForSeconds(0.01f);
+            if(RightTrigger() == 0.0)
+            {
+                holdEnd = Time.time - holdStart;
+                if(holdEnd >= chargeTime) 
+                {
+                    StartCoroutine("Shoot");
+                }
+              
+                holdStart = 0.0f;
+            }
+        }
+
+
+    }
+
+    //test to see if you can replace shootTime with player.stats.shootTime 
     IEnumerator Shoot() {
         if (shootTime <= Time.time) {
             Instantiate(arrow, ShootPoint.transform.position, transform.rotation, null); //this instantiates the arrow as an attack
@@ -128,43 +239,51 @@ public class PlayerController : MonoBehaviour {
 
     }
 
+    //change the way isGrounded is implemented 
     private void OnCollisionEnter(Collision collision) {
         isGrounded = true;
+        speed = player.stats.moveSpeed;
     }
 
-    void RotatePlayer(string horizontal, string vertical) {
-        Vector3 rightMovement = right * Time.deltaTime * Input.GetAxis(horizontal);
-        Vector3 upMovement = forward * Time.deltaTime * Input.GetAxis(vertical);
-        transform.forward = Vector3.Normalize(rightMovement - upMovement);
+    void RotatePlayer() {
+        if(RightStickX() != 0.0 || RightStickY() != 0.0)
+        {
+            Vector3 rightMovement = right * Time.deltaTime * RightStickX();
+            Vector3 upMovement = forward * Time.deltaTime * RightStickY();
+            transform.forward = Vector3.Normalize(rightMovement - upMovement);
+        }
     }
+
+
+    private void FixedUpdate() //Physics things are supposed to be in FixedUpdate
+    {
+       
+        rb.AddForce((_inputs * speed * 900 * Time.fixedDeltaTime)); //using the Physics System to move 
+    }
+
+
 
     // Update is called once per frame
     void Update() {
-
         //Checking for Movement
         // only for testing a single player with keyboard if you dont have an Xbox controller!
         // Otherwise, comment out the first if-else block.
         if (Input.GetAxis("Horizontal") != 0.0 | Input.GetAxis("Vertical") != 0.0) //WASD only for the first player
             if (playerNum == 1)
-                Move("Horizontal", "Vertical");
-        if (Input.GetAxis(playerPrefix + left_Joystick_X_Axis) != 0.0 | Input.GetAxis(playerPrefix + left_Joystick_Y_Axis) != 0.0) //Left Joystick
-            Move(playerPrefix + left_Joystick_X_Axis, playerPrefix + left_Joystick_Y_Axis);
-        else if (Input.GetAxis(playerPrefix + Dpad_X_Axis) != 0.0 | Input.GetAxis(playerPrefix + Dpad_Y_Axis) != 0.0) //D-Pad
-            Move(playerPrefix + Dpad_X_Axis, playerPrefix + Dpad_Y_Axis);
+                MoveWASD("Horizontal", "Vertical");
 
-        if (Input.GetAxis(playerPrefix + right_Joystick_X_Axis) != 0.0 | Input.GetAxis(playerPrefix + right_Joystick_Y_Axis) != 0.0) //rotation of player with right stick
-        {
-            RotatePlayer(playerPrefix + right_Joystick_X_Axis, playerPrefix + right_Joystick_Y_Axis);
-        }
+        _inputs = Vector3.zero;
+        Move();
 
-        //Checking for jumping
-        if (Input.GetButtonDown(playerPrefix + rightBumper) && isGrounded) {
+        //if (RightStickX() != 0.0 || RightStickY() != 0.0) //rotation of player with right stick
+        //{
+            RotatePlayer();
+        //}
+        //if (Input.GetButtonDown(playerPrefix + rightBumper) && isGrounded) { //Checking for jumping
             Jump();
-        }
-
-        //Checking for attacking
-        if (Input.GetAxis(playerPrefix + rightTrigger) != 0.0) {
+        //}
+        //if (Input.GetAxis(playerPrefix + rightTrigger) != 0.0) { //Checking for attacking
             Attack();
-        }
+        //}
     }
 }

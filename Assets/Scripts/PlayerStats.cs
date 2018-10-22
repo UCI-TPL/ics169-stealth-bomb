@@ -14,7 +14,8 @@ public class PlayerStats : MonoBehaviour {
 
     private void Awake() {
         AddStat("move_speed", 10);
-        AddStat("jump_force", 5);
+        AddStat("air_speed", 3);
+        AddStat("jump_force", 20);
         AddStat("max_health", 100);
         player = GetComponent<Player>();
         if (player == null) // Check to ensure Player component is present, since PlayerStats is a dependency of Player this will never happen, but just in case
@@ -29,6 +30,10 @@ public class PlayerStats : MonoBehaviour {
     }
     public float maxHealth {
         get { return GetStat("max_health"); }
+    }
+    public float airSpeed
+    {
+        get { return getStat("air_speed");  }
     }
 
     // Add a new stat
