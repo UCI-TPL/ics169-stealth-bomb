@@ -33,7 +33,7 @@ public class PlayerStats : MonoBehaviour {
     }
     public float airSpeed
     {
-        get { return getStat("air_speed");  }
+        get { return GetStat("air_speed");  }
     }
 
     // Add a new stat

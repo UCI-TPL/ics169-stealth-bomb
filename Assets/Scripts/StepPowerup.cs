@@ -9,6 +9,10 @@ public class StepPowerup : Powerup {
     public float cooldown;
     private float refreshTime;
 
+    public override void OnAdd(Player player) {
+        refreshTime = 0;
+    }
+
     public override void OnUpdate(Player player) {
         if (refreshTime <= Time.time && player.isMoving) {
             GameObject.Instantiate<GameObject>(spawnPrefab, player.transform.position, Quaternion.identity);
