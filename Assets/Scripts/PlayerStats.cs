@@ -49,7 +49,7 @@ public class PlayerStats : MonoBehaviour {
         if (stats.ContainsKey(modifier.name))
             stats[modifier.name].AddModifier(modifier);
         else
-            Debug.LogError(gameObject.name + " does not contain a stat named \"" + modifier.name + "\"");
+            Debug.LogError("Error adding modifier, " + gameObject.name + " does not contain a stat named \"" + modifier.name + "\"");
     }
 
     // Attempts to remove modifier from a stat, if that stat does not exist display error
@@ -57,7 +57,7 @@ public class PlayerStats : MonoBehaviour {
         if (stats.ContainsKey(modifier.name))
             stats[modifier.name].RemoveModifier(modifier);
         else
-            Debug.LogError(gameObject.name + " does not contain a stat named \"" + modifier.name + "\"");
+            Debug.LogError("Error removing modifier, " + gameObject.name + " does not contain a stat named \"" + modifier.name + "\"");
     }
 
     // manages the value of a single stat

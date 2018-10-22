@@ -1,13 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
-[CreateAssetMenu]
+[CreateAssetMenu(fileName = "New Powerup", menuName = "Power up/Power up", order = 1)]
 public class Powerup : ScriptableObject {
     
     public static float duration = 10; // Buff duration for all powerups
 
-    public string name;
+    public new string name;
     public Texture2D image;
     public string description;
     
@@ -30,6 +31,9 @@ public class Powerup : ScriptableObject {
         modifiers.RemoveAt(index);
     }
 
-    // On going effects of the powerup when it is on a player
-    public virtual void OnUpdate() { }
+    public virtual void OnAdd(Player player) { }
+
+    public virtual void OnUpdate(Player player) { }
+
+    public virtual void OnRemove(Player player) { }
 }
