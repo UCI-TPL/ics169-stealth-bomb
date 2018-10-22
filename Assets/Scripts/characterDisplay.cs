@@ -20,7 +20,7 @@ public class characterDisplay : MonoBehaviour {
 	private void Start()
 	{
 		characterList = new List<Transform>();
-		for (int i= 0; i < transform.childCount; i++)
+		for (int i= 0; i < transform.childCount-2; i++)
 		{
 			character = transform.GetChild(i);
 			characterList.Add(character);
@@ -46,7 +46,6 @@ public class characterDisplay : MonoBehaviour {
 			choice--;
 			if (choice <= 0f)
 				choice = choiceLimit;
-			// choice = Mathf.Abs(choice);
 		}
 
 		Debug.Log("choice: " + choice);
@@ -58,7 +57,7 @@ public class characterDisplay : MonoBehaviour {
 	 */
 	public void enableCharacterModel(int chara)
 	{
-		for (int i = 0; i < transform.childCount; i++)
+		for (int i = 0; i < transform.childCount-2; i++)
 		{
 			character = transform.GetChild(i);
 			character.gameObject.SetActive(i == chara);

@@ -100,13 +100,4 @@ public class MainMenuManager : MonoBehaviour {
 		b.Select();
 	}
 
-
-	/*
-	player one's character
-	 */
-	 private void playerOneSelection()
-	 {
-		 
-	 }
-
 }
