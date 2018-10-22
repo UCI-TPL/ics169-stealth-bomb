@@ -5,45 +5,67 @@ using UnityEngine.UI;
 
 public class characterSelection : MonoBehaviour {
 
-	// private Transform uielement;
-	public Text t;
-	public Text readyT;
+	public GameObject players;
+	public List<Text> playerOpList;
+	public Text readyText;
 
-	void Start()
+	private int player = 0;
+
+	private void Start()
 	{
-		// uielement = transform.GetChild(4);
-		// t = uielement.gameObject.GetComponent<Text>();
+		/*
+		go through players and add each player's opinfo (Text) to the playerOpList
+		 */
+		playerOpList = new List<Text>();
+		for (int i= 0; i < players.transform.childCount; i++)
+		{
+			Transform t = players.transform.GetChild(i).transform.GetChild(1);
+			playerOpList.Add(t.GetComponent<Text>());
+		}
 	}
+
+	/*
+	set player to p:
+	0 - player 1
+	1 - player 2
+	2 - player 3
+	3 - player 4
+	 */
+	public void playerIs(int p)
+	{
+		player = p;
+	}
+
 
 	public void playerConnected()
 	{
 		// uielement.gameObject.SetActive(true);
-		t.text = "Press A";
+		playerOpList[player].text = "Press A";
 	}
 
 	public void playerDisconnected()
 	{
-		t.text = "Disconnected";
+		playerOpList[player].text = "Disconnected";
 	}
 
 	public void playerIsRead()
 	{
-		t.text = "Ready";
+		playerOpList[player].text = "Ready";
 	}
 
 	public void playerIsNotReady()
 	{
-		t.text = "Not Ready";
+		playerOpList[player].text = "Not Ready";
 	}
 
 	public void gameIsReady()
 	{
-		readyT.text = "Game is ready to start";
+		readyText.text = "Game is ready to start";
 	}
 
 	public void gameIsNotReady()
 	{
-		readyT.text = "Not Enough Players";
+		readyText.text = "Not Enough Players";
 	}
 
 }
