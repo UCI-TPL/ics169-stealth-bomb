@@ -10,6 +10,13 @@ public class TerrainManager : MonoBehaviour {
     public float timer;
     private string pastLevel = null;
 
+    private Vector2 center;
+    private Vector2 radius;
+    private Vector2 newRadius;
+    public Rect mapArea {
+        get { return new Rect(center - newRadius + new Vector2(collapseBuffer, collapseBuffer), 2 * (newRadius - new Vector2(collapseBuffer, collapseBuffer))); }
+    }
+
     private static TerrainManager _terrainManager;
     public static TerrainManager terrainManager {
         get {
@@ -49,6 +56,9 @@ public class TerrainManager : MonoBehaviour {
             else
                 Debug.Log("No tile Map loaded and Random Terrain Component not included");
         }
+        center = new Vector2((tileMap.GetLength(0) - 1) / 2f, (tileMap.GetLength(2) - 1) / 2f); // diameter == numBlocks-1  EX: dist between 2 blocks is 1
+        radius = center + new Vector2(collapseBuffer, collapseBuffer); // Add buffer to radius
+        newRadius = radius;
 
         Invoke("StartCountdown", timer);
     }
@@ -59,28 +69,28 @@ public class TerrainManager : MonoBehaviour {
 
     private IEnumerator CollapseTerrain(float timer) { // Process destroying the terrain over a set time
         float endTimer = Time.time;
-        Vector3 center = new Vector3((tileMap.GetLength(0) - 1) / 2f, 0, (tileMap.GetLength(2) - 1) / 2f); // diameter == numBlocks-1  EX: dist between 2 blocks is 1
-        Vector3 radius = center + new Vector3(collapseBuffer, 0, collapseBuffer); // Add buffer to radius
-        Vector3 tPerS = radius / timer; // Tiles covered per sec
+        Vector2 tPerS = radius / timer; // Tiles covered per sec
         float ratio; // declare outside for while loop condition
         do {
             ratio = 1 - (Time.time - endTimer) / timer; // ratio to shrink stage based on timer
-            Vector3 newRadius = radius * ratio;
+            newRadius = radius * ratio;
 
             for (int col = 0; col < tileMap.GetLength(0); ++col) { // check chance to destroy for every block
                 for (int row = 0; row < tileMap.GetLength(2); ++row) {
-                    Vector3 distToRing = (new Vector3(col, 0, row) - center).Abs() - newRadius; // Tile distance from collapsing area
-                    Vector3 tileProb = (distToRing + new Vector3(collapseBuffer, 0, collapseBuffer)) / (collapseBuffer * 2); // Probability of tile collapsing based on distance from ring of collapse
-                    if (Random.Range(0f, 1f) < Mathf.Max(tileProb.x * tPerS.x, tileProb.z * tPerS.z, 0) * updateRate * 4 || Mathf.Max(distToRing.x, distToRing.z) > collapseBuffer) // Check chance to collapse or if block is too far out
+                    Vector2 distToRing = (new Vector2(col, row) - center).Abs() - newRadius; // Tile distance from collapsing area
+                    Vector2 tileProb = (distToRing + new Vector2(collapseBuffer, collapseBuffer)) / (collapseBuffer * 2); // Probability of tile collapsing based on distance from ring of collapse
+                    if (Random.Range(0f, 1f) < Mathf.Max(tileProb.x * tPerS.x, tileProb.y * tPerS.y, 0) * updateRate * 4 || Mathf.Max(distToRing.x, distToRing.y) > collapseBuffer) // Check chance to collapse or if block is too far out
                         for (int height = 0; height < tileMap.GetLength(1); ++height)
                             if (tileMap[col, height, row] != null)
                                 tileMap[col, height, row].Destroy(warningTimer); // Destroy tile after warning time
                 }
             }
 
-            if (Mathf.Min(newRadius.x, newRadius.z) < -collapseBuffer)
+            if (Mathf.Min(newRadius.x, newRadius.y) < -collapseBuffer)
                 break; // quit loop when all tiles are for sure destroyed
-            DebugShrinkTerrain(center + transform.position, newRadius); // Display visual area of where shrinking is happening in editor
+            #if UNITY_EDITOR //Editor only tag
+            DebugShrinkTerrain(new Vector3(center.x, 0, center.y) + transform.position, new Vector3(newRadius.x, 0, newRadius.y)); // Display visual area of where shrinking is happening in editor
+            #endif //Editor only tag
             yield return new WaitForSeconds(updateRate);
         } while (ratio > -0.2); // quit loop if something goes wrong
         LoadLevel("TowerLevel");

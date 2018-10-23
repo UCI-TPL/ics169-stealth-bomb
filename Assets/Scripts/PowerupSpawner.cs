@@ -17,8 +17,9 @@ public class PowerupSpawner : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
+        print(TerrainManager.terrainManager.mapArea);
 		if (cooldown <= Time.time) {
-            GameObject g = Instantiate(powerupHolder, new Vector3(Random.Range(0, 15)+0.5f, 1.5f, Random.Range(0, 15)+0.5f), Quaternion.identity);
+            GameObject g = Instantiate(powerupHolder, new Vector3(Mathf.Round(Random.Range(TerrainManager.terrainManager.mapArea.min.x, TerrainManager.terrainManager.mapArea.max.x)) +0.5f, 1.5f, Mathf.Round(Random.Range(TerrainManager.terrainManager.mapArea.min.y, TerrainManager.terrainManager.mapArea.max.y)) +0.5f), Quaternion.identity);
             g.GetComponent<PowerupBehavior>().SetPowerupData(powerupList.RandomPowerup());
             ResetCooldown();
         }

@@ -15,4 +15,12 @@ namespace Vector3Extensions {
             return new Vector3Int(Mathf.RoundToInt(v3.x), Mathf.RoundToInt(v3.y), Mathf.RoundToInt(v3.z));
         }
     }
+
+    public static class Vector2Extension {
+
+        // Returns a new Vector2 with the absolute value of the input Vector3
+        public static Vector2 Abs(this Vector2 v2) {
+            return new Vector2(Mathf.Abs(v2.x), Mathf.Abs(v2.y));
+        }
+    }
 }
