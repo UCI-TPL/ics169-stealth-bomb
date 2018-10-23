@@ -25,8 +25,6 @@ public class StepPowerup : Powerup {
         this.data = data;
         refreshTime = 0;
         AddUpdate(OnUpdate);
-        Debug.Log(data.spawnPrefab);
-        Debug.Log(player);
     }
 
     public void OnUpdate() {
