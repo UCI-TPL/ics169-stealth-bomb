@@ -21,14 +21,19 @@ public class PlayerController : MonoBehaviour {
     float shootTime = 0.0f;
     float holdTime = 0.0f;
     float holdStart = 0.0f;
+    float rollTime = 0.0f; //to check if the player is currently rolling
     float holdEnd = 0.0f;
+    float speed;
+
     bool isGrounded;
-    //bool buttonHeldDown = false ;
-    //bool holdCheck = false;
+    bool movementAllowed = true; //used to lock movement while dodging
+    bool dodging = false; 
     public bool newMovement = true; //this varialbe is temporary and for testing only
-    public float speed;
+    
     private Vector3 _inputs = Vector3.zero;
     Vector3 forward, right;
+    Vector3 rotationDirection; //used for Dodging
+
     public GameObject ShootPoint;
     public Rigidbody rb;
     public Projectile arrow; //this is used for the Basic Attack
@@ -72,6 +77,14 @@ public class PlayerController : MonoBehaviour {
 
     private string playerPrefix;
 
+
+    Renderer rend;
+    Color startColor;
+    [SerializeField]
+    Color changeColor;
+
+    public float colorAddition = 0.1f;
+
     public float DpadX()
     {
         return Input.GetAxis(playerPrefix + "DpadX");
@@ -110,6 +123,8 @@ public class PlayerController : MonoBehaviour {
 
     void Start() {
         //shootRate = player.stats.shootTime;
+        rend = GetComponent<Renderer>();
+        startColor = rend.material.color;
         speed = player.stats.moveSpeed;
         rb = GetComponent<Rigidbody>();
         Physics.gravity = new Vector3(0, -60, 0);
@@ -151,6 +166,9 @@ public class PlayerController : MonoBehaviour {
 
     void Move()
     {
+
+         
+
         if (newMovement) //this is just for testing purposes. Set this to false in the inspector to get back to the previous movement system (and set drag to 0 like before)
         {
             if (LeftStickY() != 0.0 || LeftStickX() != 0.0)
@@ -194,6 +212,34 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
+    void Dodge()
+    {
+        if (Input.GetButtonDown(playerPrefix + "B"))
+        {
+            StartCoroutine("Dodging");
+        }
+    }
+
+    IEnumerator Dodging()
+    {
+        if(rollTime <= Time.time)
+        {
+            rollTime = Time.time + player.stats.dodgeTime; //Dodge Begins
+            dodging = true;
+            movementAllowed = false;
+            speed = player.stats.moveSpeed * 1.6f;
+            Debug.Log("Dodge begins"+Time.time);
+            //make movement stuff happen 
+            yield return new WaitForSeconds(player.stats.dodgeTime/2); //Halfway through invincibility ends
+            yield return new WaitForSeconds(player.stats.dodgeTime/2); //Dodging ends
+            movementAllowed = true;
+            dodging = false;
+            Debug.Log("Dodge ends"+Time.time);
+            speed = player.stats.moveSpeed;
+        }
+        
+    }
+
 
     void Attack() {
         if (RightTrigger() != 0.0)
@@ -213,15 +259,20 @@ public class PlayerController : MonoBehaviour {
         {
             holdTime = Time.time + 0.01f;
             yield return new WaitForSeconds(0.01f);
-            if(RightTrigger() == 0.0)
+            if(RightTrigger() == 0.0) //stop being held down
             {
                 holdEnd = Time.time - holdStart;
-                if(holdEnd >= chargeTime) 
+                rend.material.color = startColor;
+                if (holdEnd >= chargeTime) 
                 {
+                   
                     StartCoroutine("Shoot");
                 }
-              
                 holdStart = 0.0f;
+            }
+            else //is being held down
+            {
+                rend.material.color = rend.material.color + (Color.red / colorAddition);
             }
         }
 
@@ -241,24 +292,42 @@ public class PlayerController : MonoBehaviour {
 
     //change the way isGrounded is implemented 
     private void OnCollisionEnter(Collision collision) {
-        isGrounded = true;
-        speed = player.stats.moveSpeed;
+
+        if(isGrounded == false)
+        {
+            isGrounded = true;
+            speed = player.stats.moveSpeed;
+        }
+
     }
 
     void RotatePlayer() {
+        Vector3 rightMovement;
+        Vector3 upMovement;
         if(RightStickX() != 0.0 || RightStickY() != 0.0)
         {
-            Vector3 rightMovement = right * Time.deltaTime * RightStickX();
-            Vector3 upMovement = forward * Time.deltaTime * RightStickY();
-            transform.forward = Vector3.Normalize(rightMovement - upMovement);
+            rightMovement = right * Time.deltaTime * RightStickX();
+            upMovement = -(forward * Time.deltaTime * RightStickY());
         }
+        else
+        {
+            rightMovement = right * Time.deltaTime * LeftStickX();
+            upMovement = forward * Time.deltaTime * LeftStickY();
+        }
+        if(Vector3.Normalize(rightMovement + upMovement) != Vector3.zero)
+        {
+            transform.forward = Vector3.Normalize(rightMovement + upMovement);
+        }
+        
     }
 
 
     private void FixedUpdate() //Physics things are supposed to be in FixedUpdate
     {
-       
-        rb.AddForce((_inputs * speed * 900 * Time.fixedDeltaTime)); //using the Physics System to move 
+        if(newMovement)
+        {
+            rb.AddForce((_inputs * speed * 900 * Time.fixedDeltaTime)); //The player moves forward forever just choose the Inputs (not sure if this is best)
+        }   
     }
 
 
@@ -272,18 +341,27 @@ public class PlayerController : MonoBehaviour {
             if (playerNum == 1)
                 MoveWASD("Horizontal", "Vertical");
 
-        _inputs = Vector3.zero;
-        Move();
-
-        //if (RightStickX() != 0.0 || RightStickY() != 0.0) //rotation of player with right stick
-        //{
+        if(movementAllowed)
+        {
+            _inputs = Vector3.zero;
+            Move();
             RotatePlayer();
-        //}
-        //if (Input.GetButtonDown(playerPrefix + rightBumper) && isGrounded) { //Checking for jumping
             Jump();
-        //}
-        //if (Input.GetAxis(playerPrefix + rightTrigger) != 0.0) { //Checking for attacking
             Attack();
-        //}
+            Dodge();
+        }
+        else //this could be used to stop movement during dodges and stuns 
+        {
+            if (dodging)
+            {
+                _inputs = transform.forward;
+            }
+            else
+            {
+                _inputs = Vector3.zero;
+            }
+            //return;
+        }
+
     }
 }

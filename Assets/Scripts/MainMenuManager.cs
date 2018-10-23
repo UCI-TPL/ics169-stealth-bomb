@@ -10,8 +10,8 @@ public class MainMenuManager : MonoBehaviour {
 	int menu represents the current menu
 	0 - quit
 	1 - main menu
-	2 - prep menu
-	3 - game
+	2 - selection menu
+	3 - setting menu
 	 */
 	private static int menu = 0;
 	
@@ -19,6 +19,9 @@ public class MainMenuManager : MonoBehaviour {
 	public GameObject mainMenuPanel;
 	public GameObject selectionMenuPanel;
 	public GameObject settingMenuPanel;
+
+	private GameObject btn;
+	private Button b;
 
 	public int getCurrentPanel()
 	{ return menu; }
@@ -47,13 +50,15 @@ public class MainMenuManager : MonoBehaviour {
 				mainMenuPanel.SetActive(true);
 				selectionMenuPanel.SetActive(false);
 				settingMenuPanel.SetActive(false);
+				mainMenuButtons(1);
 				break;
 			
-			//Game Preperation
+			//Character Selection
 			case 2:
 				mainMenuPanel.SetActive(false);
 				selectionMenuPanel.SetActive(true);
 				settingMenuPanel.SetActive(false);
+				selectionMenuButtons(2);
 				break;
 
 			//Setting Menu
@@ -61,8 +66,38 @@ public class MainMenuManager : MonoBehaviour {
 				mainMenuPanel.SetActive(false);
 				selectionMenuPanel.SetActive(false);
 				settingMenuPanel.SetActive(true);
+				settingMenuButtons(2);
 				break;
 		}
+	}
+
+
+	/*
+	the three functions below will be called when the corsponding panel is active
+	to enable the button highlight for controller
+	 */
+	private void mainMenuButtons( int i )
+	{
+		btn = mainMenuPanel.transform.GetChild(i).gameObject;
+		_buttonSelect();
+	}
+
+	private void selectionMenuButtons( int i )
+	{
+		btn = selectionMenuPanel.transform.GetChild(i).gameObject;
+		_buttonSelect();
+	}
+
+	private void settingMenuButtons( int i )
+	{
+		btn = settingMenuPanel.transform.GetChild(i).gameObject;
+		_buttonSelect();
+	}
+
+	private void _buttonSelect()
+	{
+		b = btn.GetComponent<Button>();
+		b.Select();
 	}
 
 }

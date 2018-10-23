@@ -73,8 +73,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1280739382586110}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.45, z: 0.35}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalPosition: {x: 0, y: 0.605, z: 0.437}
+  m_LocalScale: {x: 0.6, y: 0.5, z: 0.8}
   m_Children:
   - {fileID: 4717069647750178}
   m_Father: {fileID: 4778755862382544}
@@ -258,6 +258,8 @@ MonoBehaviour:
   rightTrigger: RightTrigger
   Dpad_X_Axis: DpadX
   Dpad_Y_Axis: DpadY
+  changeColor: {r: 0, g: 0, b: 0, a: 0}
+  colorAddition: 25
 --- !u!114 &114343147660848492
 MonoBehaviour:
   m_ObjectHideFlags: 1
