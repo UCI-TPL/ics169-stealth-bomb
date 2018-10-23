@@ -21,7 +21,7 @@ public class PowerupEditor : Editor {
         script.name = EditorGUILayout.TextField(script.name);
         GUILayout.EndHorizontal();
         
-        script.image = EditorGUILayout.ObjectField("Image", script.image, typeof(Texture2D), false) as Texture2D;
+        script.image = EditorGUILayout.ObjectField("Image", script.image, typeof(Sprite), false) as Sprite;
 
         GUILayout.BeginHorizontal();
         GUILayout.Label("Description", GUILayout.Width(75));

@@ -9,7 +9,7 @@ public class PowerupData : ScriptableObject {
     public static float duration = 10; // Buff duration for all powerups
 
     public new string name;
-    public Texture2D image;
+    public Sprite image;
     public string description;
     
     // Holds a list of all modifiers in the powerup

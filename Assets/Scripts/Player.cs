@@ -63,12 +63,15 @@ public class Player : MonoBehaviour {
     }
 
     void Update() {
+        List<Powerup> deleteList = new List<Powerup>();
         foreach (Powerup p in powerups) {
-            if (p.endTime <= Time.time) 
-                RemovePowerup(p); // Remove power-up if expired
+            if (p.endTime <= Time.time)
+                deleteList.Add(p); // Remove power-up if expired
             else
                 p.onUpdate.Invoke();
         }
+        foreach (Powerup p in deleteList)
+            RemovePowerup(p);
 
         CheckDeath();
     }
