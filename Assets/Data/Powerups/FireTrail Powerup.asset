@@ -9,7 +9,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a02077832023b1a419d4d656adb270ca, type: 3}
-  m_Name: Fire Trail Powerup
+  m_Name: FireTrail Powerup
   m_EditorClassIdentifier: 
   name: Fire Trail
   image: {fileID: 2800000, guid: 2a2b3a5f04235ad49aa9e0803fcd993c, type: 3}
@@ -20,4 +20,4 @@ MonoBehaviour:
     type: 0
   spawnPrefab: {fileID: 1434408715701018, guid: 3b39dc403a8cf4e4a895d6b8648b9ca0,
     type: 2}
-  cooldown: 0.1
+  cooldown: 0.05

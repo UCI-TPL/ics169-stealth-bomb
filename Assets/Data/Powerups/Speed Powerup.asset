@@ -8,14 +8,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1dbd4135e9a119e4ab0bbc845e37c1db, type: 3}
+  m_Script: {fileID: 0}
   m_Name: Speed Powerup
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::PowerupData
   name: Speed
   image: {fileID: 2800000, guid: 2a2b3a5f04235ad49aa9e0803fcd993c, type: 3}
-  description: Increases the player's attack speed and movement speed.
+  description: Increases the player's movement speed
   modifiers:
-  - name: attack_speed
-    value: 10
   - name: move_speed
     value: 10
+    type: 0

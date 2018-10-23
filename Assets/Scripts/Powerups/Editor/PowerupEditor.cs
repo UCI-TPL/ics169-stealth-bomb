@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(Powerup))]
+[CustomEditor(typeof(PowerupData))]
 public class PowerupEditor : Editor {
 
-    private Powerup script {
-        get { return (Powerup)target; }
+    private PowerupData script {
+        get { return (PowerupData)target; }
     }
 
     private void OnEnable() {

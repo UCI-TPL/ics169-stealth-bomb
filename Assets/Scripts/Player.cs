@@ -27,7 +27,7 @@ public class Player : MonoBehaviour {
 
     private Rigidbody rb;
 
-    private Queue<PowerupContainer> tempPowerups = new Queue<PowerupContainer>();
+    private List<Powerup> powerups = new List<Powerup>();
 
     private Vector3 prevPosition;
     public bool isMoving {
@@ -63,51 +63,28 @@ public class Player : MonoBehaviour {
     }
 
     void Update() {
-        while (tempPowerups.Count > 0 && tempPowerups.Peek().endTime <= Time.time) // Check oldest power-up's duration for expiration
-             RemovePowerup(tempPowerups.Dequeue().powerup); // Remove power-up from queue and remove its effects
-
-        foreach (PowerupContainer p in tempPowerups) {
-            p.onUpdate.Invoke();
+        foreach (Powerup p in powerups) {
+            if (p.endTime <= Time.time) 
+                RemovePowerup(p); // Remove power-up if expired
+            else
+                p.onUpdate.Invoke();
         }
+
         CheckDeath();
     }
 
-    // Add the power-up to queue and add its modifiers to stats
-    public void AddPowerup(Powerup powerup) {
-        powerup.OnAdd(this); // Initialize power-up
-        tempPowerups.Enqueue(new PowerupContainer(this, powerup));
-        foreach (PlayerStats.Modifier m in powerup.modifiers)
+    // Create a new instance of a power-up, save it to list of power-ups and add its modifiers to stats
+    public void AddPowerup(PowerupData powerupData) {
+        Powerup powerup = powerupData.NewInstance(this); // Initialize power-up
+        powerups.Add(powerup); // Save to list of powerups
+        foreach (PlayerStats.Modifier m in powerup.modifiers) // Add power-up's modifiers to stats
             stats.AddModifier(m);
     }
 
-    // Remove each modifier granted by the power-up
+    // Remove each modifier granted by the power-up and remove the power-up from list of power-ups
     public void RemovePowerup(Powerup powerup) {
         foreach (PlayerStats.Modifier m in powerup.modifiers)
             stats.RemoveModifier(m);
-    }
-
-    // Holds a powerup and its duration
-    private class PowerupContainer {
-        public Powerup powerup;
-        public float startTime;
-        public float endTime;
-        public float timeRemaining {
-            get { return endTime - Time.time; }
-        }
-        public bool isPermenant {
-            get { return float.IsPositiveInfinity(endTime); }
-        }
-        private Player player;
-
-        // List of functions to be called every update on a player
-        public UnityEvent onUpdate = new UnityEvent();
-
-        public PowerupContainer(Player player, Powerup powerup, bool isPermenant = false) {
-            this.player = player;
-            this.powerup = powerup;
-            startTime = Time.time;
-            endTime = isPermenant ? float.PositiveInfinity : Time.time + Powerup.duration;
-            onUpdate.AddListener(delegate { powerup.OnUpdate(player); });
-        }
+        powerups.Remove(powerup);
     }
 }

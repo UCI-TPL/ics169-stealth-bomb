@@ -5,12 +5,12 @@ using UnityEngine;
 public class PowerupBehavior : MonoBehaviour {
 
     [SerializeField]
-    private Powerup powerup;
+    private PowerupData powerupData;
 
     private bool destroying = false;
 
     private void Awake() {
-        if (powerup == null) // Check to ensure Powerup is present
+        if (powerupData == null) // Check to ensure Powerup is present
             Debug.LogError(gameObject.name + " missing Powerup");
     }
 
@@ -18,7 +18,7 @@ public class PowerupBehavior : MonoBehaviour {
     private void OnTriggerEnter(Collider other) {
         Player player = other.GetComponent<Player>();
         if (player != null) {
-            player.AddPowerup(powerup);
+            player.AddPowerup(powerupData);
             Destroy();
         }
     }
