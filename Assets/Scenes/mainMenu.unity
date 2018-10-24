@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571334, b: 0.3069219, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1143,7 +1143,7 @@ MonoBehaviour:
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 433872813}
   m_OnClick:
     m_PersistentCalls:
@@ -1775,7 +1775,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &590053544
 Transform:
   m_ObjectHideFlags: 0
@@ -1803,6 +1803,7 @@ MonoBehaviour:
   mainMenuPanel: {fileID: 919997562}
   selectionMenuPanel: {fileID: 1624157097}
   settingMenuPanel: {fileID: 1024509292}
+  cooldown: 10
 --- !u!1 &593329668
 GameObject:
   m_ObjectHideFlags: 0
@@ -3004,6 +3005,7 @@ GameObject:
   - component: {fileID: 1035839871}
   - component: {fileID: 1035839870}
   - component: {fileID: 1035839869}
+  - component: {fileID: 1035839872}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -3017,7 +3019,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1035839868}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 1077351063, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
@@ -3056,6 +3058,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1035839872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1035839868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3773888f56ad847e286a9d6846601277, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainMenuPanel: {fileID: 919997562}
+  selectionMenuPanel: {fileID: 1624157097}
+  settingMenuPanel: {fileID: 1024509292}
+  cooldown: 0.25
 --- !u!1 &1063438000
 GameObject:
   m_ObjectHideFlags: 0
@@ -3475,7 +3492,7 @@ MonoBehaviour:
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1163506035}
   m_OnClick:
     m_PersistentCalls:
@@ -4009,7 +4026,7 @@ MonoBehaviour:
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1271641118}
   m_OnClick:
     m_PersistentCalls:
@@ -5363,7 +5380,7 @@ MonoBehaviour:
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1763363283}
   m_OnClick:
     m_PersistentCalls:

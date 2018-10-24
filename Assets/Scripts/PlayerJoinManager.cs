@@ -67,7 +67,7 @@ public class PlayerJoinManager : MonoBehaviour {
 			// This loop checks to see which controllers are connected to display confirmation UI element for that controller.
 			for (int i = 0; i < 4; i++) {
 				prevStates[i] = currentStates[i];
-				currentStates[i] = GamePad.GetState(players[i]);;
+				currentStates[i] = GamePad.GetState(players[i]);
 				if (currentStates[i].IsConnected) {
 					if (!prevStates[i].IsConnected) {
 						// FINISH!!!!!
@@ -96,7 +96,7 @@ public class PlayerJoinManager : MonoBehaviour {
 			// This loop checks to see which players have A to confirm they are ready.
 			for (int i = 0; i < 4; i++) {
 				if (currentStates[i].IsConnected) {
-					if (currentStates[i].Buttons.A == ButtonState.Pressed && playersReady[i] == false) {
+					if (currentStates[i].Buttons.Start == ButtonState.Pressed && playersReady[i] == false) {
 						// FINISH!!!!!
 						// Display the UI element showing the player has confirmed he/she is ready to play.
 						playersReady[i] = true;
@@ -140,6 +140,17 @@ public class PlayerJoinManager : MonoBehaviour {
 
 				//calling UI -Kyle
 				selectionOP.gameIsNotReady();
+			}
+
+			// if conditions met, start the match
+			if (numOfPlayersReady >= 2) {
+				for (int i = 0; i < playersReady.Length; i++) {
+					if (playersReady[i] == true) {
+						if (currentStates[i].Buttons.Start == ButtonState.Pressed && prevStates[i].Buttons.Start == ButtonState.Released) {
+							SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+						}
+					}
+				}
 			}
 
 			numOfPlayersReady = newNumOfPlayersReady;

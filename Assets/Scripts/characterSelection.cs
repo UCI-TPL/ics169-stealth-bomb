@@ -60,7 +60,7 @@ public class characterSelection : MonoBehaviour {
 
 	public void playerConnected()
 	{
-		playerOpList[player].text = "Press A";
+		playerOpList[player].text = "Press Start";
 	}
 
 	public void playerIsReady()
@@ -75,7 +75,7 @@ public class characterSelection : MonoBehaviour {
 
 	public void gameIsReady()
 	{
-		readyText.text = "Game is ready to start";
+		readyText.text = "Game is ready! Press Start";
 	}
 
 	public void gameIsNotReady()
