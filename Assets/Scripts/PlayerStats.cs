@@ -17,6 +17,7 @@ public class PlayerStats : MonoBehaviour {
         AddStat("air_speed", 3);
         AddStat("jump_force", 20);
         AddStat("max_health", 100);
+        AddStat("dodge_time", 0.2f);
         player = GetComponent<Player>();
         if (player == null) // Check to ensure Player component is present, since PlayerStats is a dependency of Player this will never happen, but just in case
             Debug.LogError(gameObject.name + " missing Player Component");
@@ -31,10 +32,13 @@ public class PlayerStats : MonoBehaviour {
     public float maxHealth {
         get { return GetStat("max_health"); }
     }
-    public float airSpeed
-    {
+    public float airSpeed    {
         get { return GetStat("air_speed");  }
     }
+    public float dodgeTime    {
+        get { return GetStat("dodge_time"); }
+    }
+
 
     // Add a new stat
     private void AddStat(string name, float value) {

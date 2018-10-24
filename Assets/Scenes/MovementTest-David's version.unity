@@ -602,7 +602,7 @@ MonoBehaviour:
   floorTile: {fileID: 1965115019997768, guid: 648c98a46cfb98b4498a3a003bd98913, type: 2}
   wallTile: {fileID: 1743838175089580, guid: eb831fde644fcb04ab28eda82a20ba83, type: 2}
   size: {x: 20, y: 3, z: 20}
-  wallProb: 0.1
+  wallProb: 0.05
 --- !u!1 &1825030790
 GameObject:
   m_ObjectHideFlags: 0
@@ -650,8 +650,8 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 0
-  orthographic size: 5
+  orthographic: 1
+  orthographic size: 8
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -674,7 +674,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1825030790}
   m_LocalRotation: {x: 0.35355338, y: 0.35355338, z: -0.1464466, w: 0.8535535}
-  m_LocalPosition: {x: -4, y: 16, z: -4}
+  m_LocalPosition: {x: -4.71, y: 20.76, z: -4.59}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
