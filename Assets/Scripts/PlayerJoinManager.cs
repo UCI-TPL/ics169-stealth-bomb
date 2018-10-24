@@ -96,7 +96,7 @@ public class PlayerJoinManager : MonoBehaviour {
 			// This loop checks to see which players have A to confirm they are ready.
 			for (int i = 0; i < 4; i++) {
 				if (currentStates[i].IsConnected) {
-					if (currentStates[i].Buttons.Start == ButtonState.Pressed && playersReady[i] == false) {
+					if (currentStates[i].Buttons.A == ButtonState.Pressed && playersReady[i] == false) {
 						// FINISH!!!!!
 						// Display the UI element showing the player has confirmed he/she is ready to play.
 						playersReady[i] = true;
