@@ -12,12 +12,19 @@ MonoBehaviour:
   m_Name: Powerup List
   m_EditorClassIdentifier: 
   tiers:
-  - percent: 50
+  - percent: 45
     powerups:
     - {fileID: 11400000, guid: ad2d9603dfcf19d41a66877d48aa241e, type: 2}
-  - percent: 35
+    - {fileID: 11400000, guid: ad2d9603dfcf19d41a66877d48aa241e, type: 2}
+    - {fileID: 11400000, guid: ad2d9603dfcf19d41a66877d48aa241e, type: 2}
+    - {fileID: 11400000, guid: ad2d9603dfcf19d41a66877d48aa241e, type: 2}
+    - {fileID: 11400000, guid: ad2d9603dfcf19d41a66877d48aa241e, type: 2}
+  - percent: 30
     powerups:
     - {fileID: 11400000, guid: 9c71528773eb1544b94d39f9aefd88af, type: 2}
   - percent: 15
+    powerups:
+    - {fileID: 11400000, guid: b9f258f8b54d9094fb8dd327275c455c, type: 2}
+  - percent: 10
     powerups:
     - {fileID: 11400000, guid: b9f258f8b54d9094fb8dd327275c455c, type: 2}

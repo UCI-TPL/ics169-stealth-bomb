@@ -16,8 +16,8 @@ MonoBehaviour:
   description: Creates a fiery trail behind the player.
   modifiers:
   - name: move_speed
-    value: 5
-    type: 0
+    value: 0.2
+    type: 2
   spawnPrefab: {fileID: 1434408715701018, guid: 3b39dc403a8cf4e4a895d6b8648b9ca0,
     type: 2}
   cooldown: 0.05
