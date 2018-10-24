@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Events;
 using UnityEngine.UI;
+using XInputDotNetPure;
 
 public class MainMenuManager : MonoBehaviour {
 
@@ -23,12 +25,94 @@ public class MainMenuManager : MonoBehaviour {
 	private GameObject btn;
 	private Button b;
 
+
+	PlayerIndex player;
+	bool playerSet;
+	GamePadState state;
+	GamePadState prevState;
+	private int currentMainMenuButton;
+	private int currentSelectionMenuButton;
+	private int currentSettingsMenuButton;
+
+	public float cooldown = 10.0f;
+	private float timer;
+	private bool hasMoved;
+
 	public int getCurrentPanel()
 	{ return menu; }
 
 	private void Start()
 	{
 		setMenu(1);
+		playerSet = false;
+		currentMainMenuButton = 1;
+		currentSelectionMenuButton = 2;
+		currentSettingsMenuButton = 2;
+		timer = 7.5f;
+		hasMoved = false;
+	}
+
+	void Update() {
+		// code modified from 3rd party script: XInputTestCS.cs
+		if (!playerSet || !prevState.IsConnected) {
+			for (int i = 0; i < 4; i++) {
+				PlayerIndex testPlayer = (PlayerIndex) i;
+				//player = (PlayerIndex) i;
+				GamePadState testState = GamePad.GetState(testPlayer);
+				if (testState.IsConnected) {
+					playerSet = true;
+					player = testPlayer;
+				}
+			}
+		}
+
+		prevState = state;
+		state = GamePad.GetState(player);
+		// end of borrowed/modified code
+		if (timer >= cooldown) {
+			if (mainMenuPanel.activeSelf == true) {
+				if (state.ThumbSticks.Left.Y > 0.0f /*&& prevState.ThumbSticks.Left.Y <= 0.0f*/) {
+					currentMainMenuButton--;
+					if (currentMainMenuButton < 1) {
+						currentMainMenuButton = mainMenuPanel.transform.childCount - 1;
+					}
+					mainMenuButtons(currentMainMenuButton);
+					hasMoved = true;
+				}
+				else if (state.ThumbSticks.Left.Y < 0.0f /*&& prevState.ThumbSticks.Left.Y >= 0.0f*/) {
+					currentMainMenuButton++;
+					if (currentMainMenuButton >= mainMenuPanel.transform.childCount) {
+						currentMainMenuButton = 1;
+					}
+					mainMenuButtons(currentMainMenuButton);
+					hasMoved = true;
+				}
+			}
+
+			if (selectionMenuPanel.activeSelf == true) {
+				if (state.ThumbSticks.Left.X > 0) {
+					currentSelectionMenuButton++;
+					if (currentSelectionMenuButton > 3) {
+						currentSelectionMenuButton = 2;
+					}
+					selectionMenuButtons(currentSelectionMenuButton);
+					hasMoved = true;
+				}
+			}
+			if (hasMoved) 
+			{
+				timer = 0.0f;
+				timer += 1.0f * Time.deltaTime;
+			}
+		}
+		else {
+			timer += 1.0f * Time.deltaTime;
+		}
+
+		if (state.Buttons.A == ButtonState.Pressed /* && prevState.Buttons.A == ButtonState.Released */ && getCurrentPanel() != 2) {
+			b.onClick.Invoke();
+		}
+		Debug.Log("current main menu button: " + currentMainMenuButton);
 	}
 
 	/*
@@ -51,6 +135,7 @@ public class MainMenuManager : MonoBehaviour {
 				selectionMenuPanel.SetActive(false);
 				settingMenuPanel.SetActive(false);
 				mainMenuButtons(1);
+				currentMainMenuButton = 1;
 				break;
 			
 			//Character Selection
@@ -59,6 +144,7 @@ public class MainMenuManager : MonoBehaviour {
 				selectionMenuPanel.SetActive(true);
 				settingMenuPanel.SetActive(false);
 				selectionMenuButtons(2);
+				currentSelectionMenuButton = 2;
 				break;
 
 			//Setting Menu
@@ -67,6 +153,7 @@ public class MainMenuManager : MonoBehaviour {
 				selectionMenuPanel.SetActive(false);
 				settingMenuPanel.SetActive(true);
 				settingMenuButtons(2);
+				currentSettingsMenuButton = 2;
 				break;
 		}
 	}
