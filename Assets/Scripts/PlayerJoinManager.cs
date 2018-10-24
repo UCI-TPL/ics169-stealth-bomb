@@ -11,6 +11,15 @@ public class PlayerJoinManager : MonoBehaviour {
 
 	public bool PlayerJoinScreenActive = true;   // filler variable for now. Will be replaced when more of UI and menu is implemented.
 
+	//both for the references to the UI script -Kyle
+	
+	public GameObject playersObject;
+	private characterSelection selectionOP;
+
+	//reference the mainMenuManager for setting PJActive to true;
+	public GameObject mMManager;
+	private MainMenuManager currentMenu; 
+
 	bool[] playersReady;
 	// public bool player1Ready;
 	// public bool player2Ready;
@@ -44,10 +53,15 @@ public class PlayerJoinManager : MonoBehaviour {
 		// player3Ready = false;
 		// player4Ready = false;
 		numOfPlayersReady = 0;
+
+		//find the script -Kyle
+		selectionOP = playersObject.GetComponent<characterSelection>();
+		currentMenu = mMManager.GetComponent<MainMenuManager>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		PlayerJoinScreenActive = (currentMenu.getCurrentPanel() == 2);
 		if (PlayerJoinScreenActive) 
 		{
 			// This loop checks to see which controllers are connected to display confirmation UI element for that controller.
@@ -58,7 +72,12 @@ public class PlayerJoinManager : MonoBehaviour {
 					if (!prevStates[i].IsConnected) {
 						// FINISH!!!!!
 						// This is where we will turn on the correct UI element showing that player to press A.
-						Debug.Log("Player " + players[i] + " controller is connected.");
+						Debug.Log("Player " + players[i] + " controller fis connected.");
+
+						//calling UI -Kyle
+						selectionOP.playerIs(i);
+						selectionOP.playerConnected();
+						
 					}
 				}
 				else if (!currentStates[i].IsConnected && prevStates[i].IsConnected) {
@@ -67,6 +86,10 @@ public class PlayerJoinManager : MonoBehaviour {
 					Debug.Log("Player " + players[i] + " controller has Disconnected!");
 					playersReady[i] = false;
 					// if (numOfPlayersReady > 0) numOfPlayersReady--;
+
+					//calling UI -Kyle
+					selectionOP.playerIs(i);
+					selectionOP.playerDisconnected();
 				}
 			}
 
@@ -78,10 +101,19 @@ public class PlayerJoinManager : MonoBehaviour {
 						// Display the UI element showing the player has confirmed he/she is ready to play.
 						playersReady[i] = true;
 						Debug.Log("Player " + players[i] + " is ready to play!");
+
+						//calling UI -Kyle
+						selectionOP.playerIs(i);
+						selectionOP.playerIsReady();
 					}
 					if (currentStates[i].Buttons.B == ButtonState.Pressed && playersReady[i] == true) {
 						playersReady[i] = false;
 						Debug.Log("Player " + players[i] + " is NOT ready to play!");
+
+						//calling UI -Kyle
+						selectionOP.playerIs(i);
+						selectionOP.playerIsNotReady();
+
 					}
 				}
 			}
@@ -97,11 +129,17 @@ public class PlayerJoinManager : MonoBehaviour {
 				// FINISH!!!!!
 				// Display the UI element showing that the game is ready to start.
 				Debug.Log("Game is Ready to start!");
+
+				//calling UI -Kyle
+				selectionOP.gameIsReady();
 			}
 			else if (newNumOfPlayersReady < 2 && numOfPlayersReady >= 2) {
 				// FINISH!!!!!
 				// Turn off the UI element showing that the game is ready to start.
 				Debug.Log("There are not enough players for the game to start!");
+
+				//calling UI -Kyle
+				selectionOP.gameIsNotReady();
 			}
 
 			numOfPlayersReady = newNumOfPlayersReady;
