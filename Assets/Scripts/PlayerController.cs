@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviour {
     
     private Vector3 _inputs = Vector3.zero;
     Vector3 forward, right;
-    Vector3 rotationDirection; //used for Dodging
+    Vector3 rotationDirection = Vector3.forward; //used for Dodging
 
     public GameObject ShootPoint;
     public Rigidbody rb;
@@ -127,7 +127,7 @@ public class PlayerController : MonoBehaviour {
         startColor = rend.material.color;
         speed = player.stats.moveSpeed;
         rb = GetComponent<Rigidbody>();
-        Physics.gravity = new Vector3(0, -60, 0);
+        Physics.gravity = new Vector3(0, -30, 0);
         playerPrefix = "";
         // Decides which player to take input from if the correct input is given.
         switch (playerNum) {
@@ -160,54 +160,39 @@ public class PlayerController : MonoBehaviour {
     void MoveWASD(string horizontal, string vertical) {
         Vector3 rightMovement = right * Input.GetAxis(horizontal);
         Vector3 upMovement = forward * Input.GetAxis(vertical);
-        Vector3 direction = rightMovement + upMovement;
-        transform.position += direction * player.stats.moveSpeed * Time.fixedDeltaTime;
+        _inputs = (rightMovement + upMovement);
+        rotationDirection = Vector3.Normalize(_inputs);
+        //Vector3 direction = rightMovement + upMovement;
+        //transform.position += direction * player.stats.moveSpeed * Time.fixedDeltaTime;
     }
 
     void Move()
     {
-
-         
-
-        if (newMovement) //this is just for testing purposes. Set this to false in the inspector to get back to the previous movement system (and set drag to 0 like before)
+        if (Input.GetAxis("Horizontal") != 0.0 | Input.GetAxis("Vertical") != 0.0) //WASD only for the first player
+            if (playerNum == 1)
+                MoveWASD("Horizontal", "Vertical");
+        if (LeftStickY() != 0.0 || LeftStickX() != 0.0)
         {
-            if (LeftStickY() != 0.0 || LeftStickX() != 0.0)
-            {
-                Vector3 rightMovement = right * LeftStickX();
-                Vector3 upMovement = forward * LeftStickY();
-                _inputs = (rightMovement + upMovement);
-            }
-            else if (DpadX() != 0.0 || DpadY() != 0.0)
-            {
-                Vector3 rightMovement = right * DpadX();
-                Vector3 upMovement = forward * DpadY();
-                _inputs = (rightMovement + upMovement);
-            }
+            Vector3 rightMovement = right * LeftStickX();
+            Vector3 upMovement = forward * LeftStickY();
+            _inputs = (rightMovement + upMovement);
+            rotationDirection = Vector3.Normalize(_inputs);
         }
-        else
-        {
-            if (LeftStickX() != 0.0 || LeftStickY() != 0.0) //Left Joystick
-            {
-                Vector3 rightMovement = right * LeftStickX();
-                Vector3 upMovement = forward * LeftStickY();
-                Vector3 direction = rightMovement + upMovement;
-                transform.position += direction * player.stats.moveSpeed * Time.deltaTime;
-            }
-            else if (DpadX() != 0.0 | DpadY() != 0.0) //D-Pad
-            {
-                Vector3 rightMovement = right * DpadX();
-                Vector3 upMovement = forward * DpadY();
-                Vector3 direction = rightMovement + upMovement;
-                transform.position += direction * player.stats.moveSpeed * Time.deltaTime;
-            }
+        else if (DpadX() != 0.0 || DpadY() != 0.0)
+        { 
+            Vector3 rightMovement = right * DpadX();
+            Vector3 upMovement = forward * DpadY();
+            _inputs = (rightMovement + upMovement);
+            rotationDirection = Vector3.Normalize(_inputs);
         }
+
     }
 
     void Jump() {
-        if (Input.GetButtonDown(playerPrefix + rightBumper) && isGrounded) //Checking for jumping
+        if (Input.GetButtonDown(playerPrefix + "A") && isGrounded) //Checking for jumping
         { 
             speed = player.stats.airSpeed;
-            rb.AddForce(Vector3.up * player.stats.jumpForce, ForceMode.Impulse);
+            rb.AddForce(Vector3.up * player.stats.jumpForce,ForceMode.Impulse);
             isGrounded = false;
         }
     }
@@ -225,17 +210,20 @@ public class PlayerController : MonoBehaviour {
         if(rollTime <= Time.time)
         {
             rollTime = Time.time + player.stats.dodgeTime; //Dodge Begins
-            dodging = true;
-            movementAllowed = false;
-            speed = player.stats.moveSpeed * 1.6f;
-            Debug.Log("Dodge begins"+Time.time);
+            rb.AddForce(rotationDirection * speed * 10,ForceMode.Impulse);
+            yield return new WaitForSeconds(0.1f);
+            
+            //dodging = true;
+            //movementAllowed = false;
+            //speed = player.stats.moveSpeed * 1.6f;
+            //Debug.Log("Dodge begins"+Time.time);
             //make movement stuff happen 
-            yield return new WaitForSeconds(player.stats.dodgeTime/2); //Halfway through invincibility ends
-            yield return new WaitForSeconds(player.stats.dodgeTime/2); //Dodging ends
-            movementAllowed = true;
-            dodging = false;
-            Debug.Log("Dodge ends"+Time.time);
-            speed = player.stats.moveSpeed;
+            //yield return new WaitForSeconds(player.stats.dodgeTime/2); //Halfway through invincibility ends
+            //yield return new WaitForSeconds(player.stats.dodgeTime/2); //Dodging ends
+            //movementAllowed = true;
+            //dodging = false;
+            //Debug.Log("Dodge ends"+Time.time);
+            //speed = player.stats.moveSpeed;
         }
         
     }
@@ -302,18 +290,20 @@ public class PlayerController : MonoBehaviour {
     }
 
     void RotatePlayer() {
-        Vector3 rightMovement;
-        Vector3 upMovement;
+        Vector3 rightMovement = Vector3.zero;
+        Vector3 upMovement = Vector3.zero;
         if(RightStickX() != 0.0 || RightStickY() != 0.0)
         {
             rightMovement = right * Time.deltaTime * RightStickX();
             upMovement = -(forward * Time.deltaTime * RightStickY());
         }
+        /*
         else
         {
             rightMovement = right * Time.deltaTime * LeftStickX();
             upMovement = forward * Time.deltaTime * LeftStickY();
         }
+        */
         if(Vector3.Normalize(rightMovement + upMovement) != Vector3.zero)
         {
             transform.forward = Vector3.Normalize(rightMovement + upMovement);
@@ -326,7 +316,8 @@ public class PlayerController : MonoBehaviour {
     {
         if(newMovement)
         {
-            rb.AddForce((_inputs * speed * 900 * Time.fixedDeltaTime)); //The player moves forward forever just choose the Inputs (not sure if this is best)
+            rb.velocity = _inputs * speed; //player has a mass of 1 
+            //rb.AddForce((_inputs * speed * 900 * Time.fixedDeltaTime)); //The player moves forward forever just choose the Inputs (not sure if this is best)
         }   
     }
 
@@ -334,13 +325,6 @@ public class PlayerController : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        //Checking for Movement
-        // only for testing a single player with keyboard if you dont have an Xbox controller!
-        // Otherwise, comment out the first if-else block.
-        if (Input.GetAxis("Horizontal") != 0.0 | Input.GetAxis("Vertical") != 0.0) //WASD only for the first player
-            if (playerNum == 1)
-                MoveWASD("Horizontal", "Vertical");
-
         if(movementAllowed)
         {
             _inputs = Vector3.zero;
@@ -354,7 +338,9 @@ public class PlayerController : MonoBehaviour {
         {
             if (dodging)
             {
-                _inputs = transform.forward;
+                //_inputs = transform.forward;
+                //Debug.Log("Trying to roll in this direction : " + rotationDirection);
+                _inputs = rotationDirection;
             }
             else
             {
