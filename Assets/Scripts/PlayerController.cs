@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using XInputDotNetPure;
 
 public class PlayerController : MonoBehaviour {
     
@@ -32,13 +33,18 @@ public class PlayerController : MonoBehaviour {
     
     private Vector3 _inputs = Vector3.zero;
     Vector3 forward, right;
-    Vector3 rotationDirection = Vector3.forward; //used for Dodging
+    Vector3 rotationDirection; //used for Dodging
 
     public GameObject ShootPoint;
     public Rigidbody rb;
     public Projectile arrow; //this is used for the Basic Attack
     [Tooltip("Represents which player this is. Only put in 1-4. Do not put 0!!! This attribute must have a value in order to work or take in input properly!!! ")]
     public int playerNum;
+
+    // private variables used to store xbox controller input info
+    private PlayerIndex playerIdx;
+    private GamePadState currentState;
+    private GamePadState prevState;
    
 
     // These are the suffixes used to form a string that represents a specific input on a specific Xbox controller.
@@ -85,40 +91,40 @@ public class PlayerController : MonoBehaviour {
 
     public float colorAddition = 0.1f;
 
-    public float DpadX()
-    {
-        return Input.GetAxis(playerPrefix + "DpadX");
-    }
+    // public float DpadX()
+    // {
+    //     return Input.GetAxis(playerPrefix + "DpadX");
+    // }
 
-    public float DpadY()
-    {
-        return Input.GetAxis(playerPrefix + "DpadY");
-    }
+    // public float DpadY()
+    // {
+    //     return Input.GetAxis(playerPrefix + "DpadY");
+    // }
 
-    public float LeftStickX()
-    {
-        return Input.GetAxis(playerPrefix + left_Joystick_X_Axis);
-    }
+    // public float LeftStickX()
+    // {
+    //     return Input.GetAxis(playerPrefix + left_Joystick_X_Axis);
+    // }
 
-    public float LeftStickY()
-    {
-        return Input.GetAxis(playerPrefix + left_Joystick_Y_Axis);
-    }
+    // public float LeftStickY()
+    // {
+    //     return Input.GetAxis(playerPrefix + left_Joystick_Y_Axis);
+    // }
 
-    public float RightStickX()
-    {
-        return Input.GetAxis(playerPrefix + right_Joystick_X_Axis);
-    }
+    // public float RightStickX()
+    // {
+    //     return Input.GetAxis(playerPrefix + right_Joystick_X_Axis);
+    // }
 
-    public float RightStickY()
-    {
-        return Input.GetAxis(playerPrefix + right_Joystick_Y_Axis);
-    }
+    // public float RightStickY()
+    // {
+    //     return Input.GetAxis(playerPrefix + right_Joystick_Y_Axis);
+    // }
 
-    public float RightTrigger()
-    {
-        return Input.GetAxis(playerPrefix + rightTrigger);
-    }
+    // public float RightTrigger()
+    // {
+    //     return Input.GetAxis(playerPrefix + rightTrigger);
+    // }
 
 
     void Start() {
@@ -127,29 +133,34 @@ public class PlayerController : MonoBehaviour {
         startColor = rend.material.color;
         speed = player.stats.moveSpeed;
         rb = GetComponent<Rigidbody>();
-        Physics.gravity = new Vector3(0, -30, 0);
+        Physics.gravity = new Vector3(0, -60, 0);
         playerPrefix = "";
         // Decides which player to take input from if the correct input is given.
-        switch (playerNum) {
-            case 0:
-                Debug.Log("Either the player number (playerNum) was not assigned or you put in 0. Both are in invalid");
-                break;
-            case 1:
-                playerPrefix = Player_1_Str;
-                break;
-            case 2:
-                playerPrefix = Player_2_Str;
-                break;
-            case 3:
-                playerPrefix = Player_3_Str;
-                break;
-            case 4:
-                playerPrefix = Player_4_Str;
-                break;
-            default:
-                Debug.Log("This game does not support more than 4 players.");
-                break;
-        }
+        // switch (playerNum) {
+        //     case 0:
+        //         Debug.Log("Either the player number (playerNum) was not assigned or you put in 0. Both are in invalid");
+        //         break;
+        //     case 1:
+        //         playerPrefix = Player_1_Str;
+        //         break;
+        //     case 2:
+        //         playerPrefix = Player_2_Str;
+        //         break;
+        //     case 3:
+        //         playerPrefix = Player_3_Str;
+        //         break;
+        //     case 4:
+        //         playerPrefix = Player_4_Str;
+        //         break;
+        //     default:
+        //         Debug.Log("This game does not support more than 4 players.");
+        //         break;
+        // }
+
+        playerIdx = (PlayerIndex) (playerNum - 1);
+        //test lines
+        //Debug.Log((int) ButtonState.Pressed);
+        //Debug.Log((int) ButtonState.Released);
 
         forward = Camera.main.transform.forward;
         forward.y = 0;
@@ -157,49 +168,102 @@ public class PlayerController : MonoBehaviour {
         right = Quaternion.Euler(new Vector3(0, 90, 0)) * forward; // This right vector is -45 degrees from the world X axis 
     }
 
-    void MoveWASD(string horizontal, string vertical) {
-        Vector3 rightMovement = right * Input.GetAxis(horizontal);
-        Vector3 upMovement = forward * Input.GetAxis(vertical);
-        _inputs = (rightMovement + upMovement);
-        rotationDirection = Vector3.Normalize(_inputs);
-        //Vector3 direction = rightMovement + upMovement;
-        //transform.position += direction * player.stats.moveSpeed * Time.fixedDeltaTime;
-    }
+    // void MoveWASD(string horizontal, string vertical) {
+    //     Vector3 rightMovement = right * Input.GetAxis(horizontal);
+    //     Vector3 upMovement = forward * Input.GetAxis(vertical);
+    //     Vector3 direction = rightMovement + upMovement;
+    //     transform.position += direction * player.stats.moveSpeed * Time.fixedDeltaTime;
+    // }
 
     void Move()
     {
-        if (Input.GetAxis("Horizontal") != 0.0 | Input.GetAxis("Vertical") != 0.0) //WASD only for the first player
-            if (playerNum == 1)
-                MoveWASD("Horizontal", "Vertical");
-        if (LeftStickY() != 0.0 || LeftStickX() != 0.0)
+        if (newMovement) //this is just for testing purposes. Set this to false in the inspector to get back to the previous movement system (and set drag to 0 like before)
         {
-            Vector3 rightMovement = right * LeftStickX();
-            Vector3 upMovement = forward * LeftStickY();
-            _inputs = (rightMovement + upMovement);
-            rotationDirection = Vector3.Normalize(_inputs);
-        }
-        else if (DpadX() != 0.0 || DpadY() != 0.0)
-        { 
-            Vector3 rightMovement = right * DpadX();
-            Vector3 upMovement = forward * DpadY();
-            _inputs = (rightMovement + upMovement);
-            rotationDirection = Vector3.Normalize(_inputs);
-        }
+            
+            if (currentState.ThumbSticks.Left.Y != 0.0f || currentState.ThumbSticks.Left.X != 0.0f) 
+            {
+                Vector3 rightMovement = right * currentState.ThumbSticks.Left.X;
+                Vector3 upMovement = forward * currentState.ThumbSticks.Left.Y;
+                _inputs = (rightMovement + upMovement);
+            }
+            else if (currentState.DPad.Left == ButtonState.Pressed || currentState.DPad.Right == ButtonState.Pressed || 
+                currentState.DPad.Up == ButtonState.Pressed || currentState.DPad.Down == ButtonState.Pressed)
+            {
+                Vector3 rightMovement = (right * (float) currentState.DPad.Left) + (right * (float) currentState.DPad.Right);
+                Vector3 upMovement = (forward * (float) currentState.DPad.Up) + (forward * (float) currentState.DPad.Down);
+                _inputs = (rightMovement + upMovement);
+            }
 
+
+            /*if (LeftStickY() != 0.0 || LeftStickX() != 0.0)
+            {
+                Vector3 rightMovement = right * LeftStickX();
+                Vector3 upMovement = forward * LeftStickY();
+                _inputs = (rightMovement + upMovement);
+            }
+            else if (DpadX() != 0.0 || DpadY() != 0.0)
+            {
+                Vector3 rightMovement = right * DpadX();
+                Vector3 upMovement = forward * DpadY();
+                _inputs = (rightMovement + upMovement);
+            }*/
+        }
+        else
+        {
+            if (currentState.ThumbSticks.Left.Y != 0.0f || currentState.ThumbSticks.Left.X != 0.0f) 
+            {
+                Vector3 rightMovement = right * currentState.ThumbSticks.Left.X;
+                Vector3 upMovement = forward * currentState.ThumbSticks.Left.Y;
+                Vector3 direction = rightMovement + upMovement;
+                transform.position += direction * player.stats.moveSpeed * Time.deltaTime;
+            }
+            else if (currentState.DPad.Left == ButtonState.Pressed || currentState.DPad.Right == ButtonState.Pressed || 
+                currentState.DPad.Up == ButtonState.Pressed || currentState.DPad.Down == ButtonState.Pressed)
+            {
+                Vector3 rightMovement = (right * (float) currentState.DPad.Left) + (right * (float) currentState.DPad.Right);
+                Vector3 upMovement = (forward * (float) currentState.DPad.Up) + (forward * (float) currentState.DPad.Down);
+                Vector3 direction = rightMovement + upMovement;
+                transform.position += direction * player.stats.moveSpeed * Time.deltaTime;
+            }
+
+
+            /*if (LeftStickX() != 0.0 || LeftStickY() != 0.0) //Left Joystick
+            {
+                Vector3 rightMovement = right * LeftStickX();
+                Vector3 upMovement = forward * LeftStickY();
+                Vector3 direction = rightMovement + upMovement;
+                transform.position += direction * player.stats.moveSpeed * Time.deltaTime;
+            }
+            else if (DpadX() != 0.0 | DpadY() != 0.0) //D-Pad
+            {
+                Vector3 rightMovement = right * DpadX();
+                Vector3 upMovement = forward * DpadY();
+                Vector3 direction = rightMovement + upMovement;
+                transform.position += direction * player.stats.moveSpeed * Time.deltaTime;
+            }*/
+        }
     }
 
     void Jump() {
-        if (Input.GetButtonDown(playerPrefix + "A") && isGrounded) //Checking for jumping
+        if (currentState.Buttons.RightShoulder == ButtonState.Pressed && isGrounded) //Checking for jumping
         { 
             speed = player.stats.airSpeed;
-            rb.AddForce(Vector3.up * player.stats.jumpForce,ForceMode.Impulse);
+            rb.AddForce(Vector3.up * player.stats.jumpForce, ForceMode.Impulse);
             isGrounded = false;
         }
+
+        /*if (Input.GetButtonDown(playerPrefix + rightBumper) && isGrounded) //Checking for jumping
+        { 
+            speed = player.stats.airSpeed;
+            rb.AddForce(Vector3.up * player.stats.jumpForce, ForceMode.Impulse);
+            isGrounded = false;
+        }*/
     }
 
     void Dodge()
     {
-        if (Input.GetButtonDown(playerPrefix + "B"))
+        if (currentState.Buttons.B == ButtonState.Pressed /*&& prevState.Buttons.B == ButtonState.Released*/)
+        //if (Input.GetButtonDown(playerPrefix + "B"))
         {
             StartCoroutine("Dodging");
         }
@@ -210,27 +274,25 @@ public class PlayerController : MonoBehaviour {
         if(rollTime <= Time.time)
         {
             rollTime = Time.time + player.stats.dodgeTime; //Dodge Begins
-            rb.AddForce(rotationDirection * speed * 10,ForceMode.Impulse);
-            yield return new WaitForSeconds(0.1f);
-            
-            //dodging = true;
-            //movementAllowed = false;
-            //speed = player.stats.moveSpeed * 1.6f;
-            //Debug.Log("Dodge begins"+Time.time);
+            dodging = true;
+            movementAllowed = false;
+            speed = player.stats.moveSpeed * 1.6f;
+            Debug.Log("Dodge begins"+Time.time);
             //make movement stuff happen 
-            //yield return new WaitForSeconds(player.stats.dodgeTime/2); //Halfway through invincibility ends
-            //yield return new WaitForSeconds(player.stats.dodgeTime/2); //Dodging ends
-            //movementAllowed = true;
-            //dodging = false;
-            //Debug.Log("Dodge ends"+Time.time);
-            //speed = player.stats.moveSpeed;
+            yield return new WaitForSeconds(player.stats.dodgeTime/2); //Halfway through invincibility ends
+            yield return new WaitForSeconds(player.stats.dodgeTime/2); //Dodging ends
+            movementAllowed = true;
+            dodging = false;
+            Debug.Log("Dodge ends"+Time.time);
+            speed = player.stats.moveSpeed;
         }
         
     }
 
 
     void Attack() {
-        if (RightTrigger() != 0.0)
+        if (currentState.Triggers.Right != 0.0f)
+        //if (RightTrigger() != 0.0)
         {
             if(holdStart == 0.0)
             {
@@ -247,7 +309,8 @@ public class PlayerController : MonoBehaviour {
         {
             holdTime = Time.time + 0.01f;
             yield return new WaitForSeconds(0.01f);
-            if(RightTrigger() == 0.0) //stop being held down
+            if (currentState.Triggers.Right == 0.0f) //stop being held down
+            //if(RightTrigger() == 0.0) //stop being held down
             {
                 holdEnd = Time.time - holdStart;
                 rend.material.color = startColor;
@@ -290,20 +353,23 @@ public class PlayerController : MonoBehaviour {
     }
 
     void RotatePlayer() {
-        Vector3 rightMovement = Vector3.zero;
-        Vector3 upMovement = Vector3.zero;
-        if(RightStickX() != 0.0 || RightStickY() != 0.0)
+        Vector3 rightMovement;
+        Vector3 upMovement;
+        if (currentState.ThumbSticks.Right.X != 0.0f || currentState.ThumbSticks.Right.Y != 0.0f)
+        //if(RightStickX() != 0.0 || RightStickY() != 0.0)
         {
-            rightMovement = right * Time.deltaTime * RightStickX();
-            upMovement = -(forward * Time.deltaTime * RightStickY());
+            rightMovement = right * Time.deltaTime * currentState.ThumbSticks.Right.X;
+            upMovement = -(forward * Time.deltaTime * -currentState.ThumbSticks.Right.Y);
+            // rightMovement = right * Time.deltaTime * RightStickX();
+            // upMovement = -(forward * Time.deltaTime * RightStickY());
         }
-        /*
         else
         {
-            rightMovement = right * Time.deltaTime * LeftStickX();
-            upMovement = forward * Time.deltaTime * LeftStickY();
+            rightMovement = right * Time.deltaTime * currentState.ThumbSticks.Left.X;
+            upMovement = forward * Time.deltaTime * currentState.ThumbSticks.Left.Y;
+            // rightMovement = right * Time.deltaTime * LeftStickX();
+            // upMovement = forward * Time.deltaTime * LeftStickY();
         }
-        */
         if(Vector3.Normalize(rightMovement + upMovement) != Vector3.zero)
         {
             transform.forward = Vector3.Normalize(rightMovement + upMovement);
@@ -316,8 +382,7 @@ public class PlayerController : MonoBehaviour {
     {
         if(newMovement)
         {
-            rb.velocity = _inputs * speed; //player has a mass of 1 
-            //rb.AddForce((_inputs * speed * 900 * Time.fixedDeltaTime)); //The player moves forward forever just choose the Inputs (not sure if this is best)
+            rb.AddForce((_inputs * speed * 900 * Time.fixedDeltaTime)); //The player moves forward forever just choose the Inputs (not sure if this is best)
         }   
     }
 
@@ -325,28 +390,39 @@ public class PlayerController : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        if(movementAllowed)
+        //Checking for Movement
+        // only for testing a single player with keyboard if you dont have an Xbox controller!
+        // Otherwise, comment out the first if-else block.
+        // if (Input.GetAxis("Horizontal") != 0.0 | Input.GetAxis("Vertical") != 0.0) //WASD only for the first player
+        //     if (playerNum == 1)
+        //         MoveWASD("Horizontal", "Vertical");
+
+        prevState = currentState;
+        currentState = GamePad.GetState(playerIdx);
+
+        if (currentState.IsConnected && prevState.IsConnected) 
         {
-            _inputs = Vector3.zero;
-            Move();
-            RotatePlayer();
-            Jump();
-            Attack();
-            Dodge();
-        }
-        else //this could be used to stop movement during dodges and stuns 
-        {
-            if (dodging)
-            {
-                //_inputs = transform.forward;
-                //Debug.Log("Trying to roll in this direction : " + rotationDirection);
-                _inputs = rotationDirection;
-            }
-            else
+            if(movementAllowed)
             {
                 _inputs = Vector3.zero;
+                Move();
+                RotatePlayer();
+                Jump();
+                Attack();
+                Dodge();
             }
-            //return;
+            else //this could be used to stop movement during dodges and stuns 
+            {
+                if (dodging)
+                {
+                    _inputs = transform.forward;
+                }
+                else
+                {
+                    _inputs = Vector3.zero;
+                }
+                //return;
+            }
         }
 
     }
