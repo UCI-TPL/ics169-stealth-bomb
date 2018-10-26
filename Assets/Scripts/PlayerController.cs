@@ -185,13 +185,21 @@ public class PlayerController : MonoBehaviour {
                 Vector3 rightMovement = right * currentState.ThumbSticks.Left.X;
                 Vector3 upMovement = forward * currentState.ThumbSticks.Left.Y;
                 _inputs = (rightMovement + upMovement);
+
+                if (_inputs.magnitude > 1f) {
+                    _inputs = _inputs.normalized;
+                }
             }
             else if (currentState.DPad.Left == ButtonState.Pressed || currentState.DPad.Right == ButtonState.Pressed || 
                 currentState.DPad.Up == ButtonState.Pressed || currentState.DPad.Down == ButtonState.Pressed)
             {
-                Vector3 rightMovement = (right * (float) currentState.DPad.Left) + (right * (float) currentState.DPad.Right);
-                Vector3 upMovement = (forward * (float) currentState.DPad.Up) + (forward * (float) currentState.DPad.Down);
+                Vector3 rightMovement = (right * (float) currentState.DPad.Left) + -(right * (float) currentState.DPad.Right);
+                Vector3 upMovement = -(forward * (float) currentState.DPad.Up) + (forward * (float) currentState.DPad.Down);
                 _inputs = (rightMovement + upMovement);
+
+                if (_inputs.magnitude > 1f){
+                    _inputs = _inputs.normalized;
+                }
             }
 
 
@@ -220,8 +228,8 @@ public class PlayerController : MonoBehaviour {
             else if (currentState.DPad.Left == ButtonState.Pressed || currentState.DPad.Right == ButtonState.Pressed || 
                 currentState.DPad.Up == ButtonState.Pressed || currentState.DPad.Down == ButtonState.Pressed)
             {
-                Vector3 rightMovement = (right * (float) currentState.DPad.Left) + (right * (float) currentState.DPad.Right);
-                Vector3 upMovement = (forward * (float) currentState.DPad.Up) + (forward * (float) currentState.DPad.Down);
+                Vector3 rightMovement = -(right * (float) currentState.DPad.Left) + (right * (float) currentState.DPad.Right);
+                Vector3 upMovement = (forward * (float) currentState.DPad.Up) + -(forward * (float) currentState.DPad.Down);
                 Vector3 direction = rightMovement + upMovement;
                 transform.position += direction * player.stats.moveSpeed * Time.deltaTime;
             }
@@ -382,7 +390,8 @@ public class PlayerController : MonoBehaviour {
     {
         if(newMovement)
         {
-            rb.AddForce((_inputs * speed * 900 * Time.fixedDeltaTime)); //The player moves forward forever just choose the Inputs (not sure if this is best)
+            rb.velocity = _inputs * speed; //player has a mass of 1 
+            //rb.AddForce((_inputs * speed * 900 * Time.fixedDeltaTime)); //The player moves forward forever just choose the Inputs (not sure if this is best)
         }   
     }
 
