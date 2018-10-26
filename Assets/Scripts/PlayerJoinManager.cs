@@ -60,6 +60,7 @@ public class PlayerJoinManager : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
+	// NOTE: May want to reimplement Update to function more as a state machine later!!!
 	void Update () {
 		PlayerJoinScreenActive = (currentMenu.getCurrentPanel() == 2);
 		if (PlayerJoinScreenActive) 
@@ -80,7 +81,7 @@ public class PlayerJoinManager : MonoBehaviour {
 						
 					}
 				}
-				else if (!currentStates[i].IsConnected && prevStates[i].IsConnected) {
+				else if (!currentStates[i].IsConnected /* && prevStates[i].IsConnected*/) {
 					// FINISH!!!!!
 					// Revert that player's UI section to not connected/empty.
 					Debug.Log("Player " + players[i] + " controller has Disconnected!");
@@ -112,7 +113,8 @@ public class PlayerJoinManager : MonoBehaviour {
 
 						//calling UI -Kyle
 						selectionOP.playerIs(i);
-						selectionOP.playerIsNotReady();
+						//selectionOP.playerIsNotReady();
+						selectionOP.playerConnected();
 
 					}
 				}
