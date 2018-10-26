@@ -200,6 +200,12 @@ Prefab:
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5d6164a572789434ca9a63629c00ea2c, type: 2}
   m_IsPrefabAsset: 0
+--- !u!114 &498702239 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114292072458481204, guid: 8be54aa201738654da8a59ad165b52ca,
+    type: 2}
+  m_PrefabInternal: {fileID: 1208848415}
+  m_Script: {fileID: 11500000, guid: a9522d2e4784d5c469123f2ee647b4b9, type: 3}
 --- !u!1001 &768567031
 Prefab:
   m_ObjectHideFlags: 0
@@ -277,6 +283,12 @@ MonoBehaviour:
   wallTile: {fileID: 1743838175089580, guid: eb831fde644fcb04ab28eda82a20ba83, type: 2}
   size: {x: 15, y: 3, z: 15}
   wallProb: 0.1
+--- !u!114 &1126703656 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114891519802908218, guid: 8be54aa201738654da8a59ad165b52ca,
+    type: 2}
+  m_PrefabInternal: {fileID: 1208848415}
+  m_Script: {fileID: 2109663825, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 --- !u!1001 &1208848415
 Prefab:
   m_ObjectHideFlags: 0
@@ -284,6 +296,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114891519802908218, guid: 8be54aa201738654da8a59ad165b52ca,
+        type: 2}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4326272458837900, guid: 8be54aa201738654da8a59ad165b52ca, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -316,6 +333,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 114292072458481204, guid: 8be54aa201738654da8a59ad165b52ca,
+        type: 2}
+      propertyPath: powerupSpawner
+      value: 
+      objectReference: {fileID: 303741762}
     - target: {fileID: 224050143704215990, guid: 8be54aa201738654da8a59ad165b52ca,
         type: 2}
       propertyPath: m_AnchorMax.x
@@ -356,6 +378,66 @@ Prefab:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114891519802908218, guid: 8be54aa201738654da8a59ad165b52ca,
+        type: 2}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114891519802908218, guid: 8be54aa201738654da8a59ad165b52ca,
+        type: 2}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 498702239}
+    - target: {fileID: 114891519802908218, guid: 8be54aa201738654da8a59ad165b52ca,
+        type: 2}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: TogglePowerupSpawner
+      objectReference: {fileID: 0}
+    - target: {fileID: 114891519802908218, guid: 8be54aa201738654da8a59ad165b52ca,
+        type: 2}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114891519802908218, guid: 8be54aa201738654da8a59ad165b52ca,
+        type: 2}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 114891519802908218, guid: 8be54aa201738654da8a59ad165b52ca,
+        type: 2}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 224046844285382068, guid: 8be54aa201738654da8a59ad165b52ca,
+        type: 2}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224046844285382068, guid: 8be54aa201738654da8a59ad165b52ca,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224046844285382068, guid: 8be54aa201738654da8a59ad165b52ca,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224046844285382068, guid: 8be54aa201738654da8a59ad165b52ca,
+        type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224046844285382068, guid: 8be54aa201738654da8a59ad165b52ca,
+        type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114292072458481204, guid: 8be54aa201738654da8a59ad165b52ca,
+        type: 2}
+      propertyPath: powerupToggle
+      value: 
+      objectReference: {fileID: 1126703656}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8be54aa201738654da8a59ad165b52ca, type: 2}
   m_IsPrefabAsset: 0

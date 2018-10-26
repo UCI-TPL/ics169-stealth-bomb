@@ -16,6 +16,10 @@ public class PowerupDebuger : MonoBehaviour {
     public PowerupList powerupList;
     [Tooltip("Prefab for power-up container")]
     public GameObject powerupContainer;
+    [Tooltip("Powerup spawner object")]
+    public GameObject powerupSpawner;
+    [Tooltip("Powerup spawner toggle")]
+    public Toggle powerupToggle;
 
     private PowerupData selectedPowerup;
 
@@ -60,5 +64,9 @@ public class PowerupDebuger : MonoBehaviour {
         if (data.name != null) // Set the name if power-up has a name
             g.GetComponentInChildren<Text>().text = data.name;
         g.GetComponent<Button>().onClick.AddListener(delegate { SelectPowerup(data); });
+    }
+
+    public void TogglePowerupSpawner() {
+        powerupSpawner.SetActive(powerupToggle.isOn);
     }
 }
