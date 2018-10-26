@@ -16,9 +16,12 @@ public class PowerupData : ScriptableObject {
     [SerializeField]
     public List<PlayerStats.Modifier> modifiers;
 
+    public Powerup instance;
+
     private void OnEnable() {
         if (modifiers == null) // Initialize list of modifiers if not already
             modifiers = new List<PlayerStats.Modifier>();
+        instance.data = this; // Set powerup data to this
     }
 
     // Add modifier to the powerup
@@ -32,42 +35,6 @@ public class PowerupData : ScriptableObject {
     }
 
     public virtual Powerup NewInstance(Player player, bool isPermenant = false) {
-        return new Powerup(this, player, isPermenant);
-    }
-}
-
-public class Powerup {
-    private PowerupData data;
-    public float startTime;
-    public float endTime;
-    public float timeRemaining {
-        get { return endTime - Time.time; }
-    }
-    public bool isPermenant {
-        get { return float.IsPositiveInfinity(endTime); }
-    }
-    public virtual List<PlayerStats.Modifier> modifiers {
-        get { return data.modifiers; }
-    }
-    internal Player player;
-
-    // List of functions to be called every update on a player
-    public UnityEvent onUpdate = new UnityEvent();
-
-    internal Powerup(Player player, bool isPermenant = false) {
-        this.player = player;
-        startTime = Time.time;
-        endTime = isPermenant ? float.PositiveInfinity : Time.time + PowerupData.duration;
-    }
-
-    public Powerup(PowerupData data, Player player, bool isPermenant = false) {
-        this.data = data;
-        this.player = player;
-        startTime = Time.time;
-        endTime = isPermenant ? float.PositiveInfinity : Time.time + PowerupData.duration;
-    }
-
-    internal void AddUpdate(UnityAction updateMethod) {
-        onUpdate.AddListener(updateMethod);
+        return instance.Clone(player, isPermenant);
     }
 }

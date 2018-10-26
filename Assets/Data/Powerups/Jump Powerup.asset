@@ -18,3 +18,8 @@ MonoBehaviour:
   - name: jump_force
     value: 10
     type: 0
+  instance:
+    data: {fileID: 11400000}
+    startTime: 0
+    endTime: 0
+    triggers: []

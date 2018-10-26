@@ -29,6 +29,9 @@ public class Player : MonoBehaviour {
 
     private List<Powerup> powerups = new List<Powerup>();
 
+    private UnityEvent onUpdate = new UnityEvent();
+    private UnityEvent onMove = new UnityEvent();
+
     private Vector3 prevPosition;
     public bool isMoving {
         get { return rb.velocity.magnitude > 0.1f; }
@@ -67,11 +70,13 @@ public class Player : MonoBehaviour {
         foreach (Powerup p in powerups) {
             if (p.endTime <= Time.time)
                 deleteList.Add(p); // Remove power-up if expired
-            else
-                p.onUpdate.Invoke();
         }
         foreach (Powerup p in deleteList)
             RemovePowerup(p);
+
+        onUpdate.Invoke();
+        if (isMoving)
+            onMove.Invoke();
 
         CheckDeath();
     }
@@ -82,6 +87,16 @@ public class Player : MonoBehaviour {
         powerups.Add(powerup); // Save to list of powerups
         foreach (PlayerStats.Modifier m in powerup.modifiers) // Add power-up's modifiers to stats
             stats.AddModifier(m);
+        foreach (Powerup.Trigger t in powerup.triggers) {
+            switch (t.type) {
+                case Powerup.Trigger.Type.Update:
+                    onUpdate.AddListener(t.Activate);
+                    break;
+                case Powerup.Trigger.Type.Move:
+                    onMove.AddListener(t.Activate);
+                    break;
+            }
+        }
     }
 
     // Remove each modifier granted by the power-up and remove the power-up from list of power-ups
