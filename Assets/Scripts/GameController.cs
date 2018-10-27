@@ -16,10 +16,14 @@ public class GameController : MonoBehaviour {
         else
             Destroy(gameObject);
         DontDestroyOnLoad(gameObject);
+
+        //instance.OnGravityChange += GravityChangeHandler;
+
+
     }
 	
 	// Update is called once per frame
 	void Update () {
-		
-	}
+      
+    }
 }

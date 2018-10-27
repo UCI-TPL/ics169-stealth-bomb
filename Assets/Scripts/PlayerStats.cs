@@ -15,7 +15,7 @@ public class PlayerStats : MonoBehaviour {
     private void Awake() {
         AddStat("move_speed", 10);
         AddStat("air_speed", 3);
-        AddStat("jump_force", 100);
+        AddStat("jump_force", 10);
         AddStat("max_health", 100);
         AddStat("dodge_time", 0.2f);
         player = GetComponent<Player>();

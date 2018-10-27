@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour {
             Debug.LogError(gameObject.name + " missing Player Component");
     }
     [SerializeField]
-    float shootRate = 0.2f;
+    float shootRate = 0.2f; //put these stats in playerStats soon 
     float chargeTime = 0.5f;
     float shootTime = 0.0f;
     float holdTime = 0.0f;
@@ -29,7 +29,6 @@ public class PlayerController : MonoBehaviour {
     bool isGrounded;
     bool movementAllowed = true; //used to lock movement while dodging
     bool dodging = false; 
-    public bool newMovement = true; //this varialbe is temporary and for testing only
     
     private Vector3 _inputs = Vector3.zero;
     Vector3 forward, right;
@@ -133,7 +132,7 @@ public class PlayerController : MonoBehaviour {
         startColor = rend.material.color;
         speed = player.stats.moveSpeed;
         rb = GetComponent<Rigidbody>();
-        Physics.gravity = new Vector3(0, -60, 0);
+       
         playerPrefix = "";
         // Decides which player to take input from if the correct input is given.
         // switch (playerNum) {
@@ -176,79 +175,27 @@ public class PlayerController : MonoBehaviour {
     // }
 
     void Move()
-    {
-        if (newMovement) //this is just for testing purposes. Set this to false in the inspector to get back to the previous movement system (and set drag to 0 like before)
+    {            
+        if (currentState.ThumbSticks.Left.Y != 0.0f || currentState.ThumbSticks.Left.X != 0.0f) 
         {
-            
-            if (currentState.ThumbSticks.Left.Y != 0.0f || currentState.ThumbSticks.Left.X != 0.0f) 
-            {
-                Vector3 rightMovement = right * currentState.ThumbSticks.Left.X;
-                Vector3 upMovement = forward * currentState.ThumbSticks.Left.Y;
-                _inputs = (rightMovement + upMovement);
+            Vector3 rightMovement = right * currentState.ThumbSticks.Left.X;
+            Vector3 upMovement = forward * currentState.ThumbSticks.Left.Y;
+            _inputs = (rightMovement + upMovement);
 
-                if (_inputs.magnitude > 1f) {
-                    _inputs = _inputs.normalized;
-                }
+            if (_inputs.magnitude > 1f) {
+                _inputs = _inputs.normalized;
             }
-            else if (currentState.DPad.Left == ButtonState.Pressed || currentState.DPad.Right == ButtonState.Pressed || 
-                currentState.DPad.Up == ButtonState.Pressed || currentState.DPad.Down == ButtonState.Pressed)
-            {
-                Vector3 rightMovement = (right * (float) currentState.DPad.Left) + -(right * (float) currentState.DPad.Right);
-                Vector3 upMovement = -(forward * (float) currentState.DPad.Up) + (forward * (float) currentState.DPad.Down);
-                _inputs = (rightMovement + upMovement);
-
-                if (_inputs.magnitude > 1f){
-                    _inputs = _inputs.normalized;
-                }
-            }
-
-
-            /*if (LeftStickY() != 0.0 || LeftStickX() != 0.0)
-            {
-                Vector3 rightMovement = right * LeftStickX();
-                Vector3 upMovement = forward * LeftStickY();
-                _inputs = (rightMovement + upMovement);
-            }
-            else if (DpadX() != 0.0 || DpadY() != 0.0)
-            {
-                Vector3 rightMovement = right * DpadX();
-                Vector3 upMovement = forward * DpadY();
-                _inputs = (rightMovement + upMovement);
-            }*/
         }
-        else
+        else if (currentState.DPad.Left == ButtonState.Pressed || currentState.DPad.Right == ButtonState.Pressed || 
+            currentState.DPad.Up == ButtonState.Pressed || currentState.DPad.Down == ButtonState.Pressed)
         {
-            if (currentState.ThumbSticks.Left.Y != 0.0f || currentState.ThumbSticks.Left.X != 0.0f) 
-            {
-                Vector3 rightMovement = right * currentState.ThumbSticks.Left.X;
-                Vector3 upMovement = forward * currentState.ThumbSticks.Left.Y;
-                Vector3 direction = rightMovement + upMovement;
-                transform.position += direction * player.stats.moveSpeed * Time.deltaTime;
-            }
-            else if (currentState.DPad.Left == ButtonState.Pressed || currentState.DPad.Right == ButtonState.Pressed || 
-                currentState.DPad.Up == ButtonState.Pressed || currentState.DPad.Down == ButtonState.Pressed)
-            {
-                Vector3 rightMovement = -(right * (float) currentState.DPad.Left) + (right * (float) currentState.DPad.Right);
-                Vector3 upMovement = (forward * (float) currentState.DPad.Up) + -(forward * (float) currentState.DPad.Down);
-                Vector3 direction = rightMovement + upMovement;
-                transform.position += direction * player.stats.moveSpeed * Time.deltaTime;
-            }
+            Vector3 rightMovement = (right * (float) currentState.DPad.Left) + -(right * (float) currentState.DPad.Right);
+            Vector3 upMovement = -(forward * (float) currentState.DPad.Up) + (forward * (float) currentState.DPad.Down);
+            _inputs = (rightMovement + upMovement);
 
-
-            /*if (LeftStickX() != 0.0 || LeftStickY() != 0.0) //Left Joystick
-            {
-                Vector3 rightMovement = right * LeftStickX();
-                Vector3 upMovement = forward * LeftStickY();
-                Vector3 direction = rightMovement + upMovement;
-                transform.position += direction * player.stats.moveSpeed * Time.deltaTime;
+            if (_inputs.magnitude > 1f){
+                _inputs = _inputs.normalized;
             }
-            else if (DpadX() != 0.0 | DpadY() != 0.0) //D-Pad
-            {
-                Vector3 rightMovement = right * DpadX();
-                Vector3 upMovement = forward * DpadY();
-                Vector3 direction = rightMovement + upMovement;
-                transform.position += direction * player.stats.moveSpeed * Time.deltaTime;
-            }*/
         }
     }
 
@@ -257,9 +204,10 @@ public class PlayerController : MonoBehaviour {
         { 
             speed = player.stats.airSpeed;
             rb.AddForce(Vector3.up * player.stats.jumpForce, ForceMode.Impulse);
+            //rb.AddForce(Vector3.up  * player.stats.jumpForce, ForceMode.Impulse);
             isGrounded = false;
         }
-
+        //Debug.Log("up!");
         /*if (Input.GetButtonDown(playerPrefix + rightBumper) && isGrounded) //Checking for jumping
         { 
             speed = player.stats.airSpeed;
@@ -316,7 +264,7 @@ public class PlayerController : MonoBehaviour {
         if(holdTime <= Time.time)
         {
             holdTime = Time.time + 0.01f;
-            yield return new WaitForSeconds(0.01f);
+            yield return null;
             if (currentState.Triggers.Right == 0.0f) //stop being held down
             //if(RightTrigger() == 0.0) //stop being held down
             {
@@ -343,10 +291,8 @@ public class PlayerController : MonoBehaviour {
         if (shootTime <= Time.time) {
             Instantiate(arrow, ShootPoint.transform.position, transform.rotation, null); //this instantiates the arrow as an attack
             shootTime = Time.time + shootRate;
-            yield return new WaitForSeconds(shootRate);
+            yield return null;
         }
-        //yield return new WaitForSeconds(shootRate);
-
     }
 
     //change the way isGrounded is implemented 
@@ -388,11 +334,10 @@ public class PlayerController : MonoBehaviour {
 
     private void FixedUpdate() //Physics things are supposed to be in FixedUpdate
     {
-        if(newMovement)
-        {
-            rb.velocity = _inputs * speed; //player has a mass of 1 
-            //rb.AddForce((_inputs * speed * 900 * Time.fixedDeltaTime)); //The player moves forward forever just choose the Inputs (not sure if this is best)
-        }   
+        _inputs = _inputs * speed;
+        rb.velocity = new Vector3(_inputs.x, rb.velocity.y, _inputs.z);
+        //rb.velocity = _inputs * speed; //player has a mass of 1 
+        //rb.AddForce((_inputs * speed * 900 * Time.fixedDeltaTime)); //The player moves forward forever just choose the Inputs (not sure if this is best)      
     }
 
 
