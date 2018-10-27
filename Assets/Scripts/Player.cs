@@ -81,13 +81,26 @@ public class Player : MonoBehaviour {
         CheckDeath();
     }
 
+    // Determine the Type of item and handle accordingly
+    public void AddItem(ItemData data) {
+        switch(data.type) {
+            case ItemData.Type.Item:
+                break;
+            case ItemData.Type.Powerup:
+                AddPowerup((PowerupData)data);
+                break;
+            case ItemData.Type.Weapon:
+                break;
+        }
+    }
+
     // Create a new instance of a power-up, save it to list of power-ups and add its modifiers to stats
     public void AddPowerup(PowerupData powerupData) {
         Powerup powerup = powerupData.NewInstance(this); // Initialize power-up
         powerups.Add(powerup); // Save to list of powerups
         foreach (PlayerStats.Modifier m in powerup.modifiers) // Add power-up's modifiers to stats
             stats.AddModifier(m);
-        foreach (Powerup.Trigger t in powerup.triggers) {
+        foreach (Powerup.Trigger t in powerup.triggers) { // Add all the powerup's triggers to the respective event calls
             switch (t.type) {
                 case Powerup.Trigger.Type.Update:
                     onUpdate.AddListener(t.Activate);
@@ -101,8 +114,18 @@ public class Player : MonoBehaviour {
 
     // Remove each modifier granted by the power-up and remove the power-up from list of power-ups
     public void RemovePowerup(Powerup powerup) {
-        foreach (PlayerStats.Modifier m in powerup.modifiers)
+        foreach (PlayerStats.Modifier m in powerup.modifiers) // Remove all modifiers granted by this powerup
             stats.RemoveModifier(m);
-        powerups.Remove(powerup);
+        foreach (Powerup.Trigger t in powerup.triggers) {// Remove all the powerup's triggers from the respective event calls
+            switch (t.type) {
+                case Powerup.Trigger.Type.Update:
+                    onUpdate.RemoveListener(t.Activate);
+                    break;
+                case Powerup.Trigger.Type.Move:
+                    onMove.RemoveListener(t.Activate);
+                    break;
+            }
+        }
+        powerups.Remove(powerup); // Remove powerup from list of powerups
     }
 }

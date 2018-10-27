@@ -17,17 +17,12 @@ public class Powerup {
     public List<PlayerStats.Modifier> modifiers {
         get { return data.modifiers; }
     }
-    internal Player player;
+    internal Player player; // Player that this powerup is attached to
 
     // List of functions to be called every update on a player
     public List<Trigger> triggers = new List<Trigger>();
 
-    internal Powerup(Player player, bool isPermenant = false) {
-        this.player = player;
-        startTime = Time.time;
-        endTime = isPermenant ? float.PositiveInfinity : Time.time + PowerupData.duration;
-    }
-
+    // Contructor used to clone instance of powerup
     private Powerup(PowerupData data, Player player, bool isPermenant = false) {
         this.data = data;
         this.player = player;
@@ -35,10 +30,7 @@ public class Powerup {
         endTime = isPermenant ? float.PositiveInfinity : Time.time + PowerupData.duration;
     }
 
-    //internal void AddUpdate(UnityAction updateMethod) {
-    //    onUpdate.AddListener(updateMethod);
-    //}
-
+    // Create a deep copy of this powerup instance. Used for when adding a new powerup to a player
     public Powerup Clone(Player player, bool isPermenant = false) {
         Powerup copy = new Powerup(data, player, isPermenant);
         foreach (Trigger t in triggers) {
@@ -47,6 +39,7 @@ public class Powerup {
         return copy;
     }
 
+    // Contains a weapon that activates when a condition is triggered
     [System.Serializable]
     public class Trigger {
         [System.NonSerialized] // Prevent serialization loop
@@ -63,6 +56,7 @@ public class Powerup {
             refreshTime = 0;
         }
 
+        // Activate weapon if off cooldown
         public void Activate() {
             if (refreshTime <= Time.time) {
                 GameObject.Instantiate(spawnPrefab, powerup.player.transform.position, Quaternion.identity);
@@ -70,6 +64,7 @@ public class Powerup {
             }
         }
 
+        // Create a deep copy of this class
         public Trigger Copy(Powerup powerup) {
             Trigger copy = new Trigger(powerup) {
                 spawnPrefab = spawnPrefab,
@@ -80,6 +75,7 @@ public class Powerup {
             return copy;
         }
 
+        // Different types of Triggers available
         public enum Type { Update, Move, Stationary, Jump, Airborn, Land, Attack, Death, Touch, Hurt, StartDodge, EndDodge, Dodging}
     }
 }

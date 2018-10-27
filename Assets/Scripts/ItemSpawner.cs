@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PowerupSpawner : MonoBehaviour {
+public class ItemSpawner : MonoBehaviour {
 
     public GameObject powerupHolder;
     public PowerupList powerupList;
@@ -19,7 +19,7 @@ public class PowerupSpawner : MonoBehaviour {
     void Update () {
 		if (cooldown <= Time.time) {
             GameObject g = Instantiate(powerupHolder, new Vector3(Mathf.Round(Random.Range(TerrainManager.terrainManager.mapArea.min.x, TerrainManager.terrainManager.mapArea.max.x)) +0.5f, transform.position.y + 1.5f, Mathf.Round(Random.Range(TerrainManager.terrainManager.mapArea.min.y, TerrainManager.terrainManager.mapArea.max.y)) +0.5f), Quaternion.identity);
-            g.GetComponent<PowerupBehavior>().SetPowerupData(powerupList.RandomPowerup());
+            g.GetComponent<PowerupBehavior>().SetItemData(powerupList.RandomPowerup());
             ResetCooldown();
         }
 	}

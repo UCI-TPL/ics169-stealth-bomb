@@ -79,57 +79,29 @@ public class PlayerStats : MonoBehaviour {
             get { return _value; }
             private set { _value = value; }
         }
-        private Dictionary<Modifier, int> flatModifiers;
-        private Dictionary<Modifier, int> incModifiers;
-        private Dictionary<Modifier, int> moreModifiers;
-        private Dictionary<Modifier, int> boolModifiers;
+        private Dictionary<Modifier.Type, Dictionary<Modifier, int>> modifiers;
 
         public Property(string name, float baseValue, Type type = Type.Numerical) {
             this.name = name;
             this.baseValue = baseValue;
             this.type = Type.Numerical;
-            flatModifiers = new Dictionary<Modifier, int>();
-            incModifiers = new Dictionary<Modifier, int>();
-            moreModifiers = new Dictionary<Modifier, int>();
-            boolModifiers = new Dictionary<Modifier, int>();
+            modifiers = new Dictionary<Modifier.Type, Dictionary<Modifier, int>>();
+            modifiers.Add(Modifier.Type.Flat, new Dictionary<Modifier, int>());
+            modifiers.Add(Modifier.Type.Increased, new Dictionary<Modifier, int>());
+            modifiers.Add(Modifier.Type.More, new Dictionary<Modifier, int>());
+            modifiers.Add(Modifier.Type.Bool, new Dictionary<Modifier, int>());
             UpdateValue();
         }
 
         // Add modifier based on its type;
         public void AddModifier(Modifier modifier) {
-            switch (modifier.type) {
-                case Modifier.Type.Flat:
-                    IncMod(flatModifiers, modifier);
-                    break;
-                case Modifier.Type.Increased:
-                    IncMod(incModifiers, modifier);
-                    break;
-                case Modifier.Type.More:
-                    IncMod(moreModifiers, modifier);
-                    break;
-                case Modifier.Type.Bool:
-                    IncMod(boolModifiers, modifier);
-                    break;
-            }
+            IncMod(modifiers[modifier.type], modifier);
             UpdateValue();
         }
 
         // Remove modifier based on its type;
         public void RemoveModifier(Modifier modifier) {
-            switch (modifier.type) {
-                case Modifier.Type.Flat:
-                    DecMod(flatModifiers, modifier);
-                    break;
-                case Modifier.Type.Increased:
-                    DecMod(incModifiers, modifier);
-                    break;
-                case Modifier.Type.More:
-                    DecMod(moreModifiers, modifier);
-                    break;
-                case Modifier.Type.Bool:
-                    DecMod(boolModifiers, modifier);
-                    break;
-            }
+            DecMod(modifiers[modifier.type], modifier);
             UpdateValue();
         }
 
@@ -153,12 +125,12 @@ public class PlayerStats : MonoBehaviour {
         private void UpdateValue() {
             switch (type) { // Check the type of property (Numerical or Boolean)
                 case Type.Numerical:
-                    value = (baseValue + TotalMods(flatModifiers)) * (1+TotalMods(incModifiers)); // Adds all flat modifiers and multiplies by increased modifiers
-                    foreach (KeyValuePair<Modifier, int> m in moreModifiers) // Multiplies every more modifier separately
+                    value = (baseValue + TotalMods(modifiers[Modifier.Type.Flat])) * (1+TotalMods(modifiers[Modifier.Type.Increased])); // Adds all flat modifiers and multiplies by increased modifiers
+                    foreach (KeyValuePair<Modifier, int> m in modifiers[Modifier.Type.More]) // Multiplies every more modifier separately
                         value *= Mathf.Pow(1+m.Key.value, m.Value);
                     break;
                 case Type.Bool:
-                    if (TotalMods(boolModifiers) + baseValue > 0) // Check if boolean modifiers add up to true
+                    if (TotalMods(modifiers[Modifier.Type.Bool]) + baseValue > 0) // Check if boolean modifiers add up to true
                         value = 1;
                     break;
             }

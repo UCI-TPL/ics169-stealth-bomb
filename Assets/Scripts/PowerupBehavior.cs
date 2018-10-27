@@ -5,23 +5,23 @@ using UnityEngine;
 public class PowerupBehavior : MonoBehaviour {
 
     [SerializeField]
-    private PowerupData powerupData;
+    private ItemData data;
 
     private bool destroying = false;
 
     private void Awake() {
-        if (powerupData != null) // Set power-up sprite if powerup data already present, this would only happen is powerup was place in level by editor
-            GetComponent<SpriteRenderer>().sprite = powerupData.image;
+        if (data != null) // Set power-up sprite if powerup data already present, this would only happen is powerup was place in level by editor
+            GetComponent<SpriteRenderer>().sprite = data.image;
     }
 
     private void Start() {
-        if (powerupData == null) // Check to ensure Powerup is present
-            Debug.LogError(gameObject.name + " missing Powerup");
+        if (data == null) // Check to ensure Powerup is present
+            Debug.LogError(gameObject.name + " missing Item");
         StartCoroutine("DefaultCreateEff");
     }
 
-    public void SetPowerupData(PowerupData data) {
-        powerupData = data;
+    public void SetItemData(ItemData data) {
+        this.data = data;
         GetComponent<SpriteRenderer>().sprite = data.image;
     }
 
@@ -29,7 +29,7 @@ public class PowerupBehavior : MonoBehaviour {
     private void OnTriggerEnter(Collider other) {
         Player player = other.GetComponent<Player>();
         if (player != null) {
-            player.AddPowerup(powerupData);
+            player.AddItem(data);
             Destroy();
         }
     }

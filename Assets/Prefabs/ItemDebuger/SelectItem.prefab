@@ -61,7 +61,7 @@ GameObject:
   - component: {fileID: 114010333143535236}
   - component: {fileID: 114745737228615722}
   m_Layer: 5
-  m_Name: SelectPowerup
+  m_Name: SelectItem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

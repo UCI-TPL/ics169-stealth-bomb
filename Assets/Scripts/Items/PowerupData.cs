@@ -4,13 +4,9 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [CreateAssetMenu(fileName = "New Powerup", menuName = "Power-up/Power-up", order = 1)]
-public class PowerupData : ScriptableObject {
+public class PowerupData : ItemData {
     
     public static float duration = 10; // Buff duration for all powerups
-
-    public new string name;
-    public Sprite image;
-    public string description;
     
     // Holds a list of all modifiers in the powerup
     [SerializeField]
@@ -19,6 +15,7 @@ public class PowerupData : ScriptableObject {
     public Powerup instance;
 
     private void OnEnable() {
+        type = ItemData.Type.Powerup;
         if (modifiers == null) // Initialize list of modifiers if not already
             modifiers = new List<PlayerStats.Modifier>();
         instance.data = this; // Set powerup data to this
