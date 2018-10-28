@@ -27,7 +27,8 @@ public class PlayerJoinManager : MonoBehaviour {
 
 	[Tooltip("Reference to the game controller object.")]
 	public GameObject gameManager;
-	private GameController gameController;
+	public string gameManagerName = "GameController";
+	private ActivePlayerManager playerManager;
 
 	bool[] playersReady;
 	// public bool player1Ready;
@@ -55,6 +56,16 @@ public class PlayerJoinManager : MonoBehaviour {
 		return roster;
 	}
 
+	void Awake() {
+		if (gameManager == null) {
+			gameManager = GameObject.Find(gameManagerName);
+		}
+		if (gameManager != null) 
+			playerManager = gameManager.GetComponent<ActivePlayerManager>();
+		else
+			Debug.Log("The game manager variable was not assigned in the inspector. This will most likely cause errors!");
+	}
+
 	// Use this for initialization
 	void Start () {
 		players = new PlayerIndex[4];
@@ -75,10 +86,10 @@ public class PlayerJoinManager : MonoBehaviour {
 		//find the script -Kyle
 		selectionOP = playersObject.GetComponent<characterSelection>();
 		currentMenu = mMManager.GetComponent<MainMenuManager>();
-		if (gameManager != null) 
-			gameController = gameManager.GetComponent<GameController>();
-		else
-			Debug.Log("The game manager variable was not assigned in the inspector. This will most likely cause errors!");
+		// if (gameManager != null) 
+		// 	playerManager = gameManager.GetComponent<ActivePlayerManager>();
+		// else
+		// 	Debug.Log("The game manager variable was not assigned in the inspector. This will most likely cause errors!");
 	}
 	
 	// Update is called once per frame
@@ -173,6 +184,7 @@ public class PlayerJoinManager : MonoBehaviour {
 						// NOTE: implementation is subject to change for now.
 						if (currentStates[i].Buttons.Start == ButtonState.Pressed && prevStates[i].Buttons.Start == ButtonState.Released) {
 							// This might be where we give the game controller the number and roster of active players
+							playerManager.SetPlayersStatus(GetPLayerReadyStatusList());
 							if (loadNextLevelByName) 
 								SceneManager.LoadScene(nextLevel);
 							else 
