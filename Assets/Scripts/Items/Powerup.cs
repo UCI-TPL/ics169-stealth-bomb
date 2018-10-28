@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 [System.Serializable]
 public class Powerup {
-    public PowerupData data;
+    private PowerupData data;
     public float startTime;
     public float endTime;
     public float timeRemaining {
@@ -21,6 +21,11 @@ public class Powerup {
 
     // List of functions to be called every update on a player
     public List<Trigger> triggers = new List<Trigger>();
+
+    // Create new power-up instance for editing in inspector
+    public Powerup (PowerupData data) {
+        this.data = data;
+    }
 
     // Contructor used to clone instance of powerup
     private Powerup(PowerupData data, Player player, bool isPermenant = false) {

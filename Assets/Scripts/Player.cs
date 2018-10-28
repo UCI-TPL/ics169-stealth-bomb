@@ -27,10 +27,15 @@ public class Player : MonoBehaviour {
 
     private Rigidbody rb;
 
+
     private List<Powerup> powerups = new List<Powerup>();
 
     private UnityEvent onUpdate = new UnityEvent();
     private UnityEvent onMove = new UnityEvent();
+
+    // Currently equiped weapon
+    public Weapon weapon;
+    public WeaponData data;
 
     private Vector3 prevPosition;
     public bool isMoving {
@@ -49,6 +54,7 @@ public class Player : MonoBehaviour {
 
     private void Start() {
         ResetHealth();
+        weapon = data.NewInstance(this);
     }
 
     public void ResetHealth() {
@@ -79,6 +85,10 @@ public class Player : MonoBehaviour {
             onMove.Invoke();
 
         CheckDeath();
+        if (Input.GetKeyDown(KeyCode.Space))
+            weapon.Activate();
+        if (Input.GetKeyUp(KeyCode.Space))
+            weapon.Release();
     }
 
     // Determine the Type of item and handle accordingly
@@ -90,6 +100,7 @@ public class Player : MonoBehaviour {
                 AddPowerup((PowerupData)data);
                 break;
             case ItemData.Type.Weapon:
+                ChangeWeapon((WeaponData)data);
                 break;
         }
     }
@@ -127,5 +138,9 @@ public class Player : MonoBehaviour {
             }
         }
         powerups.Remove(powerup); // Remove powerup from list of powerups
+    }
+
+    public void ChangeWeapon(WeaponData data) {
+        weapon = data.NewInstance(this);
     }
 }

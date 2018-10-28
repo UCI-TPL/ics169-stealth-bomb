@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-[CreateAssetMenu(fileName = "New Powerup", menuName = "Power-up/Power-up", order = 1)]
+[CreateAssetMenu(fileName = "New Powerup", menuName = "Item/Power-up", order = 1)]
 public class PowerupData : ItemData {
     
     public static float duration = 10; // Buff duration for all powerups
@@ -18,7 +18,8 @@ public class PowerupData : ItemData {
         type = ItemData.Type.Powerup;
         if (modifiers == null) // Initialize list of modifiers if not already
             modifiers = new List<PlayerStats.Modifier>();
-        instance.data = this; // Set powerup data to this
+        if (instance == null)// Set powerup data to this if instance is not yet created
+            instance = new Powerup(this);
     }
 
     // Add modifier to the powerup
