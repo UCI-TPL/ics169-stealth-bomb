@@ -13,7 +13,7 @@ public class ItemDebuger : MonoBehaviour {
     [Tooltip("Image for current selected item")]
     public Image selectedImage;
     [Tooltip("List of items")]
-    public PowerupList itemList;
+    public ItemList itemList;
     [Tooltip("Prefab for item container")]
     public GameObject itemContainer;
     private GameObject _itemSpawner;
@@ -33,9 +33,9 @@ public class ItemDebuger : MonoBehaviour {
     private ItemData selectedItem;
 
     private void Start() {
-        SelectItem(itemList.tiers[0].powerups[0]); // Initalize selected item to first item
-        foreach (PowerupList.Tier tier in itemList.tiers) {
-            foreach (ItemData data in tier.powerups) {
+        SelectItem(itemList.tiers[0].items[0]); // Initalize selected item to first item
+        foreach (ItemList.Tier tier in itemList.tiers) {
+            foreach (ItemData data in tier.items) {
                 AddButton(data); // For each item in the item list create a new selection button
             }
         }
@@ -54,7 +54,7 @@ public class ItemDebuger : MonoBehaviour {
             //DrawCubeWithWire(targetGrid + Tile.TileOffset, 1, Color.white, new Color(1, 1, 1, 0.1f));
             if (Input.GetMouseButtonDown(0)) {
                 GameObject g = Instantiate(itemContainer, targetGrid + Tile.TileOffset, Quaternion.identity); // Create a item container
-                g.GetComponent<PowerupBehavior>().SetItemData(selectedItem); // Set the item for the item container
+                g.GetComponent<ItemContainer>().SetItemData(selectedItem); // Set the item for the item container
             }
         }
     }

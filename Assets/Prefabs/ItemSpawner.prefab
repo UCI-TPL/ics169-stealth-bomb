@@ -51,8 +51,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edc9129454b27394ba009b2505e037a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  powerupHolder: {fileID: 1865126826565178, guid: 51d7268249fd5e04cbc837fd04340b92,
+  itemContainer: {fileID: 1865126826565178, guid: 51d7268249fd5e04cbc837fd04340b92,
     type: 2}
-  powerupList: {fileID: 11400000, guid: 6dd4dc727b43ccd42a8c085cd363fb9a, type: 2}
+  itemList: {fileID: 11400000, guid: 6dd4dc727b43ccd42a8c085cd363fb9a, type: 2}
   spawnRateMin: 0.1
   spawnRateMax: 1

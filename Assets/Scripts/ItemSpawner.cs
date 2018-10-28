@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class ItemSpawner : MonoBehaviour {
 
-    public GameObject powerupHolder;
-    public PowerupList powerupList;
+    public GameObject itemContainer;
+    public ItemList itemList;
     public float spawnRateMin;
     public float spawnRateMax;
 
@@ -18,8 +18,8 @@ public class ItemSpawner : MonoBehaviour {
     // Update is called once per frame
     void Update () {
 		if (cooldown <= Time.time) {
-            GameObject g = Instantiate(powerupHolder, new Vector3(Mathf.Round(Random.Range(TerrainManager.terrainManager.mapArea.min.x, TerrainManager.terrainManager.mapArea.max.x)) +0.5f, transform.position.y + 1.5f, Mathf.Round(Random.Range(TerrainManager.terrainManager.mapArea.min.y, TerrainManager.terrainManager.mapArea.max.y)) +0.5f), Quaternion.identity);
-            g.GetComponent<PowerupBehavior>().SetItemData(powerupList.RandomPowerup());
+            GameObject g = Instantiate(itemContainer, new Vector3(Mathf.Round(Random.Range(TerrainManager.terrainManager.mapArea.min.x, TerrainManager.terrainManager.mapArea.max.x)) +0.5f, transform.position.y + 1.5f, Mathf.Round(Random.Range(TerrainManager.terrainManager.mapArea.min.y, TerrainManager.terrainManager.mapArea.max.y)) +0.5f), Quaternion.identity);
+            g.GetComponent<ItemContainer>().SetItemData(itemList.RandomItem());
             ResetCooldown();
         }
 	}

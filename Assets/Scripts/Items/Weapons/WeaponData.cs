@@ -11,7 +11,7 @@ public abstract class WeaponData<WeaponType> : WeaponData where WeaponType : Wea
         type = ItemData.Type.Weapon;
         if (instance == null)
             instance = new WeaponType();
-        instance.data = this;
+        instance.weaponData = this;
     }
 
     public override Weapon NewInstance(Player player) {

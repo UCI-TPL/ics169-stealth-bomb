@@ -6,7 +6,7 @@ using UnityEngine;
 [System.Serializable]
 public abstract class Weapon {
     
-    public WeaponData data;
+    public WeaponData weaponData;
     public Type type;
     
     internal Player player; // Player that this weapon is attached to
@@ -17,8 +17,8 @@ public abstract class Weapon {
     public Weapon() { }
 
     // Contructor used to clone instance of weapon
-    public Weapon(WeaponData data, Player player, Type type = Type.Instant) {
-        this.data = data;
+    public Weapon(WeaponData weaponData, Player player, Type type = Type.Instant) {
+        this.weaponData = weaponData;
         this.player = player;
         this.type = type;
         overrideChargeUpdate = IsOverride("OnChargingUpdate");
@@ -65,7 +65,7 @@ public abstract class Weapon {
     }
 
     // Create a deep copy of this powerup instance. Used for when adding a new powerup to a player
-    public abstract Weapon Clone(WeaponData data, Player player);
+    public abstract Weapon Clone(WeaponData weaponData, Player player);
 
     // Classify weapons as charged or instant, Charged attacks cannot be used as triggers
     public enum Type {

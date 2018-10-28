@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Powerup List", menuName = "Power-up List", order = 1)]
-public class PowerupList : ScriptableObject {
+[CreateAssetMenu(fileName = "New Item List", menuName = "Item List", order = 1)]
+public class ItemList : ScriptableObject {
     public Tier[] tiers;
 
     public float TotalPercent() {
@@ -13,9 +13,9 @@ public class PowerupList : ScriptableObject {
         return sum;
     }
 
-    public PowerupData RandomPowerup() {
+    public ItemData RandomItem() {
         Tier t = RandomTier();
-        return t.powerups[Random.Range(0, t.powerups.Length)];
+        return t.items[Random.Range(0, t.items.Length)];
     }
     
     private Tier RandomTier() {
@@ -24,13 +24,13 @@ public class PowerupList : ScriptableObject {
             if ((roll -= t.percent) <= 0)
                 return t;
         }
-        Debug.LogError("Powerup tier list is empty, could not get a random powerup tier");
+        Debug.LogError("Item tier list is empty, could not get a random Item tier");
         return null;
     }
 
     [System.Serializable]
     public class Tier {
         public float percent;
-        public PowerupData[] powerups;
+        public ItemData[] items;
     }
 }

@@ -9,15 +9,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 90a16db612bac3f43aa1690d903d1654, type: 3}
-  m_Name: Powerup List
+  m_Name: Item List
   m_EditorClassIdentifier: 
   tiers:
   - percent: 45
-    powerups:
+    items:
     - {fileID: 11400000, guid: ad2d9603dfcf19d41a66877d48aa241e, type: 2}
   - percent: 35
-    powerups:
+    items:
     - {fileID: 11400000, guid: 9c71528773eb1544b94d39f9aefd88af, type: 2}
-  - percent: 20
-    powerups:
     - {fileID: 11400000, guid: 204f52f175aac3a43b38bf3f8206b350, type: 2}
+  - percent: 20
+    items:
+    - {fileID: 11400000, guid: 402d85fe57f92094685452857a0715b0, type: 2}
+    - {fileID: 11400000, guid: 215207e25d1096148a30b7bc16aea5b6, type: 2}

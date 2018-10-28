@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(PowerupList))]
-public class PowerupListEditor : Editor {
+[CustomEditor(typeof(ItemList))]
+public class ItemListEditor : Editor {
 
     public static readonly Color[] colors =
         {
@@ -17,8 +17,8 @@ public class PowerupListEditor : Editor {
             new Color(0.4486272f, 0.4078432f, 0.0501960f, 1.0f),
             new Color(0.7749016f, 0.6368624f, 0.0250984f, 1.0f)
         };
-    private PowerupList script {
-        get { return (PowerupList)target; }
+    private ItemList script {
+        get { return (ItemList)target; }
     }
 
     public override void OnInspectorGUI() {

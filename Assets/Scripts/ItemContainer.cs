@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PowerupBehavior : MonoBehaviour {
+public class ItemContainer : MonoBehaviour {
 
     [SerializeField]
     private ItemData data;
@@ -10,12 +10,12 @@ public class PowerupBehavior : MonoBehaviour {
     private bool destroying = false;
 
     private void Awake() {
-        if (data != null) // Set power-up sprite if powerup data already present, this would only happen is powerup was place in level by editor
+        if (data != null) // Set item sprite if item data already present, this would only happen is item was placed in level by editor
             GetComponent<SpriteRenderer>().sprite = data.image;
     }
 
     private void Start() {
-        if (data == null) // Check to ensure Powerup is present
+        if (data == null) // Check to ensure item is present
             Debug.LogError(gameObject.name + " missing Item");
         StartCoroutine("DefaultCreateEff");
     }
@@ -25,7 +25,7 @@ public class PowerupBehavior : MonoBehaviour {
         GetComponent<SpriteRenderer>().sprite = data.image;
     }
 
-    // If collider is a player, add powerup to player
+    // If collider is a player, add item to player
     private void OnTriggerEnter(Collider other) {
         Player player = other.GetComponent<Player>();
         if (player != null) {
@@ -60,6 +60,9 @@ public class PowerupBehavior : MonoBehaviour {
     // Effect that plays while the object is destroying
     private IEnumerator DefaultDestroyEff() {
         GetComponent<Collider>().enabled = false; // Disable further collision detections while destroying
+        transform.GetChild(0).GetComponent<Collider>().enabled = false; // Disable further collision detections while destroying
+        GetComponent<Rigidbody>().useGravity = false;
+        GetComponent<Rigidbody>().velocity = Vector3.zero;
         float curTime = Time.time;
         while (true) {
             float scale = -Mathf.Pow((4f * (Time.time - curTime - 0.125f)), 2) + 1.25f;

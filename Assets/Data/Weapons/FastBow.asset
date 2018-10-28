@@ -9,17 +9,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d979d2f7b0446e74899245133bf5b7ea, type: 3}
-  m_Name: Bow
+  m_Name: FastBow
   m_EditorClassIdentifier: 
-  name: Bow
+  name: FastBow
   image: {fileID: 21300000, guid: c7c269c0629756f45976acb35b2c822a, type: 3}
-  description: Charge to fire an arrow.
+  description: ITS FAST
   type: 2
   instance:
     weaponData: {fileID: 11400000}
     type: 1
   arrow: {fileID: 114721991009535130, guid: 111ada6a1cfa3e64abadaf4254cad72b, type: 2}
-  colorAddition: 25
-  chargeTime: 0.5
-  numProj: 1
+  colorAddition: 0.1
+  chargeTime: 0
+  numProj: 3
   projSpeed: 100

@@ -35,7 +35,7 @@ public class Player : MonoBehaviour {
 
     // Currently equiped weapon
     public Weapon weapon;
-    public WeaponData data;
+    public WeaponData DefaultWeapon;
 
     private Vector3 prevPosition;
     public bool isMoving {
@@ -54,7 +54,11 @@ public class Player : MonoBehaviour {
 
     private void Start() {
         ResetHealth();
-        weapon = data.NewInstance(this);
+        ResetWeapon();
+    }
+
+    public void ResetWeapon() {
+        weapon = DefaultWeapon.NewInstance(this);
     }
 
     public void ResetHealth() {
