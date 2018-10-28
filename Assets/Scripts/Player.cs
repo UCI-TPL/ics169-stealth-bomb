@@ -89,10 +89,6 @@ public class Player : MonoBehaviour {
             onMove.Invoke();
 
         CheckDeath();
-        if (Input.GetKeyDown(KeyCode.Space))
-            weapon.Activate();
-        if (Input.GetKeyUp(KeyCode.Space))
-            weapon.Release();
     }
 
     // Determine the Type of item and handle accordingly

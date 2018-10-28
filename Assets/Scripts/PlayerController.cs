@@ -17,11 +17,12 @@ public class PlayerController : MonoBehaviour {
             Debug.LogError(gameObject.name + " missing Player Component");
     }
     [SerializeField]
-    float shootRate = 0.2f; //put these stats in playerStats soon 
-    float chargeTime = 0.5f;
-    float shootTime = 0.0f;
-    float holdTime = 0.0f;
-    float holdStart = 0.0f;
+    //float shootRate = 0.2f; //put these stats in playerStats soon 
+    //float chargeTime = 0.5f;
+    //float shootTime = 0.0f;
+    //float holdTime = 0.0f;
+    //float holdStart = 0.0f;
+    private bool attackDown; // This should be handled in InputManager
     float rollTime = 0.0f; //to check if the player is currently rolling
     float holdEnd = 0.0f;
     float speed;
@@ -36,7 +37,7 @@ public class PlayerController : MonoBehaviour {
 
     public GameObject ShootPoint;
     public Rigidbody rb;
-    public Projectile arrow; //this is used for the Basic Attack
+    //public Projectile arrow; //this is used for the Basic Attack
     [Tooltip("Represents which player this is. Only put in 1-4. Do not put 0!!! This attribute must have a value in order to work or take in input properly!!! ")]
     public int playerNum;
 
@@ -83,12 +84,12 @@ public class PlayerController : MonoBehaviour {
     private string playerPrefix;
 
 
-    Renderer rend;
-    Color startColor;
-    [SerializeField]
-    Color changeColor;
+    //Renderer rend;
+    //Color startColor;
+    //[SerializeField]
+    //Color changeColor;
 
-    public float colorAddition = 0.1f;
+    //public float colorAddition = 0.1f;
 
     // public float DpadX()
     // {
@@ -128,8 +129,8 @@ public class PlayerController : MonoBehaviour {
 
     void Start() {
         //shootRate = player.stats.shootTime;
-        rend = GetComponent<Renderer>();
-        startColor = rend.material.color;
+        //rend = GetComponent<Renderer>();
+        //startColor = rend.material.color;
         speed = player.stats.moveSpeed;
         rb = GetComponent<Rigidbody>();
        
@@ -244,56 +245,67 @@ public class PlayerController : MonoBehaviour {
         }
         
     }
-
-
+    
     void Attack() {
-        if (currentState.Triggers.Right != 0.0f)
-        //if (RightTrigger() != 0.0)
-        {
-            if(holdStart == 0.0)
-            {
-                holdStart = Time.time;
+        if (currentState.Triggers.Right != 0.0f) {
+            if (!attackDown) {
+                player.weapon.Activate();
+                Debug.Log(!attackDown);
+                attackDown = true;
             }
-            StartCoroutine("IsTriggerBeingHeldDown");
+        } else {
+            if (attackDown) {
+                player.weapon.Release();
+                attackDown = false;
+            }
         }
+
+        ////if (RightTrigger() != 0.0)
+        //{
+        //    if(holdStart == 0.0)
+        //    {
+        //        holdStart = Time.time;
+        //    }
+        //    StartCoroutine("IsTriggerBeingHeldDown");
+        //}
         
     }
 
-    IEnumerator IsTriggerBeingHeldDown() //making Input.GetButtonDown/Up functionality for the Axis
-    {
-        if(holdTime <= Time.time)
-        {
-            holdTime = Time.time + 0.01f;
-            yield return null;
-            if (currentState.Triggers.Right == 0.0f) //stop being held down
-            //if(RightTrigger() == 0.0) //stop being held down
-            {
-                holdEnd = Time.time - holdStart;
-                rend.material.color = startColor;
-                if (holdEnd >= chargeTime) 
-                {
+    //IEnumerator IsTriggerBeingHeldDown() //making Input.GetButtonDown/Up functionality for the Axis
+    //{
+    //    if(holdTime <= Time.time)
+    //    {
+    //        holdTime = Time.time + 0.01f;
+    //        yield return null;
+    //        if (currentState.Triggers.Right == 0.0f) //stop being held down
+    //        //if(RightTrigger() == 0.0) //stop being held down
+    //        {
+    //            holdEnd = Time.time - holdStart;
+    //            rend.material.color = startColor;
+    //            if (holdEnd >= chargeTime) 
+    //            {
                    
-                    StartCoroutine("Shoot");
-                }
-                holdStart = 0.0f;
-            }
-            else //is being held down
-            {
-                rend.material.color = rend.material.color + (Color.red / colorAddition);
-            }
-        }
+    //                StartCoroutine("Shoot");
+    //            }
+    //            holdStart = 0.0f;
+    //        }
+    //        else //is being held down
+    //        {
+    //            rend.material.color = rend.material.color + (Color.red / colorAddition);
+    //        }
+    //    }
 
 
-    }
+    //}
 
-    //test to see if you can replace shootTime with player.stats.shootTime 
-    IEnumerator Shoot() {
-        if (shootTime <= Time.time) {
-            Instantiate(arrow, ShootPoint.transform.position, transform.rotation, null); //this instantiates the arrow as an attack
-            shootTime = Time.time + shootRate;
-            yield return null;
-        }
-    }
+    ////test to see if you can replace shootTime with player.stats.shootTime 
+    //IEnumerator Shoot() {
+    //    if (shootTime <= Time.time) {
+    //        Instantiate(arrow, ShootPoint.transform.position, transform.rotation, null); //this instantiates the arrow as an attack
+    //        shootTime = Time.time + shootRate;
+    //        yield return null;
+    //    }
+    //}
 
     //change the way isGrounded is implemented 
     private void OnCollisionEnter(Collision collision) {

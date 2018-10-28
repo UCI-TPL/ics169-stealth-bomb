@@ -20,6 +20,7 @@ public class PowerupData : ItemData {
             modifiers = new List<PlayerStats.Modifier>();
         if (instance == null)// Set powerup data to this if instance is not yet created
             instance = new Powerup(this);
+        instance.data = this;
     }
 
     // Add modifier to the powerup

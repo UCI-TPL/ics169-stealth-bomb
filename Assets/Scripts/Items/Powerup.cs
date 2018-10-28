@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 [System.Serializable]
 public class Powerup {
-    private PowerupData data;
+    public PowerupData data;
     public float startTime;
     public float endTime;
     public float timeRemaining {
