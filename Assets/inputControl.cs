@@ -13,6 +13,29 @@ public class inputControl : MonoBehaviour {
 	private Vector3 _inputs = Vector3.zero;
 	float speed;
 
+
+	/////////////////////////////////////////////////////////
+
+	private float moveY = 0f;
+	private float moveX = 0f;
+	public string currentMove = "ThumbSticks.Left";
+	
+	private void getCurrentInput()
+	{
+		moveY = 0f;
+		moveX = 0f;
+		if (currentMove == "ThumbSticks.Left")
+		{
+			moveY = currentState.ThumbSticks.Left.Y;
+			moveX = currentState.ThumbSticks.Left.X;
+		}
+		else if (currentMove == "ThumbSticks.Right")
+		{
+			moveY = currentState.ThumbSticks.Right.Y;
+			moveX = currentState.ThumbSticks.Right.X;
+		}
+	}
+
 	void Start() {
 		rb = GetComponent<Rigidbody>();
 		forward = Camera.main.transform.forward;
@@ -26,6 +49,7 @@ public class inputControl : MonoBehaviour {
 	void Update() {
 		currentState = GamePad.GetState(0);
 		_inputs = Vector3.zero;
+		getCurrentInput();
 		Move();
 	}
 
@@ -35,16 +59,23 @@ public class inputControl : MonoBehaviour {
 
 
 	void Move()
-    {     
-		if (currentState.ThumbSticks.Left.Y != 0.0f || currentState.ThumbSticks.Left.X != 0.0f) 
-		{
-			Vector3 rightMovement = right * currentState.ThumbSticks.Left.X;
-			Vector3 upMovement = forward * currentState.ThumbSticks.Left.Y;
-			_inputs = (rightMovement + upMovement);
+    {
+		Vector3 rightMovement = right * moveX;
+		Vector3 upMovement = forward * moveY;
+		_inputs = (rightMovement + upMovement);
 
-			if (_inputs.magnitude > 1f) {
-				_inputs = _inputs.normalized;
-			}
-		}
+		if (_inputs.magnitude > 1f) {
+			_inputs = _inputs.normalized;
+		}     
+		// if (currentState.ThumbSticks.Left.Y != 0.0f || currentState.ThumbSticks.Left.X != 0.0f) 
+		// {
+		// 	Vector3 rightMovement = right * currentState.ThumbSticks.Left.X;
+		// 	Vector3 upMovement = forward * currentState.ThumbSticks.Left.Y;
+		// 	_inputs = (rightMovement + upMovement);
+
+		// 	if (_inputs.magnitude > 1f) {
+		// 		_inputs = _inputs.normalized;
+		// 	}
+		// }
     }
 }
