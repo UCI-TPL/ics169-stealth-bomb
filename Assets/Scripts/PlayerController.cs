@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour {
     //float holdStart = 0.0f;
     private bool attackDown; // This should be handled in InputManager
     float rollTime = 0.0f; //to check if the player is currently rolling
-    float holdEnd = 0.0f;
+    //float holdEnd = 0.0f;
     float speed;
 
     bool isGrounded;
@@ -250,7 +250,6 @@ public class PlayerController : MonoBehaviour {
         if (currentState.Triggers.Right != 0.0f) {
             if (!attackDown) {
                 player.weapon.Activate();
-                Debug.Log(!attackDown);
                 attackDown = true;
             }
         } else {

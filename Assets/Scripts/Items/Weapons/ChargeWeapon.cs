@@ -36,16 +36,12 @@ public class ChargeWeapon : Weapon {
     // OnRelease is called once when the weapon is released
     protected override void OnRelease() {
         rend.material.color = startColor;
-        if (chargeLevel == 1) {
-            for (int i = 0; i < data.numProj; ++i)
-                GameObject.Instantiate(data.arrow, player.controller.ShootPoint.transform.position, player.transform.rotation, null); //this instantiates the arrow as an attack
-
-        }
+            data.projectile.Shoot(player, data.projSpeed * chargeLevel, data.numProj);
     }
 
     // Create a deep copy of this weapon instance
-    public override Weapon Clone(WeaponData data, Player player) {
-        ChargeWeapon copy = new ChargeWeapon(data, player);
+    public override Weapon DeepCopy(WeaponData weaponData, Player player) {
+        ChargeWeapon copy = new ChargeWeapon(weaponData, player);
         return copy;
     }
 }

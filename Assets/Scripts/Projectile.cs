@@ -1,50 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Collider))]
+public class Projectile : MonoBehaviour {
 
-public class Projectile : MonoBehaviour { //should this just be named arrow?
-
-    // Use this for initialization
-
-    public Rigidbody rb;
-
-    public int speed = 1;
-    public int damage = 100;
-
-    public float lifetime = 3f;
+    public new Collider collider;
+    public ProjectileData data;
+    [HideInInspector]
+    public Player player;
 
 	void Start () {
-        rb = GetComponent<Rigidbody>();
-        StartCoroutine("LifeTime");
-        Shoot();
+        Physics.IgnoreCollision(player.GetComponent<Collider>(), collider);
+        Destroy(gameObject, data.lifetime); // Destroy gameObject after lifetime is up
     }
 
-    void Shoot()
-    {
-        rb.AddForce(transform.forward * speed, ForceMode.Impulse);
-    }
-
-    IEnumerator LifeTime()
-    {
-        yield return new WaitForSeconds(lifetime);
-        Destroy(gameObject);
-    }
-
-    private void OnCollisionEnter(Collision other)
-    {
-        if(other.gameObject.tag == "Player")
-        {
-            Player player = other.gameObject.GetComponent<Player>();
-            player.HurtPlayer(damage);
-            Destroy(gameObject,0.01f);
+    private void OnCollisionEnter(Collision other) {
+        Player hit;
+        if ((hit = other.gameObject.GetComponent<Player>()) != null && hit != player) {
+            hit.HurtPlayer(data.damage);
+            Destroy(gameObject);
         }
     }
-
-
-    // Update is called once per frame
-    void Update () {
-
-        //transform.Translate(Vector3.forward * speed);		
-	}
 }

@@ -49,30 +49,32 @@ public class Powerup {
     public class Trigger {
         [System.NonSerialized] // Prevent serialization loop
         private Powerup powerup;
-        public GameObject spawnPrefab;
+        public WeaponData triggerWeapon;
+        private Weapon weapon;
         public float cooldown;
         public List<PlayerStats.Modifier> modifiers;
         public Type type;
 
         private float refreshTime;
 
-        public Trigger(Powerup powerup) {
+        public Trigger(WeaponData triggerWeapon, Powerup powerup) {
             this.powerup = powerup;
+            this.triggerWeapon = triggerWeapon;
+            weapon = triggerWeapon.NewInstance(powerup.player);
             refreshTime = 0;
         }
 
         // Activate weapon if off cooldown
         public void Activate() {
             if (refreshTime <= Time.time) {
-                GameObject.Instantiate(spawnPrefab, powerup.player.transform.position, Quaternion.identity);
+                weapon.Activate();
                 refreshTime = Time.time + cooldown;
             }
         }
 
         // Create a deep copy of this class
         public Trigger Copy(Powerup powerup) {
-            Trigger copy = new Trigger(powerup) {
-                spawnPrefab = spawnPrefab,
+            Trigger copy = new Trigger(triggerWeapon, powerup) {
                 cooldown = cooldown,
                 modifiers = modifiers,
                 type = type

@@ -65,7 +65,7 @@ public abstract class Weapon {
     }
 
     // Create a deep copy of this powerup instance. Used for when adding a new powerup to a player
-    public abstract Weapon Clone(WeaponData weaponData, Player player);
+    public abstract Weapon DeepCopy(WeaponData weaponData, Player player);
 
     // Classify weapons as charged or instant, Charged attacks cannot be used as triggers
     public enum Type {

@@ -47,9 +47,8 @@ public class ItemDebuger : MonoBehaviour {
         Vector3 targetGrid = Vector3.zero;
 
         RaycastHit hit; // position at mouse cursor
-        Tile tile; // Tile at mouse cursor
         Ray ray = Camera.main.ScreenPointToRay(mousePosition);
-        if (Physics.Raycast(ray, out hit) && (tile = hit.collider.GetComponent<Tile>()) != null) {
+        if (Physics.Raycast(ray, out hit) && hit.collider.GetComponent<Tile>() != null) {
             targetGrid = (hit.point - Tile.TileOffset + hit.normal * 0.1f).Round();
             //DrawCubeWithWire(targetGrid + Tile.TileOffset, 1, Color.white, new Color(1, 1, 1, 0.1f));
             if (Input.GetMouseButtonDown(0)) {

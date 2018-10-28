@@ -100,6 +100,7 @@ public class Player : MonoBehaviour {
                 AddPowerup((PowerupData)data);
                 break;
             case ItemData.Type.Weapon:
+                weapon.RemoveWeapon();
                 ChangeWeapon((WeaponData)data);
                 break;
         }

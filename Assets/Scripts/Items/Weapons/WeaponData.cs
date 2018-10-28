@@ -15,7 +15,7 @@ public abstract class WeaponData<WeaponType> : WeaponData where WeaponType : Wea
     }
 
     public override Weapon NewInstance(Player player) {
-        Weapon copy = instance.Clone(this, player);
+        Weapon copy = instance.DeepCopy(this, player);
         return copy;
     }
 }
