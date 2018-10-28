@@ -38,17 +38,11 @@ public class InputManager : MonoBehaviour {
 
     public static InputManager im_Instance = null;
 
-    // GAMEPAD STATES - Enough for a maximum of 4 players.
-    private GamePadState p1_currentState;
-    private GamePadState p1_prevState;
-    private GamePadState p2_currentState;
-    private GamePadState p2_prevState;
-    private GamePadState p3_currentState;
-    private GamePadState p3_prevState;
-    private GamePadState p4_currentState;
-    private GamePadState p4_prevState;
+    // States: (Previous)-(Current)
+    // P1 States: 0-1 | P2 States: 2-3 | P3 States: 4-5 | P4 States: 6-7
+    private GamePadState[] playerStates = new GamePadState[8];
 
-    // Array of Controller objects called
+    // Array of Controller objects called connectedControllers
     public Controller[] connectedControllers = new Controller[4];
 
     void Awake()
@@ -62,6 +56,11 @@ public class InputManager : MonoBehaviour {
             DontDestroyOnLoad(gameObject);
         }
 
+        for (int i = 0; i < 8; i++)
+        {
+            playerStates[i] = new GamePadState();
+        }
+
         for (int i = 0; i < 4; i++)
         {
             connectedControllers[i] = new Controller();
@@ -70,10 +69,7 @@ public class InputManager : MonoBehaviour {
 
     void Update () {
         updateGamePadStates();
-        processP1Input();
-        processP2Input();
-        processP3Input();
-        processP4Input();
+        processAllControllerInput();
     }
 
     //  
@@ -85,13 +81,13 @@ public class InputManager : MonoBehaviour {
         switch (playerIndex)
         {
             case 0:
-                return new Vector2(p1_currentState.ThumbSticks.Left.X, p1_currentState.ThumbSticks.Left.Y);
+                return new Vector2(playerStates[1].ThumbSticks.Left.X, playerStates[1].ThumbSticks.Left.Y);
             case 1:
-                return new Vector2(p2_currentState.ThumbSticks.Left.X, p2_currentState.ThumbSticks.Left.Y);
+                return new Vector2(playerStates[3].ThumbSticks.Left.X, playerStates[3].ThumbSticks.Left.Y);
             case 2:
-                return new Vector2(p3_currentState.ThumbSticks.Left.X, p3_currentState.ThumbSticks.Left.Y);
+                return new Vector2(playerStates[5].ThumbSticks.Left.X, playerStates[5].ThumbSticks.Left.Y);
             case 3:
-                return new Vector2(p4_currentState.ThumbSticks.Left.X, p4_currentState.ThumbSticks.Left.Y);
+                return new Vector2(playerStates[7].ThumbSticks.Left.X, playerStates[7].ThumbSticks.Left.Y);
             default:
                 return Vector2.zero;
 
@@ -102,13 +98,13 @@ public class InputManager : MonoBehaviour {
         switch (playerIndex)
         {
             case 0:
-                return new Vector2(p1_currentState.ThumbSticks.Right.X, p1_currentState.ThumbSticks.Right.Y);
+                return new Vector2(playerStates[1].ThumbSticks.Right.X, playerStates[1].ThumbSticks.Right.Y);
             case 1:
-                return new Vector2(p2_currentState.ThumbSticks.Right.X, p2_currentState.ThumbSticks.Right.Y);
+                return new Vector2(playerStates[3].ThumbSticks.Right.X, playerStates[3].ThumbSticks.Right.Y);
             case 2:
-                return new Vector2(p3_currentState.ThumbSticks.Right.X, p3_currentState.ThumbSticks.Right.Y);
+                return new Vector2(playerStates[5].ThumbSticks.Right.X, playerStates[5].ThumbSticks.Right.Y);
             case 3:
-                return new Vector2(p4_currentState.ThumbSticks.Right.X, p4_currentState.ThumbSticks.Right.Y);
+                return new Vector2(playerStates[7].ThumbSticks.Right.X, playerStates[7].ThumbSticks.Right.Y);
             default:
                 return Vector2.zero;
 
@@ -119,13 +115,13 @@ public class InputManager : MonoBehaviour {
         switch (playerIndex)
         {
             case 0:
-                return p1_currentState.Triggers.Left;
+                return playerStates[1].Triggers.Left;
             case 1:
-                return p2_currentState.Triggers.Left;
+                return playerStates[3].Triggers.Left;
             case 2:
-                return p3_currentState.Triggers.Left;
+                return playerStates[5].Triggers.Left;
             case 3:
-                return p4_currentState.Triggers.Left;
+                return playerStates[7].Triggers.Left;
             default:
                 return 0f;
         }
@@ -135,13 +131,13 @@ public class InputManager : MonoBehaviour {
         switch (playerIndex)
         {
             case 0:
-                return p1_currentState.Triggers.Right;
+                return playerStates[1].Triggers.Right;
             case 1:
-                return p2_currentState.Triggers.Right;
+                return playerStates[3].Triggers.Right;
             case 2:
-                return p3_currentState.Triggers.Right;
+                return playerStates[5].Triggers.Right;
             case 3:
-                return p4_currentState.Triggers.Right;
+                return playerStates[7].Triggers.Right;
             default:
                 return 0f;
         }
@@ -153,174 +149,54 @@ public class InputManager : MonoBehaviour {
 
     private void updateGamePadStates()
     {
-        p1_prevState = p1_currentState;
-        p1_currentState = GamePad.GetState(PlayerIndex.One);
-        p2_prevState = p2_currentState;
-        p2_currentState = GamePad.GetState(PlayerIndex.Two);
-        p3_prevState = p3_currentState;
-        p3_currentState = GamePad.GetState(PlayerIndex.Three);
-        p4_prevState = p4_currentState;
-        p4_currentState = GamePad.GetState(PlayerIndex.Four);
+        for (int i = 0; i < 4; i++)
+        {
+            playerStates[i * 2] = playerStates[i * 2 + 1];
+            playerStates[i * 2 + 1] = GamePad.GetState((PlayerIndex)i);
+        }
     }
-    private void processP1Input()
+    private void processAllControllerInput()
     {
-        // Sticks and D-Pad
-        if (p1_currentState.ThumbSticks.Left.X != 0f || p1_currentState.ThumbSticks.Left.Y != 0f)
-            connectedControllers[0].LStick.Invoke();
-        if (p1_currentState.ThumbSticks.Right.X != 0f || p1_currentState.ThumbSticks.Right.Y != 0f)
-            connectedControllers[0].RStick.Invoke();
-        if (p1_currentState.DPad.Up == ButtonState.Pressed)
-            connectedControllers[0].DPadU.Invoke();
-        if (p1_currentState.DPad.Down == ButtonState.Pressed)
-            connectedControllers[0].DPadD.Invoke();
-        if (p1_currentState.DPad.Left == ButtonState.Pressed)
-            connectedControllers[0].DPadL.Invoke();
-        if (p1_currentState.DPad.Right == ButtonState.Pressed)
-            connectedControllers[0].DPadR.Invoke();
-        // Triggers
-        if (p1_currentState.Triggers.Left != 0f)
-            connectedControllers[0].LT.Invoke();
-        if (p1_currentState.Triggers.Right != 0f)
-            connectedControllers[0].RT.Invoke();
-        // Bumpers
-        if (p1_currentState.Buttons.LeftShoulder == ButtonState.Pressed && p1_prevState.Buttons.LeftShoulder != ButtonState.Pressed)
-            connectedControllers[0].LB_Pressed.Invoke();
-        if (p1_currentState.Buttons.RightShoulder == ButtonState.Pressed && p1_prevState.Buttons.RightShoulder != ButtonState.Pressed)
-            connectedControllers[0].RB_Pressed.Invoke();
-        // Face Buttons
-        if (p1_currentState.Buttons.A == ButtonState.Pressed && p1_prevState.Buttons.A != ButtonState.Pressed)
-            connectedControllers[0].A_Pressed.Invoke();
-        if (p1_currentState.Buttons.B == ButtonState.Pressed && p1_prevState.Buttons.B != ButtonState.Pressed)
-            connectedControllers[0].B_Pressed.Invoke();
-        if (p1_currentState.Buttons.X == ButtonState.Pressed && p1_prevState.Buttons.X != ButtonState.Pressed)
-            connectedControllers[0].X_Pressed.Invoke();
-        if (p1_currentState.Buttons.Y == ButtonState.Pressed && p1_prevState.Buttons.Y != ButtonState.Pressed)
-            connectedControllers[0].Y_Pressed.Invoke();
-        // Start and Back
-        if (p1_currentState.Buttons.Start == ButtonState.Pressed && p1_prevState.Buttons.Start != ButtonState.Pressed)
-            connectedControllers[0].Start.Invoke();
-        if (p1_currentState.Buttons.Back == ButtonState.Pressed && p1_prevState.Buttons.Back != ButtonState.Pressed)
-            connectedControllers[0].Back.Invoke();
-    }
-    private void processP2Input()
-    {
-        // Sticks and D-Pad
-        if (p2_currentState.ThumbSticks.Left.X != 0f || p2_currentState.ThumbSticks.Left.Y != 0f)
-            connectedControllers[1].LStick.Invoke();
-        if (p2_currentState.ThumbSticks.Right.X != 0f || p2_currentState.ThumbSticks.Right.Y != 0f)
-            connectedControllers[1].RStick.Invoke();
-        if (p2_currentState.DPad.Up == ButtonState.Pressed)
-            connectedControllers[1].DPadU.Invoke();
-        if (p2_currentState.DPad.Down == ButtonState.Pressed)
-            connectedControllers[1].DPadD.Invoke();
-        if (p2_currentState.DPad.Left == ButtonState.Pressed)
-            connectedControllers[1].DPadL.Invoke();
-        if (p2_currentState.DPad.Right == ButtonState.Pressed)
-            connectedControllers[1].DPadR.Invoke();
-        // Triggers
-        if (p2_currentState.Triggers.Left != 0f)
-            connectedControllers[1].LT.Invoke();
-        if (p2_currentState.Triggers.Right != 0f)
-            connectedControllers[1].RT.Invoke();
-        // Bumpers
-        if (p2_currentState.Buttons.LeftShoulder == ButtonState.Pressed && p2_prevState.Buttons.LeftShoulder != ButtonState.Pressed)
-            connectedControllers[1].LB_Pressed.Invoke();
-        if (p2_currentState.Buttons.RightShoulder == ButtonState.Pressed && p2_prevState.Buttons.RightShoulder != ButtonState.Pressed)
-            connectedControllers[1].RB_Pressed.Invoke();
-        // Face Buttons
-        if (p2_currentState.Buttons.A == ButtonState.Pressed && p2_prevState.Buttons.A != ButtonState.Pressed)
-            connectedControllers[1].A_Pressed.Invoke();
-        if (p2_currentState.Buttons.B == ButtonState.Pressed && p2_prevState.Buttons.B != ButtonState.Pressed)
-            connectedControllers[1].B_Pressed.Invoke();
-        if (p2_currentState.Buttons.X == ButtonState.Pressed && p2_prevState.Buttons.X != ButtonState.Pressed)
-            connectedControllers[1].X_Pressed.Invoke();
-        if (p2_currentState.Buttons.Y == ButtonState.Pressed && p2_prevState.Buttons.Y != ButtonState.Pressed)
-            connectedControllers[1].Y_Pressed.Invoke();
-        // Start and Back
-        if (p2_currentState.Buttons.Start == ButtonState.Pressed && p2_prevState.Buttons.Start != ButtonState.Pressed)
-            connectedControllers[1].Start.Invoke();
-        if (p2_currentState.Buttons.Back == ButtonState.Pressed && p2_prevState.Buttons.Back != ButtonState.Pressed)
-            connectedControllers[1].Back.Invoke();
-    }
-    private void processP3Input()
-    {
-        // Sticks and D-Pad
-        if (p3_currentState.ThumbSticks.Left.X != 0f || p3_currentState.ThumbSticks.Left.Y != 0f)
-            connectedControllers[2].LStick.Invoke();
-        if (p3_currentState.ThumbSticks.Right.X != 0f || p3_currentState.ThumbSticks.Right.Y != 0f)
-            connectedControllers[2].RStick.Invoke();
-        if (p3_currentState.DPad.Up == ButtonState.Pressed)
-            connectedControllers[2].DPadU.Invoke();
-        if (p3_currentState.DPad.Down == ButtonState.Pressed)
-            connectedControllers[2].DPadD.Invoke();
-        if (p3_currentState.DPad.Left == ButtonState.Pressed)
-            connectedControllers[2].DPadL.Invoke();
-        if (p3_currentState.DPad.Right == ButtonState.Pressed)
-            connectedControllers[2].DPadR.Invoke();
-        // Triggers
-        if (p3_currentState.Triggers.Left != 0f)
-            connectedControllers[2].LT.Invoke();
-        if (p3_currentState.Triggers.Right != 0f)
-            connectedControllers[2].RT.Invoke();
-        // Bumpers
-        if (p3_currentState.Buttons.LeftShoulder == ButtonState.Pressed && p3_prevState.Buttons.LeftShoulder != ButtonState.Pressed)
-            connectedControllers[2].LB_Pressed.Invoke();
-        if (p3_currentState.Buttons.RightShoulder == ButtonState.Pressed && p3_prevState.Buttons.RightShoulder != ButtonState.Pressed)
-            connectedControllers[2].RB_Pressed.Invoke();
-        // Face Buttons
-        if (p3_currentState.Buttons.A == ButtonState.Pressed && p3_prevState.Buttons.A != ButtonState.Pressed)
-            connectedControllers[2].A_Pressed.Invoke();
-        if (p3_currentState.Buttons.B == ButtonState.Pressed && p3_prevState.Buttons.B != ButtonState.Pressed)
-            connectedControllers[2].B_Pressed.Invoke();
-        if (p3_currentState.Buttons.X == ButtonState.Pressed && p3_prevState.Buttons.X != ButtonState.Pressed)
-            connectedControllers[2].X_Pressed.Invoke();
-        if (p3_currentState.Buttons.Y == ButtonState.Pressed && p3_prevState.Buttons.Y != ButtonState.Pressed)
-            connectedControllers[2].Y_Pressed.Invoke();
-        // Start and Back
-        if (p3_currentState.Buttons.Start == ButtonState.Pressed && p3_prevState.Buttons.Start != ButtonState.Pressed)
-            connectedControllers[2].Start.Invoke();
-        if (p3_currentState.Buttons.Back == ButtonState.Pressed && p3_prevState.Buttons.Back != ButtonState.Pressed)
-            connectedControllers[2].Back.Invoke();
-    }
-    private void processP4Input()
-    {
-        // Sticks and D-Pad
-        if (p4_currentState.ThumbSticks.Left.X != 0f || p4_currentState.ThumbSticks.Left.Y != 0f)
-            connectedControllers[3].LStick.Invoke();
-        if (p4_currentState.ThumbSticks.Right.X != 0f || p4_currentState.ThumbSticks.Right.Y != 0f)
-            connectedControllers[3].RStick.Invoke();
-        if (p4_currentState.DPad.Up == ButtonState.Pressed)
-            connectedControllers[3].DPadU.Invoke();
-        if (p4_currentState.DPad.Down == ButtonState.Pressed)
-            connectedControllers[3].DPadD.Invoke();
-        if (p4_currentState.DPad.Left == ButtonState.Pressed)
-            connectedControllers[3].DPadL.Invoke();
-        if (p4_currentState.DPad.Right == ButtonState.Pressed)
-            connectedControllers[3].DPadR.Invoke();
-        // Triggers
-        if (p4_currentState.Triggers.Left != 0f)
-            connectedControllers[3].LT.Invoke();
-        if (p4_currentState.Triggers.Right != 0f)
-            connectedControllers[3].RT.Invoke();
-        // Bumpers
-        if (p4_currentState.Buttons.LeftShoulder == ButtonState.Pressed && p4_prevState.Buttons.LeftShoulder != ButtonState.Pressed)
-            connectedControllers[3].LB_Pressed.Invoke();
-        if (p4_currentState.Buttons.RightShoulder == ButtonState.Pressed && p4_prevState.Buttons.RightShoulder != ButtonState.Pressed)
-            connectedControllers[3].RB_Pressed.Invoke();
-        // Face Buttons
-        if (p4_currentState.Buttons.A == ButtonState.Pressed && p4_prevState.Buttons.A != ButtonState.Pressed)
-            connectedControllers[3].A_Pressed.Invoke();
-        if (p4_currentState.Buttons.B == ButtonState.Pressed && p4_prevState.Buttons.B != ButtonState.Pressed)
-            connectedControllers[3].B_Pressed.Invoke();
-        if (p4_currentState.Buttons.X == ButtonState.Pressed && p4_prevState.Buttons.X != ButtonState.Pressed)
-            connectedControllers[3].X_Pressed.Invoke();
-        if (p4_currentState.Buttons.Y == ButtonState.Pressed && p4_prevState.Buttons.Y != ButtonState.Pressed)
-            connectedControllers[3].Y_Pressed.Invoke();
-        // Start and Back
-        if (p4_currentState.Buttons.Start == ButtonState.Pressed && p4_prevState.Buttons.Start != ButtonState.Pressed)
-            connectedControllers[3].Start.Invoke();
-        if (p4_currentState.Buttons.Back == ButtonState.Pressed && p4_prevState.Buttons.Back != ButtonState.Pressed)
-            connectedControllers[3].Back.Invoke();
+        for (int i = 0; i < 4; i++)
+        {
+            // Sticks and D-Pad
+            if (playerStates[i * 2 + 1].ThumbSticks.Left.X != 0f || playerStates[i * 2 + 1].ThumbSticks.Left.Y != 0f)
+                connectedControllers[i].LStick.Invoke();
+            if (playerStates[i * 2 + 1].ThumbSticks.Right.X != 0f || playerStates[i * 2 + 1].ThumbSticks.Right.Y != 0f)
+                connectedControllers[i].RStick.Invoke();
+            if (playerStates[i * 2 + 1].DPad.Up == ButtonState.Pressed)
+                connectedControllers[i].DPadU.Invoke();
+            if (playerStates[i * 2 + 1].DPad.Down == ButtonState.Pressed)
+                connectedControllers[i].DPadD.Invoke();
+            if (playerStates[i * 2 + 1].DPad.Left == ButtonState.Pressed)
+                connectedControllers[i].DPadL.Invoke();
+            if (playerStates[i * 2 + 1].DPad.Right == ButtonState.Pressed)
+                connectedControllers[i].DPadR.Invoke();
+            // Triggers
+            if (playerStates[i * 2 + 1].Triggers.Left != 0f)
+                connectedControllers[i].LT.Invoke();
+            if (playerStates[i * 2 + 1].Triggers.Right != 0f)
+                connectedControllers[i].RT.Invoke();
+            // Bumpers
+            if (playerStates[i * 2 + 1].Buttons.LeftShoulder == ButtonState.Pressed && playerStates[i * 2].Buttons.LeftShoulder != ButtonState.Pressed)
+                connectedControllers[i].LB_Pressed.Invoke();
+            if (playerStates[i * 2 + 1].Buttons.RightShoulder == ButtonState.Pressed && playerStates[i * 2].Buttons.RightShoulder != ButtonState.Pressed)
+                connectedControllers[i].RB_Pressed.Invoke();
+            // Face Buttons
+            if (playerStates[i * 2 + 1].Buttons.A == ButtonState.Pressed && playerStates[i * 2].Buttons.A != ButtonState.Pressed)
+                connectedControllers[i].A_Pressed.Invoke();
+            if (playerStates[i * 2 + 1].Buttons.B == ButtonState.Pressed && playerStates[i * 2].Buttons.B != ButtonState.Pressed)
+                connectedControllers[i].B_Pressed.Invoke();
+            if (playerStates[i * 2 + 1].Buttons.X == ButtonState.Pressed && playerStates[i * 2].Buttons.X != ButtonState.Pressed)
+                connectedControllers[i].X_Pressed.Invoke();
+            if (playerStates[i * 2 + 1].Buttons.Y == ButtonState.Pressed && playerStates[i * 2].Buttons.Y != ButtonState.Pressed)
+                connectedControllers[i].Y_Pressed.Invoke();
+            // Start and Back
+            if (playerStates[i * 2 + 1].Buttons.Start == ButtonState.Pressed && playerStates[i * 2].Buttons.Start != ButtonState.Pressed)
+                connectedControllers[i].Start.Invoke();
+            if (playerStates[i * 2 + 1].Buttons.Back == ButtonState.Pressed && playerStates[i * 2].Buttons.Back != ButtonState.Pressed)
+                connectedControllers[i].Back.Invoke();
+        }
     }
 
     //
@@ -332,43 +208,43 @@ public class InputManager : MonoBehaviour {
         if (enableDebug)
         {
             string text = "--- Player 1 ---\n";
-            text += string.Format("Connected: {0}\n", p1_currentState.IsConnected);
-            text += string.Format("D-Pad Left: {0} | D-Pad Right: {1} \nD-Pad Up: {2} | D-Pad Down: {3}\n", p1_currentState.DPad.Left, p1_currentState.DPad.Right, p1_currentState.DPad.Up, p1_currentState.DPad.Down);
-            text += string.Format("L-Stick X: {0} | L-Stick Y: {1} \nR-Stick X: {2} | R-Stick Y: {3}\n", p1_currentState.ThumbSticks.Left.X, p1_currentState.ThumbSticks.Left.Y, p1_currentState.ThumbSticks.Right.X, p1_currentState.ThumbSticks.Right.Y);
-            text += string.Format("L-Stick Button: {0} | R-Stick Button: {1}\n", p1_currentState.Buttons.LeftStick, p1_currentState.Buttons.RightStick);
-            text += string.Format("A: {0} | B: {1} | X: {2} | Y: {3}\n", p1_currentState.Buttons.A, p1_currentState.Buttons.B, p1_currentState.Buttons.X, p1_currentState.Buttons.Y);
-            text += string.Format("L-Bumper: {0} | L-Trigger: {1} \nR-Bumper: {2} | R-Trigger: {3}\n", p1_currentState.Buttons.LeftShoulder, p1_currentState.Triggers.Left, p1_currentState.Buttons.RightShoulder, p1_currentState.Triggers.Right);
-            text += string.Format("Start: {0} | Back: {1}", p1_currentState.Buttons.Start, p1_currentState.Buttons.Back);
+            text += string.Format("Connected: {0}\n", playerStates[1].IsConnected);
+            text += string.Format("D-Pad Left: {0} | D-Pad Right: {1} \nD-Pad Up: {2} | D-Pad Down: {3}\n", playerStates[1].DPad.Left, playerStates[1].DPad.Right, playerStates[1].DPad.Up, playerStates[1].DPad.Down);
+            text += string.Format("L-Stick X: {0} | L-Stick Y: {1} \nR-Stick X: {2} | R-Stick Y: {3}\n", playerStates[1].ThumbSticks.Left.X, playerStates[1].ThumbSticks.Left.Y, playerStates[1].ThumbSticks.Right.X, playerStates[1].ThumbSticks.Right.Y);
+            text += string.Format("L-Stick Button: {0} | R-Stick Button: {1}\n", playerStates[1].Buttons.LeftStick, playerStates[1].Buttons.RightStick);
+            text += string.Format("A: {0} | B: {1} | X: {2} | Y: {3}\n", playerStates[1].Buttons.A, playerStates[1].Buttons.B, playerStates[1].Buttons.X, playerStates[1].Buttons.Y);
+            text += string.Format("L-Bumper: {0} | L-Trigger: {1} \nR-Bumper: {2} | R-Trigger: {3}\n", playerStates[1].Buttons.LeftShoulder, playerStates[1].Triggers.Left, playerStates[1].Buttons.RightShoulder, playerStates[1].Triggers.Right);
+            text += string.Format("Start: {0} | Back: {1}", playerStates[1].Buttons.Start, playerStates[1].Buttons.Back);
             GUI.Label(new Rect(0, 0, Screen.width/2, Screen.height/2), text);
 
             text = "--- Player 2 ---\n";
-            text += string.Format("Connected: {0}\n", p2_currentState.IsConnected);
-            text += string.Format("D-Pad Left: {0} | D-Pad Right: {1} \nD-Pad Up: {2} | D-Pad Down: {3}\n", p2_currentState.DPad.Left, p2_currentState.DPad.Right, p2_currentState.DPad.Up, p2_currentState.DPad.Down);
-            text += string.Format("L-Stick X: {0} | L-Stick Y: {1} \nR-Stick X: {2} | R-Stick Y: {3}\n", p2_currentState.ThumbSticks.Left.X, p2_currentState.ThumbSticks.Left.Y, p2_currentState.ThumbSticks.Right.X, p2_currentState.ThumbSticks.Right.Y);
-            text += string.Format("L-Stick Button: {0} | R-Stick Button: {1}\n", p2_currentState.Buttons.LeftStick, p2_currentState.Buttons.RightStick);
-            text += string.Format("A: {0} | B: {1} | X: {2} | Y: {3}\n", p2_currentState.Buttons.A, p2_currentState.Buttons.B, p2_currentState.Buttons.X, p2_currentState.Buttons.Y);
-            text += string.Format("L-Bumper: {0} | L-Trigger: {1} \nR-Bumper: {2} | R-Trigger: {3}\n", p2_currentState.Buttons.LeftShoulder, p2_currentState.Triggers.Left, p2_currentState.Buttons.RightShoulder, p2_currentState.Triggers.Right);
-            text += string.Format("Start: {0} | Back: {1}", p2_currentState.Buttons.Start, p2_currentState.Buttons.Back);
+            text += string.Format("Connected: {0}\n", playerStates[3].IsConnected);
+            text += string.Format("D-Pad Left: {0} | D-Pad Right: {1} \nD-Pad Up: {2} | D-Pad Down: {3}\n", playerStates[3].DPad.Left, playerStates[3].DPad.Right, playerStates[3].DPad.Up, playerStates[3].DPad.Down);
+            text += string.Format("L-Stick X: {0} | L-Stick Y: {1} \nR-Stick X: {2} | R-Stick Y: {3}\n", playerStates[3].ThumbSticks.Left.X, playerStates[3].ThumbSticks.Left.Y, playerStates[3].ThumbSticks.Right.X, playerStates[3].ThumbSticks.Right.Y);
+            text += string.Format("L-Stick Button: {0} | R-Stick Button: {1}\n", playerStates[3].Buttons.LeftStick, playerStates[3].Buttons.RightStick);
+            text += string.Format("A: {0} | B: {1} | X: {2} | Y: {3}\n", playerStates[3].Buttons.A, playerStates[3].Buttons.B, playerStates[3].Buttons.X, playerStates[3].Buttons.Y);
+            text += string.Format("L-Bumper: {0} | L-Trigger: {1} \nR-Bumper: {2} | R-Trigger: {3}\n", playerStates[3].Buttons.LeftShoulder, playerStates[3].Triggers.Left, playerStates[3].Buttons.RightShoulder, playerStates[3].Triggers.Right);
+            text += string.Format("Start: {0} | Back: {1}", playerStates[3].Buttons.Start, playerStates[3].Buttons.Back);
             GUI.Label(new Rect(Screen.width / 2, 0, Screen.width, Screen.height / 2), text);
 
             text = "--- Player 3 ---\n";
-            text += string.Format("Connected: {0}\n", p3_currentState.IsConnected);
-            text += string.Format("D-Pad Left: {0} | D-Pad Right: {1} \nD-Pad Up: {2} | D-Pad Down: {3}\n", p3_currentState.DPad.Left, p3_currentState.DPad.Right, p3_currentState.DPad.Up, p3_currentState.DPad.Down);
-            text += string.Format("L-Stick X: {0} | L-Stick Y: {1} \nR-Stick X: {2} | R-Stick Y: {3}\n", p3_currentState.ThumbSticks.Left.X, p3_currentState.ThumbSticks.Left.Y, p3_currentState.ThumbSticks.Right.X, p3_currentState.ThumbSticks.Right.Y);
-            text += string.Format("L-Stick Button: {0} | R-Stick Button: {1}\n", p3_currentState.Buttons.LeftStick, p3_currentState.Buttons.RightStick);
-            text += string.Format("A: {0} | B: {1} | X: {2} | Y: {3}\n", p3_currentState.Buttons.A, p3_currentState.Buttons.B, p3_currentState.Buttons.X, p3_currentState.Buttons.Y);
-            text += string.Format("L-Bumper: {0} | L-Trigger: {1} \nR-Bumper: {2} | R-Trigger: {3}\n", p3_currentState.Buttons.LeftShoulder, p3_currentState.Triggers.Left, p3_currentState.Buttons.RightShoulder, p3_currentState.Triggers.Right);
-            text += string.Format("Start: {0} | Back: {1}", p3_currentState.Buttons.Start, p3_currentState.Buttons.Back);
+            text += string.Format("Connected: {0}\n", playerStates[5].IsConnected);
+            text += string.Format("D-Pad Left: {0} | D-Pad Right: {1} \nD-Pad Up: {2} | D-Pad Down: {3}\n", playerStates[5].DPad.Left, playerStates[5].DPad.Right, playerStates[5].DPad.Up, playerStates[5].DPad.Down);
+            text += string.Format("L-Stick X: {0} | L-Stick Y: {1} \nR-Stick X: {2} | R-Stick Y: {3}\n", playerStates[5].ThumbSticks.Left.X, playerStates[5].ThumbSticks.Left.Y, playerStates[5].ThumbSticks.Right.X, playerStates[5].ThumbSticks.Right.Y);
+            text += string.Format("L-Stick Button: {0} | R-Stick Button: {1}\n", playerStates[5].Buttons.LeftStick, playerStates[5].Buttons.RightStick);
+            text += string.Format("A: {0} | B: {1} | X: {2} | Y: {3}\n", playerStates[5].Buttons.A, playerStates[5].Buttons.B, playerStates[5].Buttons.X, playerStates[5].Buttons.Y);
+            text += string.Format("L-Bumper: {0} | L-Trigger: {1} \nR-Bumper: {2} | R-Trigger: {3}\n", playerStates[5].Buttons.LeftShoulder, playerStates[5].Triggers.Left, playerStates[5].Buttons.RightShoulder, playerStates[5].Triggers.Right);
+            text += string.Format("Start: {0} | Back: {1}", playerStates[5].Buttons.Start, playerStates[5].Buttons.Back);
             GUI.Label(new Rect(0, Screen.height / 2, Screen.width/2, Screen.height), text);
 
             text = "--- Player 4 ---\n";
-            text += string.Format("Connected: {0}\n", p4_currentState.IsConnected);
-            text += string.Format("D-Pad Left: {0} | D-Pad Right: {1} \nD-Pad Up: {2} | D-Pad Down: {3}\n", p4_currentState.DPad.Left, p4_currentState.DPad.Right, p4_currentState.DPad.Up, p4_currentState.DPad.Down);
-            text += string.Format("L-Stick X: {0} | L-Stick Y: {1} \nR-Stick X: {2} | R-Stick Y: {3}\n", p4_currentState.ThumbSticks.Left.X, p4_currentState.ThumbSticks.Left.Y, p4_currentState.ThumbSticks.Right.X, p4_currentState.ThumbSticks.Right.Y);
-            text += string.Format("L-Stick Button: {0} | R-Stick Button: {1}\n", p4_currentState.Buttons.LeftStick, p4_currentState.Buttons.RightStick);
-            text += string.Format("A: {0} | B: {1} | X: {2} | Y: {3}\n", p4_currentState.Buttons.A, p4_currentState.Buttons.B, p4_currentState.Buttons.X, p4_currentState.Buttons.Y);
-            text += string.Format("L-Bumper: {0} | L-Trigger: {1} \nR-Bumper: {2} | R-Trigger: {3}\n", p4_currentState.Buttons.LeftShoulder, p4_currentState.Triggers.Left, p4_currentState.Buttons.RightShoulder, p4_currentState.Triggers.Right);
-            text += string.Format("Start: {0} | Back: {1}", p4_currentState.Buttons.Start, p4_currentState.Buttons.Back);
+            text += string.Format("Connected: {0}\n", playerStates[7].IsConnected);
+            text += string.Format("D-Pad Left: {0} | D-Pad Right: {1} \nD-Pad Up: {2} | D-Pad Down: {3}\n", playerStates[7].DPad.Left, playerStates[7].DPad.Right, playerStates[7].DPad.Up, playerStates[7].DPad.Down);
+            text += string.Format("L-Stick X: {0} | L-Stick Y: {1} \nR-Stick X: {2} | R-Stick Y: {3}\n", playerStates[7].ThumbSticks.Left.X, playerStates[7].ThumbSticks.Left.Y, playerStates[7].ThumbSticks.Right.X, playerStates[7].ThumbSticks.Right.Y);
+            text += string.Format("L-Stick Button: {0} | R-Stick Button: {1}\n", playerStates[7].Buttons.LeftStick, playerStates[7].Buttons.RightStick);
+            text += string.Format("A: {0} | B: {1} | X: {2} | Y: {3}\n", playerStates[7].Buttons.A, playerStates[7].Buttons.B, playerStates[7].Buttons.X, playerStates[7].Buttons.Y);
+            text += string.Format("L-Bumper: {0} | L-Trigger: {1} \nR-Bumper: {2} | R-Trigger: {3}\n", playerStates[7].Buttons.LeftShoulder, playerStates[7].Triggers.Left, playerStates[7].Buttons.RightShoulder, playerStates[7].Triggers.Right);
+            text += string.Format("Start: {0} | Back: {1}", playerStates[7].Buttons.Start, playerStates[7].Buttons.Back);
             GUI.Label(new Rect(Screen.width / 2, Screen.height / 2, Screen.width, Screen.height), text);
         }
     }
