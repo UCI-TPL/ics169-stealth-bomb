@@ -25,10 +25,10 @@ public class PlayerJoinManager : MonoBehaviour {
 	public GameObject mMManager;
 	private MainMenuManager currentMenu; 
 
-	[Tooltip("Reference to the game controller object.")]
-	public GameObject gameManager;
-	public string gameManagerName = "GameController";
-	private ActivePlayerManager playerManager;
+	// [Tooltip("Reference to the game controller object.")]
+	// public GameObject gameManager;
+	// public string gameManagerName = "GameController";
+	// private ActivePlayerManager playerManager;
 
 	bool[] playersReady;
 	// public bool player1Ready;
@@ -56,15 +56,15 @@ public class PlayerJoinManager : MonoBehaviour {
 		return roster;
 	}
 
-	void Awake() {
-		if (gameManager == null) {
-			gameManager = GameObject.Find(gameManagerName);
-		}
-		if (gameManager != null) 
-			playerManager = gameManager.GetComponent<ActivePlayerManager>();
-		else
-			Debug.Log("The game manager variable was not assigned in the inspector. This will most likely cause errors!");
-	}
+	// void Awake() {
+	// 	if (gameManager == null) {
+	// 		gameManager = GameObject.Find(gameManagerName);
+	// 	}
+	// 	if (gameManager != null) 
+	// 		playerManager = gameManager.GetComponent<ActivePlayerManager>();
+	// 	else
+	// 		Debug.Log("The game manager variable was not assigned in the inspector. This will most likely cause errors!");
+	// }
 
 	// Use this for initialization
 	void Start () {
@@ -184,7 +184,7 @@ public class PlayerJoinManager : MonoBehaviour {
 						// NOTE: implementation is subject to change for now.
 						if (currentStates[i].Buttons.Start == ButtonState.Pressed && prevStates[i].Buttons.Start == ButtonState.Released) {
 							// This might be where we give the game controller the number and roster of active players
-							playerManager.SetPlayersStatus(GetPLayerReadyStatusList());
+							// playerManager.SetPlayersStatus(GetPLayerReadyStatusList());
 							if (loadNextLevelByName) 
 								SceneManager.LoadScene(nextLevel);
 							else 

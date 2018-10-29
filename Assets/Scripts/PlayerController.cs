@@ -6,6 +6,7 @@ using XInputDotNetPure;
 public class PlayerController : MonoBehaviour {
     
     private Player _player;
+    private InputManager input;
     public Player player {
         get { return _player; }
         private set { _player = value; }
@@ -15,6 +16,10 @@ public class PlayerController : MonoBehaviour {
         player = GetComponent<Player>();
         if (player == null) // Check to ensure Player component is present, since PlayerStats is a dependency of Player this will never happen, but just in case
             Debug.LogError(gameObject.name + " missing Player Component");
+        
+        input = GameObject.FindGameObjectWithTag("game-manager").GetComponentInChildren<InputManager>();
+        if (input == null) 
+            Debug.LogError("Input Manager does not exist");
     }
     [SerializeField]
     //float shootRate = 0.2f; //put these stats in playerStats soon 
@@ -29,9 +34,14 @@ public class PlayerController : MonoBehaviour {
 
     bool isGrounded;
     bool movementAllowed = true; //used to lock movement while dodging
+    bool rotationInput = false;
+    bool updatingPhysics = false;
+    bool moveCalled = false;
     bool dodging = false; 
     
     private Vector3 _inputs = Vector3.zero;
+    private Vector2 inputMoveVector = Vector2.zero;
+    private Vector2 inputRotationVector = Vector2.zero;
     Vector3 forward, right;
     Vector3 rotationDirection; //used for Dodging
 
@@ -45,41 +55,6 @@ public class PlayerController : MonoBehaviour {
     private PlayerIndex playerIdx;
     private GamePadState currentState;
     private GamePadState prevState;
-   
-
-    // These are the suffixes used to form a string that represents a specific input on a specific Xbox controller.
-    // The suffixes represent the types of inputs found on an Xbox controller (NOTE: more might be added later in the script).
-    [HideInInspector]
-    public string left_Joystick_X_Axis = "LeftJoystickX";
-    [HideInInspector]
-    public string left_Joystick_Y_Axis = "LeftJoystickY";
-    [HideInInspector]
-    public string right_Joystick_X_Axis = "RightJoystickX";
-    [HideInInspector]
-    public string right_Joystick_Y_Axis = "RightJoystickY";
-    [HideInInspector]
-    public string leftBumper = "LeftBumper";
-    [HideInInspector]
-    public string rightBumper = "RightBumper";
-    [HideInInspector]
-    public string leftTrigger = "LeftTrigger";
-    [HideInInspector]
-    public string rightTrigger = "RightTrigger";
-    [HideInInspector]
-    public string Dpad_X_Axis = "DpadX";
-    [HideInInspector]
-    public string Dpad_Y_Axis = "DpadY";
-
-    // These are the prefixes used to form a string that represents a specific input on a specific Xbox controller.
-    // The prefixes represent which Xbox controller an instance of this script should take input from.
-    [HideInInspector]
-    public const string Player_1_Str = "P1_";
-    [HideInInspector]
-    public const string Player_2_Str = "P2_";
-    [HideInInspector]
-    public const string Player_3_Str = "P3_";
-    [HideInInspector]
-    public const string Player_4_Str = "P4_";
 
     private string playerPrefix;
 
@@ -128,13 +103,19 @@ public class PlayerController : MonoBehaviour {
 
 
     void Start() {
+        input.connectedControllers[playerNum - 1].RB_Pressed.AddListener(Jump);
+        input.connectedControllers[playerNum - 1].B_Pressed.AddListener(Dodge);
+        input.connectedControllers[playerNum - 1].RT_Pressed.AddListener(InitiateAttack);
+        input.connectedControllers[playerNum - 1].RT_Released.AddListener(FinishAttack);
+        // input.connectedControllers[playerNum - 1].LStick.AddListener(GetMoveData);
+        input.connectedControllers[playerNum - 1].RStick.AddListener(RotatePlayer);
         //shootRate = player.stats.shootTime;
         //rend = GetComponent<Renderer>();
         //startColor = rend.material.color;
         speed = player.stats.moveSpeed;
         rb = GetComponent<Rigidbody>();
        
-        playerPrefix = "";
+        // playerPrefix = "";
         // Decides which player to take input from if the correct input is given.
         // switch (playerNum) {
         //     case 0:
@@ -175,33 +156,60 @@ public class PlayerController : MonoBehaviour {
     //     transform.position += direction * player.stats.moveSpeed * Time.fixedDeltaTime;
     // }
 
+    void GetMoveData() {
+        inputMoveVector = input.getLeftStickData(playerNum - 1);
+        moveCalled = true;
+    }
+
     void Move()
-    {            
-        if (currentState.ThumbSticks.Left.Y != 0.0f || currentState.ThumbSticks.Left.X != 0.0f) 
-        {
-            Vector3 rightMovement = right * currentState.ThumbSticks.Left.X;
-            Vector3 upMovement = forward * currentState.ThumbSticks.Left.Y;
-            _inputs = (rightMovement + upMovement);
+    {
+        GetMoveData();
+        Vector3 rightMovement = right * inputMoveVector.x;
+        Vector3 upMovement = forward * inputMoveVector.y;
+        _inputs = (rightMovement + upMovement);
 
-            if (_inputs.magnitude > 1f) {
-                _inputs = _inputs.normalized;
+        if (_inputs.magnitude > 1f) {
+            _inputs = _inputs.normalized;
+        }
+
+        if (!rotationInput) {
+            rightMovement = right * Time.deltaTime * inputMoveVector.x;
+            upMovement = forward * Time.deltaTime * inputMoveVector.y;
+
+            if(Vector3.Normalize(rightMovement + upMovement) != Vector3.zero)
+            {
+                transform.forward = Vector3.Normalize(rightMovement + upMovement);
             }
         }
-        else if (currentState.DPad.Left == ButtonState.Pressed || currentState.DPad.Right == ButtonState.Pressed || 
-            currentState.DPad.Up == ButtonState.Pressed || currentState.DPad.Down == ButtonState.Pressed)
-        {
-            Vector3 rightMovement = (right * (float) currentState.DPad.Left) + -(right * (float) currentState.DPad.Right);
-            Vector3 upMovement = -(forward * (float) currentState.DPad.Up) + (forward * (float) currentState.DPad.Down);
-            _inputs = (rightMovement + upMovement);
 
-            if (_inputs.magnitude > 1f){
-                _inputs = _inputs.normalized;
-            }
-        }
+        moveCalled = false;
+
+        // if (currentState.ThumbSticks.Left.Y != 0.0f || currentState.ThumbSticks.Left.X != 0.0f) 
+        // {
+        //     Vector3 rightMovement = right * currentState.ThumbSticks.Left.X;
+        //     Vector3 upMovement = forward * currentState.ThumbSticks.Left.Y;
+        //     _inputs = (rightMovement + upMovement);
+
+        //     if (_inputs.magnitude > 1f) {
+        //         _inputs = _inputs.normalized;
+        //     }
+        // }
+        // else if (currentState.DPad.Left == ButtonState.Pressed || currentState.DPad.Right == ButtonState.Pressed || 
+        //     currentState.DPad.Up == ButtonState.Pressed || currentState.DPad.Down == ButtonState.Pressed)
+        // {
+        //     Vector3 rightMovement = (right * (float) currentState.DPad.Left) + -(right * (float) currentState.DPad.Right);
+        //     Vector3 upMovement = -(forward * (float) currentState.DPad.Up) + (forward * (float) currentState.DPad.Down);
+        //     _inputs = (rightMovement + upMovement);
+
+        //     if (_inputs.magnitude > 1f){
+        //         _inputs = _inputs.normalized;
+        //     }
+        // }
     }
 
     void Jump() {
-        if (currentState.Buttons.RightShoulder == ButtonState.Pressed && isGrounded) //Checking for jumping
+        if (movementAllowed && isGrounded) //Checking for jumping
+        // if (currentState.Buttons.RightShoulder == ButtonState.Pressed && isGrounded) //Checking for jumping
         { 
             speed = player.stats.airSpeed;
             rb.AddForce(Vector3.up * player.stats.jumpForce, ForceMode.Impulse);
@@ -219,11 +227,14 @@ public class PlayerController : MonoBehaviour {
 
     void Dodge()
     {
-        if (currentState.Buttons.B == ButtonState.Pressed /*&& prevState.Buttons.B == ButtonState.Released*/)
-        //if (Input.GetButtonDown(playerPrefix + "B"))
-        {
+        // if (currentState.Buttons.B == ButtonState.Pressed /*&& prevState.Buttons.B == ButtonState.Released*/)
+        // //if (Input.GetButtonDown(playerPrefix + "B"))
+        // {
+        //     StartCoroutine("Dodging");
+        // }
+
+        if (movementAllowed) 
             StartCoroutine("Dodging");
-        }
     }
 
     IEnumerator Dodging()
@@ -246,19 +257,27 @@ public class PlayerController : MonoBehaviour {
         
     }
     
-    void Attack() {
-        if (currentState.Triggers.Right != 0.0f) {
-            if (!attackDown) {
-                player.weapon.Activate();
-                Debug.Log(!attackDown);
-                attackDown = true;
-            }
-        } else {
-            if (attackDown) {
-                player.weapon.Release();
-                attackDown = false;
-            }
+    void InitiateAttack() {
+        // do i need to add a condition for !movementAllowed ?
+        if (!attackDown) {
+            player.weapon.Activate();
+            Debug.Log(!attackDown);
+            attackDown = true;
         }
+        
+
+        // if (currentState.Triggers.Right != 0.0f) {
+        //     if (!attackDown) {
+        //         player.weapon.Activate();
+        //         Debug.Log(!attackDown);
+        //         attackDown = true;
+        //     }
+        // } else {
+        //     if (attackDown) {
+        //         player.weapon.Release();
+        //         attackDown = false;
+        //     }
+        // }
 
         ////if (RightTrigger() != 0.0)
         //{
@@ -269,6 +288,14 @@ public class PlayerController : MonoBehaviour {
         //    StartCoroutine("IsTriggerBeingHeldDown");
         //}
         
+    }
+
+    void FinishAttack() {
+        // do i need to add a condition for !movementAllowed ?
+        if (attackDown) {
+            player.weapon.Release();
+            attackDown = false;
+        }
     }
 
     //IEnumerator IsTriggerBeingHeldDown() //making Input.GetButtonDown/Up functionality for the Axis
@@ -318,36 +345,52 @@ public class PlayerController : MonoBehaviour {
 
     }
 
+    void GetRotationData() {
+        inputRotationVector = input.getRightStickData(playerNum - 1);
+    }
+
     void RotatePlayer() {
+        rotationInput = true;
         Vector3 rightMovement;
         Vector3 upMovement;
-        if (currentState.ThumbSticks.Right.X != 0.0f || currentState.ThumbSticks.Right.Y != 0.0f)
-        //if(RightStickX() != 0.0 || RightStickY() != 0.0)
-        {
-            rightMovement = right * Time.deltaTime * currentState.ThumbSticks.Right.X;
-            upMovement = -(forward * Time.deltaTime * -currentState.ThumbSticks.Right.Y);
-            // rightMovement = right * Time.deltaTime * RightStickX();
-            // upMovement = -(forward * Time.deltaTime * RightStickY());
-        }
-        else
-        {
-            rightMovement = right * Time.deltaTime * currentState.ThumbSticks.Left.X;
-            upMovement = forward * Time.deltaTime * currentState.ThumbSticks.Left.Y;
-            // rightMovement = right * Time.deltaTime * LeftStickX();
-            // upMovement = forward * Time.deltaTime * LeftStickY();
-        }
+        Vector2 RStickInput = input.getRightStickData(playerNum - 1);
+        rightMovement = right * Time.deltaTime * RStickInput.x;
+        upMovement = -(forward * Time.deltaTime * -RStickInput.y);
         if(Vector3.Normalize(rightMovement + upMovement) != Vector3.zero)
         {
             transform.forward = Vector3.Normalize(rightMovement + upMovement);
         }
+        
+        // if (currentState.ThumbSticks.Right.X != 0.0f || currentState.ThumbSticks.Right.Y != 0.0f)
+        // //if(RightStickX() != 0.0 || RightStickY() != 0.0)
+        // {
+        //     rightMovement = right * Time.deltaTime * currentState.ThumbSticks.Right.X;
+        //     upMovement = -(forward * Time.deltaTime * -currentState.ThumbSticks.Right.Y);
+        //     // rightMovement = right * Time.deltaTime * RightStickX();
+        //     // upMovement = -(forward * Time.deltaTime * RightStickY());
+        // }
+        // else
+        // {
+        //     rightMovement = right * Time.deltaTime * currentState.ThumbSticks.Left.X;
+        //     upMovement = forward * Time.deltaTime * currentState.ThumbSticks.Left.Y;
+        //     // rightMovement = right * Time.deltaTime * LeftStickX();
+        //     // upMovement = forward * Time.deltaTime * LeftStickY();
+        // }
+        // if(Vector3.Normalize(rightMovement + upMovement) != Vector3.zero)
+        // {
+        //     transform.forward = Vector3.Normalize(rightMovement + upMovement);
+        // }
         
     }
 
 
     private void FixedUpdate() //Physics things are supposed to be in FixedUpdate
     {
+        updatingPhysics = true;
         _inputs = _inputs * speed;
         rb.velocity = new Vector3(_inputs.x, rb.velocity.y, _inputs.z);
+        rotationInput = false;
+        updatingPhysics = false;
         //rb.velocity = _inputs * speed; //player has a mass of 1 
         //rb.AddForce((_inputs * speed * 900 * Time.fixedDeltaTime)); //The player moves forward forever just choose the Inputs (not sure if this is best)      
     }
@@ -370,12 +413,13 @@ public class PlayerController : MonoBehaviour {
         {
             if(movementAllowed)
             {
+                
                 _inputs = Vector3.zero;
                 Move();
-                RotatePlayer();
-                Jump();
-                Attack();
-                Dodge();
+                // RotatePlayer();
+                // Jump();
+                // Attack();
+                // Dodge();
             }
             else //this could be used to stop movement during dodges and stuns 
             {
