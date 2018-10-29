@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using XInputDotNetPure;
+using UnityEngine.UI;
 
 public class inputControl : MonoBehaviour {
 
@@ -19,17 +20,28 @@ public class inputControl : MonoBehaviour {
 	private float moveY = 0f;
 	private float moveX = 0f;
 	public string currentMove = "ThumbSticks.Left";
+
+	public Dropdown moveOpDp;
+
+	List<string> moveOpList = new List<string>{ "ThumbSticks.Left", "ThumbSticks.Right" };
+
+	private Hashtable opKey = new Hashtable();
+
+	public void changeMoveOp(int i)
+	{
+		opKey["Move"] = moveOpList[i];
+	}
 	
 	private void getCurrentInput()
 	{
 		moveY = 0f;
 		moveX = 0f;
-		if (currentMove == "ThumbSticks.Left")
+		if ((string)opKey["Move"] == "ThumbSticks.Left")
 		{
 			moveY = currentState.ThumbSticks.Left.Y;
 			moveX = currentState.ThumbSticks.Left.X;
 		}
-		else if (currentMove == "ThumbSticks.Right")
+		else if ((string)opKey["Move"] == "ThumbSticks.Right")
 		{
 			moveY = currentState.ThumbSticks.Right.Y;
 			moveX = currentState.ThumbSticks.Right.X;
@@ -37,6 +49,7 @@ public class inputControl : MonoBehaviour {
 	}
 
 	void Start() {
+		moveOpDp.AddOptions(moveOpList);
 		rb = GetComponent<Rigidbody>();
 		forward = Camera.main.transform.forward;
         forward.y = 0;
@@ -47,10 +60,12 @@ public class inputControl : MonoBehaviour {
 	}
 
 	void Update() {
+		// opKey["Move"] = currentMove;
 		currentState = GamePad.GetState(0);
 		_inputs = Vector3.zero;
 		getCurrentInput();
 		Move();
+		Debug.Log(opKey["Move"]);
 	}
 
 	void FixedUpdate() {
