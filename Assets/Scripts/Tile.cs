@@ -15,13 +15,13 @@ public class Tile : MonoBehaviour {
     public void Destroy(float timer = 0) {
         if (!destroying) {
             destroying = true;
-            BreakingEffect();
+            BreakingEffect(timer);
             Invoke("DestroyEffect", timer);
         }
     }
 
   
-    protected virtual void BreakingEffect() {
+    protected virtual void BreakingEffect(float duration) {
         GetComponent<MeshRenderer>().materials = new Material[2] { GetComponent<MeshRenderer>().material, Resources.Load<Material>("Red") };
     }
 

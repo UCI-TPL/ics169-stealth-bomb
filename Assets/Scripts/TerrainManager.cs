@@ -80,9 +80,7 @@ public class TerrainManager : MonoBehaviour {
                     Vector2 distToRing = (new Vector2(col, row) - center).Abs() - newRadius; // Tile distance from collapsing area
                     Vector2 tileProb = (distToRing + new Vector2(collapseBuffer, collapseBuffer)) / (collapseBuffer * 2); // Probability of tile collapsing based on distance from ring of collapse
                     if (Random.Range(0f, 1f) < Mathf.Max(tileProb.x * tPerS.x, tileProb.y * tPerS.y, 0) * updateRate * 4 || Mathf.Max(distToRing.x, distToRing.y) > collapseBuffer) // Check chance to collapse or if block is too far out
-                        for (int height = 0; height < tileMap.GetLength(1); ++height)
-                            if (tileMap[col, height, row] != null)
-                                tileMap[col, height, row].Destroy(warningTimer); // Destroy tile after warning time
+                        StartCoroutine(DestroyPillar(col, row));
                 }
             }
 
@@ -110,7 +108,15 @@ public class TerrainManager : MonoBehaviour {
         Debug.DrawLine(topRight, new Vector3(topRight.x, botleft.y, botleft.z), Color.green, 0.1f, false);
         Debug.DrawLine(botleft, new Vector3(topRight.x, botleft.y, botleft.z), Color.green, 0.1f, false);
     }
-    
+
+    private IEnumerator DestroyPillar(int col, int row) {
+        for (int height = 0; height < tileMap.GetLength(1); ++height) {
+            if (tileMap[col, height, row] != null)
+                tileMap[col, height, row].Destroy(warningTimer); // Destroy tile after warning time
+            yield return new WaitForSeconds(0.05f);
+        }
+    }
+
     public Tile[,,] ReadTileMap() {
         GameObject g = GameObject.Find("Tile Map");
         if (g != null)
