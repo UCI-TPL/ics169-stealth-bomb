@@ -24,12 +24,12 @@ public class CrumbleTile : Tile {
         float startTime = Time.time;
         float endTime = Time.time + duration;
         while (endTime >= Time.time) {
-            float scale = Random.Range(0.95f, 1.05f);
-            transform.localScale = Vector3.one * scale;
-            crumbleMaterial.SetFloat("Vector1_B581EF45", (Time.time - startTime)/duration);
+            float scale = Random.Range(0.9f, 1.1f);
+            crumbleMaterial.SetVector("Vector3_B38DBA48", Vector3.one * scale); // Set object scale with shader vertex offset
+            crumbleMaterial.SetFloat("Vector1_B581EF45", (Time.time - startTime)/duration); // Set shader crumble level
             yield return null;
         }
-        crumbleMaterial.SetFloat("Vector1_B581EF45", 1);
+        crumbleMaterial.SetFloat("Vector1_B581EF45", 1); // Set shader crumble level
     }
 
     protected override void DestroyEffect() {
@@ -40,12 +40,13 @@ public class CrumbleTile : Tile {
         GetComponent<Collider>().enabled = false;
         float startTime = Time.time;
         float endTime = Time.time + duration;
+        Vector3 offset = Vector3.zero;
         while (endTime >= Time.time) {
-            crumbleMaterial.SetFloat("Vector1_C76A37C5", (Time.time - startTime) / duration);
-            transform.Translate(Vector3.down * destroyEffSpeed * Time.deltaTime);
+            crumbleMaterial.SetFloat("Vector1_C76A37C5", (Time.time - startTime) / duration); // Set shader dissolve level
+            crumbleMaterial.SetVector("Vector3_5B57DCD6", offset += Vector3.down * destroyEffSpeed * Time.deltaTime); // Set object offset with shader vertex offset
             yield return null;
         }
-        crumbleMaterial.SetFloat("Vector1_C76A37C5", 1);
+        crumbleMaterial.SetFloat("Vector1_C76A37C5", 1); // Set shader dissolve level
         Destroy(gameObject);
     }
 }
