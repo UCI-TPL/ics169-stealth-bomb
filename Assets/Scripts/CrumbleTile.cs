@@ -43,7 +43,7 @@ public class CrumbleTile : Tile {
         Vector3 offset = Vector3.zero;
         while (endTime >= Time.time) {
             crumbleMaterial.SetFloat("Vector1_C76A37C5", (Time.time - startTime) / duration); // Set shader dissolve level
-            crumbleMaterial.SetVector("Vector3_5B57DCD6", offset += Vector3.down * destroyEffSpeed * Time.deltaTime); // Set object offset with shader vertex offset
+            crumbleMaterial.SetVector("Vector3_5B57DCD6", (offset += Vector3.down * destroyEffSpeed * Time.deltaTime) * -offset.y); // Set object offset with shader vertex offset
             yield return null;
         }
         crumbleMaterial.SetFloat("Vector1_C76A37C5", 1); // Set shader dissolve level
