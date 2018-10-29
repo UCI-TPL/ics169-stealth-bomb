@@ -9,7 +9,7 @@ public class Projectile : MonoBehaviour { //should this just be named arrow?
 
     public Rigidbody rb;
 
-    public int speed = 1;
+    public float speed = 1f;
     public int damage = 100;
 
     public float lifetime = 3f;
