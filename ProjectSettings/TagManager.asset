@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Arrow
+  - player-join-manager
+  - game-manager
+  - input-manager
   layers:
   - Default
   - TransparentFX
