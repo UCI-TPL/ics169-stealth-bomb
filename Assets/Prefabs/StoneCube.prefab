@@ -109,3 +109,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destroyEffDuration: 0.5
+  destroyEffSpeed: 5
+  particles: {fileID: 1951624619801250, guid: 708f4849a0de89348b0f4dc761d0091c, type: 2}

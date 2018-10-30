@@ -6,9 +6,7 @@ using Vector3Extensions;
 
 [CustomEditor(typeof(TileMapEditor))]
 public class TileMapEditorInspector : Editor {
-
-    SerializedProperty tiles;
-
+    
     private bool editing = false;
     private TileMapEditor script {
         get { return (TileMapEditor)target; }
@@ -19,7 +17,6 @@ public class TileMapEditorInspector : Editor {
     private GUIContent[] tileSelection;
 
     void OnEnable() {
-        tiles = serializedObject.FindProperty("tiles");
         LastTool = Tools.current; // Save current tool to be able to restore later
         UpdateTileSelection();
     }
@@ -82,6 +79,7 @@ public class TileMapEditorInspector : Editor {
     }
 
     public override void OnInspectorGUI() {
+        //DrawDefaultInspector();
         // Display controls
         {
             GUILayout.BeginVertical(GUI.skin.box); // Create a box containing controls
@@ -103,10 +101,6 @@ public class TileMapEditorInspector : Editor {
         }
         
         GUILayout.Label("Map Size:");
-
-        serializedObject.Update();
-        EditorGUILayout.PropertyField(tiles, true);
-        serializedObject.ApplyModifiedProperties();
 
         TileSelectorGUI();
 
@@ -155,15 +149,15 @@ public class TileMapEditorInspector : Editor {
         if (Event.current.type == EventType.ExecuteCommand && Event.current.commandName == "ObjectSelectorClosed") {
             GameObject g = (GameObject)EditorGUIUtility.GetObjectPickerObject();
             if (g != null && g.GetComponent<Tile>() != null) {
-                script.tiles.Add(g.GetComponent<Tile>());
+                script.tileList.tiles.Add(g.GetComponent<Tile>());
                 UpdateTileSelection();
             }
         }
     }
 
     private void UpdateTileSelection() {
-        tileSelection = new GUIContent[script.tiles.Count];
+        tileSelection = new GUIContent[script.tileList.tiles.Count];
         for (int i = 0; i < tileSelection.Length; ++i)
-            tileSelection[i] = new GUIContent(script.tiles[i].gameObject.name, AssetPreview.GetAssetPreview(script.tiles[i].gameObject));
+            tileSelection[i] = new GUIContent(script.tileList.tiles[i].gameObject.name, AssetPreview.GetAssetPreview(script.tileList.tiles[i].gameObject));
     }
 }
