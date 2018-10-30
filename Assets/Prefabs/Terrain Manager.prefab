@@ -54,5 +54,5 @@ MonoBehaviour:
   timer: 1
   collapseTime: 30
   collapseBuffer: 1
-  warningTimer: 1
+  warningTimer: 2
   updateRate: 0.1
