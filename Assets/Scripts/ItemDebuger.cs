@@ -16,6 +16,10 @@ public class ItemDebuger : MonoBehaviour {
     public ItemList itemList;
     [Tooltip("Prefab for item container")]
     public GameObject itemContainer;
+    [Tooltip("Prefab for powerup container")]
+    public GameObject powerupContainer;
+    [Tooltip("Prefab for weapon container")]
+    public GameObject weaponContainer;
     private GameObject _itemSpawner;
     private GameObject itemSpawner {
         get {
@@ -52,7 +56,7 @@ public class ItemDebuger : MonoBehaviour {
             targetGrid = (hit.point - Tile.TileOffset + hit.normal * 0.1f).Round();
             //DrawCubeWithWire(targetGrid + Tile.TileOffset, 1, Color.white, new Color(1, 1, 1, 0.1f));
             if (Input.GetMouseButtonDown(0)) {
-                GameObject g = Instantiate(itemContainer, targetGrid + Tile.TileOffset, Quaternion.identity); // Create a item container
+                GameObject g = Instantiate(selectedItem.type == ItemData.Type.Powerup ? powerupContainer : selectedItem.type == ItemData.Type.Weapon ? weaponContainer : itemContainer, targetGrid + Tile.TileOffset, Quaternion.identity); // Create a item container
                 g.GetComponent<ItemContainer>().SetItemData(selectedItem); // Set the item for the item container
             }
         }

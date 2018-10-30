@@ -1308,7 +1308,11 @@ MonoBehaviour:
   scrollRect: {fileID: 224030667728570090}
   selectedImage: {fileID: 114127262737999786}
   itemList: {fileID: 11400000, guid: 6dd4dc727b43ccd42a8c085cd363fb9a, type: 2}
-  itemContainer: {fileID: 1865126826565178, guid: 51d7268249fd5e04cbc837fd04340b92,
+  itemContainer: {fileID: 1249845245442850, guid: 7665beb86e64f074f91d84fdb56a826b,
+    type: 2}
+  powerupContainer: {fileID: 1865126826565178, guid: 51d7268249fd5e04cbc837fd04340b92,
+    type: 2}
+  weaponContainer: {fileID: 1790191231507538, guid: 504183c4d1ce2e547b8329d469e91b79,
     type: 2}
   itemToggle: {fileID: 114719124060303750}
 --- !u!114 &114982583793146426

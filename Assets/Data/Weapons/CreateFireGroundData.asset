@@ -9,10 +9,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b64b9eb074199e94e993d67c3fa6e5af, type: 3}
-  m_Name: New CreateFireGroundData
+  m_Name: CreateFireGroundData
   m_EditorClassIdentifier: 
-  name: 
-  image: {fileID: 0}
-  description: 
+  name: CreateFireGround
+  image: {fileID: 21300000, guid: 3bedf194dee3f75428ce324b6740f7b4, type: 3}
+  description: Creates fire on the ground under the player
   type: 2
-  firePrefab: {fileID: 0}
+  firePrefab: {fileID: 1434408715701018, guid: 3b39dc403a8cf4e4a895d6b8648b9ca0, type: 2}
