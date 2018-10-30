@@ -6,7 +6,9 @@ using XInputDotNetPure;
 public class PlayerController : MonoBehaviour {
     
     private Player _player;
-    private InputManager input;
+
+    [HideInInspector]
+    public InputManager input;
     public Player player {
         get { return _player; }
         private set { _player = value; }
@@ -24,6 +26,10 @@ public class PlayerController : MonoBehaviour {
 
     [Tooltip("The sets Dodge to the teleportation-like AddForce with ForceMode.Impuse")]
     public bool ImpulseDodge = false;
+
+    [Tooltip("Turn on to use lerping for player rotation instead of instant snapping")]
+    public bool enableLerping = false;
+    public float lerpfrac = 0.5f;
     private bool attackDown; // This should be handled in InputManager
     float rollTime = 0.0f; //to check if the player is currently rolling
     //float holdEnd = 0.0f;
@@ -102,14 +108,12 @@ public class PlayerController : MonoBehaviour {
             mostRecentLeftStickInput = _inputs.normalized;
         }
 
+        // this now handles default player rotation when there is no player input for rotation
         if (!rotationInput) {
             rightMovement = right * Time.deltaTime * inputMoveVector.x;
             upMovement = forward * Time.deltaTime * inputMoveVector.y;
 
-            if(Vector3.Normalize(rightMovement + upMovement) != Vector3.zero)
-            {
-                transform.forward = Vector3.Normalize(rightMovement + upMovement);
-            }
+            computeRotation(rightMovement, upMovement);
         }
 
         moveCalled = false;
@@ -188,20 +192,29 @@ public class PlayerController : MonoBehaviour {
         inputRotationVector = input.getRightStickData(playerNum - 1);
     }
 
-    void RotatePlayer() {
-        rotationInput = true;
-        Vector3 rightMovement;
-        Vector3 upMovement;
-        Vector2 RStickInput = input.getRightStickData(playerNum - 1);
-        rightMovement = right * Time.deltaTime * RStickInput.x;
-        upMovement = -(forward * Time.deltaTime * -RStickInput.y);
+    /* Helper function that does the end computations for player rotation. Parameters are the vectors for the new rotation. */
+    void computeRotation(Vector3 rightMovement, Vector3 upMovement) {
         if(Vector3.Normalize(rightMovement + upMovement) != Vector3.zero)
-        {
-            if(!dodging)
             {
-                transform.forward = Vector3.Normalize(rightMovement + upMovement);
-            }     
-        }        
+                Vector3 newRotation = Vector3.Normalize(rightMovement + upMovement);
+                if (!enableLerping)
+                    transform.forward = newRotation;
+                else 
+                    transform.forward = Vector3.Lerp(transform.forward, newRotation, lerpfrac);
+            }
+    }
+
+    void RotatePlayer() {
+        if (movementAllowed) {
+            rotationInput = true;
+            Vector3 rightMovement;
+            Vector3 upMovement;
+            Vector2 RStickInput = input.getRightStickData(playerNum - 1);
+            rightMovement = right * Time.deltaTime * RStickInput.x;
+            upMovement = -(forward * Time.deltaTime * -RStickInput.y);
+
+            computeRotation(rightMovement, upMovement);
+        }
     }
 
 

@@ -6,6 +6,7 @@ using XInputDotNetPure;
 
 public class Controller
 {
+    public float vibrationValue;
     public UnityEvent A_Pressed = new UnityEvent();
     public UnityEvent B_Pressed = new UnityEvent();
     public UnityEvent X_Pressed = new UnityEvent();
@@ -27,6 +28,7 @@ public class Controller
 
     public Controller()
     {
+        vibrationValue = 0;
         // A Controller is born!
     }
 }
@@ -74,9 +76,12 @@ public class InputManager : MonoBehaviour {
         processAllControllerInput();
     }
 
-    // void FixedUpdate() {
-    //     processAllControllerStickInput();
-    // }
+    void FixedUpdate() {
+        for (int i = 0; i < 4; i++) {
+            GamePad.SetVibration((PlayerIndex) i, connectedControllers[i].vibrationValue, connectedControllers[i].vibrationValue);
+            connectedControllers[i].vibrationValue = 0;
+        }
+    }
 
     //  
     //  PUBLIC FUNCTIONS

@@ -30,6 +30,7 @@ public class Player : MonoBehaviour {
 
     private List<Powerup> powerups = new List<Powerup>();
 
+    
     private UnityEvent onUpdate = new UnityEvent();
     private UnityEvent onMove = new UnityEvent();
 
@@ -67,6 +68,7 @@ public class Player : MonoBehaviour {
 
     public void HurtPlayer(int damage) {
         health -= damage;
+        _controller.input.connectedControllers[_controller.playerNum - 1].vibrationValue = 1.0f;
     }
 
     private void CheckDeath() {
