@@ -11,6 +11,11 @@ public class PlayerJoinManager : MonoBehaviour {
 
 	public bool PlayerJoinScreenActive = true;   // filler variable for now. Will be replaced when more of UI and menu is implemented.
 
+	[Tooltip("Turn this on if you want to load the next scene with the string of its name instead. If you turn this variable on, make sure that the variable nextLevel is filled out in the inspector!")]
+	public bool loadNextLevelByName = false;
+	[Tooltip("The name of the scene to load when players start a match.")]
+	public string nextLevel;
+
 	//both for the references to the UI script -Kyle
 	
 	public GameObject playersObject;
@@ -19,6 +24,11 @@ public class PlayerJoinManager : MonoBehaviour {
 	//reference the mainMenuManager for setting PJActive to true;
 	public GameObject mMManager;
 	private MainMenuManager currentMenu; 
+
+	[Tooltip("Reference to the game controller object.")]
+	public GameObject gameManager;
+	public string gameManagerName = "GameController";
+	private ActivePlayerManager playerManager;
 
 	bool[] playersReady;
 	// public bool player1Ready;
@@ -36,6 +46,25 @@ public class PlayerJoinManager : MonoBehaviour {
 	GamePadState[] prevStates;
 
 	private int numOfPlayersReady;
+
+	// Returns a list/array of player individual status on whether they will play or not. The returned array should not be able to be modified
+	// outside of this script (or at least should not have any effect on this script's variables).
+	public bool[] GetPLayerReadyStatusList() {
+		bool[] roster = new bool[playersReady.Length];
+		for (int i = 0; i < playersReady.Length; i++) 
+			roster[i] = playersReady[i];
+		return roster;
+	}
+
+	void Awake() {
+		if (gameManager == null) {
+			gameManager = GameObject.Find(gameManagerName);
+		}
+		if (gameManager != null) 
+			playerManager = gameManager.GetComponent<ActivePlayerManager>();
+		else
+			Debug.Log("The game manager variable was not assigned in the inspector. This will most likely cause errors!");
+	}
 
 	// Use this for initialization
 	void Start () {
@@ -57,6 +86,10 @@ public class PlayerJoinManager : MonoBehaviour {
 		//find the script -Kyle
 		selectionOP = playersObject.GetComponent<characterSelection>();
 		currentMenu = mMManager.GetComponent<MainMenuManager>();
+		// if (gameManager != null) 
+		// 	playerManager = gameManager.GetComponent<ActivePlayerManager>();
+		// else
+		// 	Debug.Log("The game manager variable was not assigned in the inspector. This will most likely cause errors!");
 	}
 	
 	// Update is called once per frame
@@ -84,7 +117,7 @@ public class PlayerJoinManager : MonoBehaviour {
 				else if (!currentStates[i].IsConnected /* && prevStates[i].IsConnected*/) {
 					// FINISH!!!!!
 					// Revert that player's UI section to not connected/empty.
-					Debug.Log("Player " + players[i] + " controller has Disconnected!");
+					// Debug.Log("Player " + players[i] + " controller has Disconnected!");
 					playersReady[i] = false;
 					// if (numOfPlayersReady > 0) numOfPlayersReady--;
 
@@ -98,7 +131,6 @@ public class PlayerJoinManager : MonoBehaviour {
 			for (int i = 0; i < 4; i++) {
 				if (currentStates[i].IsConnected) {
 					if (currentStates[i].Buttons.A == ButtonState.Pressed && playersReady[i] == false) {
-						// FINISH!!!!!
 						// Display the UI element showing the player has confirmed he/she is ready to play.
 						playersReady[i] = true;
 						Debug.Log("Player " + players[i] + " is ready to play!");
@@ -148,8 +180,15 @@ public class PlayerJoinManager : MonoBehaviour {
 			if (numOfPlayersReady >= 2) {
 				for (int i = 0; i < playersReady.Length; i++) {
 					if (playersReady[i] == true) {
+						// If the right conditions are met, this is where the protocol for starting the game happens.
+						// NOTE: implementation is subject to change for now.
 						if (currentStates[i].Buttons.Start == ButtonState.Pressed && prevStates[i].Buttons.Start == ButtonState.Released) {
-							SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+							// This might be where we give the game controller the number and roster of active players
+							playerManager.SetPlayersStatus(GetPLayerReadyStatusList());
+							if (loadNextLevelByName) 
+								SceneManager.LoadScene(nextLevel);
+							else 
+								SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);    // starts the scene used for the first level.
 						}
 					}
 				}
@@ -171,8 +210,6 @@ public class PlayerJoinManager : MonoBehaviour {
 		// 	}
 		// }
 	}
-
-
 
 
 

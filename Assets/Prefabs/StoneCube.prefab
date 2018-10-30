@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33557046631894842}
   - component: {fileID: 23432997640321554}
   - component: {fileID: 65534371034307994}
-  - component: {fileID: 114259066480335828}
+  - component: {fileID: 114651681039802948}
   m_Layer: 0
   m_Name: StoneCube
   m_TagString: Untagged
@@ -97,7 +97,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &114259066480335828
+--- !u!114 &114651681039802948
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -105,7 +105,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1410903596878104}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a46aa3257554b44c81ea77ab26a015d, type: 3}
+  m_Script: {fileID: 11500000, guid: 46cd9f9f5f631f44ea3ad19d5ed0031e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 0}
+  destroyEffDuration: 0.5
+  destroyEffSpeed: 5
+  particles: {fileID: 1951624619801250, guid: 708f4849a0de89348b0f4dc761d0091c, type: 2}

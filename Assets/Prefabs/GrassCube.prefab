@@ -21,8 +21,8 @@ GameObject:
   - component: {fileID: 4483387075294452}
   - component: {fileID: 33397827759109728}
   - component: {fileID: 23911831046860530}
-  - component: {fileID: 114678984953367124}
   - component: {fileID: 65570429913597026}
+  - component: {fileID: 114604968677382744}
   m_Layer: 0
   m_Name: GrassCube
   m_TagString: Untagged
@@ -97,7 +97,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &114678984953367124
+--- !u!114 &114604968677382744
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -105,7 +105,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1965115019997768}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a46aa3257554b44c81ea77ab26a015d, type: 3}
+  m_Script: {fileID: 11500000, guid: 46cd9f9f5f631f44ea3ad19d5ed0031e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 1965115019997768}
+  destroyEffDuration: 0.5
+  destroyEffSpeed: 5
+  particles: {fileID: 1951624619801250, guid: 708f4849a0de89348b0f4dc761d0091c, type: 2}

@@ -7,7 +7,7 @@ using UnityEditor;
 
 public class TileMapEditor : MonoBehaviour {
 #if UNITY_EDITOR //Editor only tag
-    public List<Tile> tiles;
+    public TileList tileList;
     //public HashSet<Tile> createdTiles = new HashSet<Tile>();
     public int selectTile = 0;
     public Vector3Int mapsize;
@@ -26,7 +26,7 @@ public class TileMapEditor : MonoBehaviour {
     }
 
     public void CreateTile(Vector3 pos) {
-        GameObject g = Tile.Create(tiles[selectTile].gameObject, pos, terrainParrent.transform);
+        GameObject g = Tile.PrefabCreate(tileList.tiles[selectTile].gameObject, pos, Quaternion.identity, terrainParrent.transform);
         Undo.RegisterCreatedObjectUndo(g, "Undo Create Tile");
         //createdTiles.Add(g.GetComponent<Tile>());
     }
