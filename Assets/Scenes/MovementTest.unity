@@ -2638,7 +2638,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4778755862382544, guid: 5d6164a572789434ca9a63629c00ea2c, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 1.79
+      value: 1.889
       objectReference: {fileID: 0}
     - target: {fileID: 4778755862382544, guid: 5d6164a572789434ca9a63629c00ea2c, type: 2}
       propertyPath: m_LocalPosition.z
@@ -2663,21 +2663,6 @@ Prefab:
     - target: {fileID: 4778755862382544, guid: 5d6164a572789434ca9a63629c00ea2c, type: 2}
       propertyPath: m_RootOrder
       value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 54631217233156534, guid: 5d6164a572789434ca9a63629c00ea2c,
-        type: 2}
-      propertyPath: m_IsKinematic
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114067377986542440, guid: 5d6164a572789434ca9a63629c00ea2c,
-        type: 2}
-      propertyPath: playerNum
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114067377986542440, guid: 5d6164a572789434ca9a63629c00ea2c,
-        type: 2}
-      propertyPath: ImpulseDodge
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5d6164a572789434ca9a63629c00ea2c, type: 2}

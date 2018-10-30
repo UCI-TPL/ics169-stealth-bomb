@@ -35,7 +35,7 @@ public class PlayerController : MonoBehaviour {
     //float holdEnd = 0.0f;
     float speed;
 
-    bool isGrounded;
+    //bool isGrounded = true;
     bool movementAllowed = true; //used to lock movement while dodging
     bool rotationInput = false;
     bool updatingPhysics = false;
@@ -50,6 +50,7 @@ public class PlayerController : MonoBehaviour {
     Vector3 rotationDirection; //used for Dodging
 
     public GameObject ShootPoint;
+    public Transform GroundCheck; //this is used for linecasting for Jump
     public Rigidbody rb;
     [Tooltip("Represents which player this is. Only put in 1-4. Do not put 0!!! This attribute must have a value in order to work or take in input properly!!! ")]
     public int playerNum;
@@ -118,13 +119,19 @@ public class PlayerController : MonoBehaviour {
 
         moveCalled = false;
     }
+    
+    bool IsGrounded() //uses raycasting to decide whether the layer can jump or not
+    {
+        return Physics.Raycast(GroundCheck.position, GroundCheck.TransformDirection(Vector3.down),0.05f); //GroundCheck is set to the bottom of the player
+        //return Physics.Linecast(transform.position, GroundCheck.position); //Linecast was used first but it got harder once there were two colliders (it was detecting the sphere)
+    }
 
     void Jump() {
-        if (movementAllowed && isGrounded) //Checking if on the ground
+        if (movementAllowed && IsGrounded()) //Checking if on the ground
         { 
             speed = player.stats.airSpeed;
             rb.AddForce(Vector3.up * player.stats.jumpForce, ForceMode.Impulse);
-            isGrounded = false;
+            //isGrounded = false;
         }
     }
 
@@ -176,16 +183,14 @@ public class PlayerController : MonoBehaviour {
             attackDown = false;
         }
     }
-
-    //change the way isGrounded is implemented 
-    private void OnCollisionEnter(Collision collision) {
-
-        if(isGrounded == false)
+    private void OnCollisionEnter(Collision col) {
+        /*
+        foreach (ContactPoint contact in col.contacts)
         {
-            isGrounded = true;
-            speed = player.stats.moveSpeed;
+            Debug.Log(contact.thisCollider.name);
+            Debug.Log(contact.otherCollider.name);
         }
-
+        */
     }
 
     void GetRotationData() {

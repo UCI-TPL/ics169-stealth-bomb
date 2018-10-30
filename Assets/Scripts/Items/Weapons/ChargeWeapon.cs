@@ -51,7 +51,7 @@ public class ChargeWeapon : Weapon {
     // OnRelease is called once when the weapon is released
     protected override void OnRelease() {
         rend.material.color = startColor;
-        Debug.Log("Releasing with a chargeTime of " + chargeLevel);
+        //Debug.Log("Releasing with a chargeTime of " + chargeLevel);
         //if (chargeLevel >= 1) { }
         for (int i = 0; i < data.numProj; ++i)
         {
