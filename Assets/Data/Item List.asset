@@ -15,6 +15,7 @@ MonoBehaviour:
   - percent: 45
     items:
     - {fileID: 11400000, guid: ad2d9603dfcf19d41a66877d48aa241e, type: 2}
+    - {fileID: 11400000, guid: c84350dacbdd4bb4184930b4700550d5, type: 2}
   - percent: 35
     items:
     - {fileID: 11400000, guid: 9c71528773eb1544b94d39f9aefd88af, type: 2}

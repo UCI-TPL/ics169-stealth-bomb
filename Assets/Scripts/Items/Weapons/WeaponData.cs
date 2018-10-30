@@ -23,4 +23,8 @@ public abstract class WeaponData<WeaponType> : WeaponData where WeaponType : Wea
 public abstract class WeaponData : ItemData {
     
     public abstract Weapon NewInstance(Player player);
+
+    public override void Use(Player player) {
+        throw new System.NotImplementedException();
+    }
 }

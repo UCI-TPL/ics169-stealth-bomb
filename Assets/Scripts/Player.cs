@@ -95,6 +95,7 @@ public class Player : MonoBehaviour {
     public void AddItem(ItemData data) {
         switch(data.type) {
             case ItemData.Type.Item:
+                data.Use(this);
                 break;
             case ItemData.Type.Powerup:
                 AddPowerup((PowerupData)data);

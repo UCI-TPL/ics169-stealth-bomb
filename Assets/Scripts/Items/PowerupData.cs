@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-[CreateAssetMenu(fileName = "New Powerup", menuName = "Item/Power-up", order = 1)]
+[CreateAssetMenu(fileName = "New Powerup", menuName = "Item/Power-up", order = 0)]
 public class PowerupData : ItemData {
     
     public static float duration = 10; // Buff duration for all powerups
@@ -35,5 +35,9 @@ public class PowerupData : ItemData {
 
     public virtual Powerup NewInstance(Player player, bool isPermenant = false) {
         return instance.Clone(player, isPermenant);
+    }
+
+    public override void Use(Player player) {
+        throw new System.NotImplementedException();
     }
 }
