@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -42,6 +43,8 @@ public class TerrainManager : MonoBehaviour {
     [Range(0.02f, 1f)]
     public float updateRate = 0.1f; // Set the update rate
 
+    private Queue<TileDestroyCalc> TileDestroyQueue;
+
     // Use this for initialization
     void Start () {
         StartGame();
@@ -60,11 +63,32 @@ public class TerrainManager : MonoBehaviour {
         radius = center + new Vector2(collapseBuffer, collapseBuffer); // Add buffer to radius
         newRadius = radius;
 
+        TileDestroyQueue = CreateTileMapDestroyCalc(tileMap, center, collapseBuffer);
+
         Invoke("StartCountdown", timer);
     }
 
     public void StartCountdown() {
-        StartCoroutine("CollapseTerrain", collapseTime);
+        StartCoroutine("CollapseCircle", collapseTime);
+        //StartCoroutine("CollapseTerrain", collapseTime);
+    }
+
+    private IEnumerator CollapseCircle(float timer) {
+        float endTimer = Time.time;
+        do {
+            float ratio = 1 - (Time.time - endTimer) / timer; // ratio to shrink stage based on timer
+            newRadius = radius * ratio;
+            while (TileDestroyQueue.Peek().destroyDistance > newRadius.x) {
+                Vector2Int v = TileDestroyQueue.Dequeue().tilePos;
+                StartCoroutine(DestroyPillar(v.x, v.y));
+                if (TileDestroyQueue.Count <= 0) // Check after dequeue for just a little be more performance
+                    break;
+            }
+            yield return null;
+#if UNITY_EDITOR //Editor only tag
+            DebugShrinkTerrain(new Vector3(center.x, 0, center.y) + transform.position, new Vector3(newRadius.x, 0, newRadius.y)); // Display visual area of where shrinking is happening in editor
+#endif //Editor only tag
+        } while (TileDestroyQueue.Count > 0 && newRadius.x >= -collapseBuffer);
     }
 
     private IEnumerator CollapseTerrain(float timer) { // Process destroying the terrain over a set time
@@ -79,7 +103,7 @@ public class TerrainManager : MonoBehaviour {
                 for (int row = 0; row < tileMap.GetLength(2); ++row) {
                     Vector2 distToRing = (new Vector2(col, row) - center).Abs() - newRadius; // Tile distance from collapsing area
                     Vector2 tileProb = (distToRing + new Vector2(collapseBuffer, collapseBuffer)) / (collapseBuffer * 2); // Probability of tile collapsing based on distance from ring of collapse
-                    if (Random.Range(0f, 1f) < Mathf.Max(tileProb.x * tPerS.x, tileProb.y * tPerS.y, 0) * updateRate * 4 || Mathf.Max(distToRing.x, distToRing.y) > collapseBuffer) // Check chance to collapse or if block is too far out
+                    if (UnityEngine.Random.Range(0f, 1f) < Mathf.Max(tileProb.x * tPerS.x, tileProb.y * tPerS.y, 0) * updateRate * 4 || Mathf.Max(distToRing.x, distToRing.y) > collapseBuffer) // Check chance to collapse or if block is too far out
                         StartCoroutine(DestroyPillar(col, row));
                 }
             }
@@ -107,6 +131,21 @@ public class TerrainManager : MonoBehaviour {
         Debug.DrawLine(topRight, new Vector3(botleft.x, botleft.y, topRight.z), Color.green, 0.1f, false);
         Debug.DrawLine(topRight, new Vector3(topRight.x, botleft.y, botleft.z), Color.green, 0.1f, false);
         Debug.DrawLine(botleft, new Vector3(topRight.x, botleft.y, botleft.z), Color.green, 0.1f, false);
+    }
+
+    private static Queue<TileDestroyCalc> CreateTileMapDestroyCalc(Tile[,,] tileMap, Vector2 center, float bufferRadius) {
+        TileDestroyCalc[] toSort = new TileDestroyCalc[tileMap.GetLength(0) * tileMap.GetLength(2)];
+        for (int col = 0; col < tileMap.GetLength(0); ++col) { // Loop through every X and Z position in the tile map
+            for (int row = 0; row < tileMap.GetLength(2); ++row) {
+                Vector2Int pos = new Vector2Int(col, row);
+                toSort[row * tileMap.GetLength(0) + col] = new TileDestroyCalc(pos, (pos - center).magnitude + UnityEngine.Random.Range(-bufferRadius, bufferRadius)); // Get distance from center plus some noise
+            }
+        }
+        Array.Sort(toSort);
+        Queue<TileDestroyCalc> result = new Queue<TileDestroyCalc>();
+        foreach (TileDestroyCalc t in toSort)
+            result.Enqueue(t);
+        return result;
     }
 
     private IEnumerator DestroyPillar(int col, int row) {
@@ -144,5 +183,24 @@ public class TerrainManager : MonoBehaviour {
 
     private void DeleteOldLevel() { // Remove old scene
         SceneManager.UnloadSceneAsync(pastLevel);
+    }
+
+    private class TileDestroyCalc : IComparable {
+        public float destroyDistance;
+        public Vector2Int tilePos;
+
+        public TileDestroyCalc(Vector2Int tilePos, float destroyDistance) {
+            this.tilePos = tilePos;
+            this.destroyDistance = destroyDistance;
+        }
+
+        public int CompareTo(object obj) {
+            if (obj == null) return 1;
+            TileDestroyCalc other = (TileDestroyCalc)obj;
+            if (other != null)
+                return other.destroyDistance.CompareTo(destroyDistance);
+            else
+                throw new ArgumentException("Object is not a TileDestroyCalc");
+        }
     }
 }
