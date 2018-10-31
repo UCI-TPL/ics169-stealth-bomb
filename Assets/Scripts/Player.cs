@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 // Player requires the GameObject to have a PlayerController and PlayerStats component
-[RequireComponent(typeof(PlayerController))]
+[RequireComponent(typeof(PlayerControls))]
 [RequireComponent(typeof(PlayerStats))]
 public class Player : MonoBehaviour {
 
@@ -13,11 +13,13 @@ public class Player : MonoBehaviour {
         get { return _stats; }
         private set { _stats = value; }
     }
-    private PlayerController _controller;
-    public PlayerController controller {
+    private PlayerControls _controller;
+    public PlayerControls controller {
         get { return _controller; }
         private set { _controller = value; }
     }
+
+    public int playerNumber;
 
     private float _health;
     public float health {
@@ -27,9 +29,7 @@ public class Player : MonoBehaviour {
 
     private Rigidbody rb;
 
-
     private List<Powerup> powerups = new List<Powerup>();
-
     
     private UnityEvent onUpdate = new UnityEvent();
     private UnityEvent onMove = new UnityEvent();
@@ -47,7 +47,7 @@ public class Player : MonoBehaviour {
         stats = GetComponent<PlayerStats>();
         if (stats == null) // Check to ensure PlayerStats component is present, since PlayerStats is a dependency this will never happen, but just in case
             Debug.LogError(gameObject.name + " missing PlayerStats Component");
-        controller = GetComponent<PlayerController>();
+        controller = GetComponent<PlayerControls>();
         if (controller == null) // Check to ensure PlayerController component is present, since PlayerController is a dependency this will never happen, but just in case
             Debug.LogError(gameObject.name + " missing PlayerController Component");
         rb = GetComponent<Rigidbody>();
@@ -68,7 +68,7 @@ public class Player : MonoBehaviour {
 
     public void HurtPlayer(int damage) {
         health -= damage;
-        _controller.input.connectedControllers[_controller.playerNum - 1].vibrationValue = 1.0f;
+        controller.input.controllers[playerNumber].Vibrate(1.0f);
     }
 
     private void CheckDeath() {

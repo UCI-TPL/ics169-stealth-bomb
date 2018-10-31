@@ -19,9 +19,9 @@ TagManager:
   - 
   - PostProcessing
   - Player
-  - PowerupCollider
-  - 
-  - 
+  - ItemContainer
+  - Ground
+  - Attack
   - 
   - 
   - 

@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 23027701005056780}
   - component: {fileID: 65934440792571160}
   - component: {fileID: 114933370073468886}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: DirtCube
   m_TagString: Untagged
   m_Icon: {fileID: 0}

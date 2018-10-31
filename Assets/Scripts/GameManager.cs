@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Require an inputManager
+[RequireComponent(typeof(InputManager))]
 public class GameManager : MonoBehaviour {
     public static GameManager instance;
 

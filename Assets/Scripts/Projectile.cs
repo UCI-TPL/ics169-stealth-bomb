@@ -16,7 +16,8 @@ public class Projectile : MonoBehaviour {
     public Player player;
 
 	void Start () {
-        Physics.IgnoreCollision(player.GetComponent<Collider>(), collider);
+        Physics.IgnoreCollision(player.controller.floorCollider, collider);
+        Physics.IgnoreCollision(player.controller.wallCollider, collider);
         Destroy(gameObject, data.lifetime); // Destroy gameObject after lifetime is up
     }
 

@@ -24,6 +24,7 @@ public class ItemSpawnTile : Tile {
             Debug.Log(name + " is missing an Item list for it's drop table, This spawner will be disabled");
             gameObject.SetActive(false);
         }
+        ResetCooldown();
         StartCoroutine(SpawnItems(updateRate));
     }
 
