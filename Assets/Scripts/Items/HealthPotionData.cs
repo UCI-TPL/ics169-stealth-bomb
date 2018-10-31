@@ -8,6 +8,6 @@ public class HealthPotionData : ItemData {
     public float amount;
 
     public override void Use(Player player) {
-        player.ResetHealth();
+        player.Heal(amount);
     }
 }

@@ -13,6 +13,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectile: {fileID: 114721991009535130, guid: 111ada6a1cfa3e64abadaf4254cad72b,
     type: 2}
-  damage: 100
+  damage: 10
   lifetime: 3
   spreadAngle: 10

@@ -14,7 +14,13 @@ MonoBehaviour:
   name: Speed
   image: {fileID: 21300000, guid: 2a2b3a5f04235ad49aa9e0803fcd993c, type: 3}
   description: Increases the player's movement speed
+  type: 1
   modifiers:
   - name: move_speed
-    value: 10
-    type: 0
+    value: 0.5
+    type: 1
+  instance:
+    data: {fileID: 11400000}
+    startTime: 0
+    endTime: 0
+    triggers: []

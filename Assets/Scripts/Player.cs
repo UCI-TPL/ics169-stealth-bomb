@@ -66,7 +66,11 @@ public class Player : MonoBehaviour {
         health = stats.maxHealth;
     }
 
-    public void HurtPlayer(int damage) {
+    public void Heal(float amount) {
+        health = Mathf.Min(amount, stats.maxHealth);
+    }
+
+    public void HurtPlayer(float damage) {
         health -= damage;
         controller.input.controllers[playerNumber].Vibrate(1.0f);
     }
