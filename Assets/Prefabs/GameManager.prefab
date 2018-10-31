@@ -109,4 +109,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enableSingletonBehavior: 0
-  enableDebug: 1
+  enableDebug: 0
