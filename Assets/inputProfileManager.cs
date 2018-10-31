@@ -31,7 +31,7 @@ public class inputProfileManager : MonoBehaviour {
 	private void Update()
 	{
 		currentState = GamePad.GetState(0);
-		// Debug.Log("x: " + getInputValue("MoveX") + " y: " + getInputValue("MoveY"));
+		Debug.Log("x: " + getInputValue("MoveX") + " y: " + getInputValue("MoveY"));
 		Debug.Log(getInputValue("Attack"));
 	}
 
