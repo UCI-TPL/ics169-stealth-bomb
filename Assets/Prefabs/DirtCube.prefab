@@ -21,8 +21,8 @@ GameObject:
   - component: {fileID: 4755600271311528}
   - component: {fileID: 33680996325618522}
   - component: {fileID: 23027701005056780}
-  - component: {fileID: 114842966499044708}
   - component: {fileID: 65934440792571160}
+  - component: {fileID: 114933370073468886}
   m_Layer: 0
   m_Name: DirtCube
   m_TagString: Untagged
@@ -97,7 +97,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &114842966499044708
+--- !u!114 &114933370073468886
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -105,7 +105,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1743838175089580}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a46aa3257554b44c81ea77ab26a015d, type: 3}
+  m_Script: {fileID: 11500000, guid: 46cd9f9f5f631f44ea3ad19d5ed0031e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 1743838175089580}
+  destroyEffDuration: 0.5
+  destroyEffSpeed: 5
+  particles: {fileID: 1951624619801250, guid: 708f4849a0de89348b0f4dc761d0091c, type: 2}

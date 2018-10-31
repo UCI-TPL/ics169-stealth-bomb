@@ -15,13 +15,12 @@ public class Tile : MonoBehaviour {
     public void Destroy(float timer = 0) {
         if (!destroying) {
             destroying = true;
-            BreakingEffect();
+            BreakingEffect(timer);
             Invoke("DestroyEffect", timer);
         }
     }
-
   
-    protected virtual void BreakingEffect() {
+    protected virtual void BreakingEffect(float duration) {
         GetComponent<MeshRenderer>().materials = new Material[2] { GetComponent<MeshRenderer>().material, Resources.Load<Material>("Red") };
     }
 
@@ -41,6 +40,17 @@ public class Tile : MonoBehaviour {
         }
         Destroy(gameObject);
     }
+
+#if UNITY_EDITOR //Editor only tag
+    // Create the tile as a prefab in the specified position and rotation
+    public static GameObject PrefabCreate(GameObject prefab, Vector3 pos, Quaternion rotation, Transform parent) {
+        GameObject tile = (GameObject)UnityEditor.PrefabUtility.InstantiatePrefab(prefab);
+        tile.transform.position = pos.Round() + TileOffset;
+        tile.transform.rotation = rotation;
+        tile.transform.SetParent(parent);
+        return tile;
+    }
+#endif //Editor only tag
 
     public static GameObject Create(GameObject prefab, Vector3 pos, Quaternion rotation, Transform parent) {
         return Instantiate<GameObject>(prefab, pos.Round() + TileOffset, rotation, parent);
