@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: Grass
-  m_Shader: {fileID: 4800000, guid: 31cbb17cf7040f940b71295bccbf82b6, type: 3}
+  m_Shader: {fileID: 4800000, guid: 1746376ee9075b74ba866f40ad81ee6f, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -63,8 +63,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - Vector1_21BC1C32: 1.5
     - Vector1_7C693275: 0
     - Vector1_86268C42: 0
+    - Vector1_8D60783: 2
     - Vector1_B581EF45: 0
     - Vector1_C76A37C5: 0
     - _AlphaClip: 0
