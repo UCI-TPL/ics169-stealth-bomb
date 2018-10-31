@@ -5,6 +5,10 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Collider))]
 public class Projectile : MonoBehaviour {
+    public Rigidbody rb;
+
+    public float speed = 1f;
+    public int damage = 100;
 
     public new Collider collider;
     public ProjectileData data;

@@ -13,11 +13,13 @@ public class PlayerStats : MonoBehaviour {
     private Dictionary<string, Property> stats = new Dictionary<string, Property>();
 
     private void Awake() {
-        AddStat("move_speed", 10);
-        AddStat("air_speed", 3);
-        AddStat("jump_force", 10);
+        AddStat("move_speed", 5); //blocks per second
+        AddStat("air_speed", 50);  //percent of movespeed
+        AddStat("jump_force", 1); //blocks per jump (1,2,3)
         AddStat("max_health", 100);
-        AddStat("dodge_time", 0.2f);
+        AddStat("dodge_time", 0.2f); //how long the dodge lasts
+        AddStat("dodge_recharge", 0.8f); //how long the player waits before dodging again
+        
         player = GetComponent<Player>();
         if (player == null) // Check to ensure Player component is present, since PlayerStats is a dependency of Player this will never happen, but just in case
             Debug.LogError(gameObject.name + " missing Player Component");
@@ -27,16 +29,20 @@ public class PlayerStats : MonoBehaviour {
         get { return GetStat("move_speed"); }
     }
     public float jumpForce {
-        get { return GetStat("jump_force"); }
+        get { return 9 + (GetStat("jump_force") - 1) * 3; } //1 return 9, 2 returns 12, 3 returns 15
     }
     public float maxHealth {
         get { return GetStat("max_health"); }
     }
     public float airSpeed    {
-        get { return GetStat("air_speed");  }
+        get { return (GetStat("air_speed")/100) * moveSpeed;  }
     }
     public float dodgeTime    {
         get { return GetStat("dodge_time"); }
+    }
+
+    public float dodgeRecharge    {
+        get { return GetStat("dodge_recharge"); }
     }
 
 

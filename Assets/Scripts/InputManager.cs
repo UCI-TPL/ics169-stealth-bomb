@@ -6,14 +6,17 @@ using XInputDotNetPure;
 
 public class Controller
 {
+    public float vibrationValue;
     public UnityEvent A_Pressed = new UnityEvent();
     public UnityEvent B_Pressed = new UnityEvent();
     public UnityEvent X_Pressed = new UnityEvent();
     public UnityEvent Y_Pressed = new UnityEvent();
     public UnityEvent LB_Pressed = new UnityEvent();
     public UnityEvent RB_Pressed = new UnityEvent();
-    public UnityEvent LT = new UnityEvent();
-    public UnityEvent RT = new UnityEvent();
+    public UnityEvent LT_Pressed = new UnityEvent();
+    public UnityEvent LT_Released = new UnityEvent();
+    public UnityEvent RT_Pressed = new UnityEvent();
+    public UnityEvent RT_Released = new UnityEvent();
     public UnityEvent DPadL = new UnityEvent();
     public UnityEvent DPadR = new UnityEvent();
     public UnityEvent DPadU = new UnityEvent();
@@ -25,6 +28,7 @@ public class Controller
 
     public Controller()
     {
+        vibrationValue = 0;
         // A Controller is born!
     }
 }
@@ -70,6 +74,13 @@ public class InputManager : MonoBehaviour {
     void Update () {
         updateGamePadStates();
         processAllControllerInput();
+    }
+
+    void FixedUpdate() {
+        for (int i = 0; i < 4; i++) {
+            GamePad.SetVibration((PlayerIndex) i, connectedControllers[i].vibrationValue, connectedControllers[i].vibrationValue);
+            connectedControllers[i].vibrationValue = 0;
+        }
     }
 
     //  
@@ -155,6 +166,17 @@ public class InputManager : MonoBehaviour {
             playerStates[i * 2 + 1] = GamePad.GetState((PlayerIndex)i);
         }
     }
+
+    private void processAllControllerStickInput() {
+        for (int i = 0; i < 4; i++) 
+        {
+            if (playerStates[i * 2 + 1].ThumbSticks.Left.X != 0f || playerStates[i * 2 + 1].ThumbSticks.Left.Y != 0f)
+                connectedControllers[i].LStick.Invoke();
+            if (playerStates[i * 2 + 1].ThumbSticks.Right.X != 0f || playerStates[i * 2 + 1].ThumbSticks.Right.Y != 0f)
+                connectedControllers[i].RStick.Invoke();
+        }
+    }
+
     private void processAllControllerInput()
     {
         for (int i = 0; i < 4; i++)
@@ -174,9 +196,13 @@ public class InputManager : MonoBehaviour {
                 connectedControllers[i].DPadR.Invoke();
             // Triggers
             if (playerStates[i * 2 + 1].Triggers.Left != 0f)
-                connectedControllers[i].LT.Invoke();
+                connectedControllers[i].LT_Pressed.Invoke();
+            else 
+                connectedControllers[i].LT_Released.Invoke();
             if (playerStates[i * 2 + 1].Triggers.Right != 0f)
-                connectedControllers[i].RT.Invoke();
+                connectedControllers[i].RT_Pressed.Invoke();
+            else
+                connectedControllers[i].RT_Released.Invoke();
             // Bumpers
             if (playerStates[i * 2 + 1].Buttons.LeftShoulder == ButtonState.Pressed && playerStates[i * 2].Buttons.LeftShoulder != ButtonState.Pressed)
                 connectedControllers[i].LB_Pressed.Invoke();

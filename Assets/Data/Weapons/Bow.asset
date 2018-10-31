@@ -18,8 +18,10 @@ MonoBehaviour:
   instance:
     weaponData: {fileID: 11400000}
     type: 1
-  arrow: {fileID: 114721991009535130, guid: 111ada6a1cfa3e64abadaf4254cad72b, type: 2}
-  colorAddition: 25
+  projectile: {fileID: 11400000, guid: 9df1e8c6a587d604684f97e370ea1793, type: 2}
+  colorAddition: 1
   chargeTime: 0.5
+  chargeLevels: 3
   numProj: 1
-  projSpeed: 100
+  projSpeed: 25
+  damage: 35

@@ -35,7 +35,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4157136823194534}
-  - component: {fileID: 114800016979540188}
+  - component: {fileID: 114380574983239810}
+  - component: {fileID: 114407400500306902}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: game-manager
@@ -70,7 +71,7 @@ Transform:
   m_Father: {fileID: 4157136823194534}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114800016979540188
+--- !u!114 &114380574983239810
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -78,13 +79,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 1494888083987260}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f81cdbc3958b154f8cfbe5185f3a12e, type: 3}
+  m_Script: {fileID: 11500000, guid: 93a4923d128e6ee4982acb389859e7ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   inputManager: {fileID: 114946860565535868}
   playerJoinManager: {fileID: 0}
   mainMenuSceneName: mainMenu
-  readyPlayers: 
+--- !u!114 &114407400500306902
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1494888083987260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da0ca78e648c7614fb6d91ee719d5d9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gravity: -30
 --- !u!114 &114946860565535868
 MonoBehaviour:
   m_ObjectHideFlags: 1
