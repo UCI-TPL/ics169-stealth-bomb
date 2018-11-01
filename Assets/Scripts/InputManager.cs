@@ -54,7 +54,7 @@ public class InputManager : MonoBehaviour {
 
     public Controller[] controllers = new Controller[4];
 
-    private void Start() {
+    private void Awake() {
         for (int i = 0; i < 4; ++i)
             controllers[i] = new XboxController(i);
     }

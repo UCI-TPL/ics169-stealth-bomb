@@ -62,7 +62,7 @@ public class PlayerControls : MonoBehaviour {
         right = Camera.main.transform.right;
         right.Scale(new Vector3(1, 0, 1));
         right.Normalize();
-
+        
         input.controllers[player.playerNumber].attack.OnDown.AddListener(ActivateAttack);
         input.controllers[player.playerNumber].attack.OnUp.AddListener(ReleaseAttack);
     }
