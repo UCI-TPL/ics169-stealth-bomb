@@ -235,8 +235,16 @@ public class InputManager : MonoBehaviour {
         }
 
         public override void Vibrate(float strength) {
-            GamePad.SetVibration(playerIndex, strength, strength);
+            
         }
+
+        // private IEnumerator VibrateDuration(float strength, float duration) {
+        //     float endTime = Time.time + duration;
+        //     while (endTime >= Time.time) {
+        //         GamePad.SetVibration(playerIndex, strength, strength);
+        //         yield return null;
+        //     }
+        // }
 
         public override void UpdateController() {
             prevState = state;

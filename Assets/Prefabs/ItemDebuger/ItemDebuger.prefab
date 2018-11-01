@@ -1308,7 +1308,7 @@ MonoBehaviour:
   scrollRect: {fileID: 224030667728570090}
   selectedImage: {fileID: 114127262737999786}
   itemList: {fileID: 11400000, guid: 6dd4dc727b43ccd42a8c085cd363fb9a, type: 2}
-  itemContainer: {fileID: 1249845245442850, guid: 51d7268249fd5e04cbc837fd04340b92,
+  itemContainer: {fileID: 1249845245442850, guid: 7665beb86e64f074f91d84fdb56a826b,
     type: 2}
   powerupContainer: {fileID: 1865126826565178, guid: d9fa753bba09da84ab551ff91bb0851c,
     type: 2}
