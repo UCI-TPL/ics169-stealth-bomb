@@ -80,7 +80,7 @@ public class InputManager : MonoBehaviour {
         }
 
         // Do nothing, because a keyboard can't vibrate. Atleast mine can't!
-        public override void Vibrate(float strength) { }
+        public override void Vibrate(float strength, float duration) { }
 
         public MouseKeyboard() {
             type = Type.MouseKeyboard;
@@ -100,45 +100,84 @@ public class InputManager : MonoBehaviour {
         private delegate bool TestEvent();
         private delegate Vector2 TestJoyStick();
 
+        // LOTS OF ORGANIZING CODE so that things can be tested with just the code values
         private Dictionary<ButtonCode, ButtonTest> ButtonMap = new Dictionary<ButtonCode, ButtonTest>();
         private Dictionary<JoyStickCode, TestJoyStick> JoyStickMap = new Dictionary<JoyStickCode, TestJoyStick>();
+        private Dictionary<ActionCode, ButtonTest> ActionTests = new Dictionary<ActionCode, ButtonTest>();
+        private Dictionary<ActionCode, ButtonEvent> ActionEvents = new Dictionary<ActionCode, ButtonEvent>();
 
-        private ButtonTest attackTest = new ButtonTest();
-        private ButtonTest jumpTest = new ButtonTest();
-        private ButtonTest dodgeTest = new ButtonTest();
+        // Public variables showing what the controlls are currently mapped to
+        public readonly Dictionary<ActionCode, HashSet<ButtonCode>> ButtonMaps = new Dictionary<ActionCode, HashSet<ButtonCode>>();
+        public JoyStickCode moveJoyStick { get; private set; }
+        public JoyStickCode aimJoyStick { get; private set; }
 
         public override Vector2 MoveVector() {
-            return JoyStickMap[JoyStickCode.Left]();
+            return JoyStickMap[moveJoyStick]();
         }
 
         public override Vector2 AimVector() {
-            return JoyStickMap[JoyStickCode.Right]();
+            return JoyStickMap[aimJoyStick]();
         }
 
-        private void MapButtons() {
-            attackTest += ButtonMap[ButtonCode.RightBumper] += ButtonMap[ButtonCode.RightTrigger];
-            jumpTest += ButtonMap[ButtonCode.LeftBumper];
-            dodgeTest += ButtonMap[ButtonCode.LeftTrigger];
+        // Add a button mapping to the specified action
+        public void AddButtonMapping(ActionCode action, ButtonCode button) {
+            if (ButtonMaps[action].Add(button))
+                ActionTests[action] += ButtonMap[button];
         }
 
-        public void UpdateEvents() {
-            attackTest.Down(delegate { attack.OnDown.Invoke(); });
-            attackTest.Up(delegate { attack.OnUp.Invoke(); });
-            attack.Pressed = attackTest.Pressed();
-
-            jumpTest.Down(delegate { jump.OnDown.Invoke(); });
-            jumpTest.Up(delegate { jump.OnUp.Invoke(); });
-            jump.Pressed = jumpTest.Pressed();
-
-            dodgeTest.Down(delegate { dodge.OnDown.Invoke(); });
-            dodgeTest.Up(delegate { dodge.OnUp.Invoke(); });
-            dodge.Pressed = dodgeTest.Pressed();
+        // Remove a button mapping from the specified action
+        public void RemoveButtonMapping(ActionCode action, ButtonCode button) {
+            if (ButtonMaps[action].Remove(button))
+                ActionTests[action] -= ButtonMap[button];
         }
 
-        public void UpdateJoySticks() {
-
+        // Remove all button mappings related to an action
+        public void ClearButtonMapping(ActionCode action) {
+            ButtonMaps[action].Clear();
+            ActionTests[action].Clear();
         }
 
+        // Remove all button mappings for all actions
+        public void ClearAllButtonMapping() {
+            foreach (ActionCode action in System.Enum.GetValues(typeof(ActionCode))) {
+                ClearButtonMapping(action);
+            }
+        }
+
+        // Set the Movement controls to the specified joystick
+        public void SetMoveJoyStick(JoyStickCode joyStickCode) {
+            moveJoyStick = joyStickCode;
+        }
+
+        // Set the Aiming controls to the specified joystick
+        public void SetAimJoyStick(JoyStickCode joyStickCode) {
+            aimJoyStick = joyStickCode;
+        }
+
+        // Set controller to the default button mapping
+        private void SetDefaultMapping() {
+            ClearAllButtonMapping();
+            AddButtonMapping(ActionCode.Attack, ButtonCode.RightBumper);
+            AddButtonMapping(ActionCode.Attack, ButtonCode.RightTrigger);
+            AddButtonMapping(ActionCode.Jump, ButtonCode.LeftBumper);
+            AddButtonMapping(ActionCode.Dodge, ButtonCode.LeftTrigger);
+            SetMoveJoyStick(JoyStickCode.Left);
+            SetAimJoyStick(JoyStickCode.Right);
+        }
+
+        // Update button events, invoking them if condition is met
+        private void UpdateEvents() {
+            foreach (ActionCode action in System.Enum.GetValues(typeof(ActionCode))) {
+                ActionTests[action].Down(delegate { ActionEvents[action].OnDown.Invoke(); });
+                ActionTests[action].Up(delegate { ActionEvents[action].OnUp.Invoke(); });
+                bool testAll = false;
+                foreach (TestEvent del in ActionTests[action].Pressed.GetInvocationList())
+                    testAll = testAll || del();
+                ActionEvents[action].Pressed = testAll;
+            }
+        }
+
+        // Create a new Xbox controller with the specified player number
         public XboxController(int playerIndex) {
             type = Type.Xbox;
             this.playerIndex = (PlayerIndex)playerIndex;
@@ -151,7 +190,19 @@ public class InputManager : MonoBehaviour {
             #endregion
             JoyStickMap.Add(JoyStickCode.Left, LeftJoyStickTest);
             JoyStickMap.Add(JoyStickCode.Right, RightJoyStickTest);
-            MapButtons();
+
+            ActionTests.Add(ActionCode.Attack, new ButtonTest());
+            ActionTests.Add(ActionCode.Jump, new ButtonTest());
+            ActionTests.Add(ActionCode.Dodge, new ButtonTest());
+
+            ActionEvents.Add(ActionCode.Attack, attack);
+            ActionEvents.Add(ActionCode.Jump, jump);
+            ActionEvents.Add(ActionCode.Dodge, dodge);
+
+            ButtonMaps.Add(ActionCode.Attack, new HashSet<ButtonCode>());
+            ButtonMaps.Add(ActionCode.Jump, new HashSet<ButtonCode>());
+            ButtonMaps.Add(ActionCode.Dodge, new HashSet<ButtonCode>());
+            SetDefaultMapping();
         }
 
         #region Button Defenitions
@@ -234,18 +285,20 @@ public class InputManager : MonoBehaviour {
             return new Vector2(state.ThumbSticks.Right.X, state.ThumbSticks.Right.Y);
         }
 
-        public override void Vibrate(float strength) {
-            
+        public override void Vibrate(float strength, float duration) {
+            inputManager.StartCoroutine(VibrateDuration(strength, duration));
         }
 
-        // private IEnumerator VibrateDuration(float strength, float duration) {
-        //     float endTime = Time.time + duration;
-        //     while (endTime >= Time.time) {
-        //         GamePad.SetVibration(playerIndex, strength, strength);
-        //         yield return null;
-        //     }
-        // }
+        private IEnumerator VibrateDuration(float strength, float duration) {
+            float endTime = Time.time + duration;
+            GamePad.SetVibration(playerIndex, strength, strength);
+            while (endTime >= Time.time) {
+                yield return null;
+            }
+            GamePad.SetVibration(playerIndex, 0, 0);
+        }
 
+        // Update This controller's events
         public override void UpdateController() {
             prevState = state;
             state = GamePad.GetState(playerIndex);
@@ -278,21 +331,29 @@ public class InputManager : MonoBehaviour {
             Left, Right, DPad
         }
 
+        // Container for test delegates coresponding to a events on a certain button
         private class ButtonTest {
             public EventCall Down;
             public EventCall Up;
             public TestEvent Pressed;
             public ButtonTest() {
-                this.Down = delegate {};
-                this.Up = delegate {};
-                this.Pressed = delegate { return false; };
+                Clear();
             }
+
             public ButtonTest(EventCall Down, EventCall Up, TestEvent Pressed) {
                 this.Down = Down;
                 this.Up = Up;
                 this.Pressed = Pressed;
             }
 
+            // Clear all tests
+            public void Clear() {
+                Down = delegate { };
+                Up = delegate { };
+                Pressed = delegate { return false; };
+            }
+
+            // Add a button map
             public static ButtonTest operator +(ButtonTest l, ButtonTest r) {
                 ButtonTest b = new ButtonTest(l.Down, l.Up, l.Pressed);
                 b.Down += r.Down;
@@ -301,6 +362,7 @@ public class InputManager : MonoBehaviour {
                 return b;
             }
 
+            // Remove a button map
             public static ButtonTest operator -(ButtonTest l, ButtonTest r) {
                 ButtonTest b = new ButtonTest(l.Down, l.Up, l.Pressed);
                 b.Down -= r.Down;
@@ -313,22 +375,30 @@ public class InputManager : MonoBehaviour {
 
     public abstract class Controller {
         public Type type;
-        public abstract void Vibrate(float strength);
+        public abstract void Vibrate(float strength, float duration);
         public abstract void UpdateController();
 
         // Public Methods to get controller states
-        public ButtonEvent attack = new ButtonEvent();
-        public ButtonEvent jump = new ButtonEvent();
-        public ButtonEvent dodge = new ButtonEvent();
+        public readonly ButtonEvent attack = new ButtonEvent();
+        public readonly ButtonEvent jump = new ButtonEvent();
+        public readonly ButtonEvent dodge = new ButtonEvent();
         public abstract Vector2 MoveVector();
         public abstract Vector2 AimVector();
 
+        // List of every PlayerAction available
+        public enum ActionCode {
+            Attack, Jump, Dodge
+        }
+
+        // Type of Controller
         public enum Type {
             Xbox, MouseKeyboard
         }
+
+        // Container for events of a specific action, such as attack or jump
         public class ButtonEvent {
-            public UnityEvent OnDown = new UnityEvent();
-            public UnityEvent OnUp = new UnityEvent();
+            public readonly UnityEvent OnDown = new UnityEvent();
+            public readonly UnityEvent OnUp = new UnityEvent();
             public bool Pressed;
         }
     }

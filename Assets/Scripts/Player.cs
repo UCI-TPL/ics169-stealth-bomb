@@ -7,25 +7,13 @@ using UnityEngine.Events;
 [RequireComponent(typeof(PlayerControls))]
 [RequireComponent(typeof(PlayerStats))]
 public class Player : MonoBehaviour {
-
-    private PlayerStats _stats;
-    public PlayerStats stats {
-        get { return _stats; }
-        private set { _stats = value; }
-    }
-    private PlayerControls _controller;
-    public PlayerControls controller {
-        get { return _controller; }
-        private set { _controller = value; }
-    }
+    
+    public PlayerStats stats { get; private set; }
+    public PlayerControls controller { get; private set; }
 
     public int playerNumber;
-
-    private float _health;
-    public float health {
-        get { return _health; }
-        private set { _health = value; }
-    }
+    
+    public float health { get; private set; }
 
     private Rigidbody rb;
 
@@ -72,7 +60,7 @@ public class Player : MonoBehaviour {
 
     public void HurtPlayer(float damage) {
         health -= damage;
-        controller.input.controllers[playerNumber].Vibrate(1.0f);
+        controller.input.controllers[playerNumber].Vibrate(1.0f, 0.1f);
     }
 
     private void CheckDeath() {

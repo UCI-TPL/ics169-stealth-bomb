@@ -4,12 +4,8 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerControls : MonoBehaviour {
-
-    private Player _player;
-    public Player player {
-        get { return _player; }
-        private set { _player = value; }
-    }
+    
+    public Player player { get; private set; }
 
     [HideInInspector]
     public InputManager input;
@@ -28,7 +24,7 @@ public class PlayerControls : MonoBehaviour {
 
     // Required variables for detecting ground collisions
     private float jumpCooldown = 0;
-    private static readonly int groundLayer = 11;
+    public static readonly int groundLayer = 11;
     private static readonly int groundLayerMask = 1 << groundLayer;
     private static readonly float maxGroundDistance = 0.5f;
     private bool touchedGround;
@@ -131,8 +127,10 @@ public class PlayerControls : MonoBehaviour {
             touchedGround = true;
     }
 
+#if UNITY_EDITOR //Editor only tag
     private void OnDrawGizmosSelected() {
         Gizmos.color = Color.red;
         Gizmos.DrawSphere(transform.position + Vector3.down * CheckGroundDistance(), floorCollider.bounds.extents.y);
     }
+#endif
 }

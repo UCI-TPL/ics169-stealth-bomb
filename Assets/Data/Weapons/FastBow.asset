@@ -23,5 +23,5 @@ MonoBehaviour:
   chargeTime: 0
   chargeLevels: 3
   numProj: 3
-  projSpeed: 100
+  projSpeed: 5
   damage: 35

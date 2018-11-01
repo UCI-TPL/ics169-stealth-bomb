@@ -3,12 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerStats : MonoBehaviour {
-
-    private Player _player;
-    public Player player {
-        get { return _player; }
-        private set { _player = value; }
-    }
+    
+    public Player player { get; private set; }
 
     private Dictionary<string, Property> stats = new Dictionary<string, Property>();
 

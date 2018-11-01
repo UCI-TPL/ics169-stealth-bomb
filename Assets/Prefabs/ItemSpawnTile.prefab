@@ -73,4 +73,7 @@ MonoBehaviour:
   itemList: {fileID: 11400000, guid: 6dd4dc727b43ccd42a8c085cd363fb9a, type: 2}
   spawnRateMin: 5
   spawnRateMax: 8
+  ItemContainerLayer:
+    serializedVersion: 2
+    m_Bits: 1024
   updateRate: 0.25
