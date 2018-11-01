@@ -10,6 +10,7 @@ public class ItemSpawnTile : Tile {
     public ItemList itemList;
     public float spawnRateMin;
     public float spawnRateMax;
+    public LayerMask ItemContainerLayer;
 
     private float lastSpawnTime;
     private float cooldown;
@@ -69,5 +70,10 @@ public class ItemSpawnTile : Tile {
     // Destroy the Spawner as soon as the ground under it is decaying
     protected override void BreakingEffect(float duration) {
         Destroy(gameObject);
+    }
+
+    private void OnTriggerStay(Collider other) {
+        if (other.gameObject.GetComponent<ItemContainer>() != null)
+            ResetCooldown();
     }
 }

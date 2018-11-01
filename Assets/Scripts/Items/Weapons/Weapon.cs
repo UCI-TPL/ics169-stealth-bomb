@@ -12,6 +12,7 @@ public abstract class Weapon {
     internal Player player; // Player that this weapon is attached to
 
     internal bool isCharging = false;
+    internal int numCharging = 0;// This is how many charging coroutines are active at once, This allows us to limit to one charge
     private bool overrideChargeUpdate = false;
 
     public Weapon() { }
@@ -39,10 +40,12 @@ public abstract class Weapon {
 
     // Coroutine to repetedly call OnChargingUpdate while weapon is charging
     private IEnumerator ChargingUpdate() {
-        while (isCharging) {
+        ++numCharging;
+        while (isCharging && numCharging == 1) {
             OnChargingUpdate();
             yield return null;
         }
+        --numCharging;
     }
 
     // OnChargingUpdate is called once per frame while the weapon is charging

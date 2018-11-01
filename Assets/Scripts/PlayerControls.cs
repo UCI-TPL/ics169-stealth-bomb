@@ -27,14 +27,15 @@ public class PlayerControls : MonoBehaviour {
     private bool allowMovement = true;
 
     // Required variables for detecting ground collisions
+    private float jumpCooldown = 0;
     private static readonly int groundLayer = 11;
     private static readonly int groundLayerMask = 1 << groundLayer;
+    private static readonly float maxGroundDistance = 0.5f;
     private bool touchedGround;
     public bool isGrounded {
         get {
             if (touchedGround) {
-                Vector3 startPos = floorCollider.transform.position + Vector3.down * floorCollider.bounds.extents.y;
-                if (Physics.Linecast(transform.position, startPos + Vector3.down * 0.1f, groundLayerMask)) {
+                if (CheckGroundDistance() < maxGroundDistance) {
                     return true;
                 }
                 touchedGround = false;
@@ -70,6 +71,8 @@ public class PlayerControls : MonoBehaviour {
     // Perform movement every physics update
     private void FixedUpdate() {
         Move(isGrounded ? player.stats.moveSpeed : player.stats.airSpeed);
+        if (input.controllers[player.playerNumber].jump.Pressed)
+            Jump();
     }
 
     // Rotate the player's facing direction
@@ -78,8 +81,6 @@ public class PlayerControls : MonoBehaviour {
         Vector3 scaledVector = (horizontalVector.y * forward) + (horizontalVector.x * right);
         if (scaledVector != Vector3.zero)
             transform.forward = scaledVector;
-        if (input.controllers[player.playerNumber].jump.Pressed)
-            Jump();
     }
 
     // Move the player using the the controller's move input scaled by the provided speed
@@ -91,9 +92,10 @@ public class PlayerControls : MonoBehaviour {
 
     // Attempt to perform a jump
     public void Jump() {
-        if (allowMovement && isGrounded) { //Checking if on the ground and movement is allowed
+        if (allowMovement && isGrounded && jumpCooldown < Time.time) { //Checking if on the ground and movement is allowed
             rb.AddForce(Vector3.up * player.stats.jumpForce, ForceMode.Impulse);
             touchedGround = false;
+            jumpCooldown = 0.1f + Time.time;
         }
     }
 
@@ -118,9 +120,19 @@ public class PlayerControls : MonoBehaviour {
         allowMovement = true;
     }
 
+    private float CheckGroundDistance() {
+        RaycastHit hit; // Create a SphereCast below the player and check the distance to the ground, if none return infinity;
+        return Physics.SphereCast(transform.position, floorCollider.bounds.extents.y, Vector3.down, out hit, 5f, groundLayerMask, QueryTriggerInteraction.Ignore) ? hit.distance : float.PositiveInfinity;
+    }
+
     // Check the the player has collided with the ground
     private void OnCollisionStay(Collision collision) {
-        if (collision.gameObject.layer == groundLayer)
+        if (collision.gameObject.layer == groundLayer && collision.contacts[0].thisCollider == floorCollider)
             touchedGround = true;
+    }
+
+    private void OnDrawGizmosSelected() {
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(transform.position + Vector3.down * CheckGroundDistance(), floorCollider.bounds.extents.y);
     }
 }
