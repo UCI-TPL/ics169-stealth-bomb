@@ -25,7 +25,7 @@ public class PlayerStats : MonoBehaviour {
         get { return GetStat("move_speed"); }
     }
     public float jumpForce {
-        get { return 9 + (GetStat("jump_force") - 1) * 3; } //1 return 9, 2 returns 12, 3 returns 15
+        get { return GetStat("jump_force"); } //9 + (GetStat("jump_force") - 1) * 3; } //1 return 9, 2 returns 12, 3 returns 15
     }
     public float maxHealth {
         get { return GetStat("max_health"); }
