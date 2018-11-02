@@ -130,7 +130,7 @@ TrailRenderer:
   m_ReflectionProbeUsage: 0
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 9b7a797f8e0ce5641830c7f217bc435e, type: 2}
+  - {fileID: 2100000, guid: 9c066b9fa49f21b49b98b7133756f03d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -150,7 +150,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 0.2
+  m_Time: 0.15
   m_Parameters:
     serializedVersion: 2
     widthMultiplier: 1
@@ -218,6 +218,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 54612792617523452}
+  trail: {fileID: 96182481458528356}
   speed: 1
   damage: 100
   collider: {fileID: 65851718138537896}

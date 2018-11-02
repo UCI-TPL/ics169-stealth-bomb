@@ -15,7 +15,12 @@ public class Player : MonoBehaviour {
     
     public float health { get; private set; }
 
+    public Color[] Colors = new Color[4]; //The player's color is based on thier player number
+    public Color playerColor { get { return Colors[playerNumber]; } set { Colors[playerNumber] = value; } }//used for the bullettrail
+
     private Rigidbody rb;
+
+    private Renderer rend;
 
     private List<Powerup> powerups = new List<Powerup>();
     
@@ -39,6 +44,11 @@ public class Player : MonoBehaviour {
         if (controller == null) // Check to ensure PlayerController component is present, since PlayerController is a dependency this will never happen, but just in case
             Debug.LogError(gameObject.name + " missing PlayerController Component");
         rb = GetComponent<Rigidbody>();
+        rend = GetComponent<Renderer>();
+        //if (Colors.Length == 0)
+        //    Colors[playerNumber] = Color.gray; //make sure the default color is gray and not black
+        rend.material.color = playerColor; //setting the player color based on playeNum 
+        
     }
 
     private void Start() {
