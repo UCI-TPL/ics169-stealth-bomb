@@ -7,7 +7,7 @@ using Vector3Extensions;
 
 public class TerrainManager : MonoBehaviour {
 
-    public Tile[,,] tileMap;
+    public TileMap tileMap;
     public float timer;
     private string pastLevel = null;
 
@@ -42,6 +42,8 @@ public class TerrainManager : MonoBehaviour {
     [Tooltip("Rate of checking tiles to destory, lower the laggier")]
     [Range(0.02f, 1f)]
     public float updateRate = 0.1f; // Set the update rate
+    [Tooltip("Delay between destruction of tiles in a column")]
+    public float pillarDestroyDelay = 0.05f;
 
     private Queue<TileDestroyCalc> TileDestroyQueue;
 
@@ -52,27 +54,31 @@ public class TerrainManager : MonoBehaviour {
 
     public void StartGame() {
         tileMap = ReadTileMap(); // Read Tile Map currently in scene into memory
-        if (tileMap == null || tileMap.Length == 0) { // If no map, create a random map
+        if (tileMap == null || tileMap.Tiles.Length == 0) { // If no map, create a random map
             CreateRandomTerrain c = GetComponent<CreateRandomTerrain>();
-            if (c != null)
+            if (c != null) {
                 c.GenerateTerrain();
+                tileMap = ReadTileMap();
+            }
             else
                 Debug.Log("No tile Map loaded and Random Terrain Component not included");
         }
-        center = new Vector2((tileMap.GetLength(0) - 1) / 2f, (tileMap.GetLength(2) - 1) / 2f); // diameter == numBlocks-1  EX: dist between 2 blocks is 1
+        center = new Vector2((tileMap.Tiles.GetLength(0) - 1) / 2f, (tileMap.Tiles.GetLength(2) - 1) / 2f); // diameter == numBlocks-1  EX: dist between 2 blocks is 1
         radius = center + new Vector2(collapseBuffer, collapseBuffer); // Add buffer to radius
         newRadius = radius;
 
-        TileDestroyQueue = CreateTileMapDestroyCalc(tileMap, center, collapseBuffer);
+        TileDestroyQueue = CreateTileMapDestroyCalc(tileMap.Tiles, center, collapseBuffer);
 
         Invoke("StartCountdown", timer);
     }
 
+    // Begin shrinking the terrain
     public void StartCountdown() {
         StartCoroutine("CollapseCircle", collapseTime);
-        //StartCoroutine("CollapseTerrain", collapseTime);
+        //StartCoroutine("CollapseRectangle", collapseTime);
     }
 
+    // Collapse the map in a shrinking circle over the timer parameter
     private IEnumerator CollapseCircle(float timer) {
         float endTimer = Time.time;
         do {
@@ -91,7 +97,8 @@ public class TerrainManager : MonoBehaviour {
         } while (TileDestroyQueue.Count > 0 && newRadius.x >= -collapseBuffer);
     }
 
-    private IEnumerator CollapseTerrain(float timer) { // Process destroying the terrain over a set time
+    // Collapse the map in a shrinking rectangle over the timer parameter
+    private IEnumerator CollapseRectangle(float timer) { // Process destroying the terrain over a set time
         float endTimer = Time.time;
         Vector2 tPerS = radius / timer; // Tiles covered per sec
         float ratio; // declare outside for while loop condition
@@ -99,8 +106,8 @@ public class TerrainManager : MonoBehaviour {
             ratio = 1 - (Time.time - endTimer) / timer; // ratio to shrink stage based on timer
             newRadius = radius * ratio;
 
-            for (int col = 0; col < tileMap.GetLength(0); ++col) { // check chance to destroy for every block
-                for (int row = 0; row < tileMap.GetLength(2); ++row) {
+            for (int col = 0; col < tileMap.Tiles.GetLength(0); ++col) { // check chance to destroy for every block
+                for (int row = 0; row < tileMap.Tiles.GetLength(2); ++row) {
                     Vector2 distToRing = (new Vector2(col, row) - center).Abs() - newRadius; // Tile distance from collapsing area
                     Vector2 tileProb = (distToRing + new Vector2(collapseBuffer, collapseBuffer)) / (collapseBuffer * 2); // Probability of tile collapsing based on distance from ring of collapse
                     if (UnityEngine.Random.Range(0f, 1f) < Mathf.Max(tileProb.x * tPerS.x, tileProb.y * tPerS.y, 0) * updateRate * 4 || Mathf.Max(distToRing.x, distToRing.y) > collapseBuffer) // Check chance to collapse or if block is too far out
@@ -118,6 +125,7 @@ public class TerrainManager : MonoBehaviour {
         LoadLevel("TowerLevel");
     }
 
+    // Display a debug area in the scene view showing current state of map collapsing
     private void DebugShrinkTerrain(Vector3 center, Vector3 radius) { // Display visual area of where shrinking is happening in editor
         Vector3 botleft = center - radius - new Vector3(collapseBuffer, 0, collapseBuffer) + Tile.TileOffset;
         Vector3 topRight = center + radius + new Vector3(collapseBuffer, 0, collapseBuffer) + Tile.TileOffset;
@@ -133,12 +141,13 @@ public class TerrainManager : MonoBehaviour {
         Debug.DrawLine(botleft, new Vector3(topRight.x, botleft.y, botleft.z), Color.green, 0.1f, false);
     }
 
-    private static Queue<TileDestroyCalc> CreateTileMapDestroyCalc(Tile[,,] tileMap, Vector2 center, float bufferRadius) {
-        TileDestroyCalc[] toSort = new TileDestroyCalc[tileMap.GetLength(0) * tileMap.GetLength(2)];
-        for (int col = 0; col < tileMap.GetLength(0); ++col) { // Loop through every X and Z position in the tile map
-            for (int row = 0; row < tileMap.GetLength(2); ++row) {
+    // Reads all the tiles and returns an order for when every tile will collapse
+    private static Queue<TileDestroyCalc> CreateTileMapDestroyCalc(Tile[,,] tiles, Vector2 center, float bufferRadius) {
+        TileDestroyCalc[] toSort = new TileDestroyCalc[tiles.GetLength(0) * tiles.GetLength(2)];
+        for (int col = 0; col < tiles.GetLength(0); ++col) { // Loop through every X and Z position in the tile map
+            for (int row = 0; row < tiles.GetLength(2); ++row) {
                 Vector2Int pos = new Vector2Int(col, row);
-                toSort[row * tileMap.GetLength(0) + col] = new TileDestroyCalc(pos, (pos - center).magnitude + UnityEngine.Random.Range(-bufferRadius, bufferRadius)); // Get distance from center plus some noise
+                toSort[row * tiles.GetLength(0) + col] = new TileDestroyCalc(pos, (pos - center).magnitude + UnityEngine.Random.Range(-bufferRadius, bufferRadius)); // Get distance from center plus some noise
             }
         }
         Array.Sort(toSort);
@@ -148,22 +157,25 @@ public class TerrainManager : MonoBehaviour {
         return result;
     }
 
+    // Destroys all tiles in that z and x position
     private IEnumerator DestroyPillar(int col, int row) {
-        for (int height = 0; height < tileMap.GetLength(1); ++height) {
-            if (tileMap[col, height, row] != null)
-                tileMap[col, height, row].Destroy(warningTimer); // Destroy tile after warning time
-            yield return new WaitForSeconds(0.05f);
+        for (int height = 0; height < tileMap.Tiles.GetLength(1); ++height) {
+            if (tileMap.Tiles[col, height, row] != null)
+                tileMap.Tiles[col, height, row].Destroy(warningTimer); // Destroy tile after warning time
+            yield return new WaitForSeconds(pillarDestroyDelay);
         }
     }
 
-    public Tile[,,] ReadTileMap() {
+    // Returns the TileMap currently loading in the scene
+    public TileMap ReadTileMap() {
         GameObject g = GameObject.Find("Tile Map");
         if (g != null)
-            return TileMap.ReadMap(g.transform);
+            return new TileMap(g.transform);
         return null;
     }
 
-    public void LoadLevel(string name) { // Removes the old level and loads in new level
+    // Removes the old level and loads in new level
+    public void LoadLevel(string name) {
         GameObject g = GameObject.Find("Tile Map");
         if (g != null)
             Destroy(g);
@@ -173,7 +185,8 @@ public class TerrainManager : MonoBehaviour {
         StartCoroutine("LoadLevelAsync", name);
     }
 
-    private IEnumerator LoadLevelAsync(string name) { // Loads scene and starts game once finished
+    // Loads scene and starts game once finished
+    private IEnumerator LoadLevelAsync(string name) {
         AsyncOperation asyncLoadLevel = SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
         while (!asyncLoadLevel.isDone) {
             yield return new WaitForEndOfFrame();
@@ -181,10 +194,12 @@ public class TerrainManager : MonoBehaviour {
         StartGame();
     }
 
-    private void DeleteOldLevel() { // Remove old scene
+    // Remove old scene
+    private void DeleteOldLevel() {
         SceneManager.UnloadSceneAsync(pastLevel);
     }
 
+    // Object containing calculations for determining what order tiles are destroyed in
     private class TileDestroyCalc : IComparable {
         public float destroyDistance;
         public Vector2Int tilePos;

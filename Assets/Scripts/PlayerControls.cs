@@ -128,6 +128,7 @@ public class PlayerControls : MonoBehaviour {
     }
 
 #if UNITY_EDITOR //Editor only tag
+    // Draw the groundcheck spherecast under the player
     private void OnDrawGizmosSelected() {
         Gizmos.color = Color.red;
         Gizmos.DrawSphere(transform.position + Vector3.down * CheckGroundDistance(), floorCollider.bounds.extents.y);

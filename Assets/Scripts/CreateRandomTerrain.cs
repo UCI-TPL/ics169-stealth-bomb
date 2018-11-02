@@ -30,7 +30,7 @@ public class CreateRandomTerrain : MonoBehaviour {
     }
     
     public void GenerateTerrain() {
-        tileMap = TerrainManager.terrainManager.tileMap = new Tile[size.x, size.y, size.z];
+        tileMap = new Tile[size.x, size.y, size.z];
         GenerateFloor();
         GenerateWalls(wallProb);
     }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemSpawnTile : Tile {
+public class ItemTile : Tile {
 
     public GameObject itemContainer;
     public GameObject powerupContainer;
@@ -19,6 +19,11 @@ public class ItemSpawnTile : Tile {
     }
     [SerializeField]
     private float updateRate = 0.25f;
+
+    // Set tile Type
+    private void Awake() {
+        type = Type.Item;
+    }
 
     private void Start() {
         if (itemList == null) {

@@ -4,8 +4,18 @@ using UnityEngine;
 using Vector3Extensions;
 
 public class TileMap {
-    
-    public static Tile[,,] ReadMap(Transform parentContainer) {
+
+    public Tile[,,] Tiles { get; private set; }
+    public List<Tile> SpawnTiles { get; private set; }
+    public List<Tile> ItemTiles { get; private set; }
+
+    public TileMap(Transform parentContainer) {
+        SpawnTiles = new List<Tile>();
+        ItemTiles = new List<Tile>();
+        Tiles = ReadMap(parentContainer);
+    }
+
+    public Tile[,,] ReadMap(Transform parentContainer) {
         Vector3Int mapSize = Vector3Int.one * -1;
         foreach (Transform t in parentContainer) {
             Tile tile = t.GetComponent<Tile>();
@@ -13,14 +23,23 @@ public class TileMap {
                 mapSize = Max(mapSize, tile.position.Round());
         }
         mapSize += Vector3Int.one;
-        Tile[,,] tileMap = new Tile[mapSize.x, mapSize.y, mapSize.z];
+        Tile[,,] tiles = new Tile[mapSize.x, mapSize.y, mapSize.z];
         foreach (Transform t in parentContainer) {
             Tile tile = t.GetComponent<Tile>();
-            Vector3Int pos = tile.position.Round();
-            if (tile != null)
-                tileMap[pos.x, pos.y, pos.z] = tile;
+            if (tile != null) {
+                Vector3Int pos = tile.position.Round();
+                tiles[pos.x, pos.y, pos.z] = tile;
+                switch(tile.type) {
+                    case Tile.Type.SpawnPoint:
+                        SpawnTiles.Add(tile);
+                        break;
+                    case Tile.Type.Item:
+                        ItemTiles.Add(tile);
+                        break;
+                }
+            }
         }
-        return tileMap;
+        return tiles;
     }
 
     private static Vector3Int Max(Vector3Int v1, Vector3Int v2) {
