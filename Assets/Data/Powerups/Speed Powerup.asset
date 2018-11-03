@@ -17,7 +17,7 @@ MonoBehaviour:
   type: 1
   modifiers:
   - name: move_speed
-    value: 0.5
+    value: 0.3
     type: 1
   instance:
     data: {fileID: 11400000}

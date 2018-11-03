@@ -25,14 +25,19 @@ public class InputManager : MonoBehaviour {
 
     public Controller[] controllers = new Controller[4];
 
+    // Used to scale controller joystick inputs to camera angle
+    protected Vector2 cameraScale;
+
     // Set up controllers
     private void Awake() {
+        //controllers[0] = new MouseKeyboard();
         for (int i = 0; i < 4; ++i)
             controllers[i] = new XboxController(i);
     }
 
     // Update every controller every frame
     private void Update() {
+        cameraScale = new Vector2(Mathf.Sin(Mathf.Deg2Rad * Camera.main.transform.eulerAngles.x), 1);
         for (int i = 0; i < 4; ++i)
             controllers[i].UpdateController();
     }
@@ -41,15 +46,24 @@ public class InputManager : MonoBehaviour {
     public class MouseKeyboard : Controller {
 
         public override Vector2 MoveVector() {
-            throw new System.NotImplementedException();
+            return new Vector2((Input.GetKey(KeyCode.D) ? 1 : 0) + (Input.GetKey(KeyCode.A) ? -1 : 0), (Input.GetKey(KeyCode.W) ? 1 : 0) + (Input.GetKey(KeyCode.S) ? -1 : 0)).normalized;
         }
 
         public override Vector2 AimVector() {
-            throw new System.NotImplementedException();
+            return MoveVector();
         }
 
         public override void UpdateController() {
-            throw new System.NotImplementedException();
+            if (Input.GetKeyDown(KeyCode.Space))
+                jump.OnDown.Invoke();
+            if (Input.GetKeyUp(KeyCode.Space))
+                jump.OnUp.Invoke();
+            jump.Pressed = Input.GetKey(KeyCode.Space);
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+                attack.OnDown.Invoke();
+            if (Input.GetKeyUp(KeyCode.Mouse0))
+                attack.OnUp.Invoke();
+            attack.Pressed = Input.GetKey(KeyCode.Mouse0);
         }
 
         // Do nothing, because a keyboard can't vibrate. Atleast mine can't!
@@ -85,11 +99,11 @@ public class InputManager : MonoBehaviour {
         public JoyStickCode aimJoyStick { get; private set; }
 
         public override Vector2 MoveVector() {
-            return JoyStickMap[moveJoyStick]();
+            return (JoyStickMap[moveJoyStick]() * inputManager.cameraScale).normalized * JoyStickMap[moveJoyStick]().magnitude;
         }
 
         public override Vector2 AimVector() {
-            return JoyStickMap[aimJoyStick]();
+            return (JoyStickMap[aimJoyStick]() * inputManager.cameraScale).normalized;
         }
 
         // Add a button mapping to the specified action

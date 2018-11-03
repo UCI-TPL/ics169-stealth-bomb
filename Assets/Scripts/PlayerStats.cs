@@ -9,7 +9,7 @@ public class PlayerStats : MonoBehaviour {
     private Dictionary<string, Property> stats = new Dictionary<string, Property>();
 
     private void Awake() {
-        AddStat("move_speed", 10); //blocks per second
+        AddStat("move_speed", 7.5f); //blocks per second
         AddStat("air_speed", 50);  //percent of movespeed
         AddStat("jump_force", 1); //blocks per jump (1,2,3)
         AddStat("max_health", 100);

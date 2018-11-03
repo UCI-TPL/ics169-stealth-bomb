@@ -15,9 +15,16 @@ namespace Vector3Extensions {
             return new Vector3Int(Mathf.RoundToInt(v3.x), Mathf.RoundToInt(v3.y), Mathf.RoundToInt(v3.z));
         }
 
-        // Returns a new Vector3Int with all the values of the input Vector3 rounded to the nearest integer
+        // Returns a new Vector3 with all the values of the input Vector3 square rooted
         public static Vector3 Sqrt(this Vector3 v3) {
             return new Vector3(Mathf.Sqrt(v3.x), Mathf.Sqrt(v3.y), Mathf.Sqrt(v3.z));
+        }
+
+        // Returns a new Vector3Int with all the values of the input Vector3 rounded to the nearest integer
+        public static Vector3 Scaled(this Vector3 v3, Vector3 other) {
+            Vector3 result = new Vector3(v3.x, v3.y, v3.z);
+            result.Scale(other);
+            return result;
         }
     }
 

@@ -15,13 +15,13 @@ public class PlayerControls : MonoBehaviour {
     public GameObject ShootPoint;
     public Collider floorCollider;
     public Collider wallCollider;
+    public float friction = 10f;
     
     public float jumpGravityMultiplier = 0.5f;
 
     // Used to scale movement to the camera's direction
     private Vector3 forward;
     private Vector3 right;
-    private Vector2 cameraScale;
 
     // For disabling movement while performing a dodge or potentially while stunned
     private bool allowMovement = true;
@@ -29,6 +29,7 @@ public class PlayerControls : MonoBehaviour {
     // Required variables for jumping and detecting ground collisions
     private float jumpCooldown = 0;
     private bool jumped = false;
+    private bool jumpedReleased = true;
     public static readonly int groundLayer = 11;
     private static readonly int groundLayerMask = 1 << groundLayer;
     private static readonly float maxGroundDistance = 0.5f;
@@ -64,24 +65,26 @@ public class PlayerControls : MonoBehaviour {
         right = Camera.main.transform.right;
         right.Scale(new Vector3(1, 0, 1));
         right.Normalize();
-        cameraScale = new Vector2(Mathf.Sin(Mathf.Deg2Rad * Camera.main.transform.eulerAngles.x), 1);
 
         input.controllers[player.playerNumber].attack.OnDown.AddListener(ActivateAttack);
         input.controllers[player.playerNumber].attack.OnUp.AddListener(ReleaseAttack);
-        input.controllers[player.playerNumber].jump.OnDown.AddListener(Jump);
+        input.controllers[player.playerNumber].jump.OnUp.AddListener(delegate { jumpedReleased = true; });
     }
 
     // Perform movement every physics update
     private void FixedUpdate() {
         Move(isGrounded ? player.stats.moveSpeed : player.stats.airSpeed);
-        if (jumped && input.controllers[player.playerNumber].jump.Pressed && rb.velocity.y > 0) {
-            rb.AddForce(Physics.gravity * jumpGravityMultiplier - Physics.gravity, ForceMode.Acceleration);
+        if (input.controllers[player.playerNumber].jump.Pressed) {
+            Jump();
+            if (jumped && rb.velocity.y > 0) {
+                rb.AddForce(Physics.gravity * jumpGravityMultiplier - Physics.gravity, ForceMode.Acceleration);
+            }
         }
     }
 
     // Rotate the player's facing direction
     private void Update() {
-        Vector2 horizontalVector = (input.controllers[player.playerNumber].AimVector() * cameraScale).normalized;
+        Vector2 horizontalVector = input.controllers[player.playerNumber].AimVector();
         Debug.DrawRay(transform.position, transform.forward*100, Color.white);
         Vector3 scaledVector = (horizontalVector.y * forward) + (horizontalVector.x * right);
         if (scaledVector != Vector3.zero)
@@ -90,16 +93,30 @@ public class PlayerControls : MonoBehaviour {
 
     // Move the player using the the controller's move input scaled by the provided speed
     private void Move(float speed) {
-        Vector2 horizontalVector = (input.controllers[player.playerNumber].MoveVector() * cameraScale).normalized * speed * input.controllers[player.playerNumber].MoveVector().magnitude;
+        Vector2 horizontalVector = input.controllers[player.playerNumber].MoveVector() * speed;
         Vector3 scaledVector = (horizontalVector.y * forward) + (horizontalVector.x * right);
-        rb.velocity = new Vector3(scaledVector.x, rb.velocity.y, scaledVector.z);
+        if (isGrounded) { // If grounded apply friction
+            Vector3 frictionVector = -friction * rb.velocity; // Friction is a negative percentage of current velocity
+            Debug.DrawRay(floorCollider.transform.position + Vector3.down * floorCollider.bounds.extents.y, frictionVector, Color.blue);
+            Debug.DrawRay(floorCollider.transform.position + Vector3.down * floorCollider.bounds.extents.y, scaledVector, Color.green);
+            frictionVector -= Vector3.Project(frictionVector, scaledVector); // Scale friction to remove the forward direction, so friction doesnt slow player in moving direction
+            Debug.DrawRay(floorCollider.transform.position + Vector3.down * floorCollider.bounds.extents.y, frictionVector, Color.red);
+            rb.velocity += frictionVector * Time.fixedDeltaTime; // Add friction to velocity
+        }
+        if (allowMovement) {
+            Vector3 oldVelocity = rb.velocity.Scaled(new Vector3(1, 0, 1));
+            Vector3 newVelocity = rb.velocity + scaledVector * Time.fixedDeltaTime * 5; // Clamp velocity to either max speed or current speed(if player was launched)
+            newVelocity = Vector3.ClampMagnitude(new Vector3(newVelocity.x, 0, newVelocity.z), Mathf.Max(oldVelocity.magnitude, speed * input.controllers[player.playerNumber].MoveVector().magnitude + 0.1f) - 0.1f);
+            rb.velocity = new Vector3(newVelocity.x, rb.velocity.y, newVelocity.z);
+        }
     }
 
     // Attempt to perform a jump
     public void Jump() {
-        if (allowMovement && isGrounded) { //Checking if on the ground and movement is allowed
+        if (jumpedReleased && allowMovement && isGrounded) { //Checking if on the ground and movement is allowed
+            jumpedReleased = false;
             jumped = true;
-            rb.velocity = (2 * -Physics.gravity * (player.stats.jumpForce + 0.2f) * jumpGravityMultiplier).Sqrt();
+            rb.velocity = rb.velocity += (2 * -Physics.gravity * (player.stats.jumpForce + 0.2f) * jumpGravityMultiplier).Sqrt();
             touchedGround = false;
             jumpCooldown = 0.1f + Time.time;
         }

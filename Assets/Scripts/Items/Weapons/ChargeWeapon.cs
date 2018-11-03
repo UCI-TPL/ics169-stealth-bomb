@@ -19,7 +19,7 @@ public class ChargeWeapon : Weapon {
 
     public ChargeWeapon(WeaponData weaponData, Player player) : base(weaponData, player, Type.Charge) {
         data = (ChargeWeaponData)weaponData;
-        rend = player.GetComponent<Renderer>();
+        rend = player.rend;
         startColor = rend.material.color;
     }
 
