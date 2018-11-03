@@ -1,267 +1,166 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using XInputDotNetPure;
+using Vector3Extensions;
 
+[RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour {
-
-    private Player _player;
+    
+    public Player player { get; private set; }
 
     [HideInInspector]
     public InputManager input;
-    public Player player {
-        get { return _player; }
-        private set { _player = value; }
+
+    private Rigidbody rb;
+    public GameObject ShootPoint;
+    public Collider floorCollider;
+    public Collider wallCollider;
+    public float friction = 10f;
+    
+    public float jumpGravityMultiplier = 0.5f;
+
+    // Used to scale movement to the camera's direction
+    private Vector3 forward;
+    private Vector3 right;
+
+    // For disabling movement while performing a dodge or potentially while stunned
+    private bool allowMovement = true;
+
+    // Required variables for jumping and detecting ground collisions
+    private float jumpCooldown = 0;
+    private bool jumped = false;
+    private bool jumpedReleased = true;
+    public static readonly int groundLayer = 11;
+    private static readonly int groundLayerMask = 1 << groundLayer;
+    private static readonly float maxGroundDistance = 0.5f;
+    private bool touchedGround;
+    public bool isGrounded {
+        get {
+            if (touchedGround) {
+                if (CheckGroundDistance() < maxGroundDistance) {
+                    return true;
+                }
+                touchedGround = false;
+            }
+            return false;
+        }
     }
 
+    // Initialize referances
     private void Awake() {
         player = GetComponent<Player>();
         if (player == null) // Check to ensure Player component is present, since PlayerStats is a dependency of Player this will never happen, but just in case
             Debug.LogError(gameObject.name + " missing Player Component");
-
-        input = GameObject.FindGameObjectWithTag("game-manager").GetComponentInChildren<InputManager>();
+        input = InputManager.inputManager;
         if (input == null)
             Debug.LogError("Input Manager does not exist");
+        rb = GetComponent<Rigidbody>();
     }
 
-    [Tooltip("The sets Dodge to the teleportation-like AddForce with ForceMode.Impuse")]
-    public bool ImpulseDodge = false;
+    // Set up controllers
+    private void Start() {
+        forward = Camera.main.transform.forward;
+        forward.Scale(new Vector3(1, 0, 1));
+        forward.Normalize();
+        right = Camera.main.transform.right;
+        right.Scale(new Vector3(1, 0, 1));
+        right.Normalize();
 
-    [Tooltip("Turn on to use lerping for player rotation instead of instant snapping")]
-    public bool enableLerping = false;
-    public float lerpfrac = 0.5f;
-    private bool attackDown; // This should be handled in InputManager
-    float rollTime = 0.0f; //to check if the player is currently rolling
-    //float holdEnd = 0.0f;
-    float speed;
+        input.controllers[player.playerNumber].attack.OnDown.AddListener(ActivateAttack);
+        input.controllers[player.playerNumber].attack.OnUp.AddListener(ReleaseAttack);
+        input.controllers[player.playerNumber].jump.OnUp.AddListener(delegate { jumpedReleased = true; });
+    }
 
-    //bool isGrounded = true;
-    bool movementAllowed = true; //used to lock movement while dodging
-    bool rotationInput = false;
-    bool updatingPhysics = false;
-    bool moveCalled = false;
-    bool dodging = false;
+    // Perform movement every physics update
+    private void FixedUpdate() {
+        Move(isGrounded ? player.stats.moveSpeed : player.stats.airSpeed);
+        if (input.controllers[player.playerNumber].jump.Pressed) {
+            Jump();
+            if (jumped && rb.velocity.y > 0) {
+                rb.AddForce(Physics.gravity * jumpGravityMultiplier - Physics.gravity, ForceMode.Acceleration);
+            }
+        }
+    }
 
-    private Vector3 _inputs = Vector3.zero;
-    private Vector3 mostRecentLeftStickInput = Vector3.forward; //the most recent left stick input, used for dodging
-    private Vector2 inputMoveVector = Vector2.zero;
-    private Vector2 inputRotationVector = Vector2.zero;
-    Vector3 forward, right;
-    Vector3 rotationDirection; //used for Dodging
+    // Rotate the player's facing direction
+    private void Update() {
+        Vector2 horizontalVector = input.controllers[player.playerNumber].AimVector();
+        Debug.DrawRay(transform.position, transform.forward*100, Color.white);
+        Vector3 scaledVector = (horizontalVector.y * forward) + (horizontalVector.x * right);
+        if (scaledVector != Vector3.zero)
+            transform.forward = scaledVector;
+    }
 
-    public GameObject ShootPoint;
-    public Transform GroundCheck; //this is used for linecasting for Jump
-    public Rigidbody rb;
-    [Tooltip("Represents which player this is. Only put in 1-4. Do not put 0!!! This attribute must have a value in order to work or take in input properly!!! ")]
-    public int playerNum;
+    // Move the player using the the controller's move input scaled by the provided speed
+    private void Move(float speed) {
+        Vector2 horizontalVector = input.controllers[player.playerNumber].MoveVector() * speed;
+        Vector3 scaledVector = (horizontalVector.y * forward) + (horizontalVector.x * right);
+        if (isGrounded) { // If grounded apply friction
+            Vector3 frictionVector = -friction * rb.velocity; // Friction is a negative percentage of current velocity
+            Debug.DrawRay(floorCollider.transform.position + Vector3.down * floorCollider.bounds.extents.y, frictionVector, Color.blue);
+            Debug.DrawRay(floorCollider.transform.position + Vector3.down * floorCollider.bounds.extents.y, scaledVector, Color.green);
+            frictionVector -= Vector3.Project(frictionVector, scaledVector); // Scale friction to remove the forward direction, so friction doesnt slow player in moving direction
+            Debug.DrawRay(floorCollider.transform.position + Vector3.down * floorCollider.bounds.extents.y, frictionVector, Color.red);
+            rb.velocity += frictionVector * Time.fixedDeltaTime; // Add friction to velocity
+        }
+        if (allowMovement) {
+            Vector3 oldVelocity = rb.velocity.Scaled(new Vector3(1, 0, 1));
+            Vector3 newVelocity = rb.velocity + scaledVector * Time.fixedDeltaTime * 5; // Clamp velocity to either max speed or current speed(if player was launched)
+            newVelocity = Vector3.ClampMagnitude(new Vector3(newVelocity.x, 0, newVelocity.z), Mathf.Max(oldVelocity.magnitude, speed * input.controllers[player.playerNumber].MoveVector().magnitude + 0.1f) - 0.1f);
+            rb.velocity = new Vector3(newVelocity.x, rb.velocity.y, newVelocity.z);
+        }
+    }
 
-    // private variables used to store xbox controller input info
-    private PlayerIndex playerIdx;
-    private GamePadState currentState;
-    private GamePadState prevState;
+    // Attempt to perform a jump
+    public void Jump() {
+        if (jumpedReleased && allowMovement && isGrounded) { //Checking if on the ground and movement is allowed
+            jumpedReleased = false;
+            jumped = true;
+            rb.velocity = rb.velocity += (2 * -Physics.gravity * (player.stats.jumpForce + 0.2f) * jumpGravityMultiplier).Sqrt();
+            touchedGround = false;
+            jumpCooldown = 0.1f + Time.time;
+        }
+    }
 
-    private string playerPrefix;
+    // On Attack down
+    public void ActivateAttack() {
+        player.weapon.Activate();
+    }
 
+    // On Attack up
+    public void ReleaseAttack() {
+        player.weapon.Release();
+    }
 
-    //void Start() {
-    //    input.connectedControllers[playerNum - 1].LT_Pressed.AddListener(Jump);
-    //    input.connectedControllers[playerNum - 1].A_Pressed.AddListener(Jump); 
-    //    input.connectedControllers[playerNum - 1].B_Pressed.AddListener(Dodge);
-    //    input.connectedControllers[playerNum - 1].LB_Pressed.AddListener(Dodge);
-    //    input.connectedControllers[playerNum - 1].RT_Pressed.AddListener(InitiateAttack);
-    //    input.connectedControllers[playerNum - 1].RT_Released.AddListener(FinishAttack);
-    //    // input.connectedControllers[playerNum - 1].LStick.AddListener(GetMoveData);
-    //    input.connectedControllers[playerNum - 1].RStick.AddListener(RotatePlayer);
+    // Restrict the player's movement for a duration
+    public void DisableMovement(float duration) {
+        StartCoroutine(DisableMovementTimer(duration));
+    }
 
-    //    speed = player.stats.moveSpeed;
-    //    rb = GetComponent<Rigidbody>();
-    //    playerIdx = (PlayerIndex) (playerNum - 1);
-    //    forward = Camera.main.transform.forward;
-    //    forward.y = 0;
-    //    forward = Vector3.Normalize(forward);
-    //    right = Quaternion.Euler(new Vector3(0, 90, 0)) * forward; // This right vector is -45 degrees from the world X axis 
-    //}
+    private IEnumerator DisableMovementTimer(float duration) {
+        allowMovement = false;
+        yield return new WaitForSeconds(duration);
+        allowMovement = true;
+    }
 
-    //// void MoveWASD(string horizontal, string vertical) {
-    ////     Vector3 rightMovement = right * Input.GetAxis(horizontal);
-    ////     Vector3 upMovement = forward * Input.GetAxis(vertical);
-    ////     Vector3 direction = rightMovement + upMovement;
-    ////     transform.position += direction * player.stats.moveSpeed * Time.fixedDeltaTime;
-    //// }
+    private float CheckGroundDistance() {
+        RaycastHit hit; // Create a SphereCast below the player and check the distance to the ground, if none return infinity;
+        return Physics.SphereCast(transform.position, floorCollider.bounds.extents.y, Vector3.down, out hit, 5f, groundLayerMask, QueryTriggerInteraction.Ignore) ? hit.distance : float.PositiveInfinity;
+    }
 
-    //void GetMoveData() {
-    //    inputMoveVector = input.getLeftStickData(playerNum - 1);
-    //    moveCalled = true;
-    //}
+    // Check the the player has collided with the ground
+    private void OnCollisionStay(Collision collision) {
+        if (jumpCooldown < Time.time && collision.gameObject.layer == groundLayer && collision.contacts[0].thisCollider == floorCollider) {
+            touchedGround = true;
+            jumped = false;
+        }
+    }
 
-    //void Move()
-    //{
-    //    GetMoveData();
-    //    Vector3 rightMovement = right * inputMoveVector.x;
-    //    Vector3 upMovement = forward * inputMoveVector.y;
-    //    _inputs = (rightMovement + upMovement);
-
-    //    if (_inputs.magnitude > 1f) {
-    //        _inputs = _inputs.normalized;
-    //    }
-    //    if(_inputs != Vector3.zero)
-    //    {
-    //        mostRecentLeftStickInput = _inputs.normalized;
-    //    }
-
-    //    // this now handles default player rotation when there is no player input for rotation
-    //    if (!rotationInput) {
-    //        rightMovement = right * Time.deltaTime * inputMoveVector.x;
-    //        upMovement = forward * Time.deltaTime * inputMoveVector.y;
-
-    //        computeRotation(rightMovement, upMovement);
-    //    }
-
-    //    moveCalled = false;
-    //}
-
-    //bool IsGrounded() //uses raycasting to decide whether the layer can jump or not
-    //{
-    //    return Physics.Raycast(GroundCheck.position, GroundCheck.TransformDirection(Vector3.down),0.05f); //GroundCheck is set to the bottom of the player
-    //    //return Physics.Linecast(transform.position, GroundCheck.position); //Linecast was used first but it got harder once there were two colliders (it was detecting the sphere)
-    //}
-
-    //void Jump() {
-    //    if (movementAllowed && IsGrounded()) //Checking if on the ground
-    //    { 
-    //        speed = player.stats.airSpeed;
-    //        rb.AddForce(Vector3.up * player.stats.jumpForce, ForceMode.Impulse);
-    //        //isGrounded = false;
-    //    }
-    //}
-
-    //void Dodge()
-    //{
-    //    if (movementAllowed) 
-    //        StartCoroutine("Dodging");
-    //}
-
-    //IEnumerator Dodging()
-    //{
-    //    if(rollTime <= Time.time)
-    //    {
-    //        rollTime = Time.time + player.stats.dodgeTime + player.stats.dodgeRecharge; //Player has to wait for the dodge to recharge to avoid spamming
-    //        if(!ImpulseDodge) //move at a faster speed for a short while
-    //        {
-    //            dodging = true;
-    //            movementAllowed = false;
-    //            rotationInput = false;
-    //            speed = player.stats.moveSpeed * 2f;
-    //            yield return new WaitForSeconds(player.stats.dodgeTime / 2); //Just incase we want to make this a roll like Enter the Gungeon where the player is inviceable for half the roll
-    //            yield return new WaitForSeconds(player.stats.dodgeTime / 2); 
-    //            movementAllowed = true;
-    //            dodging = false;
-    //            rotationInput = true;
-    //            speed = player.stats.moveSpeed;
-    //        }
-    //        else //Add a force and zoom forward 
-    //        {
-    //            rb.AddForce( mostRecentLeftStickInput * 100, ForceMode.Impulse);
-    //        }
-    //    }
-
-    //}
-
-    //void InitiateAttack() {
-    //    // do i need to add a condition for !movementAllowed ?
-    //    if (!attackDown) {
-    //        player.weapon.Activate();
-    //        //Debug.Log(!attackDown);
-    //        attackDown = true;
-    //    }
-    //}
-
-    //void FinishAttack() {
-    //    // do i need to add a condition for !movementAllowed ?
-    //    if (attackDown) {
-    //        player.weapon.Release();
-    //        attackDown = false;
-    //    }
-    //}
-    //private void OnCollisionEnter(Collision col) {
-    //    /*
-    //    foreach (ContactPoint contact in col.contacts)
-    //    {
-    //        Debug.Log(contact.thisCollider.name);
-    //        Debug.Log(contact.otherCollider.name);
-    //    }
-    //    */
-    //}
-
-    //void GetRotationData() {
-    //    inputRotationVector = input.getRightStickData(playerNum - 1);
-    //}
-
-    ///* Helper function that does the end computations for player rotation. Parameters are the vectors for the new rotation. */
-    //void computeRotation(Vector3 rightMovement, Vector3 upMovement) {
-    //    if(Vector3.Normalize(rightMovement + upMovement) != Vector3.zero)
-    //        {
-    //            Vector3 newRotation = Vector3.Normalize(rightMovement + upMovement);
-    //            if (!enableLerping)
-    //                transform.forward = newRotation;
-    //            else 
-    //                transform.forward = Vector3.Lerp(transform.forward, newRotation, lerpfrac);
-    //        }
-    //}
-
-    //void RotatePlayer() {
-    //    if (movementAllowed) {
-    //        rotationInput = true;
-    //        Vector3 rightMovement;
-    //        Vector3 upMovement;
-    //        Vector2 RStickInput = input.getRightStickData(playerNum - 1);
-    //        rightMovement = right * Time.deltaTime * RStickInput.x;
-    //        upMovement = -(forward * Time.deltaTime * -RStickInput.y);
-
-    //        computeRotation(rightMovement, upMovement);
-    //    }
-    //}
-
-
-    //private void FixedUpdate() //Physics things are supposed to be in FixedUpdate
-    //{
-    //    updatingPhysics = true;
-    //    _inputs = _inputs * speed;
-    //    rb.velocity = new Vector3(_inputs.x, rb.velocity.y, _inputs.z);
-    //    rotationInput = false;
-    //    updatingPhysics = false;      
-    //}
-
-    //void Update() {
-    //    //Checking for Movement
-    //    // only for testing a single player with keyboard if you dont have an Xbox controller!
-    //    // Otherwise, comment out the first if-else block.
-    //    // if (Input.GetAxis("Horizontal") != 0.0 | Input.GetAxis("Vertical") != 0.0) //WASD only for the first player
-    //    //     if (playerNum == 1)
-    //    //         MoveWASD("Horizontal", "Vertical");
-
-    //    prevState = currentState;
-    //    currentState = GamePad.GetState(playerIdx);
-
-    //    if (currentState.IsConnected && prevState.IsConnected) 
-    //    {
-    //        if(movementAllowed)
-    //        {
-    //            _inputs = Vector3.zero;
-    //            Move();
-    //        }
-    //        else //this could be used to stop movement during dodges and stuns 
-    //        {
-    //            if (dodging)
-    //            {
-    //                _inputs = transform.forward;
-    //            }
-    //            else //if movement is not allowed and the player is not dodging, don't move
-    //            {
-    //                _inputs = Vector3.zero;
-    //            }
-    //        }
-    //    }
-
-    //}
+#if UNITY_EDITOR //Editor only tag
+    // Draw the groundcheck spherecast under the player
+    private void OnDrawGizmosSelected() {
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(transform.position + Vector3.down * CheckGroundDistance(), floorCollider.bounds.extents.y);
+    }
+#endif
 }

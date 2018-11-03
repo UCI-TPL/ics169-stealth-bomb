@@ -4,12 +4,12 @@ using UnityEngine;
 using UnityEngine.Events;
 
 // Player requires the GameObject to have a PlayerController and PlayerStats component
-[RequireComponent(typeof(PlayerControls))]
+[RequireComponent(typeof(PlayerController))]
 [RequireComponent(typeof(PlayerStats))]
 public class Player : MonoBehaviour {
     
     public PlayerStats stats { get; private set; }
-    public PlayerControls controller { get; private set; }
+    public PlayerController controller { get; private set; }
 
     public int playerNumber;
     
@@ -40,7 +40,7 @@ public class Player : MonoBehaviour {
         stats = GetComponent<PlayerStats>();
         if (stats == null) // Check to ensure PlayerStats component is present, since PlayerStats is a dependency this will never happen, but just in case
             Debug.LogError(gameObject.name + " missing PlayerStats Component");
-        controller = GetComponent<PlayerControls>();
+        controller = GetComponent<PlayerController>();
         if (controller == null) // Check to ensure PlayerController component is present, since PlayerController is a dependency this will never happen, but just in case
             Debug.LogError(gameObject.name + " missing PlayerController Component");
         rb = GetComponent<Rigidbody>();
