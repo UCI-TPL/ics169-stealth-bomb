@@ -10,6 +10,7 @@ public class ProjectileData : ScriptableObject {
     public int damage = 100;
     public float lifetime = 3f;
     public float spreadAngle = 10;
+    public int knockbackForce = 15; 
 
     public void Shoot(Player player, float speed, int numberOfProjectile) {
         for (int i = 0; i < numberOfProjectile; ++i)
