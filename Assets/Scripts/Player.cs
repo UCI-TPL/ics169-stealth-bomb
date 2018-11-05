@@ -71,6 +71,19 @@ public class Player : MonoBehaviour {
     public void HurtPlayer(float damage) {
         health -= damage;
         controller.input.controllers[playerNumber].Vibrate(1.0f, 0.1f);
+        StartCoroutine("HurtIndicator");
+    }
+
+    IEnumerator HurtIndicator() //show the player that it is hurt 
+    {
+        Color test = playerColor;
+        rend.material.color = Color.white;
+        yield return new WaitForSeconds(0.025f); //the player flashes white 
+        rend.material.color = playerColor;
+    }
+
+    public void Knockback(Vector3 direction)    {
+        rb.AddForce(direction,ForceMode.Impulse); //move back in the direction of the projectile 
     }
 
     public void Kill() {

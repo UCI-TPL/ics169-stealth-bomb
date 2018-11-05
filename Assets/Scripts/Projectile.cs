@@ -21,13 +21,14 @@ public class Projectile : MonoBehaviour {
         Physics.IgnoreCollision(player.controller.wallCollider, collider);
         Destroy(gameObject, data.lifetime); // Destroy gameObject after lifetime is up
         trail.material.color = player.playerColor;
-        //trail.material.color = player.GetComponent<Renderer>().material.color;
     }
 
     private void OnCollisionEnter(Collision other) {
         Player hit;
         if ((hit = other.gameObject.GetComponent<Player>()) != null && hit != player) {
             hit.HurtPlayer(data.damage);
+            Debug.Log("What they get" + transform.forward * data.knockbackForce);
+            hit.Knockback(transform.forward * data.knockbackForce); //the knockback will be in the direction of the projectile 
             Destroy(gameObject);
         }
     }
