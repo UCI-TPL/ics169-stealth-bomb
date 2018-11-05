@@ -68,7 +68,7 @@ public class PlayerController : MonoBehaviour {
 
         input.controllers[player.playerNumber].attack.OnDown.AddListener(ActivateAttack);
         input.controllers[player.playerNumber].attack.OnUp.AddListener(ReleaseAttack);
-        input.controllers[player.playerNumber].jump.OnUp.AddListener(delegate { jumpedReleased = true; });
+        input.controllers[player.playerNumber].jump.OnUp.AddListener(ReleaseJump);
     }
 
     // Perform movement every physics update
@@ -112,23 +112,31 @@ public class PlayerController : MonoBehaviour {
     }
 
     // Attempt to perform a jump
-    public void Jump() {
+    private void Jump() {
         if (jumpedReleased && allowMovement && isGrounded) { //Checking if on the ground and movement is allowed
             jumpedReleased = false;
             jumped = true;
-            rb.velocity = rb.velocity += (2 * -Physics.gravity * (player.stats.jumpForce + 0.2f) * jumpGravityMultiplier).Sqrt();
+            rb.velocity = rb.velocity += (2 * -Physics.gravity * player.stats.jumpForce * jumpGravityMultiplier).Sqrt();
             touchedGround = false;
             jumpCooldown = 0.1f + Time.time;
         }
     }
 
+    private void ReleaseJump() {
+            jumpedReleased = true;
+        if (jumped && rb.velocity.y > 0) {
+            rb.velocity -= Vector3.Project(rb.velocity, Physics.gravity);
+            jumped = false;
+        }
+    }
+
     // On Attack down
-    public void ActivateAttack() {
+    private void ActivateAttack() {
         player.weapon.Activate();
     }
 
     // On Attack up
-    public void ReleaseAttack() {
+    private void ReleaseAttack() {
         player.weapon.Release();
     }
 

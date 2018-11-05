@@ -73,8 +73,13 @@ public class Player : MonoBehaviour {
         controller.input.controllers[playerNumber].Vibrate(1.0f, 0.1f);
     }
 
+    public void Kill() {
+        health = 0;
+    }
+
     private void CheckDeath() {
         if (health <= 0) {
+            controller.input.controllers[playerNumber].Vibrate(1.0f, 1f, InputManager.Controller.VibrationMode.Diminish);
             Destroy(gameObject);
         }
     }

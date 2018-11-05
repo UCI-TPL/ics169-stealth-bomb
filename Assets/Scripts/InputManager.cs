@@ -42,6 +42,11 @@ public class InputManager : MonoBehaviour {
             controllers[i].UpdateController();
     }
 
+    private void OnApplicationQuit() {
+        for (int i = 0; i < 4; ++i)
+            controllers[i].OnApplicationQuit();
+    }
+
     // Controller object for Mouse and Keyboard, This is not implemented yet
     public class MouseKeyboard : Controller {
 
@@ -65,9 +70,6 @@ public class InputManager : MonoBehaviour {
                 attack.OnUp.Invoke();
             attack.Pressed = Input.GetKey(KeyCode.Mouse0);
         }
-
-        // Do nothing, because a keyboard can't vibrate. Atleast mine can't!
-        public override void Vibrate(float strength, float duration) { }
 
         public MouseKeyboard() {
             type = Type.MouseKeyboard;
@@ -272,16 +274,38 @@ public class InputManager : MonoBehaviour {
             return new Vector2(state.ThumbSticks.Right.X, state.ThumbSticks.Right.Y);
         }
 
-        public override void Vibrate(float strength, float duration) {
-            inputManager.StartCoroutine(VibrateDuration(strength, duration));
+        public override void Vibrate(float strength, float duration, VibrationMode vibrationMode = VibrationMode.Flat) {
+            switch (vibrationMode) {
+                case VibrationMode.Flat:
+                    inputManager.StartCoroutine(VibrateDuration(strength, duration));
+                    break;
+                case VibrationMode.Diminish:
+                    inputManager.StartCoroutine(VibrateDiminish(strength, duration));
+                    break;
+            }
         }
 
         private IEnumerator VibrateDuration(float strength, float duration) {
             float endTime = Time.time + duration;
-            GamePad.SetVibration(playerIndex, strength, strength);
             while (endTime >= Time.time) {
+                GamePad.SetVibration(playerIndex, strength, strength);
                 yield return null;
             }
+            GamePad.SetVibration(playerIndex, 0, 0);
+        }
+
+        private IEnumerator VibrateDiminish(float strength, float duration) {
+            float endTime = Time.time + duration;
+            float newStrength;
+            while (endTime >= Time.time) {
+                newStrength = strength * (-Mathf.Pow(1 - (endTime - Time.time) / duration, 2) + 1);
+                GamePad.SetVibration(playerIndex, newStrength, newStrength);
+                yield return null;
+            }
+            GamePad.SetVibration(playerIndex, 0, 0);
+        }
+
+        public override void OnApplicationQuit() {
             GamePad.SetVibration(playerIndex, 0, 0);
         }
 
@@ -362,15 +386,16 @@ public class InputManager : MonoBehaviour {
 
     public abstract class Controller {
         public Type type;
-        public abstract void Vibrate(float strength, float duration);
-        public abstract void UpdateController();
-
         // Public Methods to get controller states
         public readonly ButtonEvent attack = new ButtonEvent();
         public readonly ButtonEvent jump = new ButtonEvent();
         public readonly ButtonEvent dodge = new ButtonEvent();
         public abstract Vector2 MoveVector();
         public abstract Vector2 AimVector();
+
+        public virtual void Vibrate(float strength, float duration, VibrationMode vibrationMode = VibrationMode.Flat) { }
+        public virtual void OnApplicationQuit() { }
+        public abstract void UpdateController();
 
         // List of every PlayerAction available
         public enum ActionCode {
@@ -380,6 +405,10 @@ public class InputManager : MonoBehaviour {
         // Type of Controller
         public enum Type {
             Xbox, MouseKeyboard
+        }
+
+        public enum VibrationMode {
+            Flat, Diminish
         }
 
         // Container for events of a specific action, such as attack or jump

@@ -8,11 +8,11 @@ public class CameraShake : MonoBehaviour {
     public float baseDisplacement = 0.1f;
     public float intensity;
     private Vector3 originalPosition;
-    private Vector3 originalForward;
+    private Vector3 originalRight;
 
     private void Start() {
         originalPosition = transform.position;
-        originalForward = transform.forward;
+        originalRight = transform.right;
         StartCoroutine(Shaky());
     }
 
@@ -33,7 +33,7 @@ public class CameraShake : MonoBehaviour {
         float endTime = Time.time + duration;
         Vector3 targetPosition;
         Vector3 distance;
-        Vector3 targetForward;
+        Vector3 targetRight;
         Vector3 distanceF;
         float maxDisplacement = intensity * baseDisplacement;
         float timer;
@@ -41,17 +41,17 @@ public class CameraShake : MonoBehaviour {
         while (endTime > Time.time) {
             targetPosition = originalPosition + new Vector3(Random.Range(-maxDisplacement, maxDisplacement), Random.Range(-maxDisplacement, maxDisplacement), Random.Range(-maxDisplacement, maxDisplacement));
             distance = transform.position - targetPosition;
-            targetForward = originalForward + new Vector3(Random.Range(-intensity / 100, intensity / 100), Random.Range(-intensity / 400, intensity / 400), 0);
-            distanceF = transform.forward - targetForward;
+            targetRight = originalRight + new Vector3(0 , Random.Range(-intensity / 200, intensity / 200), Random.Range(-intensity / 200, intensity / 200));
+            distanceF = transform.right - targetRight;
             shakeDuration = ((baseShakeRate * distance.magnitude / 2) / maxDisplacement);
             timer = Time.time + shakeDuration;
             while (timer >= Time.time) {
                 transform.position = targetPosition + distance * (Mathf.Sin(3*((timer - Time.time) / shakeDuration) - 1.5f) + 1 )/2;
-                transform.forward = targetForward + distanceF * (Mathf.Sin(3 * ((timer - Time.time) / shakeDuration) - 1.5f) + 1) / 2;
+                transform.right = targetRight + distanceF * (Mathf.Sin(3 * ((timer - Time.time) / shakeDuration) - 1.5f) + 1) / 2;
                 yield return null;
             }
             transform.position = targetPosition;
-            transform.forward = targetForward;
+            transform.right = targetRight;
         }
         targetPosition = originalPosition;
         distance = transform.position - targetPosition;
@@ -62,6 +62,6 @@ public class CameraShake : MonoBehaviour {
             yield return null;
         }
         transform.position = originalPosition;
-        transform.forward = originalForward;
+        transform.right = originalRight;
     }
 }
