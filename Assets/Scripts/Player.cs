@@ -31,6 +31,9 @@ public class Player : MonoBehaviour {
     public Weapon weapon;
     public WeaponData DefaultWeapon;
 
+    // flags for rendering player UI
+    private bool HP_CoroutineActive = false;
+
     private Vector3 prevPosition;
     public bool isMoving {
         get { return rb.velocity.magnitude > 0.1f; }
@@ -65,13 +68,25 @@ public class Player : MonoBehaviour {
     }
 
     public void Heal(float amount) {
-        health = Mathf.Min(amount, stats.maxHealth);
+        health += Mathf.Min(amount, stats.maxHealth);
+
+        // if player overheals, set them back to the correct health.
+        if (health > stats.maxHealth)
+            health = stats.maxHealth;
+        // render HP on heal
+        if (!HP_CoroutineActive)
+            StartCoroutine("renderHP_Bar");
     }
 
     public void HurtPlayer(float damage) {
         health -= damage;
         controller.input.controllers[playerNumber].Vibrate(1.0f, 0.1f);
         StartCoroutine("HurtIndicator");
+
+        // Remove this code to render HP bars all the time, as well as code in the Awake method in PlayerController.cs
+        if (!HP_CoroutineActive)
+            StartCoroutine("renderHP_Bar");
+
     }
 
     IEnumerator HurtIndicator() //show the player that it is hurt 
@@ -80,6 +95,18 @@ public class Player : MonoBehaviour {
         rend.material.color = Color.white;
         yield return new WaitForSeconds(0.025f); //the player flashes white 
         rend.material.color = playerColor;
+    }
+
+    // Renders the players HP bar for a second.
+    IEnumerator renderHP_Bar()
+    {
+        HP_CoroutineActive = true;
+        controller.playerUI_HPCanvas.gameObject.SetActive(true);
+        controller.playerUI_HPMaskCanvas.gameObject.SetActive(true);
+        yield return new WaitForSeconds(1f);
+        controller.playerUI_HPCanvas.gameObject.SetActive(false);
+        controller.playerUI_HPMaskCanvas.gameObject.SetActive(false);
+        HP_CoroutineActive = false;
     }
 
     public void Knockback(Vector3 direction)    {

@@ -8,6 +8,8 @@ TagManager:
   - player-join-manager
   - game-manager
   - input-manager
+  - stationary-player-ui
+  - player-ui-masks
   layers:
   - Default
   - TransparentFX

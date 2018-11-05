@@ -34,6 +34,12 @@ public class PlayerController : MonoBehaviour {
     private static readonly int groundLayerMask = 1 << groundLayer;
     private static readonly float maxGroundDistance = 0.5f;
     private bool touchedGround;
+
+    // Required Variables for the Player's UI stuff.
+    public RectTransform playerUI_HPCanvas;
+    public RectTransform playerUI_HPMaskCanvas;
+    public UnityEngine.UI.Image playerUI_healthBar;
+
     public bool isGrounded {
         get {
             if (touchedGround) {
@@ -55,6 +61,10 @@ public class PlayerController : MonoBehaviour {
         if (input == null)
             Debug.LogError("Input Manager does not exist");
         rb = GetComponent<Rigidbody>();
+
+        // To have HP bar render all the time remove this code, as well as code in the HurtPlayer method in Player.cs
+        playerUI_HPCanvas.gameObject.SetActive(false);
+        playerUI_HPMaskCanvas.gameObject.SetActive(false);   
     }
 
     // Set up controllers
@@ -89,6 +99,11 @@ public class PlayerController : MonoBehaviour {
         Vector3 scaledVector = (horizontalVector.y * forward) + (horizontalVector.x * right);
         if (scaledVector != Vector3.zero)
             transform.forward = scaledVector;
+
+        //code to make player ui's not rotate with player
+        playerUI_HPCanvas.rotation = Quaternion.Euler(90f, Camera.main.transform.rotation.eulerAngles.y, 0f);
+        playerUI_HPMaskCanvas.rotation = Quaternion.Euler(90f, Camera.main.transform.rotation.eulerAngles.y, 0f);
+        playerUI_healthBar.fillAmount = player.health / player.stats.maxHealth;
     }
 
     // Move the player using the the controller's move input scaled by the provided speed
