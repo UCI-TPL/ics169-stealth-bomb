@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 // Require an inputManager
 [RequireComponent(typeof(InputManager))]
@@ -25,6 +26,9 @@ public class GameManager : MonoBehaviour {
     // Important Data in any non Main Menu scene.
     private Player[] players;
 
+    public int countdown = 3; //at the start of a round
+    public GameObject countdownText; 
+
     // Use this for initialization
     void Awake () {
         if (instance == null)
@@ -37,6 +41,24 @@ public class GameManager : MonoBehaviour {
         tileManager = TileManager.tileManager;
 
         UnityEngine.SceneManagement.SceneManager.sceneLoaded += onSceneLoaded;
+    }
+
+    IEnumerator Countdown()
+    {
+        DisablePlayersMovement(countdown);
+        countdownText.SetActive(true);
+        for (int i = countdown; i > 0; i--)
+        {
+            countdownText.GetComponent<Text>().text = i.ToString();
+            yield return new WaitForSeconds(1f);
+        }
+        countdownText.SetActive(false);
+    }
+
+    void DisablePlayersMovement(float duration)
+    {
+        for(int i = 0; i < players.Length; i++)
+            players[i].DisablePlayer(duration);
     }
 
     // The onSceneLoaded function is where you are going to do most of the data pushing from scene to scene.
@@ -62,6 +84,7 @@ public class GameManager : MonoBehaviour {
                         players[i].SetController(Instantiate<GameObject>(PlayerPrefab.gameObject, spawnTile.transform.position, Quaternion.identity).GetComponent<PlayerController>());
                     }
                 }
+                StartCoroutine("Countdown");
             }
         }
     }

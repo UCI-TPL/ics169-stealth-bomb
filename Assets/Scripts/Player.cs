@@ -41,6 +41,11 @@ public class Player {
         controller.player = this;
     }
 
+    public void DisablePlayer(float duration) { //this exists for GameController to access PlayerController
+        controller.DisableMovement(duration);
+        controller.DisableAttack(duration);
+    }
+
     public void ResetWeapon() {
         weapon = playerData.defaultWeapon.NewInstance(this);
     }

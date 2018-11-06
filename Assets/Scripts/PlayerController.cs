@@ -43,6 +43,7 @@ public class PlayerController : MonoBehaviour {
 
     // For disabling movement while performing a dodge or potentially while stunned
     private bool allowMovement = true;
+    private bool allowAttack = true; //used to disable movement during the countdown
 
     // Required variables for jumping and detecting ground collisions
     private float jumpCooldown = 0;
@@ -173,12 +174,14 @@ public class PlayerController : MonoBehaviour {
 
     // On Attack down
     private void ActivateAttack() {
-        player.weapon.Activate();
+        if(allowAttack)
+            player.weapon.Activate();   
     }
 
     // On Attack up
     private void ReleaseAttack() {
-        player.weapon.Release();
+        if(allowAttack)
+            player.weapon.Release();
     }
 
     public void Knockback(Vector3 direction) {
@@ -228,6 +231,16 @@ public class PlayerController : MonoBehaviour {
         allowMovement = false;
         yield return new WaitForSeconds(duration);
         allowMovement = true;
+    }
+
+    public void DisableAttack(float duraion){
+        StartCoroutine(DisableAttackTimer(duraion));
+    }
+
+    private IEnumerator DisableAttackTimer(float duration) {
+        allowAttack = false;
+        yield return new WaitForSeconds(duration);
+        allowAttack = true;
     }
 
     private float CheckGroundDistance() {
