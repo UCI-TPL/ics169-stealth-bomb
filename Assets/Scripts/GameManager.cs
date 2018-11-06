@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour {
     public PlayerData DefaultPlayerData;
     public PlayerController PlayerPrefab;
     // Important Data in any non Main Menu scene.
-    private Player[] players;
+    public Player[] players { get; private set; }
 
     // Use this for initialization
     void Awake () {
