@@ -12459,7 +12459,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 50
+  far clip plane: 60.9
   field of view: 60
   orthographic: 1
   orthographic size: 11
@@ -12485,7 +12485,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 445079568}
   m_LocalRotation: {x: 0.38268346, y: -0, z: -0, w: 0.9238796}
-  m_LocalPosition: {x: 0, y: 19.5, z: -19.798988}
+  m_LocalPosition: {x: -0, y: 27.7, z: -28}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 764434411}
@@ -21702,7 +21702,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseShakeRate: 0.05
   baseDisplacement: 0.1
-  intensity: 6
 --- !u!1001 &765018472
 Prefab:
   m_ObjectHideFlags: 0
@@ -44496,6 +44495,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e93290f4c434f64b8207c6f3fd0c537, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OffScreenDeathEffect: {fileID: 1531115614047860, guid: 83892095036610a43b2b689f902c5d4a,
+    type: 2}
 --- !u!64 &1601712494
 MeshCollider:
   m_ObjectHideFlags: 0

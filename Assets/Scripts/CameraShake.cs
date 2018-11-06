@@ -4,29 +4,46 @@ using UnityEngine;
 
 public class CameraShake : MonoBehaviour {
 
+    private static CameraShake _instance;
+    private static CameraShake instance {
+        get {
+            if (_instance != null)
+                return _instance;
+            _instance = FindObjectOfType<CameraShake>();
+            if (_instance == null) {
+                Debug.LogError("CameraShake not found in current scene");
+            }
+            return _instance;
+        }
+    }
+
     public float baseShakeRate = 0.1f;
     public float baseDisplacement = 0.1f;
-    public float intensity;
     private Vector3 originalPosition;
     private Vector3 originalRight;
 
     private void Start() {
         originalPosition = transform.position;
         originalRight = transform.right;
-        StartCoroutine(Shaky());
+        ShakeDiminish(6, 3);
     }
 
-    private IEnumerator Shaky() {
-        while (intensity > 0) {
-            Shake(intensity, 0.1f);
-            intensity -= 0.2f;
+    public static void Shake(float intensity, float duration) {
+        instance.StartCoroutine(instance.ProcessShake(intensity, duration));
+    }
+
+    public static void ShakeDiminish(float intensity, float duration) {
+        instance.StartCoroutine(instance.ProcessShakeDiminish(intensity, duration));
+    }
+
+    private IEnumerator ProcessShakeDiminish(float intensity, float duration) {
+        float endTime = Time.time + duration;
+        float newIntensity;
+        while (endTime >= Time.time) {
+            newIntensity = intensity * (-Mathf.Pow(1 - (endTime - Time.time) / duration, 2) + 1);
+            Shake(newIntensity, 0.1f);
             yield return new WaitForSeconds(0.1f);
         }
-    }
-
-    public void Shake(float intensity, float duration) {
-        //this.intensity = 1f;
-        StartCoroutine(ProcessShake(intensity, duration));
     }
 
     private IEnumerator ProcessShake(float intensity, float duration) {
