@@ -12,15 +12,12 @@ public class ChargeWeapon : Weapon {
         get { return Mathf.Min((Time.time - startChargeTime) / data.chargeTime, data.chargeLevels-1) +1; } //the -1 and +1 are so it goes from 1-3 instead of 0-3
     }
 
-    Renderer rend;
-    Color startColor;
+    Renderer rend { get { return player.controller.rend; } }
 
     public ChargeWeapon() : base() { }
 
     public ChargeWeapon(WeaponData weaponData, Player player) : base(weaponData, player, Type.Charge) {
         data = (ChargeWeaponData)weaponData;
-        rend = player.rend;
-        startColor = rend.material.color;
     }
 
     // OnActivate is called once when the weapon is activated
@@ -50,7 +47,7 @@ public class ChargeWeapon : Weapon {
 
     // OnRelease is called once when the weapon is released
     protected override void OnRelease() {
-        rend.material.color = startColor;
+        rend.material.color = player.controller.playerColor;
         //Debug.Log("Releasing with a chargeTime of " + chargeLevel);
         //if (chargeLevel >= 1) { }
         for (int i = 0; i < data.numProj; ++i)

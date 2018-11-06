@@ -14,7 +14,7 @@ public class CreateFireGround : Weapon {
 
     // OnActivate is called once when the weapon is activated
     protected override void OnActivate() {
-        GameObject.Instantiate<GameObject>(data.firePrefab, player.transform.position, Quaternion.identity);
+        GameObject.Instantiate<GameObject>(data.firePrefab, player.controller.transform.position, Quaternion.identity);
     }
 
     public override Weapon DeepCopy(WeaponData weaponData, Player player) {

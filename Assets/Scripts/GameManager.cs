@@ -20,7 +20,8 @@ public class GameManager : MonoBehaviour {
     // this is by default set to true for all values so that the players spawn as normal if we start in a level.
     private bool[] readyPlayers = { true, true, true, true };
 
-    public Player PlayerPrefab;
+    public PlayerData DefaultPlayerData;
+    public PlayerController PlayerPrefab;
     // Important Data in any non Main Menu scene.
     private Player[] players;
 
@@ -56,8 +57,9 @@ public class GameManager : MonoBehaviour {
                 Queue<SpawnTile> spawnPoints = new Queue<SpawnTile>(tileManager.tileMap.SpawnTiles);
                 for (int i = 0; i < readyPlayers.Length; ++i) {
                     if (readyPlayers[i]) {
+                        players[i] = new Player(i, DefaultPlayerData);
                         SpawnTile spawnTile = spawnPoints.Dequeue();
-                        Instantiate<GameObject>(PlayerPrefab.gameObject, spawnTile.transform.position, Quaternion.identity).GetComponent<Player>().playerNumber = i;
+                        players[i].SetController(Instantiate<GameObject>(PlayerPrefab.gameObject, spawnTile.transform.position, Quaternion.identity).GetComponent<PlayerController>());
                     }
                 }
             }

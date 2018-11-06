@@ -2,23 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerStats : MonoBehaviour {
+public class PlayerStats {
     
     public Player player { get; private set; }
 
     private Dictionary<string, Property> stats = new Dictionary<string, Property>();
 
-    private void Awake() {
+    public PlayerStats(Player player) {
+        this.player = player;
         AddStat("move_speed", 7.5f); //blocks per second
         AddStat("air_speed", 50);  //percent of movespeed
         AddStat("jump_force", 1.5f); //blocks per jump (1,2,3)
         AddStat("max_health", 100);
         AddStat("dodge_time", 0.2f); //how long the dodge lasts
         AddStat("dodge_recharge", 0.8f); //how long the player waits before dodging again
-        
-        player = GetComponent<Player>();
-        if (player == null) // Check to ensure Player component is present, since PlayerStats is a dependency of Player this will never happen, but just in case
-            Debug.LogError(gameObject.name + " missing Player Component");
     }
 
     public float moveSpeed {
@@ -51,7 +48,7 @@ public class PlayerStats : MonoBehaviour {
     public float GetStat(string name) {
         if (stats.ContainsKey(name))
             return stats[name].value;
-        Debug.LogError(gameObject.name + " does not contain a stat named \"" + name + "\"");
+        Debug.LogError("Player " + player.playerNumber + " does not contain a stat named \"" + name + "\"");
         return 0;
     }
 
@@ -60,7 +57,7 @@ public class PlayerStats : MonoBehaviour {
         if (stats.ContainsKey(modifier.name))
             stats[modifier.name].AddModifier(modifier);
         else
-            Debug.LogError("Error adding modifier, " + gameObject.name + " does not contain a stat named \"" + modifier.name + "\"");
+            Debug.LogError("Error adding modifier, " + "Player " + player.playerNumber + " does not contain a stat named \"" + modifier.name + "\"");
     }
 
     // Attempts to remove modifier from a stat, if that stat does not exist display error
@@ -68,7 +65,7 @@ public class PlayerStats : MonoBehaviour {
         if (stats.ContainsKey(modifier.name))
             stats[modifier.name].RemoveModifier(modifier);
         else
-            Debug.LogError("Error removing modifier, " + gameObject.name + " does not contain a stat named \"" + modifier.name + "\"");
+            Debug.LogError("Error removing modifier, " + "Player " + player.playerNumber + " does not contain a stat named \"" + modifier.name + "\"");
     }
 
     // manages the value of a single stat

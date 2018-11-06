@@ -27,9 +27,9 @@ public class ItemContainer : MonoBehaviour {
 
     // If collider is a player, add item to player
     private void OnTriggerEnter(Collider other) {
-        Player player = other.GetComponent<Player>();
-        if (player != null) {
-            player.AddItem(data);
+        PlayerController playerController = other.GetComponent<PlayerController>();
+        if (playerController != null) {
+            playerController.player.AddItem(data);
             Destroy();
         }
     }

@@ -32,7 +32,7 @@ public abstract class Weapon {
         isCharging = true;
         OnActivate();
         if (overrideChargeUpdate)
-            player.StartCoroutine(ChargingUpdate());
+            player.controller.StartCoroutine(ChargingUpdate());
     }
 
     // OnActivate is called once when the weapon is activated

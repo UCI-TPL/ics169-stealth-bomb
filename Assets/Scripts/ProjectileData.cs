@@ -18,7 +18,7 @@ public class ProjectileData : ScriptableObject {
     }
 
     private void SpawnProjectile(Player player, float speed, float rotate) {
-        GameObject proj = GameObject.Instantiate(projectile.gameObject, player.controller.ShootPoint.transform.position, player.transform.rotation, null); //this instantiates the arrow as an attack
+        GameObject proj = GameObject.Instantiate(projectile.gameObject, player.controller.ShootPoint.transform.position, player.controller.transform.rotation, null); //this instantiates the arrow as an attack
         proj.GetComponent<Projectile>().player = player;
         proj.GetComponent<Projectile>().data = this;
         proj.transform.RotateAround(proj.transform.position, Vector3.up, rotate);

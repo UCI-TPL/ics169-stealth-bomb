@@ -7,9 +7,9 @@ public class KillPlane : MonoBehaviour {
     public GameObject OffScreenDeathEffect;
 
     private void OnTriggerEnter(Collider other) {
-        Player player;
-        if ((player = other.GetComponent<Player>()) != null) {
-            player.Kill();
+        PlayerController playerController;
+        if ((playerController = other.GetComponent<PlayerController>()) != null) {
+            playerController.player.Kill();
             CameraShake.ShakeDiminish(4, 1);
             Instantiate<GameObject>(OffScreenDeathEffect, other.transform.position, Quaternion.identity);
         }

@@ -5,18 +5,36 @@ using Vector3Extensions;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour {
-    
-    public Player player { get; private set; }
+
+    private Player _player;
+    public Player player {
+        get { return _player; }
+        set {
+            if (player != null) {
+                player.onHeal.RemoveListener(Heal);
+                player.onHurt.RemoveListener(Hurt);
+            }
+            _player = value;
+            player.onHeal.AddListener(Heal);
+            player.onHurt.AddListener(Hurt);
+        }
+    }
 
     [HideInInspector]
     public InputManager input;
 
     private Rigidbody rb;
+    public Renderer rend;
     public GameObject ShootPoint;
     public Collider floorCollider;
     public Collider wallCollider;
     public float friction = 10f;
-    
+    [Tooltip("time it takes to go from 0 to max speed is 1 second / acceleration")]
+    public float acceleration = 10f;
+
+    public Color[] Colors = new Color[4]; //The player's color is based on thier player number
+    public Color playerColor { get { return Colors[player.playerNumber]; } set { Colors[player.playerNumber] = value; } }//used for the bullettrail
+
     public float jumpGravityMultiplier = 0.5f;
 
     // Used to scale movement to the camera's direction
@@ -40,6 +58,9 @@ public class PlayerController : MonoBehaviour {
     public RectTransform playerUI_HPMaskCanvas;
     public UnityEngine.UI.Image playerUI_healthBar;
 
+    // flags for rendering player UI
+    private bool HP_CoroutineActive = false;
+
     public bool isGrounded {
         get {
             if (touchedGround) {
@@ -52,15 +73,17 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
+    public bool isMoving {
+        get { return rb.velocity.magnitude > 0.1f; }
+    }
+
     // Initialize referances
     private void Awake() {
-        player = GetComponent<Player>();
-        if (player == null) // Check to ensure Player component is present, since PlayerStats is a dependency of Player this will never happen, but just in case
-            Debug.LogError(gameObject.name + " missing Player Component");
         input = InputManager.inputManager;
         if (input == null)
             Debug.LogError("Input Manager does not exist");
         rb = GetComponent<Rigidbody>();
+        rend = rend == null ? GetComponent<Renderer>() : rend;
 
         // To have HP bar render all the time remove this code, as well as code in the HurtPlayer method in Player.cs
         playerUI_HPCanvas.gameObject.SetActive(false);
@@ -75,6 +98,7 @@ public class PlayerController : MonoBehaviour {
         right = Camera.main.transform.right;
         right.Scale(new Vector3(1, 0, 1));
         right.Normalize();
+        rend.material.color = playerColor; //setting the player color based on playeNum 
 
         input.controllers[player.playerNumber].attack.OnDown.AddListener(ActivateAttack);
         input.controllers[player.playerNumber].attack.OnUp.AddListener(ReleaseAttack);
@@ -94,6 +118,8 @@ public class PlayerController : MonoBehaviour {
 
     // Rotate the player's facing direction
     private void Update() {
+        player.Update();
+
         Vector2 horizontalVector = input.controllers[player.playerNumber].AimVector();
         Debug.DrawRay(transform.position, transform.forward*100, Color.white);
         Vector3 scaledVector = (horizontalVector.y * forward) + (horizontalVector.x * right);
@@ -120,7 +146,7 @@ public class PlayerController : MonoBehaviour {
         }
         if (allowMovement) {
             Vector3 oldVelocity = rb.velocity.Scaled(new Vector3(1, 0, 1));
-            Vector3 newVelocity = rb.velocity + scaledVector * Time.fixedDeltaTime * 5; // Clamp velocity to either max speed or current speed(if player was launched)
+            Vector3 newVelocity = rb.velocity + scaledVector * Time.fixedDeltaTime * acceleration; // Clamp velocity to either max speed or current speed(if player was launched)
             newVelocity = Vector3.ClampMagnitude(new Vector3(newVelocity.x, 0, newVelocity.z), Mathf.Max(oldVelocity.magnitude, speed * input.controllers[player.playerNumber].MoveVector().magnitude + 0.1f) - 0.1f);
             rb.velocity = new Vector3(newVelocity.x, rb.velocity.y, newVelocity.z);
         }
@@ -153,6 +179,44 @@ public class PlayerController : MonoBehaviour {
     // On Attack up
     private void ReleaseAttack() {
         player.weapon.Release();
+    }
+
+    public void Knockback(Vector3 direction) {
+        rb.AddForce(direction, ForceMode.Impulse); //move back in the direction of the projectile 
+    }
+
+    private void Hurt() {
+        input.controllers[player.playerNumber].Vibrate(1.0f, 0.1f);
+        StartCoroutine("HurtIndicator");
+
+        // Remove this code to render HP bars all the time, as well as code in the Awake method in PlayerController.cs
+        if (!HP_CoroutineActive)
+            StartCoroutine("renderHP_Bar");
+    }
+
+    private void Heal() {
+        // render HP on heal
+        if (!HP_CoroutineActive)
+            StartCoroutine("renderHP_Bar");
+    }
+
+    // Renders the players HP bar for a second.
+    IEnumerator renderHP_Bar() {
+        HP_CoroutineActive = true;
+        playerUI_HPCanvas.gameObject.SetActive(true);
+        playerUI_HPMaskCanvas.gameObject.SetActive(true);
+        yield return new WaitForSeconds(1f);
+        playerUI_HPCanvas.gameObject.SetActive(false);
+        playerUI_HPMaskCanvas.gameObject.SetActive(false);
+        HP_CoroutineActive = false;
+    }
+
+    IEnumerator HurtIndicator() //show the player that it is hurt 
+    {
+        Color test = playerColor;
+        rend.material.color = Color.white;
+        yield return new WaitForSeconds(0.025f); //the player flashes white 
+        rend.material.color = playerColor;
     }
 
     // Restrict the player's movement for a duration

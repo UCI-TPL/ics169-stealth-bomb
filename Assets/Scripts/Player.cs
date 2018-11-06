@@ -3,64 +3,45 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-// Player requires the GameObject to have a PlayerController and PlayerStats component
-[RequireComponent(typeof(PlayerController))]
-[RequireComponent(typeof(PlayerStats))]
-public class Player : MonoBehaviour {
+public class Player {
     
     public PlayerStats stats { get; private set; }
     public PlayerController controller { get; private set; }
+    public PlayerData playerData { get; private set; }
 
     public int playerNumber;
     
     public float health { get; private set; }
-
-    public Color[] Colors = new Color[4]; //The player's color is based on thier player number
-    public Color playerColor { get { return Colors[playerNumber]; } set { Colors[playerNumber] = value; } }//used for the bullettrail
-
-    private Rigidbody rb;
-
-    public Renderer rend;
+    private float experiance;
+    public int rank { get { return Mathf.FloorToInt(experiance) + 1; } }
 
     private List<Powerup> powerups = new List<Powerup>();
-    
+
     private UnityEvent onUpdate = new UnityEvent();
     private UnityEvent onMove = new UnityEvent();
+    public UnityEvent onHurt = new UnityEvent();
+    public UnityEvent onHeal = new UnityEvent();
 
     // Currently equiped weapon
     public Weapon weapon;
-    public WeaponData DefaultWeapon;
-
-    // flags for rendering player UI
-    private bool HP_CoroutineActive = false;
 
     private Vector3 prevPosition;
-    public bool isMoving {
-        get { return rb.velocity.magnitude > 0.1f; }
-    }
 
-    private void Awake() {
-        stats = GetComponent<PlayerStats>();
-        if (stats == null) // Check to ensure PlayerStats component is present, since PlayerStats is a dependency this will never happen, but just in case
-            Debug.LogError(gameObject.name + " missing PlayerStats Component");
-        controller = GetComponent<PlayerController>();
-        if (controller == null) // Check to ensure PlayerController component is present, since PlayerController is a dependency this will never happen, but just in case
-            Debug.LogError(gameObject.name + " missing PlayerController Component");
-        rb = GetComponent<Rigidbody>();
-        rend = rend == null ? GetComponent<Renderer>() : rend;
-        //if (Colors.Length == 0)
-        //    Colors[playerNumber] = Color.gray; //make sure the default color is gray and not black
-        
-    }
-
-    private void Start() {
-        rend.material.color = playerColor; //setting the player color based on playeNum 
+    public Player(int playerNumber, PlayerData playerData) {
+        this.playerNumber = playerNumber;
+        this.playerData = playerData;
+        stats = new PlayerStats(this); // Creates a stats profile for the player
         ResetHealth();
         ResetWeapon();
     }
 
+    public void SetController(PlayerController controller) {
+        this.controller = controller;
+        controller.player = this;
+    }
+
     public void ResetWeapon() {
-        weapon = DefaultWeapon.NewInstance(this);
+        weapon = playerData.defaultWeapon.NewInstance(this);
     }
 
     public void ResetHealth() {
@@ -68,63 +49,27 @@ public class Player : MonoBehaviour {
     }
 
     public void Heal(float amount) {
-        health += Mathf.Min(amount, stats.maxHealth);
-
-        // if player overheals, set them back to the correct health.
-        if (health > stats.maxHealth)
-            health = stats.maxHealth;
-        // render HP on heal
-        if (!HP_CoroutineActive)
-            StartCoroutine("renderHP_Bar");
+        health = Mathf.Min(health + amount, stats.maxHealth);
+        onHeal.Invoke();
     }
 
     public void HurtPlayer(float damage) {
         health -= damage;
-        controller.input.controllers[playerNumber].Vibrate(1.0f, 0.1f);
-        StartCoroutine("HurtIndicator");
-
-        // Remove this code to render HP bars all the time, as well as code in the Awake method in PlayerController.cs
-        if (!HP_CoroutineActive)
-            StartCoroutine("renderHP_Bar");
-
-    }
-
-    IEnumerator HurtIndicator() //show the player that it is hurt 
-    {
-        Color test = playerColor;
-        rend.material.color = Color.white;
-        yield return new WaitForSeconds(0.025f); //the player flashes white 
-        rend.material.color = playerColor;
-    }
-
-    // Renders the players HP bar for a second.
-    IEnumerator renderHP_Bar()
-    {
-        HP_CoroutineActive = true;
-        controller.playerUI_HPCanvas.gameObject.SetActive(true);
-        controller.playerUI_HPMaskCanvas.gameObject.SetActive(true);
-        yield return new WaitForSeconds(1f);
-        controller.playerUI_HPCanvas.gameObject.SetActive(false);
-        controller.playerUI_HPMaskCanvas.gameObject.SetActive(false);
-        HP_CoroutineActive = false;
-    }
-
-    public void Knockback(Vector3 direction)    {
-        rb.AddForce(direction,ForceMode.Impulse); //move back in the direction of the projectile 
+        onHurt.Invoke();
     }
 
     public void Kill() {
         health = 0;
     }
-
+    
     private void CheckDeath() {
         if (health <= 0) {
             controller.input.controllers[playerNumber].Vibrate(1.0f, 1f, InputManager.Controller.VibrationMode.Diminish);
-            Destroy(gameObject);
+            GameObject.Destroy(controller.gameObject);
         }
     }
 
-    void Update() {
+    public void Update() {
         List<Powerup> deleteList = new List<Powerup>();
         foreach (Powerup p in powerups) {
             if (p.endTime <= Time.time)
@@ -134,7 +79,7 @@ public class Player : MonoBehaviour {
             RemovePowerup(p);
 
         onUpdate.Invoke();
-        if (isMoving && controller.isGrounded)
+        if (controller.isMoving && controller.isGrounded)
             onMove.Invoke();
 
         CheckDeath();
