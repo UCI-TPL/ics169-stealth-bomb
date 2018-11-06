@@ -21,6 +21,8 @@ public class Player {
     private UnityEvent onMove = new UnityEvent();
     public UnityEvent onHurt = new UnityEvent();
     public UnityEvent onHeal = new UnityEvent();
+    public delegate void powerupDel(Powerup powerup);
+    public event powerupDel onAddPowerUp;
 
     // Currently equiped weapon
     public Weapon weapon;
@@ -110,6 +112,7 @@ public class Player {
     // Create a new instance of a power-up, save it to list of power-ups and add its modifiers to stats
     public void AddPowerup(PowerupData powerupData) {
         Powerup powerup = powerupData.NewInstance(this); // Initialize power-up
+        onAddPowerUp.Invoke(powerup);
         powerups.Add(powerup); // Save to list of powerups
         foreach (PlayerStats.Modifier m in powerup.modifiers) // Add power-up's modifiers to stats
             stats.AddModifier(m);

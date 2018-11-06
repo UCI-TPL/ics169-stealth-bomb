@@ -15,13 +15,9 @@ public class PowerupDisplayUI : MonoBehaviour {
         rt = GetComponent<RectTransform>();
     }
 
-    // Use this for initialization
-    void Start () {
-
-	}
-
-    public void NewPowerup(Vector2 targetSize, float duration) {
-        //this.powerup = powerup;
+    public void NewPowerup(Powerup powerup, Vector2 targetSize, float duration) {
+        this.powerup = powerup;
+        powerupDiplay.sprite = powerup.data.image;
         StartCoroutine(ResetDisplay(targetSize, duration));
     }
 
