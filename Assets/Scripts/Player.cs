@@ -33,6 +33,7 @@ public class Player {
         stats = new PlayerStats(this); // Creates a stats profile for the player
         ResetHealth();
         ResetWeapon();
+        experiance = 0;
     }
 
     public void SetController(PlayerController controller) {

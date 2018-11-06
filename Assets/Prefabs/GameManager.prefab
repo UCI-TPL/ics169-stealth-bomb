@@ -86,7 +86,8 @@ MonoBehaviour:
   playerJoinManager: {fileID: 0}
   tileManager: {fileID: 0}
   mainMenuSceneName: mainMenu
-  PlayerPrefab: {fileID: 114926635601995958, guid: 1525c93e4ceebd542b02ed13a439c69e,
+  DefaultPlayerData: {fileID: 11400000, guid: a943fa26298abe5409b720607ae16d86, type: 2}
+  PlayerPrefab: {fileID: 114453241457146372, guid: 1525c93e4ceebd542b02ed13a439c69e,
     type: 2}
 --- !u!114 &114407400500306902
 MonoBehaviour:

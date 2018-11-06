@@ -351,8 +351,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4662240197852592}
-  - component: {fileID: 114926635601995958}
-  - component: {fileID: 114609160043805932}
   - component: {fileID: 114453241457146372}
   - component: {fileID: 54095348738050004}
   - component: {fileID: 135886423390436444}
@@ -1030,10 +1028,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   input: {fileID: 0}
+  rend: {fileID: 23428729641376972}
   ShootPoint: {fileID: 1042869990503360}
   floorCollider: {fileID: 135181991345102188}
   wallCollider: {fileID: 136752097907207242}
   friction: 20
+  acceleration: 10
+  Colors:
+  - {r: 1, g: 0.23266676, b: 0.2216981, a: 0}
+  - {r: 0.16509432, g: 0.36372915, b: 1, a: 0}
+  - {r: 0.9733331, g: 1, b: 0, a: 0}
+  - {r: 0, g: 1, b: 0.003575325, a: 0}
   jumpGravityMultiplier: 0.75
   playerUI_HPCanvas: {fileID: 224221850297294898}
   playerUI_HPMaskCanvas: {fileID: 224917888600945680}
@@ -1093,17 +1098,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &114609160043805932
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1889070153941650}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ec9adae1957a014cb7fdb95d56e15d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114613310297843132
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1238,25 +1232,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &114926635601995958
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1889070153941650}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8ebe38a515c1fa479c1b30303e4940c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerNumber: 0
-  Colors:
-  - {r: 0.8092942, g: 0, b: 1, a: 0}
-  - {r: 0.12259703, g: 0.6110451, b: 0.8962264, a: 0}
-  - {r: 0.8301887, g: 0.74956053, b: 0.11356357, a: 0}
-  - {r: 0.990566, g: 0.040442906, b: 0, a: 0}
-  rend: {fileID: 23428729641376972}
-  DefaultWeapon: {fileID: 11400000, guid: 402d85fe57f92094685452857a0715b0, type: 2}
 --- !u!114 &114979332810464676
 MonoBehaviour:
   m_ObjectHideFlags: 1
