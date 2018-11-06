@@ -84,7 +84,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputManager: {fileID: 114946860565535868}
   playerJoinManager: {fileID: 0}
+  tileManager: {fileID: 0}
   mainMenuSceneName: mainMenu
+  PlayerPrefab: {fileID: 114926635601995958, guid: 1525c93e4ceebd542b02ed13a439c69e,
+    type: 2}
 --- !u!114 &114407400500306902
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -108,5 +111,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 830765641182702488086bf34010f242, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableSingletonBehavior: 0
-  enableDebug: 0

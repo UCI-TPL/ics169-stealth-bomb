@@ -75,7 +75,6 @@ public class TileMapEditorInspector : Editor {
         Handles.DrawWireCube(pos, new Vector3(size, size, size));
         Handles.color = cubeColor;
         Handles.CubeHandleCap(0, pos, Quaternion.identity, size + 0.001f, EventType.Repaint); // slight offset on size to fix z-fighting
-
     }
 
     public override void OnInspectorGUI() {

@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour {
     [Header("Managers")]
     public InputManager inputManager;
     public PlayerJoinManager playerJoinManager;
+    public TileManager tileManager;
 
     [Header("Important Scene Names")]
     public string mainMenuSceneName;
@@ -19,8 +20,9 @@ public class GameManager : MonoBehaviour {
     // this is by default set to true for all values so that the players spawn as normal if we start in a level.
     private bool[] readyPlayers = { true, true, true, true };
 
+    public Player PlayerPrefab;
     // Important Data in any non Main Menu scene.
-    private GameObject[] playersInScene;
+    private Player[] players;
 
     // Use this for initialization
     void Awake () {
@@ -31,6 +33,7 @@ public class GameManager : MonoBehaviour {
         }
         else if (instance != this)
             Destroy(gameObject);
+        tileManager = TileManager.tileManager;
 
         UnityEngine.SceneManagement.SceneManager.sceneLoaded += onSceneLoaded;
     }
@@ -48,12 +51,13 @@ public class GameManager : MonoBehaviour {
             }
             else if (scene.name != mainMenuSceneName)           // WE ARE ASSUMING ANYTHING THAT ISN'T THE MAIN MENU IS A LEVEL. THIS IS CLEARLY NOT GOING TO BE THE CASE AT ALL TIMES, SO UPDATE THIS AS NEEDED.
             {
-                playersInScene = GameObject.FindGameObjectsWithTag("Player");
-                if (playersInScene.Length != 0)                                             // If we have some players, we assume there are four, then...
-                {
-                    for (int i = 0; i < playersInScene.Length; i++)
-                    {
-                        playersInScene[i].SetActive(readyPlayers[i]);                       // we enable them based on the data from the readyPlayers array.
+                tileManager.StartGame();
+                players = new Player[readyPlayers.Length];
+                Queue<SpawnTile> spawnPoints = new Queue<SpawnTile>(tileManager.tileMap.SpawnTiles);
+                for (int i = 0; i < readyPlayers.Length; ++i) {
+                    if (readyPlayers[i]) {
+                        SpawnTile spawnTile = spawnPoints.Dequeue();
+                        Instantiate<GameObject>(PlayerPrefab.gameObject, spawnTile.transform.position, Quaternion.identity).GetComponent<Player>().playerNumber = i;
                     }
                 }
             }

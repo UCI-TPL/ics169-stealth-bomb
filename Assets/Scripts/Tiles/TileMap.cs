@@ -1,18 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Vector3Extensions;
 
 public class TileMap {
 
     public Tile[,,] Tiles { get; private set; }
-    public List<Tile> SpawnTiles { get; private set; }
-    public List<Tile> ItemTiles { get; private set; }
+    public List<SpawnTile> SpawnTiles { get; private set; }
+    public List<ItemTile> ItemTiles { get; private set; }
 
     public TileMap(Transform parentContainer) {
-        SpawnTiles = new List<Tile>();
-        ItemTiles = new List<Tile>();
+        SpawnTiles = new List<SpawnTile>();
+        ItemTiles = new List<ItemTile>();
         Tiles = ReadMap(parentContainer);
+        SpawnTiles = SpawnTiles.OrderByDescending(o => o.priority).ToList();
     }
 
     public Tile[,,] ReadMap(Transform parentContainer) {
@@ -20,7 +22,7 @@ public class TileMap {
         foreach (Transform t in parentContainer) {
             Tile tile = t.GetComponent<Tile>();
             if (tile != null)
-                mapSize = Max(mapSize, tile.position.Round());
+                mapSize = Vector3.Max(mapSize, tile.position.Round()).Round();
         }
         mapSize += Vector3Int.one;
         Tile[,,] tiles = new Tile[mapSize.x, mapSize.y, mapSize.z];
@@ -31,18 +33,14 @@ public class TileMap {
                 tiles[pos.x, pos.y, pos.z] = tile;
                 switch(tile.type) {
                     case Tile.Type.SpawnPoint:
-                        SpawnTiles.Add(tile);
+                        SpawnTiles.Add((SpawnTile)tile);
                         break;
                     case Tile.Type.Item:
-                        ItemTiles.Add(tile);
+                        ItemTiles.Add((ItemTile)tile);
                         break;
                 }
             }
         }
         return tiles;
-    }
-
-    private static Vector3Int Max(Vector3Int v1, Vector3Int v2) {
-        return new Vector3Int(Mathf.Max(v1.x, v2.x), Mathf.Max(v1.y, v2.y), Mathf.Max(v1.z, v2.z));
     }
 }

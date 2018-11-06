@@ -81,4 +81,11 @@ public class ItemTile : Tile {
         if (other.gameObject.GetComponent<ItemContainer>() != null)
             ResetCooldown();
     }
+
+    private void OnDrawGizmos() {
+        Gizmos.color = new Color(1f, 1f, 1f, 0.75f);
+        Gizmos.DrawWireCube(transform.position, transform.lossyScale);
+        Gizmos.color = new Color(0.75f, 0.75f, 0.75f, 0.5f);
+        Gizmos.DrawCube(transform.position, transform.lossyScale);
+    }
 }

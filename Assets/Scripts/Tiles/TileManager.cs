@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Vector3Extensions;
 
-public class TerrainManager : MonoBehaviour {
+public class TileManager : MonoBehaviour {
 
     public TileMap tileMap;
     public float timer;
@@ -18,17 +18,17 @@ public class TerrainManager : MonoBehaviour {
         get { return new Rect(center - newRadius + new Vector2(collapseBuffer, collapseBuffer), 2 * (newRadius - new Vector2(collapseBuffer, collapseBuffer))); }
     }
 
-    private static TerrainManager _terrainManager;
-    public static TerrainManager terrainManager {
+    private static TileManager _tileManager;
+    public static TileManager tileManager {
         get {
-            if (_terrainManager != null)
-                return _terrainManager;
-            _terrainManager = FindObjectOfType<TerrainManager>();
-            if (_terrainManager == null) {
-                Debug.LogError("Terrain Manager not found, Created new Terrain Manager.");
-                _terrainManager = new GameObject("Terrain Manager").AddComponent<TerrainManager>();
+            if (_tileManager != null)
+                return _tileManager;
+            _tileManager = FindObjectOfType<TileManager>();
+            if (_tileManager == null) {
+                Debug.LogError("Tile Manager not found, Created new Tile Manager.");
+                _tileManager = new GameObject("Tile Manager").AddComponent<TileManager>();
             }
-            return _terrainManager;
+            return _tileManager;
         }
     }
 
@@ -49,7 +49,7 @@ public class TerrainManager : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        StartGame();
+        //StartGame();
 	}
 
     public void StartGame() {

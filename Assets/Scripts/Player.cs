@@ -50,11 +50,11 @@ public class Player : MonoBehaviour {
         rend = rend == null ? GetComponent<Renderer>() : rend;
         //if (Colors.Length == 0)
         //    Colors[playerNumber] = Color.gray; //make sure the default color is gray and not black
-        rend.material.color = playerColor; //setting the player color based on playeNum 
         
     }
 
     private void Start() {
+        rend.material.color = playerColor; //setting the player color based on playeNum 
         ResetHealth();
         ResetWeapon();
     }

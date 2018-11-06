@@ -13,7 +13,8 @@ public class Tile : MonoBehaviour {
     private void Awake() {
         type = Type.Tile;
     }
-
+    
+    /// <summary>Position of the tile snaped to the grid (nearest Int)</summary>
     public Vector3 position {
         get { return transform.localPosition - TileOffset; }
     }
@@ -25,11 +26,13 @@ public class Tile : MonoBehaviour {
             Invoke("DestroyEffect", timer);
         }
     }
-  
+
+    /// <summary>Called once when the block begins breaking</summary>
     protected virtual void BreakingEffect(float duration) {
         GetComponent<MeshRenderer>().materials = new Material[2] { GetComponent<MeshRenderer>().material, Resources.Load<Material>("Red") };
     }
 
+    /// <summary>Called once when the block is supposed to be destroyed. This method should destroy the Tile.</summary>
     protected virtual void DestroyEffect() {
         StartCoroutine("DefaultDestroyEff");
     }
@@ -48,7 +51,7 @@ public class Tile : MonoBehaviour {
     }
 
 #if UNITY_EDITOR //Editor only tag
-    // Create the tile as a prefab in the specified position and rotation
+    /// <summary>Create the tile as a prefab in the specified position and rotation</summary>
     public static GameObject PrefabCreate(GameObject prefab, Vector3 pos, Quaternion rotation, Transform parent) {
         GameObject tile = (GameObject)UnityEditor.PrefabUtility.InstantiatePrefab(prefab);
         tile.transform.position = pos.Round() + TileOffset;

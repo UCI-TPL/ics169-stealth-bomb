@@ -21,7 +21,7 @@ public class ItemSpawner : MonoBehaviour {
     void Update () {
 		if (cooldown <= Time.time) {
             ItemData item = itemList.RandomItem();
-            GameObject g = Instantiate(item.type == ItemData.Type.Powerup ? powerupContainer : item.type == ItemData.Type.Weapon ? weaponContainer : itemContainer, new Vector3(Mathf.Round(Random.Range(TerrainManager.terrainManager.mapArea.min.x, TerrainManager.terrainManager.mapArea.max.x)) +0.5f, transform.position.y + 1.5f, Mathf.Round(Random.Range(TerrainManager.terrainManager.mapArea.min.y, TerrainManager.terrainManager.mapArea.max.y)) +0.5f), Quaternion.identity);
+            GameObject g = Instantiate(item.type == ItemData.Type.Powerup ? powerupContainer : item.type == ItemData.Type.Weapon ? weaponContainer : itemContainer, new Vector3(Mathf.Round(Random.Range(TileManager.tileManager.mapArea.min.x, TileManager.tileManager.mapArea.max.x)) +0.5f, transform.position.y + 1.5f, Mathf.Round(Random.Range(TileManager.tileManager.mapArea.min.y, TileManager.tileManager.mapArea.max.y)) +0.5f), Quaternion.identity);
             g.GetComponent<ItemContainer>().SetItemData(item);
             ResetCooldown();
         }
