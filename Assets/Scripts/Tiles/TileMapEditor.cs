@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Vector3Extensions;
 #if UNITY_EDITOR //Editor only tag
 using UnityEditor;
 #endif //Editor only tag
@@ -10,7 +11,7 @@ public class TileMapEditor : MonoBehaviour {
     public TileList tileList;
     //public HashSet<Tile> createdTiles = new HashSet<Tile>();
     public int selectTile = 0;
-    public Vector3Int mapsize;
+    public Bounds mapBounds = new Bounds();
     
     private GameObject _terrainParent;
     private GameObject terrainParrent {
@@ -28,12 +29,12 @@ public class TileMapEditor : MonoBehaviour {
     public void CreateTile(Vector3 pos) {
         GameObject g = Tile.PrefabCreate(tileList.tiles[selectTile].gameObject, pos, Quaternion.identity, terrainParrent.transform);
         Undo.RegisterCreatedObjectUndo(g, "Undo Create Tile");
-        //createdTiles.Add(g.GetComponent<Tile>());
+        mapBounds.Encapsulate(g.GetComponent<Tile>().position.Round());
     }
 
     public void DeleteTile(Tile tile) {
-        //createdTiles.Remove(tile);
         Undo.DestroyObjectImmediate(tile.gameObject);
+        RecalculateBounds();
     }
 
     public void ClearTiles() {
@@ -43,6 +44,15 @@ public class TileMapEditor : MonoBehaviour {
         for (int i = terrainParrent.transform.childCount-1; i >= 0; --i)
             if (terrainParrent.transform.GetChild(i).GetComponent<Tile>() != null)
                 Undo.DestroyObjectImmediate(terrainParrent.transform.GetChild(i).gameObject);
+    }
+
+    public void RecalculateBounds() {
+        mapBounds = new Bounds();
+        foreach (Transform t in terrainParrent.transform) {
+            Tile tile = t.GetComponent<Tile>();
+            if (tile != null)
+                mapBounds.Encapsulate(tile.position.Round());
+        }
     }
 #endif //Editor only tag
 }

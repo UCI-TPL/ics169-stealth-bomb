@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour {
     public PlayerController PlayerPrefab;
     // Important Data in any non Main Menu scene.
     public Player[] players { get; private set; }
+    public Player leader;
     [Range(0,1)]
     [Tooltip("Amount experiance is scalled by per level over")]
     public float ExpPenaltyPerLvl = 0.75f;
@@ -92,6 +93,14 @@ public class GameManager : MonoBehaviour {
                         players[i].onDeath += ExpOnKill;
                     }
                 }
+                FollowTargetsCamera moveCamera = Camera.main.GetComponentInParent<FollowTargetsCamera>();
+                if (moveCamera != null) {
+                    foreach (Player player in players) {
+                        if (player != null) {
+                            moveCamera.targets.Add(player.controller.gameObject);
+                        }
+                    }
+                }
                 // StartCoroutine(Countdown());
             }
         }
@@ -106,6 +115,14 @@ public class GameManager : MonoBehaviour {
             {
                 readyPlayers = playerJoinManager.GetPLayerReadyStatusList();                // Have the GameManager store the players who are currently ready.
             }
+        }
+        float highestRank = 0;
+        foreach (Player player in players) {
+            if (player.rank > highestRank) {
+                highestRank = player.rank;
+                leader = player;
+            } else if (player.rank == highestRank)
+                leader = null;
         }
     }
 

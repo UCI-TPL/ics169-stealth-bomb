@@ -14,7 +14,7 @@ public class InputManager : MonoBehaviour {
                 return _inputManager;
             _inputManager = FindObjectOfType<InputManager>();
             if (_inputManager == null) {
-                Debug.LogError("Input Manager not found, Created new Input Manager.");
+                Debug.LogWarning("Input Manager not found, Created new Input Manager.");
                 _inputManager = new GameObject("Input Manager").AddComponent<InputManager>();
                 GameObject g = GameObject.Find("Managers");
                 _inputManager.transform.SetParent(g != null ? g.transform : new GameObject("Managers").transform);

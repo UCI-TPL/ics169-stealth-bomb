@@ -28,6 +28,8 @@ public class PlayerController : MonoBehaviour {
     public GameObject ShootPoint;
     public Collider floorCollider;
     public Collider wallCollider;
+    public GameObject crown;
+
     public float friction = 10f;
     [Tooltip("time it takes to go from 0 to max speed is 1 second / acceleration")]
     public float acceleration = 10f;
@@ -120,6 +122,8 @@ public class PlayerController : MonoBehaviour {
     // Rotate the player's facing direction
     private void Update() {
         player.Update();
+        transform.localScale = player == GameManager.instance.leader ? Vector3.one * 1.35f : Vector3.one;
+        crown.SetActive(player == GameManager.instance.leader);
 
         Vector2 horizontalVector = input.controllers[player.playerNumber].AimVector();
         Debug.DrawRay(transform.position, transform.forward*100, Color.white);

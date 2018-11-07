@@ -23,7 +23,7 @@ public class CameraShake : MonoBehaviour {
     private Vector3 originalRight;
 
     private void Start() {
-        originalPosition = transform.position;
+        originalPosition = transform.localPosition;
         originalRight = transform.right;
         ShakeDiminish(6, 3);
     }
@@ -57,28 +57,28 @@ public class CameraShake : MonoBehaviour {
         float shakeDuration;
         while (endTime > Time.time) {
             targetPosition = originalPosition + new Vector3(Random.Range(-maxDisplacement, maxDisplacement), Random.Range(-maxDisplacement, maxDisplacement), Random.Range(-maxDisplacement, maxDisplacement));
-            distance = transform.position - targetPosition;
+            distance = transform.localPosition - targetPosition;
             targetRight = originalRight + new Vector3(0 , Random.Range(-intensity / 200, intensity / 200), Random.Range(-intensity / 200, intensity / 200));
             distanceF = transform.right - targetRight;
             shakeDuration = ((baseShakeRate * distance.magnitude / 2) / maxDisplacement);
             timer = Time.time + shakeDuration;
             while (timer >= Time.time) {
-                transform.position = targetPosition + distance * (Mathf.Sin(3*((timer - Time.time) / shakeDuration) - 1.5f) + 1 )/2;
+                transform.localPosition = targetPosition + distance * (Mathf.Sin(3*((timer - Time.time) / shakeDuration) - 1.5f) + 1 )/2;
                 transform.right = targetRight + distanceF * (Mathf.Sin(3 * ((timer - Time.time) / shakeDuration) - 1.5f) + 1) / 2;
                 yield return null;
             }
-            transform.position = targetPosition;
+            transform.localPosition = targetPosition;
             transform.right = targetRight;
         }
         targetPosition = originalPosition;
-        distance = transform.position - targetPosition;
+        distance = transform.localPosition - targetPosition;
         shakeDuration = ((baseShakeRate * distance.magnitude / 2) / maxDisplacement);
         timer = Time.time + shakeDuration;
         while (timer >= Time.time) {
-            transform.position = targetPosition + distance * (Mathf.Sin(3 * ((timer - Time.time) / shakeDuration) - 1.5f) + 1) / 2;
+            transform.localPosition = targetPosition + distance * (Mathf.Sin(3 * ((timer - Time.time) / shakeDuration) - 1.5f) + 1) / 2;
             yield return null;
         }
-        transform.position = originalPosition;
+        transform.localPosition = originalPosition;
         transform.right = originalRight;
     }
 }

@@ -19,17 +19,19 @@ public class TileMap {
 
     public Tile[,,] ReadMap(Transform parentContainer) {
         Vector3Int mapSize = Vector3Int.one * -1;
+        Bounds mapBounds = new Bounds();
         foreach (Transform t in parentContainer) {
             Tile tile = t.GetComponent<Tile>();
             if (tile != null)
-                mapSize = Vector3.Max(mapSize, tile.position.Round()).Round();
+                mapBounds.Encapsulate(tile.position.Round());
         }
-        mapSize += Vector3Int.one;
+        mapSize = mapBounds.size.Round() + Vector3Int.one;
+        Vector3Int offset = mapBounds.min.Round();
         Tile[,,] tiles = new Tile[mapSize.x, mapSize.y, mapSize.z];
         foreach (Transform t in parentContainer) {
             Tile tile = t.GetComponent<Tile>();
             if (tile != null) {
-                Vector3Int pos = tile.position.Round();
+                Vector3Int pos = tile.position.Round() - offset;
                 tiles[pos.x, pos.y, pos.z] = tile;
                 switch(tile.type) {
                     case Tile.Type.SpawnPoint:

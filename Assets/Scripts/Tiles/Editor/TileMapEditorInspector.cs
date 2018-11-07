@@ -19,6 +19,7 @@ public class TileMapEditorInspector : Editor {
     void OnEnable() {
         LastTool = Tools.current; // Save current tool to be able to restore later
         UpdateTileSelection();
+        script.RecalculateBounds();
     }
 
     private void OnDisable() {
@@ -99,7 +100,7 @@ public class TileMapEditorInspector : Editor {
             GUILayout.EndVertical();
         }
         
-        GUILayout.Label("Map Size:");
+        GUILayout.Label("Map Size: " + (script.mapBounds.size + Vector3.one).ToString());
 
         TileSelectorGUI();
 
