@@ -50,17 +50,11 @@ public class ChargeWeapon : Weapon {
         rend.material.color = player.controller.playerColor;
         //Debug.Log("Releasing with a chargeTime of " + chargeLevel);
         //if (chargeLevel >= 1) { }
-        for (int i = 0; i < data.numProj; ++i)
-        {
-            data.projectile.Shoot(player, data.projSpeed * Mathf.Floor(chargeLevel), data.numProj);
-            //Projectile arrow = GameObject.Instantiate(data.arrow, player.controller.ShootPoint.transform.position, player.transform.rotation, null); //this instantiates the arrow as an attack
-            //arrow.player = player;
-            //arrow.speed = data.projSpeed * Mathf.Floor(chargeLevel);
-            //arrow.damage = data.damage * Mathf.FloorToInt(chargeLevel); //should this be done differently? Perhaps we could call a function called "shoot" or "launch" and provide these variables
-        }
-
-
-        
+        data.projectile.Shoot(player, data.projSpeed * Mathf.Pow(Mathf.Floor(chargeLevel), 2), data.numProj);
+        //Projectile arrow = GameObject.Instantiate(data.arrow, player.controller.ShootPoint.transform.position, player.transform.rotation, null); //this instantiates the arrow as an attack
+        //arrow.player = player;
+        //arrow.speed = data.projSpeed * Mathf.Floor(chargeLevel);
+        //arrow.damage = data.damage * Mathf.FloorToInt(chargeLevel); //should this be done differently? Perhaps we could call a function called "shoot" or "launch" and provide these variables
     }
 
     // Create a deep copy of this weapon instance

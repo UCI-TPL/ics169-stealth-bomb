@@ -17,8 +17,10 @@ public class Projectile : MonoBehaviour {
     public Player player;
 
 	void Start () {
-        Physics.IgnoreCollision(player.controller.floorCollider, collider);
-        Physics.IgnoreCollision(player.controller.wallCollider, collider);
+        if (player.controller.floorCollider != null)
+            Physics.IgnoreCollision(player.controller.floorCollider, collider);
+        if (player.controller.wallCollider != null)
+            Physics.IgnoreCollision(player.controller.wallCollider, collider);
         Destroy(gameObject, data.lifetime); // Destroy gameObject after lifetime is up
         trail.material.color = player.controller.playerColor;
     }

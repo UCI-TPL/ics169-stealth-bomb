@@ -61,8 +61,10 @@ public class GameManager : MonoBehaviour {
 
     void DisablePlayersMovement(float duration)
     {
-        for(int i = 0; i < players.Length; i++)
-            players[i].DisablePlayer(duration);
+        for(int i = 0; i < players.Length; i++) {
+            if (players[i] != null)
+                players[i].DisablePlayer(duration);
+        }
     }
 
     // The onSceneLoaded function is where you are going to do most of the data pushing from scene to scene.
@@ -90,7 +92,7 @@ public class GameManager : MonoBehaviour {
                         players[i].onDeath += ExpOnKill;
                     }
                 }
-                StartCoroutine("Countdown");
+                // StartCoroutine(Countdown());
             }
         }
     }

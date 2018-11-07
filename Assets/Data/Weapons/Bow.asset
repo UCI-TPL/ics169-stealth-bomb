@@ -20,8 +20,8 @@ MonoBehaviour:
     type: 1
   projectile: {fileID: 11400000, guid: 9df1e8c6a587d604684f97e370ea1793, type: 2}
   colorAddition: 1
-  chargeTime: 0.5
+  chargeTime: 0.1666
   chargeLevels: 3
   numProj: 1
-  projSpeed: 25
+  projSpeed: 10
   damage: 35
