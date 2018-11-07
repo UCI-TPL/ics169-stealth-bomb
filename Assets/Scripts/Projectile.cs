@@ -26,7 +26,7 @@ public class Projectile : MonoBehaviour {
     private void OnCollisionEnter(Collision other) {
         PlayerController hit;
         if ((hit = other.gameObject.GetComponent<PlayerController>()) != null && hit.player != player) {
-            hit.player.HurtPlayer(data.damage);
+            hit.player.Hurt(player, data.damage);
             hit.Knockback(transform.forward * data.knockbackForce); //the knockback will be in the direction of the projectile 
             Destroy(gameObject);
         }

@@ -12,11 +12,11 @@ public class PlayerController : MonoBehaviour {
         set {
             if (player != null) {
                 player.onHeal.RemoveListener(Heal);
-                player.onHurt.RemoveListener(Hurt);
+                player.onHurt -= Hurt;
             }
             _player = value;
             player.onHeal.AddListener(Heal);
-            player.onHurt.AddListener(Hurt);
+            player.onHurt += Hurt;
         }
     }
 
@@ -188,7 +188,7 @@ public class PlayerController : MonoBehaviour {
         rb.AddForce(direction, ForceMode.Impulse); //move back in the direction of the projectile 
     }
 
-    private void Hurt() {
+    private void Hurt(Player damageDealer, Player reciever, float percentDealt) {
         input.controllers[player.playerNumber].Vibrate(1.0f, 0.1f);
         StartCoroutine("HurtIndicator");
 

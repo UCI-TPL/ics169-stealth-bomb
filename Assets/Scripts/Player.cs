@@ -12,15 +12,21 @@ public class Player {
     public int playerNumber;
     
     public float health { get; private set; }
-    private float experiance;
+    public float experiance { get; private set; }
     public int rank { get { return Mathf.FloorToInt(experiance) + 1; } }
 
     private List<Powerup> powerups = new List<Powerup>();
+    // The Last player this player was hurt by. This is for attributing kills
+    private Player lastHurtBy;
 
+    // Events
     private UnityEvent onUpdate = new UnityEvent();
     private UnityEvent onMove = new UnityEvent();
-    public UnityEvent onHurt = new UnityEvent();
+    public delegate void onHurtDel(Player damageDealer, Player reciever, float percentDealt);
+    public event onHurtDel onHurt;
     public UnityEvent onHeal = new UnityEvent();
+    public delegate void onDeathDel(Player killer, Player killed);
+    public event onDeathDel onDeath;
     public delegate void powerupDel(Powerup powerup);
     public event powerupDel onAddPowerUp;
 
@@ -43,6 +49,10 @@ public class Player {
         controller.player = this;
     }
 
+    public void AddExperiance(float amount) {
+        experiance += amount;
+    }
+
     public void DisablePlayer(float duration) { //this exists for GameController to access PlayerController
         controller.DisableMovement(duration);
         controller.DisableAttack(duration);
@@ -61,9 +71,14 @@ public class Player {
         onHeal.Invoke();
     }
 
-    public void HurtPlayer(float damage) {
-        health -= damage;
-        onHurt.Invoke();
+    /// <summary>Deals damage to this player and returns the percentage of damage dealt</summary>
+    public float Hurt(Player damageDealer, float damage) {
+        float damageDealt = Mathf.Min(damage, health);
+        health -= damageDealt;
+        float percent = damageDealt / stats.maxHealth; // Percentage of max health dealt
+        lastHurtBy = damageDealer; // Remember last player that dealt damage, this is used to attribute kills
+        onHurt.Invoke(damageDealer, this, percent);
+        return percent;
     }
 
     public void Kill() {
@@ -73,6 +88,7 @@ public class Player {
     private void CheckDeath() {
         if (health <= 0) {
             controller.input.controllers[playerNumber].Vibrate(1.0f, 1f, InputManager.Controller.VibrationMode.Diminish);
+            onDeath(lastHurtBy, this);
             GameObject.Destroy(controller.gameObject);
         }
     }

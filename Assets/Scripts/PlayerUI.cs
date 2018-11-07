@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class PlayerUI : MonoBehaviour {
 
     public Text rankDisplay;
+    public Slider experianceSlider;
     public PowerupShelfUI powerUpShelf;
     public Player player;
 
@@ -15,5 +16,6 @@ public class PlayerUI : MonoBehaviour {
 
     private void Update() {
         rankDisplay.text = player.rank.ToString();
+        experianceSlider.value = player.experiance - Mathf.Floor(player.experiance);
     }
 }
