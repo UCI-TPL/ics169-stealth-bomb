@@ -33,7 +33,9 @@ public class GameManager : MonoBehaviour {
     public float ExpBonusPerLvl = 0.25f;
 
     public int countdown = 3; //at the start of a round
-    public GameObject countdownText; 
+    public GameObject countdownText;
+
+    private List<GameRound> rounds = new List<GameRound>();
 
     // Use this for initialization
     void Awake () {
@@ -81,24 +83,12 @@ public class GameManager : MonoBehaviour {
             }
             else if (scene.name != mainMenuSceneName)           // WE ARE ASSUMING ANYTHING THAT ISN'T THE MAIN MENU IS A LEVEL. THIS IS CLEARLY NOT GOING TO BE THE CASE AT ALL TIMES, SO UPDATE THIS AS NEEDED.
             {
-                TileManager.tileManager.StartGame();
                 players = new Player[readyPlayers.Length];
-                Queue<SpawnTile> spawnPoints = new Queue<SpawnTile>(TileManager.tileManager.tileMap.SpawnTiles);
                 for (int i = 0; i < readyPlayers.Length; ++i) {
                     if (readyPlayers[i]) {
                         players[i] = new Player(i, DefaultPlayerData);
-                        SpawnTile spawnTile = spawnPoints.Dequeue();
-                        players[i].SetController(Instantiate<GameObject>(PlayerPrefab.gameObject, spawnTile.transform.position, Quaternion.identity).GetComponent<PlayerController>());
                         players[i].onHurt += ExpOnHurt;
                         players[i].onDeath += ExpOnKill;
-                    }
-                }
-                FollowTargetsCamera moveCamera = Camera.main.GetComponentInParent<FollowTargetsCamera>();
-                if (moveCamera != null) {
-                    foreach (Player player in players) {
-                        if (player != null) {
-                            moveCamera.targets.Add(player.controller.gameObject);
-                        }
                     }
                 }
                 // StartCoroutine(Countdown());
@@ -116,12 +106,41 @@ public class GameManager : MonoBehaviour {
                 readyPlayers = playerJoinManager.GetPLayerReadyStatusList();                // Have the GameManager store the players who are currently ready.
             }
         }
+        else {
+            if (rounds.Count <= 0 || !rounds[rounds.Count - 1].isActive) {
+                GameRound newRound = new GameRound(GetActivePlayers(players));
+                rounds.Add(newRound);
+                newRound.LoadLevel();
+                StartCoroutine(StartGameAfterLoad(newRound));
+            }
+        }
+    }
+
+    private IEnumerator StartGameAfterLoad(GameRound round) {
+        while (!round.isReady)
+            yield return null;
+        round.StartGame();
+    }
+
+    protected static Player[] GetActivePlayers(Player[] players) {
+        List<Player> activePlayers = new List<Player>(players);
+        for (int i = activePlayers.Count - 1; i >= 0; --i)
+            if (activePlayers[i] == null)
+                activePlayers.RemoveAt(i);
+        return activePlayers.ToArray();
+    }
+
+    /// <summary>
+    /// Update who the current highest ranking player is.
+    /// </summary>
+    private void UpdateRank() {
         float highestRank = 0;
         foreach (Player player in players) {
             if (player.rank > highestRank) {
                 highestRank = player.rank;
                 leader = player;
-            } else if (player.rank == highestRank)
+            }
+            else if (player.rank == highestRank)
                 leader = null;
         }
     }
@@ -141,7 +160,9 @@ public class GameManager : MonoBehaviour {
         ExpOnHurt(killer, killed, 0.5f);
     }
 
-    // Move to a position over a duration and slow down at the end
+    /// <summary>
+    /// Grant experiance to a player, This happens over time very quickly to give it that pokemon like level up
+    /// </summary>
     private IEnumerator ExperianceOverTime(Player player, float amount) {
         float duration = Mathf.Sqrt(amount);
         float endTime = Time.time + duration;
@@ -150,6 +171,7 @@ public class GameManager : MonoBehaviour {
             float add = remaining - amount * Mathf.Pow(Mathf.Max(endTime - Time.time, 0) / duration, 2f);
             player.AddExperiance(add);
             remaining -= add;
+            UpdateRank(); // Update Ranking after granting experiance to a player
             yield return null;
         }
     }
@@ -158,6 +180,12 @@ public class GameManager : MonoBehaviour {
 
         public Dictionary<Player, float> initialExperiance;
         public Player[] players;
+        public bool isActive {
+            get { return activePlayersControllers.Count > 1 || isLoading || isReady; }
+        }
+        public bool isLoading { get; private set; }
+        public bool isReady { get; private set; }
+        public List<GameObject> activePlayersControllers = new List<GameObject>();
 
         public GameRound(Player[] players) {
             this.players = players;
@@ -165,6 +193,40 @@ public class GameManager : MonoBehaviour {
             foreach (Player player in this.players) {
                 initialExperiance.Add(player, player.experiance);
             }
+            isLoading = isReady = false;
+        }
+
+        public void LoadLevel() {
+            isLoading = true;
+            TileManager.tileManager.LoadLevel("LoadLevel").AddListener(delegate { isLoading = false; isReady = true; });
+        }
+
+        public void StartGame() {
+            isReady = false;
+            TileManager.tileManager.StartGame();
+
+            Queue<SpawnTile> spawnPoints = new Queue<SpawnTile>(TileManager.tileManager.tileMap.SpawnTiles);
+            FollowTargetsCamera moveCamera = Camera.main.GetComponentInParent<FollowTargetsCamera>();
+            foreach (Player player in players) {
+                SpawnTile spawnTile = spawnPoints.Dequeue();
+                player.SetController(Instantiate<GameObject>(GameManager.instance.PlayerPrefab.gameObject, spawnTile.transform.position, Quaternion.identity).GetComponent<PlayerController>());
+                moveCamera.targets.Add(player.controller.gameObject);
+                activePlayersControllers.Add(player.controller.gameObject);
+                player.onDeath += Player_onDeath;
+            }
+        }
+
+        private void GameOver() {
+            foreach (GameObject g in activePlayersControllers)
+                Destroy(g);
+            foreach (Player player in players)
+                player.onDeath -= Player_onDeath;
+        }
+
+        private void Player_onDeath(Player killer, Player killed) {
+            activePlayersControllers.Remove(killed.controller.gameObject);
+            if (!isActive)
+                GameOver();
         }
     }
 }

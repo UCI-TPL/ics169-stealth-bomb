@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using Vector3Extensions;
 
@@ -17,6 +18,8 @@ public class TileManager : MonoBehaviour {
     public Rect mapArea {
         get { return new Rect(center - newRadius + new Vector2(collapseBuffer, collapseBuffer), 2 * (newRadius - new Vector2(collapseBuffer, collapseBuffer))); }
     }
+    // whether the tile manager is done loading next level
+    public bool isLoading { get; private set; }
 
     private static TileManager _tileManager;
     public static TileManager tileManager {
@@ -47,11 +50,6 @@ public class TileManager : MonoBehaviour {
 
     private Queue<TileDestroyCalc> TileDestroyQueue;
 
-    // Use this for initialization
-    void Start () {
-        //StartGame();
-	}
-
     public void StartGame() {
         tileMap = ReadTileMap(); // Read Tile Map currently in scene into memory
         if (tileMap == null || tileMap.Tiles.Length == 0) { // If no map, create a random map
@@ -69,6 +67,8 @@ public class TileManager : MonoBehaviour {
 
         TileDestroyQueue = CreateTileMapDestroyCalc(tileMap.Tiles, center, collapseBuffer);
 
+        StopAllCoroutines();
+        CancelInvoke();
         Invoke("StartCountdown", timer);
     }
 
@@ -175,23 +175,27 @@ public class TileManager : MonoBehaviour {
     }
 
     // Removes the old level and loads in new level
-    public void LoadLevel(string name) {
+    public UnityEvent LoadLevel(string name) {
         GameObject g = GameObject.Find("Tile Map");
         if (g != null)
             Destroy(g);
         if (pastLevel != null)
             DeleteOldLevel();
         pastLevel = name;
-        StartCoroutine("LoadLevelAsync", name);
+        UnityEvent onLoad = new UnityEvent();
+        StartCoroutine(LoadLevelAsync(name, onLoad));
+        return onLoad;
     }
 
     // Loads scene and starts game once finished
-    private IEnumerator LoadLevelAsync(string name) {
+    private IEnumerator LoadLevelAsync(string name, UnityEvent onLoad) {
+        isLoading = true;
         AsyncOperation asyncLoadLevel = SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
         while (!asyncLoadLevel.isDone) {
             yield return new WaitForEndOfFrame();
         }
-        StartGame();
+        isLoading = false;
+        onLoad.Invoke();
     }
 
     // Remove old scene

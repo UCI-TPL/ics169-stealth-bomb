@@ -15,6 +15,7 @@ public class Player {
     public float experiance { get; private set; }
     public int rank { get { return Mathf.FloorToInt(experiance) + 1; } }
 
+    private List<Powerup> permPowerups = new List<Powerup>();
     private List<Powerup> powerups = new List<Powerup>();
     // The Last player this player was hurt by. This is for attributing kills
     private Player lastHurtBy;
@@ -93,7 +94,7 @@ public class Player {
         }
     }
 
-    public void Update() {
+    public void InGameUpdate() {
         List<Powerup> deleteList = new List<Powerup>();
         foreach (Powerup p in powerups) {
             if (p.endTime <= Time.time)
@@ -127,9 +128,15 @@ public class Player {
 
     // Create a new instance of a power-up, save it to list of power-ups and add its modifiers to stats
     public void AddPowerup(PowerupData powerupData) {
-        Powerup powerup = powerupData.NewInstance(this); // Initialize power-up
+        Powerup powerup;
+        if (permPowerups.Count < rank) {
+            powerup = powerupData.NewInstance(this, true); // Initialize power-up
+            permPowerups.Add(powerup); // Save to list of powerups
+        } else {
+            powerup = powerupData.NewInstance(this); // Initialize power-up
+            powerups.Add(powerup); // Save to list of powerups
+        }
         onAddPowerUp.Invoke(powerup);
-        powerups.Add(powerup); // Save to list of powerups
         foreach (PlayerStats.Modifier m in powerup.modifiers) // Add power-up's modifiers to stats
             stats.AddModifier(m);
         foreach (Powerup.Trigger t in powerup.triggers) { // Add all the powerup's triggers to the respective event calls

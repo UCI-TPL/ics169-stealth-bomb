@@ -121,7 +121,7 @@ public class PlayerController : MonoBehaviour {
 
     // Rotate the player's facing direction
     private void Update() {
-        player.Update();
+        player.InGameUpdate();
         transform.localScale = player == GameManager.instance.leader ? Vector3.one * 1.35f : Vector3.one;
         crown.SetActive(player == GameManager.instance.leader);
 
