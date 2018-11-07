@@ -83,14 +83,8 @@ public class GameManager : MonoBehaviour {
             }
             else if (scene.name != mainMenuSceneName)           // WE ARE ASSUMING ANYTHING THAT ISN'T THE MAIN MENU IS A LEVEL. THIS IS CLEARLY NOT GOING TO BE THE CASE AT ALL TIMES, SO UPDATE THIS AS NEEDED.
             {
-                players = new Player[readyPlayers.Length];
-                for (int i = 0; i < readyPlayers.Length; ++i) {
-                    if (readyPlayers[i]) {
-                        players[i] = new Player(i, DefaultPlayerData);
-                        players[i].onHurt += ExpOnHurt;
-                        players[i].onDeath += ExpOnKill;
-                    }
-                }
+                if (players == null)
+                    SetUpPlayers();
                 // StartCoroutine(Countdown());
             }
         }
@@ -112,6 +106,17 @@ public class GameManager : MonoBehaviour {
                 rounds.Add(newRound);
                 newRound.LoadLevel();
                 StartCoroutine(StartGameAfterLoad(newRound));
+            }
+        }
+    }
+
+    public void SetUpPlayers() {
+        players = new Player[readyPlayers.Length];
+        for (int i = 0; i < readyPlayers.Length; ++i) {
+            if (readyPlayers[i]) {
+                players[i] = new Player(i, DefaultPlayerData);
+                players[i].onHurt += ExpOnHurt;
+                players[i].onDeath += ExpOnKill;
             }
         }
     }
@@ -202,18 +207,19 @@ public class GameManager : MonoBehaviour {
         }
 
         public void StartGame() {
-            isReady = false;
             TileManager.tileManager.StartGame();
 
             Queue<SpawnTile> spawnPoints = new Queue<SpawnTile>(TileManager.tileManager.tileMap.SpawnTiles);
             FollowTargetsCamera moveCamera = Camera.main.GetComponentInParent<FollowTargetsCamera>();
             foreach (Player player in players) {
+                player.ResetForRound();
                 SpawnTile spawnTile = spawnPoints.Dequeue();
                 player.SetController(Instantiate<GameObject>(GameManager.instance.PlayerPrefab.gameObject, spawnTile.transform.position, Quaternion.identity).GetComponent<PlayerController>());
                 moveCamera.targets.Add(player.controller.gameObject);
                 activePlayersControllers.Add(player.controller.gameObject);
                 player.onDeath += Player_onDeath;
             }
+            isReady = false;
         }
 
         private void GameOver() {

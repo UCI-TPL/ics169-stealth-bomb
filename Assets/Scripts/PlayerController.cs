@@ -10,13 +10,9 @@ public class PlayerController : MonoBehaviour {
     public Player player {
         get { return _player; }
         set {
-            if (player != null) {
-                player.onHeal.RemoveListener(Heal);
-                player.onHurt -= Hurt;
-            }
+            RemoveListeners();
             _player = value;
-            player.onHeal.AddListener(Heal);
-            player.onHurt += Hurt;
+            AddListeners();
         }
     }
 
@@ -106,6 +102,22 @@ public class PlayerController : MonoBehaviour {
         input.controllers[player.playerNumber].attack.OnDown.AddListener(ActivateAttack);
         input.controllers[player.playerNumber].attack.OnUp.AddListener(ReleaseAttack);
         input.controllers[player.playerNumber].jump.OnUp.AddListener(ReleaseJump);
+    }
+
+    private void AddListeners() {
+        player.onHeal.AddListener(Heal);
+        player.onHurt += Hurt;
+    }
+
+    private void RemoveListeners() {
+        if (player != null) {
+            player.onHeal.RemoveListener(Heal);
+            player.onHurt -= Hurt;
+        }
+    }
+
+    private void OnDestroy() {
+        RemoveListeners();
     }
 
     // Perform movement every physics update

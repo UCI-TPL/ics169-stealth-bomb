@@ -50,6 +50,13 @@ public class Player {
         controller.player = this;
     }
 
+    public void ResetForRound() {
+        ResetHealth();
+        for (int i = powerups.Count - 1; i >= 0; --i) {
+            RemovePowerup(powerups[i]);
+        }
+    }
+
     public void AddExperiance(float amount) {
         experiance += amount;
     }
@@ -136,7 +143,7 @@ public class Player {
             powerup = powerupData.NewInstance(this); // Initialize power-up
             powerups.Add(powerup); // Save to list of powerups
         }
-        onAddPowerUp.Invoke(powerup);
+        onAddPowerUp(powerup);
         foreach (PlayerStats.Modifier m in powerup.modifiers) // Add power-up's modifiers to stats
             stats.AddModifier(m);
         foreach (Powerup.Trigger t in powerup.triggers) { // Add all the powerup's triggers to the respective event calls
