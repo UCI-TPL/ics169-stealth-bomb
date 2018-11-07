@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 224909699962514242}
   - component: {fileID: 222834760677644932}
   - component: {fileID: 114172543239381048}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: AimingArrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -125,7 +125,7 @@ GameObject:
   - component: {fileID: 222093778261150634}
   - component: {fileID: 114628621565915504}
   - component: {fileID: 114028807271367644}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: MaskRight
   m_TagString: player-ui-masks
   m_Icon: {fileID: 0}
@@ -231,7 +231,7 @@ GameObject:
   - component: {fileID: 222604097557879940}
   - component: {fileID: 114484350781344532}
   - component: {fileID: 114597932772597632}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: MaskLeft
   m_TagString: player-ui-masks
   m_Icon: {fileID: 0}
@@ -265,7 +265,7 @@ GameObject:
   - component: {fileID: 224105161121209200}
   - component: {fileID: 222847051320770866}
   - component: {fileID: 114660660425680170}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -283,7 +283,7 @@ GameObject:
   - component: {fileID: 223070689971004588}
   - component: {fileID: 114980510742145542}
   - component: {fileID: 114841521204542342}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: PlayerUI_AimingMask
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -318,7 +318,7 @@ GameObject:
   - component: {fileID: 224763006689205918}
   - component: {fileID: 222716686302104558}
   - component: {fileID: 114336492705101154}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -336,7 +336,7 @@ GameObject:
   - component: {fileID: 223700255450698508}
   - component: {fileID: 114613310297843132}
   - component: {fileID: 114059483224462608}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: PlayerUI_Aiming
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -469,7 +469,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1889070153941650}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.5, y: 6.5, z: 12.5}
+  m_LocalPosition: {x: 8.120575, y: 6.46, z: 4.8245173}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4896907915751354}

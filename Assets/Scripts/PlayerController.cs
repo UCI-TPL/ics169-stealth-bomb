@@ -127,7 +127,17 @@ public class PlayerController : MonoBehaviour {
         if (scaledVector != Vector3.zero)
             transform.forward = scaledVector;
 
-        //code to make player ui's not rotate with player
+        // MOVE THIS CRAP OUT INTO A SEPARATE SCRIPT EVENTUALLY.
+        if (player.health < player.stats.maxHealth)
+        {
+            playerUI_HPCanvas.gameObject.SetActive(true);
+            playerUI_HPMaskCanvas.gameObject.SetActive(true);
+        }
+        else
+        {
+            playerUI_HPCanvas.gameObject.SetActive(false);
+            playerUI_HPMaskCanvas.gameObject.SetActive(false);
+        }
         playerUI_HPCanvas.rotation = Quaternion.Euler(90f, Camera.main.transform.rotation.eulerAngles.y, 0f);
         playerUI_HPMaskCanvas.rotation = Quaternion.Euler(90f, Camera.main.transform.rotation.eulerAngles.y, 0f);
         playerUI_healthBar.fillAmount = player.health / player.stats.maxHealth;
@@ -193,26 +203,15 @@ public class PlayerController : MonoBehaviour {
         StartCoroutine("HurtIndicator");
 
         // Remove this code to render HP bars all the time, as well as code in the Awake method in PlayerController.cs
-        if (!HP_CoroutineActive)
-            StartCoroutine("renderHP_Bar");
+
     }
 
     private void Heal() {
         // render HP on heal
-        if (!HP_CoroutineActive)
-            StartCoroutine("renderHP_Bar");
+
     }
 
     // Renders the players HP bar for a second.
-    IEnumerator renderHP_Bar() {
-        HP_CoroutineActive = true;
-        playerUI_HPCanvas.gameObject.SetActive(true);
-        playerUI_HPMaskCanvas.gameObject.SetActive(true);
-        yield return new WaitForSeconds(1f);
-        playerUI_HPCanvas.gameObject.SetActive(false);
-        playerUI_HPMaskCanvas.gameObject.SetActive(false);
-        HP_CoroutineActive = false;
-    }
 
     IEnumerator HurtIndicator() //show the player that it is hurt 
     {
