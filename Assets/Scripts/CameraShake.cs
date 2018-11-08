@@ -25,7 +25,6 @@ public class CameraShake : MonoBehaviour {
     private void Start() {
         originalPosition = transform.localPosition;
         originalRight = transform.right;
-        ShakeDiminish(6, 3);
     }
 
     public static void Shake(float intensity, float duration) {
