@@ -21587,9 +21587,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 222ff88743ad2fa4ba28cc36d963a02d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  camera: {fileID: 445079570}
   targets:
   - {fileID: 603492927}
   smoothTime: 1
+  minZoom: 5
+  maxZoom: 12
+  maxZoomDistance: 14
 --- !u!1001 &765018472
 Prefab:
   m_ObjectHideFlags: 0
