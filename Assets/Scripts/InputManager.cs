@@ -173,6 +173,18 @@ public class InputManager : MonoBehaviour {
             this.playerIndex = (PlayerIndex)playerIndex;
             #region Button Defenitions
             ButtonMap.Add(ButtonCode.A, new ButtonTest(ADown, AUp, APressed));
+            ButtonMap.Add(ButtonCode.B, new ButtonTest(BDown, BUp, BPressed));
+            ButtonMap.Add(ButtonCode.X, new ButtonTest(XDown, XUp, XPressed));
+            ButtonMap.Add(ButtonCode.Y, new ButtonTest(YDown, YUp, YPressed));
+            ButtonMap.Add(ButtonCode.Up, new ButtonTest(UpDown, UpUp, UpPressed));
+            ButtonMap.Add(ButtonCode.Down, new ButtonTest(DownDown, DownUp, DownPressed));
+            ButtonMap.Add(ButtonCode.Left, new ButtonTest(LeftDown, LeftUp, LeftPressed));
+            ButtonMap.Add(ButtonCode.Right, new ButtonTest(RightDown, RightUp, RightPressed));
+            ButtonMap.Add(ButtonCode.Back, new ButtonTest(BackDown, BackUp, BackPressed));
+            ButtonMap.Add(ButtonCode.Start, new ButtonTest(StartDown, StartUp, StartPressed));
+            ButtonMap.Add(ButtonCode.Guide, new ButtonTest(GuideDown, GuideUp, GuidePressed));
+            ButtonMap.Add(ButtonCode.LeftStick, new ButtonTest(LeftStickDown, LeftStickUp, LeftStickPressed));
+            ButtonMap.Add(ButtonCode.RightStick, new ButtonTest(RightStickDown, RightStickUp, RightStickPressed));
             ButtonMap.Add(ButtonCode.RightBumper, new ButtonTest(RightBumperDown, RightBumperUp, RightBumperPressed));
             ButtonMap.Add(ButtonCode.LeftBumper, new ButtonTest(LeftBumperDown, LeftBumperUp, LeftBumperPressed));
             ButtonMap.Add(ButtonCode.RightTrigger, new ButtonTest(RightTriggerDown, RightTriggerUp, RightTriggerPressed));
@@ -180,6 +192,7 @@ public class InputManager : MonoBehaviour {
             #endregion
             JoyStickMap.Add(JoyStickCode.Left, LeftJoyStickTest);
             JoyStickMap.Add(JoyStickCode.Right, RightJoyStickTest);
+            JoyStickMap.Add(JoyStickCode.DPad, DPadJoyStickTest);
 
             ActionTests.Add(ActionCode.Attack, new ButtonTest());
             ActionTests.Add(ActionCode.Jump, new ButtonTest());
@@ -208,6 +221,174 @@ public class InputManager : MonoBehaviour {
 
         private bool APressed() {
             return ButtonPressed(state.Buttons.A);
+        }
+
+        private void BDown(Action action) {
+            if (ButtonDown(state.Buttons.B, prevState.Buttons.B))
+                action();
+        }
+
+        private void BUp(Action action) {
+            if (ButtonUp(state.Buttons.B, prevState.Buttons.B))
+                action();
+        }
+
+        private bool BPressed() {
+            return ButtonPressed(state.Buttons.B);
+        }
+
+        private void XDown(Action action) {
+            if (ButtonDown(state.Buttons.X, prevState.Buttons.X))
+                action();
+        }
+
+        private void XUp(Action action) {
+            if (ButtonUp(state.Buttons.X, prevState.Buttons.X))
+                action();
+        }
+
+        private bool XPressed() {
+            return ButtonPressed(state.Buttons.X);
+        }
+
+        private void YDown(Action action) {
+            if (ButtonDown(state.Buttons.Y, prevState.Buttons.Y))
+                action();
+        }
+
+        private void YUp(Action action) {
+            if (ButtonUp(state.Buttons.Y, prevState.Buttons.Y))
+                action();
+        }
+
+        private bool YPressed() {
+            return ButtonPressed(state.Buttons.Y);
+        }
+
+        private void UpDown(Action action) {
+            if (ButtonDown(state.DPad.Up, prevState.DPad.Up))
+                action();
+        }
+
+        private void UpUp(Action action) {
+            if (ButtonUp(state.DPad.Up, prevState.DPad.Up))
+                action();
+        }
+
+        private bool UpPressed() {
+            return ButtonPressed(state.DPad.Up);
+        }
+
+        private void DownDown(Action action) {
+            if (ButtonDown(state.DPad.Down, prevState.DPad.Down))
+                action();
+        }
+
+        private void DownUp(Action action) {
+            if (ButtonUp(state.DPad.Down, prevState.DPad.Down))
+                action();
+        }
+
+        private bool DownPressed() {
+            return ButtonPressed(state.DPad.Down);
+        }
+
+        private void LeftDown(Action action) {
+            if (ButtonDown(state.DPad.Left, prevState.DPad.Left))
+                action();
+        }
+
+        private void LeftUp(Action action) {
+            if (ButtonUp(state.DPad.Left, prevState.DPad.Left))
+                action();
+        }
+
+        private bool LeftPressed() {
+            return ButtonPressed(state.DPad.Left);
+        }
+
+        private void RightDown(Action action) {
+            if (ButtonDown(state.DPad.Right, prevState.DPad.Right))
+                action();
+        }
+
+        private void RightUp(Action action) {
+            if (ButtonUp(state.DPad.Right, prevState.DPad.Right))
+                action();
+        }
+
+        private bool RightPressed() {
+            return ButtonPressed(state.DPad.Right);
+        }
+
+        private void BackDown(Action action) {
+            if (ButtonDown(state.Buttons.Back, prevState.Buttons.Back))
+                action();
+        }
+
+        private void BackUp(Action action) {
+            if (ButtonUp(state.Buttons.Back, prevState.Buttons.Back))
+                action();
+        }
+
+        private bool BackPressed() {
+            return ButtonPressed(state.Buttons.Back);
+        }
+
+        private void GuideDown(Action action) {
+            if (ButtonDown(state.Buttons.Guide, prevState.Buttons.Guide))
+                action();
+        }
+
+        private void GuideUp(Action action) {
+            if (ButtonUp(state.Buttons.Guide, prevState.Buttons.Guide))
+                action();
+        }
+
+        private bool GuidePressed() {
+            return ButtonPressed(state.Buttons.Guide);
+        }
+
+        private void StartDown(Action action) {
+            if (ButtonDown(state.Buttons.Start, prevState.Buttons.Start))
+                action();
+        }
+
+        private void StartUp(Action action) {
+            if (ButtonUp(state.Buttons.Start, prevState.Buttons.Start))
+                action();
+        }
+
+        private bool StartPressed() {
+            return ButtonPressed(state.Buttons.Start);
+        }
+
+        private void LeftStickDown(Action action) {
+            if (ButtonDown(state.Buttons.LeftStick, prevState.Buttons.LeftStick))
+                action();
+        }
+
+        private void LeftStickUp(Action action) {
+            if (ButtonUp(state.Buttons.LeftStick, prevState.Buttons.LeftStick))
+                action();
+        }
+
+        private bool LeftStickPressed() {
+            return ButtonPressed(state.Buttons.LeftStick);
+        }
+
+        private void RightStickDown(Action action) {
+            if (ButtonDown(state.Buttons.RightStick, prevState.Buttons.RightStick))
+                action();
+        }
+
+        private void RightStickUp(Action action) {
+            if (ButtonUp(state.Buttons.RightStick, prevState.Buttons.RightStick))
+                action();
+        }
+
+        private bool RightStickPressed() {
+            return ButtonPressed(state.Buttons.RightStick);
         }
 
         private void RightBumperDown(Action action) {
@@ -275,7 +456,11 @@ public class InputManager : MonoBehaviour {
             return new Vector2(state.ThumbSticks.Right.X, state.ThumbSticks.Right.Y);
         }
 
-        public override void Vibrate(float strength, float duration, VibrationMode vibrationMode = VibrationMode.Flat) {
+        private Vector2 DPadJoyStickTest() {
+            return new Vector2((ButtonPressed(state.DPad.Right) ? 1 : 0) + (ButtonPressed(state.DPad.Left) ? -1 : 0), (ButtonPressed(state.DPad.Up) ? 1 : 0) + (ButtonPressed(state.DPad.Down) ? -1 : 0)).normalized;
+        }
+
+        public override void Vibrate(float strength, float duration, VibrationMode vibrationMode) {
             switch (vibrationMode) {
                 case VibrationMode.Flat:
                     inputManager.StartCoroutine(VibrateDuration(strength, duration));
@@ -335,7 +520,7 @@ public class InputManager : MonoBehaviour {
 
         // List of every button available
         public enum ButtonCode {
-            A, B, X, Y, Up, Down, Left, Right, LeftBumper, RightBumper, Back, Start, LeftStick, RightStick, LeftTrigger, RightTrigger, Home
+            A, B, X, Y, Up, Down, Left, Right, LeftBumper, RightBumper, Back, Start, LeftStick, RightStick, LeftTrigger, RightTrigger, Guide
         }
 
         // List of every JoyStick available

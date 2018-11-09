@@ -52,9 +52,9 @@ public class Player {
 
     public void ResetForRound() {
         ResetHealth();
-        for (int i = powerups.Count - 1; i >= 0; --i) {
+        for (int i = powerups.Count - 1; i >= 0; --i)
             RemovePowerup(powerups[i]);
-        }
+        lastHurtBy = null;
     }
 
     public void AddExperiance(float amount) {
