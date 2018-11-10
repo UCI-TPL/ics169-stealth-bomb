@@ -8,8 +8,8 @@ public class ChargeWeapon : Weapon {
     private ChargeWeaponData data;
 
     private float startChargeTime;
-    public float chargeLevel {
-        get { return Mathf.Min((Time.time - startChargeTime) / data.chargeTime, data.chargeLevels-1) +1; } //the -1 and +1 are so it goes from 1-3 instead of 0-3
+    protected override float GetChargeLevel() {
+        return (Mathf.Min((Time.time - startChargeTime) / data.chargeTime, data.chargeLevels-1) +1)/ data.chargeLevels; //the -1 and +1 are so it goes from 1-3 instead of 0-3
     }
 
     Renderer rend { get { return player.controller.rend; } }
@@ -27,7 +27,7 @@ public class ChargeWeapon : Weapon {
 
     // OnChargingUpdate is called once per frame while the weapon is charging
     protected override void OnChargingUpdate() {
-        switch((int)chargeLevel)
+        switch((int)(ChargeLevel * data.chargeLevels))
         {
             case 1:
                 rend.material.color = rend.material.color + ((Color.red / data.colorAddition) * Time.deltaTime);
@@ -50,7 +50,7 @@ public class ChargeWeapon : Weapon {
         rend.material.color = player.controller.playerColor;
         //Debug.Log("Releasing with a chargeTime of " + chargeLevel);
         //if (chargeLevel >= 1) { }
-        data.projectile.Shoot(player, data.projSpeed * Mathf.Pow(Mathf.Floor(chargeLevel), 2), data.numProj);
+        data.projectile.Shoot(player, data.projSpeed * Mathf.Pow(Mathf.Floor(ChargeLevel * data.chargeLevels), 2), data.numProj);
         //Projectile arrow = GameObject.Instantiate(data.arrow, player.controller.ShootPoint.transform.position, player.transform.rotation, null); //this instantiates the arrow as an attack
         //arrow.player = player;
         //arrow.speed = data.projSpeed * Mathf.Floor(chargeLevel);

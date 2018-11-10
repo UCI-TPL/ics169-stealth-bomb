@@ -5,14 +5,18 @@ using UnityEngine;
 
 [System.Serializable]
 public abstract class Weapon {
-    
+
     public WeaponData weaponData;
     public Type type;
-    
-    internal Player player; // Player that this weapon is attached to
 
-    internal bool isCharging = false;
-    internal int numCharging = 0;// This is how many charging coroutines are active at once, This allows us to limit to one charge
+    protected Player player; // Player that this weapon is attached to
+    public float ChargeLevel { get { return Mathf.Clamp(GetChargeLevel(), 0, 1); } }
+    protected virtual float GetChargeLevel() {
+        return 0;
+    }
+
+    protected bool isCharging = false;
+    protected int numCharging = 0;// This is how many charging coroutines are active at once, This allows us to limit to one charge
     private bool overrideChargeUpdate = false;
 
     public Weapon() { }
