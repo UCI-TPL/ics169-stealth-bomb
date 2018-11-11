@@ -11,6 +11,8 @@ public class PlayerJoinManager : MonoBehaviour {
 
 	public bool PlayerJoinScreenActive = true;   // filler variable for now. Will be replaced when more of UI and menu is implemented.
 
+	public bool debugMode = false;
+
 	[Tooltip("Turn this on if you want to load the next scene with the string of its name instead. If you turn this variable on, make sure that the variable nextLevel is filled out in the inspector!")]
 	public bool loadNextLevelByName = false;
 	[Tooltip("The name of the scene to load when players start a match.")]
@@ -51,9 +53,17 @@ public class PlayerJoinManager : MonoBehaviour {
 	// outside of this script (or at least should not have any effect on this script's variables).
 	public bool[] GetPLayerReadyStatusList() {
 		bool[] roster = new bool[playersReady.Length];
-		for (int i = 0; i < playersReady.Length; i++) 
-			roster[i] = playersReady[i];
+		if (!debugMode) 
+			for (int i = 0; i < playersReady.Length; i++) 
+				roster[i] = playersReady[i];
+		else
+			for (int i = 0; i < playersReady.Length; i++)
+				roster[i] = true;
 		return roster;
+	}
+
+	public void DebugActive(bool turnOn) {
+		debugMode = turnOn;
 	}
 
 	// void Awake() {
@@ -158,37 +168,70 @@ public class PlayerJoinManager : MonoBehaviour {
 					newNumOfPlayersReady++;
 			}
 
-			// Checks if enough players have confirmed they are ready.
-			if (newNumOfPlayersReady >= 2 && numOfPlayersReady < 2) {
-				// FINISH!!!!!
-				// Display the UI element showing that the game is ready to start.
-				Debug.Log("Game is Ready to start!");
+			// the normal conditions needed for the game to start
+			if (!debugMode) 
+			{
+				// Checks if enough players have confirmed they are ready.
+				if (newNumOfPlayersReady >= 2 && numOfPlayersReady < 2) {
+					// Display the UI element showing that the game is ready to start.
+					Debug.Log("Game is Ready to start!");
+					//calling UI -Kyle
+					selectionOP.gameIsReady();
+				}
+				else if (newNumOfPlayersReady < 2 /*&& numOfPlayersReady >= 2*/) {
+					// Turn off the UI element showing that the game is ready to start.
+					Debug.Log("There are not enough players for the game to start!");
+					//calling UI -Kyle
+					selectionOP.gameIsNotReady();
+				}
 
-				//calling UI -Kyle
-				selectionOP.gameIsReady();
+				// if conditions met, start the match
+				if (numOfPlayersReady >= 2) {
+					for (int i = 0; i < playersReady.Length; i++) {
+						if (playersReady[i] == true) {
+							// If the right conditions are met, this is where the protocol for starting the game happens.
+							// NOTE: implementation is subject to change for now.
+							if (currentStates[i].Buttons.Start == ButtonState.Pressed && prevStates[i].Buttons.Start == ButtonState.Released) {
+								// playerManager.SetPlayersStatus(GetPLayerReadyStatusList());
+								if (loadNextLevelByName) 
+									SceneManager.LoadScene(nextLevel);
+								else 
+									SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);    // starts the scene used for the first level.
+							}
+						}
+					}
+				}
 			}
-			else if (newNumOfPlayersReady < 2 && numOfPlayersReady >= 2) {
-				// FINISH!!!!!
-				// Turn off the UI element showing that the game is ready to start.
-				Debug.Log("There are not enough players for the game to start!");
 
-				//calling UI -Kyle
-				selectionOP.gameIsNotReady();
-			}
+			// conditions when in debug mode. Debug mode allows the game to start with only 1 player (and maybe more).
+			else {
+				// Checks if enough players have confirmed they are ready.
+				if (newNumOfPlayersReady >= 1 /* && numOfPlayersReady < 1*/) {
+					// Display the UI element showing that the game is ready to start.
+					Debug.Log("Game is Ready to start!");
+					//calling UI -Kyle
+					selectionOP.gameIsReady();
+				}
+				else if (newNumOfPlayersReady < 1 && numOfPlayersReady >= 1) {
+					// Turn off the UI element showing that the game is ready to start.
+					Debug.Log("There are not enough players for the game to start!");
+					//calling UI -Kyle
+					selectionOP.gameIsNotReady();
+				}
 
-			// if conditions met, start the match
-			if (numOfPlayersReady >= 2) {
-				for (int i = 0; i < playersReady.Length; i++) {
-					if (playersReady[i] == true) {
-						// If the right conditions are met, this is where the protocol for starting the game happens.
-						// NOTE: implementation is subject to change for now.
-						if (currentStates[i].Buttons.Start == ButtonState.Pressed && prevStates[i].Buttons.Start == ButtonState.Released) {
-							// This might be where we give the game controller the number and roster of active players
-							// playerManager.SetPlayersStatus(GetPLayerReadyStatusList());
-							if (loadNextLevelByName) 
-								SceneManager.LoadScene(nextLevel);
-							else 
-								SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);    // starts the scene used for the first level.
+				// if conditions met, start the match
+				if (numOfPlayersReady >= 1) {
+					for (int i = 0; i < playersReady.Length; i++) {
+						if (playersReady[i] == true) {
+							// If the right conditions are met, this is where the protocol for starting the game happens.
+							// NOTE: implementation is subject to change for now.
+							if (currentStates[i].Buttons.Start == ButtonState.Pressed && prevStates[i].Buttons.Start == ButtonState.Released) {
+								// playerManager.SetPlayersStatus(GetPLayerReadyStatusList());
+								if (loadNextLevelByName) 
+									SceneManager.LoadScene(nextLevel);
+								else 
+									SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);    // starts the scene used for the first level.
+							}
 						}
 					}
 				}
@@ -196,19 +239,6 @@ public class PlayerJoinManager : MonoBehaviour {
 
 			numOfPlayersReady = newNumOfPlayersReady;
 		}
-
-		/* Old, Outdated code */
-		// string[] connectedControllers = Input.GetJoystickNames();
-		// Debug.Log("Number of controllers connected: " + connectedControllers.Length);
-		// for (int i = 1; i <= connectedControllers.Length; i++) {
-		// 	//Debug.Log("controller #" + i + ": " + connectedControllers[i-1]);
-		// 	if (IsPlayerControllerConnected(i) && playersReady[i-1] == false) {
-		// 		//ThenShowPlayerControllerConnectedInUIforPlayerI();            // placeholder! remove later!
-		// 		if (Input.GetButtonDown("P" + i + "_A")) {
-		// 			playersReady[i-1] = true;
-		// 		}
-		// 	}
-		// }
 	}
 
 
