@@ -8,11 +8,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 01a933e661fff5d4298cfc7befe50327, type: 3}
   m_Name: DodgeDash
-  m_EditorClassIdentifier: Assembly-CSharp::DodgeData
+  m_EditorClassIdentifier: 
   moveDuration: 0.2
-  cooldown: 0.5
+  cooldown: 0.4
   description: A dash like in Overcooked
   type: 0
   SpeedMultiplier: 1.6

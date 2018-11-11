@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour {
     public Collider wallCollider;
     public GameObject crown;
 
-    public float friction = 10f;
+    public float friction = 1f;
     [Tooltip("time it takes to go from 0 to max speed is 1 second / acceleration")]
     public float acceleration = 10f;
 
@@ -41,13 +41,13 @@ public class PlayerController : MonoBehaviour {
     private Vector3 forward;
     private Vector3 right;
 
-    private Vector2 lastForwardMovement; //used to dodge forward when not moving 
+    private Vector2 lastForwardMovement = Vector2.zero; //used to dodge forward when not moving 
 
     // For disabling movement while performing a dodge or potentially while stunned
     private bool allowMovement = true;
     private bool allowAttack = true; //used to disable movement during the countdown
     public bool dodging;
-    public float dodgeSpeed  = 10f;
+    public float dodgeSpeed  = 0f;
 
     // Required variables for jumping and detecting ground collisions
     private float jumpCooldown = 0;
@@ -100,7 +100,7 @@ public class PlayerController : MonoBehaviour {
         forward = Camera.main.transform.forward;
         forward.Scale(new Vector3(1, 0, 1));
         forward.Normalize();
-        lastForwardMovement = forward * dodgeSpeed;
+        //lastForwardMovement = forward * dodgeSpeed;
         right = Camera.main.transform.right;
         right.Scale(new Vector3(1, 0, 1));
         right.Normalize();
