@@ -6,7 +6,7 @@ public class PlayerStats {
     
     public Player player { get; private set; }
 
-    private Dictionary<string, Property> stats = new Dictionary<string, Property>();
+    private Dictionary<string, Stat> stats = new Dictionary<string, Stat>();
 
     public PlayerStats(Player player) {
         this.player = player;
@@ -41,14 +41,14 @@ public class PlayerStats {
 
     // Add a new stat
     private void AddStat(string name, float value) {
-        stats.Add(name, new Property(name, value));
+        stats.Add(name, new Stat(value));
     }
 
     // Attempts to grab a stat, if that stat does not exist display error
     public float GetStat(string name) {
         if (stats.ContainsKey(name))
-            return stats[name].value;
-        Debug.LogError("Player " + player.playerNumber + " does not contain a stat named \"" + name + "\"");
+            return stats[name].Value;
+        Debug.LogWarning("Player " + player.playerNumber + " does not contain a stat named \"" + name + "\"");
         return 0;
     }
 
@@ -57,7 +57,7 @@ public class PlayerStats {
         if (stats.ContainsKey(modifier.name))
             stats[modifier.name].AddModifier(modifier);
         else
-            Debug.LogError("Error adding modifier, " + "Player " + player.playerNumber + " does not contain a stat named \"" + modifier.name + "\"");
+            Debug.LogWarning("Error adding modifier, " + "Player " + player.playerNumber + " does not contain a stat named \"" + modifier.name + "\"");
     }
 
     // Attempts to remove modifier from a stat, if that stat does not exist display error
@@ -65,81 +65,67 @@ public class PlayerStats {
         if (stats.ContainsKey(modifier.name))
             stats[modifier.name].RemoveModifier(modifier);
         else
-            Debug.LogError("Error removing modifier, " + "Player " + player.playerNumber + " does not contain a stat named \"" + modifier.name + "\"");
+            Debug.LogWarning("Error removing modifier, " + "Player " + player.playerNumber + " does not contain a stat named \"" + modifier.name + "\"");
     }
 
     // manages the value of a single stat
-    private class Property {
-        private string name;
+    private class Stat {
         public float baseValue;
         public Type type;
+        private readonly Dictionary<Modifier.ModifierType, List<Modifier>> modifiers;
+
         private float _value;
-        public float value {
-            get { return _value; }
+        private bool isDirty = true;
+        public float Value {
+            get { if (isDirty)
+                    UpdateValue();
+                return _value; }
             private set { _value = value; }
         }
-        private Dictionary<Modifier.Type, Dictionary<Modifier, int>> modifiers;
 
-        public Property(string name, float baseValue, Type type = Type.Numerical) {
-            this.name = name;
+        public Stat(float baseValue, Type type = Type.Numerical) {
             this.baseValue = baseValue;
             this.type = Type.Numerical;
-            modifiers = new Dictionary<Modifier.Type, Dictionary<Modifier, int>>();
-            modifiers.Add(Modifier.Type.Flat, new Dictionary<Modifier, int>());
-            modifiers.Add(Modifier.Type.Increased, new Dictionary<Modifier, int>());
-            modifiers.Add(Modifier.Type.More, new Dictionary<Modifier, int>());
-            modifiers.Add(Modifier.Type.Bool, new Dictionary<Modifier, int>());
-            UpdateValue();
+            modifiers = new Dictionary<Modifier.ModifierType, List<Modifier>>();
+            modifiers.Add(Modifier.ModifierType.Flat, new List<Modifier>());
+            modifiers.Add(Modifier.ModifierType.Increased, new List<Modifier>());
+            modifiers.Add(Modifier.ModifierType.More, new List<Modifier>());
+            modifiers.Add(Modifier.ModifierType.Bool, new List<Modifier>());
         }
 
         // Add modifier based on its type;
         public void AddModifier(Modifier modifier) {
-            IncMod(modifiers[modifier.type], modifier);
-            UpdateValue();
+            modifiers[modifier.type].Add(modifier);
+            isDirty = true;
         }
 
         // Remove modifier based on its type;
-        public void RemoveModifier(Modifier modifier) {
-            DecMod(modifiers[modifier.type], modifier);
-            UpdateValue();
-        }
-
-        // Adds the modifier to the dictionary incrementing the counter if it already exist
-        private void IncMod(Dictionary<Modifier, int> dict, Modifier mod) {
-            if (dict.ContainsKey(mod))
-                dict[mod] += 1;
-            else
-                dict.Add(mod, 1);
-        }
-
-        // Removes the modifier from the dictionary decresing the counter if there are more than 1
-        private void DecMod(Dictionary<Modifier, int> dict, Modifier mod) {
-            if (dict[mod] <= 1)
-                dict.Remove(mod);
-            else
-                dict[mod] -= 1;
+        public bool RemoveModifier(Modifier modifier) {
+            if (modifiers[modifier.type].Remove(modifier))
+                return isDirty = true;
+            return false;
         }
 
         // Updates the property's value
         private void UpdateValue() {
             switch (type) { // Check the type of property (Numerical or Boolean)
                 case Type.Numerical:
-                    value = (baseValue + TotalMods(modifiers[Modifier.Type.Flat])) * (1+TotalMods(modifiers[Modifier.Type.Increased])); // Adds all flat modifiers and multiplies by increased modifiers
-                    foreach (KeyValuePair<Modifier, int> m in modifiers[Modifier.Type.More]) // Multiplies every more modifier separately
-                        value *= Mathf.Pow(1+m.Key.value, m.Value);
+                    Value = (baseValue + TotalMods(modifiers[Modifier.ModifierType.Flat])) * (1+TotalMods(modifiers[Modifier.ModifierType.Increased])); // Adds all flat modifiers and multiplies by increased modifiers
+                    foreach (Modifier m in modifiers[Modifier.ModifierType.More]) // Multiplies every more modifier separately
+                        Value *= 1 + m.value;
                     break;
                 case Type.Bool:
-                    if (TotalMods(modifiers[Modifier.Type.Bool]) + baseValue > 0) // Check if boolean modifiers add up to true
-                        value = 1;
+                    if (TotalMods(modifiers[Modifier.ModifierType.Bool]) + baseValue > 0) // Check if boolean modifiers add up to true
+                        Value = 1;
                     break;
             }
         }
 
         // Returns sum of all values in a set of modifiers 
-        private float TotalMods (Dictionary<Modifier,int> modifiers) {
+        private static float TotalMods (List<Modifier> modifiers) {
             float total = 0;
-            foreach (KeyValuePair<Modifier, int> m in modifiers)
-                total += m.Key.value * m.Value;
+            foreach (Modifier m in modifiers)
+                total += m.value;
             return total;
         }
 
@@ -151,14 +137,14 @@ public class PlayerStats {
     public class Modifier {
         public string name;
         public float value;
-        public Type type;
+        public ModifierType type;
 
-        public Modifier(string name, float value, Type type = Type.Flat) {
+        public Modifier(string name, float value, ModifierType type = ModifierType.Flat) {
             this.name = name;
             this.value = value;
             this.type = type;
         }
 
-        public enum Type { Flat, Increased, More, Bool}; // How the modifier affects properties
+        public enum ModifierType { Flat, Increased, More, Bool}; // How the modifier affects properties
     }
 }
