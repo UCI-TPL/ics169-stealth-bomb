@@ -13,6 +13,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DodgeData
   moveDuration: 0.2
   cooldown: 0.5
-  description: A dash like in Overcooked
+  description: A dash like the one in Overcooked
   type: 0
   SpeedMultiplier: 1.6
