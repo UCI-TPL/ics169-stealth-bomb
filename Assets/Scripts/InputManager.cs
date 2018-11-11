@@ -148,7 +148,7 @@ public class InputManager : MonoBehaviour {
             ClearAllButtonMapping();
             AddButtonMapping(ActionCode.Attack, ButtonCode.RightBumper);
             AddButtonMapping(ActionCode.Attack, ButtonCode.RightTrigger);
-            AddButtonMapping(ActionCode.Jump, ButtonCode.LeftTrigger);
+            //AddButtonMapping(ActionCode.Jump, ButtonCode.LeftTrigger);
             AddButtonMapping(ActionCode.Jump, ButtonCode.LeftBumper);
             AddButtonMapping(ActionCode.Dodge, ButtonCode.LeftTrigger);
             SetMoveJoyStick(JoyStickCode.Left);

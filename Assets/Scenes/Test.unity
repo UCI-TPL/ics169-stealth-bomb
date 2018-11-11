@@ -38573,6 +38573,7 @@ GameObject:
   - component: {fileID: 1351554526}
   - component: {fileID: 1351554528}
   - component: {fileID: 1351554527}
+  - component: {fileID: 1351554529}
   m_Layer: 5
   m_Name: Countdown Text
   m_TagString: Untagged
@@ -38610,7 +38611,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.5442527, b: 0, a: 1}
+  m_Color: {r: 0.9150943, g: 0.80714726, b: 0.20287468, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -38618,12 +38619,12 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: 429f351db53f71f47bfa963b6985302c, type: 3}
     m_FontSize: 14
     m_FontStyle: 0
     m_BestFit: 1
     m_MinSize: 10
-    m_MaxSize: 300
+    m_MaxSize: 250
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -38638,6 +38639,20 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1351554525}
   m_CullTransparentMesh: 1
+--- !u!114 &1351554529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1351554525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -900027084, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0.8962264, g: 0.57170564, b: 0.080322154, a: 1}
+  m_EffectDistance: {x: 5, y: -5}
+  m_UseGraphicAlpha: 0
 --- !u!1001 &1353522447
 Prefab:
   m_ObjectHideFlags: 0
@@ -40513,7 +40528,7 @@ MonoBehaviour:
   ExpPenaltyPerLvl: 0.75
   ExpBonusPerLvl: 0.25
   countdown: 3
-  countdownText: {fileID: 2122816798}
+  countdownText: {fileID: 1351554525}
 --- !u!4 &1436843638 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4755600271311528, guid: eb831fde644fcb04ab28eda82a20ba83,
@@ -59641,11 +59656,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4483387075294452, guid: 648c98a46cfb98b4498a3a003bd98913,
     type: 2}
   m_PrefabInternal: {fileID: 2119781329}
---- !u!1 &2122816798 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1572377091499982, guid: aed479e38fe7288469b3c9b08829af20,
-    type: 2}
-  m_PrefabInternal: {fileID: 1909002299}
 --- !u!1001 &2123814813
 Prefab:
   m_ObjectHideFlags: 0
