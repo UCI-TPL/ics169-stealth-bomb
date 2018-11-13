@@ -46,6 +46,7 @@ public class Player {
         stats = new PlayerStats(this); // Creates a stats profile for the player
         ResetHealth();
         ResetWeapon();
+        ResetSpecialMove();
         experiance = 0;
     }
 

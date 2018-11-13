@@ -15,7 +15,6 @@ public class DodgeDash : Weapon
 
     public DodgeDash(WeaponData weaponData, Player player) : base(weaponData, player, Type.Move)
     {
-        Debug.Log("isn't this important??");
         data = (DodgeData)weaponData;
     }
 

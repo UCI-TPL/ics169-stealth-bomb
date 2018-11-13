@@ -212,7 +212,8 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void SpecialMove() {
-        player.specialMove.Activate();
+        if (allowAttack && isGrounded)
+            player.specialMove.Activate();
     }
 
     // Attempt to perform a jump
