@@ -10,6 +10,7 @@ TagManager:
   - input-manager
   - stationary-player-ui
   - player-ui-masks
+  - countdown
   layers:
   - Default
   - TransparentFX

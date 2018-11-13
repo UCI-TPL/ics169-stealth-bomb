@@ -36,7 +36,7 @@ public class Player {
     // Currently equiped weapon
     public Weapon weapon;
 
-    public SpecialMove specialMove; //give this to the controlelr
+    public Weapon specialMove; //give this to the controlelr
 
     private Vector3 prevPosition;
 
@@ -46,6 +46,7 @@ public class Player {
         stats = new PlayerStats(this); // Creates a stats profile for the player
         ResetHealth();
         ResetWeapon();
+        ResetSpecialMove();
         experiance = 0;
     }
 
@@ -70,12 +71,8 @@ public class Player {
         controller.DisableAttack(duration);
     }
 
-    public void ResetSpecialMove()    {
-
-        if (controller == null) //happens when called too early by accident
-            Debug.LogError("Controller is null when ResetSpecialMove is being called");
-        else
-            controller.AttachComponent(playerData.defaultSpecialMove); //attachs a SpecialMove to the player GameObject (and gives it the data)
+    public void ResetSpecialMove()    { 
+        specialMove = playerData.defaultSpecialMove.NewInstance(this);
     }
 
     public void ResetWeapon() {

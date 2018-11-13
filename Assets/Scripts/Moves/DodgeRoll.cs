@@ -4,22 +4,22 @@ using UnityEngine;
 
 
 [System.Serializable]
-public class DodgeDash : Weapon
+public class DodgeRoll : Weapon
 {
 
     private DodgeData data;
 
     float cooldown = 0.0f;
 
-    public DodgeDash() : base() { }
+    public DodgeRoll() : base() { }
 
-    public DodgeDash(WeaponData weaponData, Player player) : base(weaponData, player, Type.Move)
+    public DodgeRoll(WeaponData weaponData, Player player) : base(weaponData, player, Type.Move)
     {
         data = (DodgeData)weaponData;
     }
 
 
-    // OnActivate is called once when the move is activated
+    // OnActivate is called once when the weapon is activated
     protected override void OnActivate()
     {
         if (cooldown <= Time.time)
@@ -31,20 +31,22 @@ public class DodgeDash : Weapon
 
     public IEnumerator Dodge()
     {
-        player.controller.dodging = true;
-        player.controller.dodgeSpeed = player.controller.player.stats.moveSpeed * data.SpeedMultiplier;//data.SpeedMultiplier;
+
+        player.controller.rolling = true;
+        player.controller.dodgeSpeed = player.controller.player.stats.moveSpeed * data.SpeedMultiplier; //the dodge begins by changing the playerspeed                                                                                        
         yield return new WaitForSeconds(data.moveDuration);
 
         player.controller.dodgeSpeed = 0f; //the speed is set to 0 to decelarate the player at the end of the dodge
         yield return new WaitForSeconds(data.StopTime);
 
         player.controller.dodgeSpeed = player.controller.player.stats.moveSpeed;
-        player.controller.dodging = false;
+        player.controller.rolling = false;
+
     }
 
     public override Weapon DeepCopy(WeaponData weaponData, Player player)
     {
-        DodgeDash copy = new DodgeDash(weaponData, player);
+        DodgeRoll copy = new DodgeRoll(weaponData, player);
         return copy;
     }
 }

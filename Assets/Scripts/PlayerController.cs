@@ -6,7 +6,8 @@ using Vector3Extensions;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour {
 
-    public SpecialMove specialMove; // Dodge, Ice Wall, etc. 
+    public Weapon specialMove;
+   // public SpecialMove specialMove; // Dodge, Ice Wall, etc. 
 
     private Player _player;
     public Player player {
@@ -41,12 +42,14 @@ public class PlayerController : MonoBehaviour {
     private Vector3 forward;
     private Vector3 right;
 
-    private Vector2 lastForwardMovement = Vector2.zero; //used to dodge forward when not moving 
+    public Vector2 lastForwardMovement = Vector2.zero; //used to dodge forward when not moving 
+    public Vector3 lastScaledVector = Vector2.zero;
 
     // For disabling movement while performing a dodge or potentially while stunned
     private bool allowMovement = true;
     private bool allowAttack = true; //used to disable movement during the countdown
     public bool dodging;
+    public bool rolling;
     public float dodgeSpeed  = 0f;
 
     // Required variables for jumping and detecting ground collisions
@@ -130,7 +133,7 @@ public class PlayerController : MonoBehaviour {
 
     // Perform movement every physics update
     private void FixedUpdate() {
-        if(!dodging)
+        if(!dodging && !rolling)
             Move(isGrounded ? player.stats.moveSpeed : player.stats.airSpeed);
         else
             Move(dodgeSpeed); //hopefully this allows air dodges
@@ -173,12 +176,23 @@ public class PlayerController : MonoBehaviour {
     // Move the player using the the controller's move input scaled by the provided speed
     private void Move(float speed) {
         Vector2 horizontalVector = input.controllers[player.playerNumber].MoveVector() * speed;
-        if (!dodging && horizontalVector != Vector2.zero)
-            lastForwardMovement = horizontalVector.normalized;          
-        if(dodging)
+
+        if (dodging)
+        {
+            if (horizontalVector == Vector2.zero)
+                horizontalVector = lastForwardMovement * speed; //if the user is not entering any input
+            else
+                horizontalVector = horizontalVector.normalized * speed; //in the case the magnitude is below 1
+        }
+        else if (rolling)
             horizontalVector = lastForwardMovement * speed;
         Vector3 scaledVector = (horizontalVector.y * forward) + (horizontalVector.x * right);
-    
+        if (!dodging && !rolling && horizontalVector != Vector2.zero) {
+            lastForwardMovement = horizontalVector.normalized;
+            lastScaledVector = scaledVector.normalized;
+        }
+            
+
         if (isGrounded) { // If grounded apply friction
             Vector3 frictionVector = -friction * rb.velocity; // Friction is a negative percentage of current velocity
             Debug.DrawRay(floorCollider.transform.position + Vector3.down * floorCollider.bounds.extents.y, frictionVector, Color.blue);
@@ -190,24 +204,16 @@ public class PlayerController : MonoBehaviour {
         if (allowMovement) {
             Vector3 oldVelocity = rb.velocity.Scaled(new Vector3(1, 0, 1));
             Vector3 newVelocity = rb.velocity + scaledVector * Time.fixedDeltaTime * acceleration; // Clamp velocity to either max speed or current speed(if player was launched)
-            if(!dodging) //don't clamp while dodging
+            if(!dodging && !rolling) //don't clamp while dodging
                 newVelocity = Vector3.ClampMagnitude(new Vector3(newVelocity.x, 0, newVelocity.z), Mathf.Max(oldVelocity.magnitude, speed * input.controllers[player.playerNumber].MoveVector().magnitude + 0.1f) - 0.1f);
             rb.velocity = new Vector3(newVelocity.x, rb.velocity.y, newVelocity.z);
         }
         
     }
 
-    public void AttachComponent(SpecialMoveData moveData)
-    {
-        //specialMove = new DodgeDash(); //coroutines gave errors when I used 'new' so now it is a component
-
-        if (moveData.type == SpecialMoveData.MoveType.DodgeDash) //make one for every type of SpecialMove
-            specialMove = gameObject.AddComponent<DodgeDash>();
-        specialMove.SetData(this, moveData);
-    }
-
     private void SpecialMove() {
-        specialMove.Activate();
+        if (allowAttack && isGrounded)
+            player.specialMove.Activate();
     }
 
     // Attempt to perform a jump
@@ -260,8 +266,20 @@ public class PlayerController : MonoBehaviour {
 
     // Renders the players HP bar for a second.
 
+    public GameObject InstantiateSummon(GameObject sum) //Special Move scripts will call this to instantiate objects
+    {
+        GameObject summon = Instantiate(sum);
+        return summon;
+    }
+
+    public void DestroySummon(GameObject sum)//created since the Move Scripts were not able to use Destroy
+    {
+        Destroy(sum);
+    }
+
     IEnumerator HurtIndicator() //show the player that it is hurt 
     {
+        
         Color test = playerColor;
         rend.material.color = Color.white;
         yield return new WaitForSeconds(0.025f); //the player flashes white 

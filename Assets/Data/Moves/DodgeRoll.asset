@@ -9,15 +9,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 01a933e661fff5d4298cfc7befe50327, type: 3}
-  m_Name: DodgeDash
+  m_Name: DodgeRoll
   m_EditorClassIdentifier: 
-  name: Dodge Dash
+  name: Dodge Roll
   image: {fileID: 0}
-  description: A dash like in Overcooked, player can go forward and change directions
-    but can take damage
+  description: A roll like in Enter the Gungeon. Player can't move during the roll
+    but is invinceable for half
   type: 0
-  moveDuration: 0.3
-  cooldown: 0.4
-  moveType: 0
-  SpeedMultiplier: 1.2
+  moveDuration: 0.4
+  cooldown: 0.8
+  moveType: 1
+  SpeedMultiplier: 0.7
   StopTime: 0.05

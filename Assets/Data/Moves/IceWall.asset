@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ad55fd2bae32ad458f53841c3a502df, type: 3}
+  m_Name: IceWall
+  m_EditorClassIdentifier: 
+  name: Ice Wall
+  image: {fileID: 0}
+  description: A wall that a player can summon to block attacks
+  type: 0
+  moveDuration: 4
+  cooldown: 1
+  moveType: 2
+  summon: {fileID: 1848007807692530, guid: 117b067fe2fe3bb4480c8b58682c8999, type: 2}
+  distanceFromPlayer: 2
