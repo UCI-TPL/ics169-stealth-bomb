@@ -16,6 +16,6 @@ public abstract class ItemData : ScriptableObject {
     public abstract void Use(Player player);
 
     public enum Type {
-        Item, Powerup, Weapon
+        Item, Powerup, Weapon, SpecialMove
     }
 }

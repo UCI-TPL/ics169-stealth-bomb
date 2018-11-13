@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DodgeDash : SpecialMove
-{
+public class DodgeRoll : SpecialMove {  //later the roll will disable left/right moveem
+
     public DodgeData data;
     float cooldown = 0.0f;
 
@@ -32,15 +32,16 @@ public class DodgeDash : SpecialMove
 
     public IEnumerator Dodge()
     {
-        controller.dodging = true;
+        
+        controller.rolling = true;
         controller.dodgeSpeed = controller.player.stats.moveSpeed * data.SpeedMultiplier;//data.SpeedMultiplier;
+       // controller.GetComponent<Rigidbody>().AddForce(new Vector3(0, 1f, 0f));
         yield return new WaitForSeconds(data.moveDuration);
-
         controller.dodgeSpeed = 0f; //the speed is set to 0 to decelarate the player at the end of the dodge
+        
         yield return new WaitForSeconds(data.StopTime);
-
         controller.dodgeSpeed = controller.player.stats.moveSpeed;
-        controller.dodging = false;
+        controller.rolling = false;
+      
     }
-
 }
