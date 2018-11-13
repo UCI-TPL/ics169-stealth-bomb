@@ -47,6 +47,13 @@ public class InputManager : MonoBehaviour {
             controllers[i].OnApplicationQuit();
     }
 
+    //public: UI element modification
+    public void mapInput(string action, string input)
+    {
+        controllers[0].setMapping(action, input);
+    }
+
+
     // Controller object for Mouse and Keyboard, This is not implemented yet
     public class MouseKeyboard : Controller {
 
@@ -206,6 +213,68 @@ public class InputManager : MonoBehaviour {
             ButtonMaps.Add(ActionCode.Jump, new HashSet<ButtonCode>());
             ButtonMaps.Add(ActionCode.Dodge, new HashSet<ButtonCode>());
             SetDefaultMapping();
+        }
+
+        
+
+        /*
+        input mapping customization
+        */
+
+        public override void setMapping(string a, string b)
+        {
+            Debug.Log("============================================");
+            // Debug.Log(op + b + a);
+            if (a == "move")
+            {
+                Debug.Log("in move");
+                if (b == "left")
+                    SetMoveJoyStick(JoyStickCode.Left);
+                else if (b == "right")
+                    SetMoveJoyStick(JoyStickCode.Right);
+            }
+            else if ( a == "aim")
+            {
+                if (b == "left")
+                    SetAimJoyStick(JoyStickCode.Left);
+                else if (b == "right")
+                    SetAimJoyStick(JoyStickCode.Right);
+            }
+            else
+            {
+                Controller.ActionCode newAction = getAction(a);
+                XboxController.ButtonCode newButton = GetButton(b);
+                AddButtonMapping(newAction, newButton);
+            }
+
+        }
+
+        private Controller.ActionCode getAction(string a)
+        {
+            Debug.Log("action: " + a);
+            if ( a == "attack")
+                return Controller.ActionCode.Attack;
+            else if ( a=="dodge")
+                return Controller.ActionCode.Dodge;
+            else if ( a=="jump")
+                return Controller.ActionCode.Jump;
+            
+            return Controller.ActionCode.Attack;
+        }
+
+        private XboxController.ButtonCode GetButton(string b)
+        {
+            Debug.Log("button: " + b);
+            if ( b== "leftBumper")
+                return XboxController.ButtonCode.LeftBumper;
+            else if (b == "leftTrigger")
+                return XboxController.ButtonCode.LeftTrigger;
+            else if (b == "rightBumper")
+                return XboxController.ButtonCode.RightBumper;
+            else if (b == "rightTrigger")
+                return XboxController.ButtonCode.RightTrigger;
+
+            return XboxController.ButtonCode.A;
         }
 
         #region Button Defenitions
@@ -582,6 +651,8 @@ public class InputManager : MonoBehaviour {
         public virtual void Vibrate(float strength, float duration, VibrationMode vibrationMode = VibrationMode.Flat) { }
         public virtual void OnApplicationQuit() { }
         public abstract void UpdateController();
+
+        public virtual void setMapping( string b, string a) {}
 
         // List of every PlayerAction available
         public enum ActionCode {

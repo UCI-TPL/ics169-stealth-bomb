@@ -21,6 +21,7 @@ public class MainMenuManager : MonoBehaviour {
 	public GameObject mainMenuPanel;
 	public GameObject selectionMenuPanel;
 	public GameObject settingMenuPanel;
+	public GameObject playerOneCustomMappingPanel;
 
 	private GameObject btn;
 	private Button b;
@@ -117,7 +118,7 @@ public class MainMenuManager : MonoBehaviour {
 		if (currentState.Buttons.A == ButtonState.Pressed /* && prevState.Buttons.A == ButtonState.Released */ && getCurrentPanel() != 2) {
 			b.onClick.Invoke();
 		}
-		Debug.Log("current main menu button: " + currentMainMenuButton);
+		// Debug.Log("current main menu button: " + currentMainMenuButton);
 	}
 
 	/*
@@ -139,6 +140,7 @@ public class MainMenuManager : MonoBehaviour {
 				mainMenuPanel.SetActive(true);
 				selectionMenuPanel.SetActive(false);
 				settingMenuPanel.SetActive(false);
+				playerOneCustomMappingPanel.SetActive(false);
 				mainMenuButtons(1);
 				currentMainMenuButton = 1;
 				break;
@@ -148,6 +150,7 @@ public class MainMenuManager : MonoBehaviour {
 				mainMenuPanel.SetActive(false);
 				selectionMenuPanel.SetActive(true);
 				settingMenuPanel.SetActive(false);
+				playerOneCustomMappingPanel.SetActive(false);
 				selectionMenuButtons(2);
 				currentSelectionMenuButton = 2;
 				break;
@@ -157,8 +160,15 @@ public class MainMenuManager : MonoBehaviour {
 				mainMenuPanel.SetActive(false);
 				selectionMenuPanel.SetActive(false);
 				settingMenuPanel.SetActive(true);
+				playerOneCustomMappingPanel.SetActive(false);
 				settingMenuButtons(2);
 				currentSettingsMenuButton = 2;
+				break;
+			case 4:
+				mainMenuPanel.SetActive(false);
+				selectionMenuPanel.SetActive(false);
+				settingMenuPanel.SetActive(false);
+				playerOneCustomMappingPanel.SetActive(true);
 				break;
 		}
 	}
