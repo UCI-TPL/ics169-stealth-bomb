@@ -85,7 +85,6 @@ public class GameManager : MonoBehaviour {
             {
                 if (players == null)
                     SetUpPlayers();
-                // StartCoroutine(Countdown());
             }
         }
     }
@@ -125,6 +124,8 @@ public class GameManager : MonoBehaviour {
         while (!round.isReady)
             yield return null;
         round.StartGame();
+        players[0].ResetSpecialMove(); 
+        StartCoroutine(Countdown());
     }
 
     protected static Player[] GetActivePlayers(Player[] players) {
@@ -215,6 +216,7 @@ public class GameManager : MonoBehaviour {
                 player.ResetForRound();
                 SpawnTile spawnTile = spawnPoints.Dequeue();
                 player.SetController(Instantiate<GameObject>(GameManager.instance.PlayerPrefab.gameObject, spawnTile.transform.position, Quaternion.identity).GetComponent<PlayerController>());
+                //player.ResetSpecialMove(); //this is to make sure that the SpecialMove has a reference to PlayerController, it can't be in the constructor
                 moveCamera.targets.Add(player.controller.gameObject);
                 activePlayersControllers.Add(player.controller.gameObject);
                 player.onDeath += Player_onDeath;

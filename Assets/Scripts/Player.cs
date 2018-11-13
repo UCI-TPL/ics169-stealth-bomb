@@ -34,6 +34,8 @@ public class Player {
     // Currently equiped weapon
     public Weapon weapon;
 
+    public SpecialMove specialMove; //give this to the controlelr
+
     private Vector3 prevPosition;
 
     public Player(int playerNumber, PlayerData playerData) {
@@ -64,6 +66,14 @@ public class Player {
     public void DisablePlayer(float duration) { //this exists for GameController to access PlayerController
         controller.DisableMovement(duration);
         controller.DisableAttack(duration);
+    }
+
+    public void ResetSpecialMove()    {
+
+        if (controller == null) //happens when called too early by accident
+            Debug.LogError("Controller is null when ResetSpecialMove is being called");
+        else
+            controller.AttachComponent(playerData.defaultSpecialMove); //attachs a SpecialMove to the player GameObject (and gives it the data)
     }
 
     public void ResetWeapon() {

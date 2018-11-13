@@ -6,6 +6,8 @@ using Vector3Extensions;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour {
 
+    public SpecialMove specialMove; // Dodge, Ice Wall, etc. 
+
     private Player _player;
     public Player player {
         get { return _player; }
@@ -26,7 +28,7 @@ public class PlayerController : MonoBehaviour {
     public Collider wallCollider;
     public GameObject crown;
 
-    public float friction = 10f;
+    public float friction = 1f;
     [Tooltip("time it takes to go from 0 to max speed is 1 second / acceleration")]
     public float acceleration = 10f;
 
@@ -39,9 +41,13 @@ public class PlayerController : MonoBehaviour {
     private Vector3 forward;
     private Vector3 right;
 
+    private Vector2 lastForwardMovement = Vector2.zero; //used to dodge forward when not moving 
+
     // For disabling movement while performing a dodge or potentially while stunned
     private bool allowMovement = true;
     private bool allowAttack = true; //used to disable movement during the countdown
+    public bool dodging;
+    public float dodgeSpeed  = 0f;
 
     // Required variables for jumping and detecting ground collisions
     private float jumpCooldown = 0;
@@ -94,6 +100,7 @@ public class PlayerController : MonoBehaviour {
         forward = Camera.main.transform.forward;
         forward.Scale(new Vector3(1, 0, 1));
         forward.Normalize();
+        //lastForwardMovement = forward * dodgeSpeed;
         right = Camera.main.transform.right;
         right.Scale(new Vector3(1, 0, 1));
         right.Normalize();
@@ -102,6 +109,7 @@ public class PlayerController : MonoBehaviour {
         input.controllers[player.playerNumber].attack.OnDown.AddListener(ActivateAttack);
         input.controllers[player.playerNumber].attack.OnUp.AddListener(ReleaseAttack);
         input.controllers[player.playerNumber].jump.OnUp.AddListener(ReleaseJump);
+        input.controllers[player.playerNumber].dodge.OnDown.AddListener(SpecialMove);
     }
 
     private void AddListeners() {
@@ -122,7 +130,10 @@ public class PlayerController : MonoBehaviour {
 
     // Perform movement every physics update
     private void FixedUpdate() {
-        Move(isGrounded ? player.stats.moveSpeed : player.stats.airSpeed);
+        if(!dodging)
+            Move(isGrounded ? player.stats.moveSpeed : player.stats.airSpeed);
+        else
+            Move(dodgeSpeed); //hopefully this allows air dodges
         if (input.controllers[player.playerNumber].jump.Pressed) {
             Jump();
             if (jumped && rb.velocity.y > 0) {
@@ -162,7 +173,12 @@ public class PlayerController : MonoBehaviour {
     // Move the player using the the controller's move input scaled by the provided speed
     private void Move(float speed) {
         Vector2 horizontalVector = input.controllers[player.playerNumber].MoveVector() * speed;
+        if (!dodging && horizontalVector != Vector2.zero)
+            lastForwardMovement = horizontalVector.normalized;          
+        if(dodging)
+            horizontalVector = lastForwardMovement * speed;
         Vector3 scaledVector = (horizontalVector.y * forward) + (horizontalVector.x * right);
+    
         if (isGrounded) { // If grounded apply friction
             Vector3 frictionVector = -friction * rb.velocity; // Friction is a negative percentage of current velocity
             Debug.DrawRay(floorCollider.transform.position + Vector3.down * floorCollider.bounds.extents.y, frictionVector, Color.blue);
@@ -174,9 +190,24 @@ public class PlayerController : MonoBehaviour {
         if (allowMovement) {
             Vector3 oldVelocity = rb.velocity.Scaled(new Vector3(1, 0, 1));
             Vector3 newVelocity = rb.velocity + scaledVector * Time.fixedDeltaTime * acceleration; // Clamp velocity to either max speed or current speed(if player was launched)
-            newVelocity = Vector3.ClampMagnitude(new Vector3(newVelocity.x, 0, newVelocity.z), Mathf.Max(oldVelocity.magnitude, speed * input.controllers[player.playerNumber].MoveVector().magnitude + 0.1f) - 0.1f);
+            if(!dodging) //don't clamp while dodging
+                newVelocity = Vector3.ClampMagnitude(new Vector3(newVelocity.x, 0, newVelocity.z), Mathf.Max(oldVelocity.magnitude, speed * input.controllers[player.playerNumber].MoveVector().magnitude + 0.1f) - 0.1f);
             rb.velocity = new Vector3(newVelocity.x, rb.velocity.y, newVelocity.z);
         }
+        
+    }
+
+    public void AttachComponent(SpecialMoveData moveData)
+    {
+        //specialMove = new DodgeDash(); //coroutines gave errors when I used 'new' so now it is a component
+
+        if (moveData.type == SpecialMoveData.MoveType.DodgeDash) //make one for every type of SpecialMove
+            specialMove = gameObject.AddComponent<DodgeDash>();
+        specialMove.SetData(this, moveData);
+    }
+
+    private void SpecialMove() {
+        specialMove.Activate();
     }
 
     // Attempt to perform a jump
@@ -211,7 +242,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void Knockback(Vector3 direction) {
-        rb.AddForce(direction, ForceMode.Impulse); //move back in the direction of the projectile 
+        rb.AddForce(direction, ForceMode.VelocityChange); //move back in the direction of the projectile 
     }
 
     private void Hurt(Player damageDealer, Player reciever, float percentDealt) {

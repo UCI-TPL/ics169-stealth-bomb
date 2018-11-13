@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Name: DefaultPlayer
   m_EditorClassIdentifier: 
   defaultWeapon: {fileID: 11400000, guid: 402d85fe57f92094685452857a0715b0, type: 2}
+  defaultSpecialMove: {fileID: 11400000, guid: 8f845288885848b41a628736545cc5a7, type: 2}
