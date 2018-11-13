@@ -7,7 +7,6 @@ public class PowerupShelfUI : MonoBehaviour {
     public Player player;
     public RectTransform powerupDisplay;
     public int numToDisplay;
-    public Powerup powerup;
     public static float AnimationDuration = 0.25f;
     private RectTransform rectTransform;
     private Transform activePool;
@@ -79,7 +78,7 @@ public class PowerupShelfUI : MonoBehaviour {
         //return Mathf.Pow(2.5f, 2 * input - 4.8f); // y = 2.5^(2x-4.8)
     }
 
-    public void AddPowerup(Powerup powerup) {
+    public void AddPowerup(PowerupData powerupData, Buff buff) {
         StopAllCoroutines();
         RectTransform newPowerup;
         if (inactivePool.childCount > 0) {
@@ -89,7 +88,7 @@ public class PowerupShelfUI : MonoBehaviour {
             newPowerup = activePool.GetChild(0).GetComponent<RectTransform>();
         newPowerup.SetAsLastSibling();
         newPowerup.position = new Vector3((rectTransform.position.x - (size.width - size.height) / 2) + TargetPosition(activePool.childCount - 1) * ((size.width - size.height) / (numToDisplay - 3.5f)), rectTransform.position.y, rectTransform.position.z);
-        newPowerup.GetComponent<PowerupDisplayUI>().NewPowerup(powerup, new Vector2(size.height, size.height), AnimationDuration);
+        newPowerup.GetComponent<PowerupDisplayUI>().NewPowerup(powerupData, buff, new Vector2(size.height, size.height), AnimationDuration);
         UpdateDisplaysPositions();
     }
 }

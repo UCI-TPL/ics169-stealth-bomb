@@ -25,6 +25,10 @@ public class GameManager : MonoBehaviour {
     // Important Data in any non Main Menu scene.
     public Player[] players { get; private set; }
     public Player leader;
+    [Tooltip("Amount of experiance per precent life dealt")]
+    public float ExpGainPerDamage = 0.5f;
+    [Tooltip("Amount of experiance for killing blow")]
+    public float ExpGainOnKill = 0.25f;
     [Range(0,1)]
     [Tooltip("Amount experiance is scalled by per level over")]
     public float ExpPenaltyPerLvl = 0.75f;
@@ -98,6 +102,8 @@ public class GameManager : MonoBehaviour {
             {
                 readyPlayers = playerJoinManager.GetPLayerReadyStatusList();                // Have the GameManager store the players who are currently ready.
             }
+            rounds.Clear();
+            players = null;
         }
         else {
             if (rounds.Count <= 0 || !rounds[rounds.Count - 1].isActive) {
@@ -114,20 +120,23 @@ public class GameManager : MonoBehaviour {
         for (int i = 0; i < readyPlayers.Length; ++i) {
             if (readyPlayers[i]) {
                 players[i] = new Player(i, DefaultPlayerData);
-                players[i].onHurt += ExpOnHurt;
-                players[i].onDeath += ExpOnKill;
+                players[i].OnHurt += ExpOnHurt;
+                players[i].OnDeath += ExpOnKill;
             }
         }
     }
 
     private IEnumerator StartGameAfterLoad(GameRound round) {
-        while (!round.isReady)
+        while (round.State != GameRound.GameState.Ready)
             yield return null;
         round.StartGame();
         players[0].ResetSpecialMove(); 
         StartCoroutine(Countdown());
     }
 
+    /// <summary>
+    /// Returns an array containing only active players
+    /// </summary>
     protected static Player[] GetActivePlayers(Player[] players) {
         List<Player> activePlayers = new List<Player>(players);
         for (int i = activePlayers.Count - 1; i >= 0; --i)
@@ -152,18 +161,22 @@ public class GameManager : MonoBehaviour {
     }
 
     public void ExpOnHurt(Player damageDealer, Player reciever, float percentDealt) {
-        if (damageDealer != null) {
-            float experianceGain = percentDealt;
-            if (damageDealer.rank > reciever.rank)
-                experianceGain *= Mathf.Pow(ExpPenaltyPerLvl, damageDealer.rank - reciever.rank); // Scale Experiance gain down by amount overleveled
-            else
-                experianceGain *= 1 + ExpBonusPerLvl * (reciever.rank - damageDealer.rank); // Scale Experiance gain up according to amount underleveled
-            StartCoroutine(ExperianceOverTime(damageDealer, experianceGain));
-        }
+        if (damageDealer != null)
+            StartCoroutine(ExperianceOverTime(damageDealer, ScaleExpGain(damageDealer.rank, reciever.rank, percentDealt * ExpGainPerDamage)));
     }
 
     public void ExpOnKill(Player killer, Player killed) {
-        ExpOnHurt(killer, killed, 0.5f);
+        if (killer != null)
+            StartCoroutine(ExperianceOverTime(killer, ScaleExpGain(killer.rank, killed.rank, ExpGainOnKill)));
+    }
+
+    private float ScaleExpGain(int dealerRank, int recieverRank, float amount) {
+        float experianceGain = amount;
+        if (dealerRank > recieverRank)
+            experianceGain *= Mathf.Pow(ExpPenaltyPerLvl, dealerRank - recieverRank); // Scale Experiance gain down by amount overleveled
+        else
+            experianceGain *= 1 + ExpBonusPerLvl * (recieverRank - dealerRank); // Scale Experiance gain up according to amount underleveled
+        return experianceGain;
     }
 
     /// <summary>
@@ -187,10 +200,11 @@ public class GameManager : MonoBehaviour {
         public Dictionary<Player, float> initialExperiance;
         public Player[] players;
         public bool isActive {
-            get { return activePlayersControllers.Count > 1 || isLoading || isReady; }
+            get { return State != GameState.GameOver && State != GameState.Created; }
         }
-        public bool isLoading { get; private set; }
-        public bool isReady { get; private set; }
+        public GameState State { get; private set; }
+        public float StartTime { get; private set; }
+        public float ElapsedTime { get { return Time.time - StartTime; } }
         public List<GameObject> activePlayersControllers = new List<GameObject>();
 
         public GameRound(Player[] players) {
@@ -199,15 +213,21 @@ public class GameManager : MonoBehaviour {
             foreach (Player player in this.players) {
                 initialExperiance.Add(player, player.experiance);
             }
-            isLoading = isReady = false;
+            State = GameState.Created;
+        }
+
+        ~GameRound() {
+            if (!isActive)
+                GameOver();
         }
 
         public void LoadLevel() {
-            isLoading = true;
-            TileManager.tileManager.LoadLevel("LoadLevel").AddListener(delegate { isLoading = false; isReady = true; });
+            State = GameState.Loading;
+            TileManager.tileManager.LoadLevel("LoadLevel").AddListener(delegate { State = GameState.Ready; });
         }
 
         public void StartGame() {
+            StartTime = Time.time;
             TileManager.tileManager.StartGame();
 
             Queue<SpawnTile> spawnPoints = new Queue<SpawnTile>(TileManager.tileManager.tileMap.SpawnTiles);
@@ -219,22 +239,40 @@ public class GameManager : MonoBehaviour {
                 //player.ResetSpecialMove(); //this is to make sure that the SpecialMove has a reference to PlayerController, it can't be in the constructor
                 moveCamera.targets.Add(player.controller.gameObject);
                 activePlayersControllers.Add(player.controller.gameObject);
-                player.onDeath += Player_onDeath;
+                player.OnDeath += Player_onDeath;
             }
-            isReady = false;
+            State = GameState.Battle;
+            GameManager.instance.StartCoroutine(Update());
+        }
+
+        public IEnumerator Update() {
+            while (isActive) {
+                if (State == GameState.Battle && ElapsedTime > 20f) {
+                    TileManager.tileManager.StartCountdown();
+                    State = GameState.HurryUp;
+                }
+                yield return null;
+            }
         }
 
         private void GameOver() {
+            foreach (Player player in players)
+                player.ResetForRound();
             foreach (GameObject g in activePlayersControllers)
                 Destroy(g);
             foreach (Player player in players)
-                player.onDeath -= Player_onDeath;
+                player.OnDeath -= Player_onDeath;
+            State = GameState.GameOver;
         }
 
         private void Player_onDeath(Player killer, Player killed) {
             activePlayersControllers.Remove(killed.controller.gameObject);
-            if (!isActive)
+            if (activePlayersControllers.Count < 2)
                 GameOver();
+        }
+
+        public enum GameState {
+            Created, Loading, Ready, Battle, HurryUp, GameOver
         }
     }
 }

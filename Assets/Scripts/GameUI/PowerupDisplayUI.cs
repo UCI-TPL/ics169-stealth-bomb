@@ -5,7 +5,8 @@ using UnityEngine.UI;
 
 public class PowerupDisplayUI : MonoBehaviour {
 
-    public Powerup powerup;
+    public PowerupData powerupData;
+    public Buff buff;
     public Image powerupDiplay;
     private RectTransform rt;
 
@@ -15,9 +16,10 @@ public class PowerupDisplayUI : MonoBehaviour {
         rt = GetComponent<RectTransform>();
     }
 
-    public void NewPowerup(Powerup powerup, Vector2 targetSize, float duration) {
-        this.powerup = powerup;
-        powerupDiplay.sprite = powerup.data.image;
+    public void NewPowerup(PowerupData powerupData, Buff buff, Vector2 targetSize, float duration) {
+        this.powerupData = powerupData;
+        this.buff = buff;
+        powerupDiplay.sprite = powerupData.image;
         StartCoroutine(ResetDisplay(targetSize, duration));
     }
 

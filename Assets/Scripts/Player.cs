@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -15,21 +16,22 @@ public class Player {
     public float experiance { get; private set; }
     public int rank { get { return Mathf.FloorToInt(experiance) + 1; } }
 
-    private List<Powerup> permPowerups = new List<Powerup>();
-    private List<Powerup> powerups = new List<Powerup>();
+    private List<Buff> permPowerups = new List<Buff>();
+    private List<Buff> buffs = new List<Buff>();
     // The Last player this player was hurt by. This is for attributing kills
     private Player lastHurtBy;
 
     // Events
-    private UnityEvent onUpdate = new UnityEvent();
-    private UnityEvent onMove = new UnityEvent();
+    public delegate void playerEventDel(Player player);
+    private event playerEventDel OnUpdate;
+    private event playerEventDel OnMove;
     public delegate void onHurtDel(Player damageDealer, Player reciever, float percentDealt);
-    public event onHurtDel onHurt;
+    public event onHurtDel OnHurt;
     public UnityEvent onHeal = new UnityEvent();
     public delegate void onDeathDel(Player killer, Player killed);
-    public event onDeathDel onDeath;
-    public delegate void powerupDel(Powerup powerup);
-    public event powerupDel onAddPowerUp;
+    public event onDeathDel OnDeath;
+    public delegate void powerupDel(PowerupData powerupData, Buff buff);
+    public event powerupDel OnAddPowerUp;
 
     // Currently equiped weapon
     public Weapon weapon;
@@ -54,8 +56,8 @@ public class Player {
 
     public void ResetForRound() {
         ResetHealth();
-        for (int i = powerups.Count - 1; i >= 0; --i)
-            RemovePowerup(powerups[i]);
+        for (int i = buffs.Count - 1; i >= 0; --i)
+            RemoveBuff(buffs[i]);
         lastHurtBy = null;
     }
 
@@ -91,7 +93,7 @@ public class Player {
         health -= damageDealt;
         float percent = damageDealt / stats.maxHealth; // Percentage of max health dealt
         lastHurtBy = damageDealer; // Remember last player that dealt damage, this is used to attribute kills
-        onHurt.Invoke(damageDealer, this, percent);
+        OnHurt.Invoke(damageDealer, this, percent);
         return percent;
     }
 
@@ -102,86 +104,72 @@ public class Player {
     private void CheckDeath() {
         if (health <= 0) {
             controller.input.controllers[playerNumber].Vibrate(1.0f, 1f, InputManager.Controller.VibrationMode.Diminish);
-            onDeath(lastHurtBy, this);
+            OnDeath(lastHurtBy, this);
             GameObject.Destroy(controller.gameObject);
         }
     }
 
     public void InGameUpdate() {
-        List<Powerup> deleteList = new List<Powerup>();
-        foreach (Powerup p in powerups) {
-            if (p.endTime <= Time.time)
-                deleteList.Add(p); // Remove power-up if expired
-        }
-        foreach (Powerup p in deleteList)
-            RemovePowerup(p);
+        while (buffs.Count > 0 && buffs[0].endTime <= Time.time)
+            RemoveBuff(buffs[0]);
 
-        onUpdate.Invoke();
+        if (OnUpdate != null)
+            OnUpdate(this);
         if (controller.isMoving && controller.isGrounded)
-            onMove.Invoke();
+            if (OnMove != null)
+                OnMove(this);
 
         CheckDeath();
     }
 
     // Determine the Type of item and handle accordingly
     public void AddItem(ItemData data) {
-        switch(data.type) {
-            case ItemData.Type.Item:
-                data.Use(this);
-                break;
-            case ItemData.Type.Powerup:
-                AddPowerup((PowerupData)data);
-                break;
-            case ItemData.Type.Weapon:
-                weapon.RemoveWeapon();
-                ChangeWeapon((WeaponData)data);
-                break;
-        }
+        data.Use(this);
     }
 
     // Create a new instance of a power-up, save it to list of power-ups and add its modifiers to stats
-    public void AddPowerup(PowerupData powerupData) {
-        Powerup powerup;
-        if (permPowerups.Count < rank) {
-            powerup = powerupData.NewInstance(this, true); // Initialize power-up
-            permPowerups.Add(powerup); // Save to list of powerups
-        } else {
-            powerup = powerupData.NewInstance(this); // Initialize power-up
-            powerups.Add(powerup); // Save to list of powerups
-        }
-        onAddPowerUp(powerup);
-        foreach (PlayerStats.Modifier m in powerup.modifiers) // Add power-up's modifiers to stats
+    public void AddBuff(Buff buff) {
+        buffs.Add(buff); // Save to list of buffs
+        buffs.Sort(CompareLowerBuffDuration); // Always sort 
+        foreach (PlayerStats.Modifier m in buff.Modifiers) // Add power-up's modifiers to stats
             stats.AddModifier(m);
-        foreach (Powerup.Trigger t in powerup.triggers) { // Add all the powerup's triggers to the respective event calls
-            switch (t.type) {
-                case Powerup.Trigger.Type.Update:
-                    onUpdate.AddListener(t.Activate);
+        foreach (Buff.Trigger t in buff.Triggers) { // Add all the powerup's triggers to the respective event calls
+            switch (t.condition) {
+                case Buff.Trigger.TriggerCondition.Update:
+                    OnUpdate += t.Activate;
                     break;
-                case Powerup.Trigger.Type.Move:
-                    onMove.AddListener(t.Activate);
+                case Buff.Trigger.TriggerCondition.Move:
+                    OnMove += t.Activate;
                     break;
             }
         }
+        if (buff.Source.GetType() == typeof(PowerupData))
+            OnAddPowerUp((PowerupData)buff.Source, buff);
     }
 
+    private static int CompareLowerBuffDuration(Buff L, Buff R) {
+        return L.timeRemaining <= R.timeRemaining ? -1 : 1;
+    }
+    
     // Remove each modifier granted by the power-up and remove the power-up from list of power-ups
-    public void RemovePowerup(Powerup powerup) {
-        foreach (PlayerStats.Modifier m in powerup.modifiers) // Remove all modifiers granted by this powerup
+    public void RemoveBuff(Buff buff) {
+        foreach (PlayerStats.Modifier m in buff.Modifiers) // Remove all modifiers granted by this powerup
             stats.RemoveModifier(m);
-        foreach (Powerup.Trigger t in powerup.triggers) {// Remove all the powerup's triggers from the respective event calls
-            switch (t.type) {
-                case Powerup.Trigger.Type.Update:
-                    onUpdate.RemoveListener(t.Activate);
+        foreach (Buff.Trigger t in buff.Triggers) {// Remove all the powerup's triggers from the respective event calls
+            switch (t.condition) {
+                case Buff.Trigger.TriggerCondition.Update:
+                    OnUpdate -= t.Activate;
                     break;
-                case Powerup.Trigger.Type.Move:
-                    onMove.RemoveListener(t.Activate);
+                case Buff.Trigger.TriggerCondition.Move:
+                    OnMove -= t.Activate;
                     break;
             }
         }
-        powerups.Remove(powerup); // Remove powerup from list of powerups
+        buffs.Remove(buff); // Remove powerup from list of powerups
     }
 
     public void ChangeWeapon(WeaponData data) {
+        weapon.RemoveWeapon();
         weapon = data.NewInstance(this);
     }
 }

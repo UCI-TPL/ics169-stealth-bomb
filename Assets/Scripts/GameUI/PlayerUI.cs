@@ -12,12 +12,16 @@ public class PlayerUI : MonoBehaviour {
     public Player player;
 
     private void Start() {
-        player.onAddPowerUp += powerUpShelf.AddPowerup;
+        player.OnAddPowerUp += powerUpShelf.AddPowerup;
     }
 
     private void Update() {
         rankDisplay.text = player.rank.ToString();
         experianceSlider.value = player.experiance - Mathf.Floor(player.experiance);
         Crown.SetActive(player == GameManager.instance.leader);
+    }
+
+    private void OnDestroy() {
+        player.OnAddPowerUp -= powerUpShelf.AddPowerup;
     }
 }
