@@ -13,4 +13,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseBuff:
     Modifiers: []
-    Triggers: []
+    Triggers:
+    - modifiers: []
+      condition: 1
+      cooldown: 0.1
+      triggerWeapon: {fileID: 11400000, guid: dddc2f3c56024cc4d9f109f237ba0814, type: 2}

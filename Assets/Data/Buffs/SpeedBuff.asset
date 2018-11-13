@@ -12,5 +12,8 @@ MonoBehaviour:
   m_Name: SpeedBuff
   m_EditorClassIdentifier: 
   baseBuff:
-    Modifiers: []
+    Modifiers:
+    - name: move_speed
+      value: 0.25
+      type: 1
     Triggers: []
