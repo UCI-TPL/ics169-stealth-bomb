@@ -25,6 +25,10 @@ public class GameManager : MonoBehaviour {
     // Important Data in any non Main Menu scene.
     public Player[] players { get; private set; }
     public Player leader;
+    [Tooltip("Amount of experiance per precent life dealt")]
+    public float ExpGainPerDamage = 0.5f;
+    [Tooltip("Amount of experiance for killing blow")]
+    public float ExpGainOnKill = 0.25f;
     [Range(0,1)]
     [Tooltip("Amount experiance is scalled by per level over")]
     public float ExpPenaltyPerLvl = 0.75f;
@@ -115,8 +119,8 @@ public class GameManager : MonoBehaviour {
         for (int i = 0; i < readyPlayers.Length; ++i) {
             if (readyPlayers[i]) {
                 players[i] = new Player(i, DefaultPlayerData);
-                players[i].onHurt += ExpOnHurt;
-                players[i].onDeath += ExpOnKill;
+                players[i].OnHurt += ExpOnHurt;
+                players[i].OnDeath += ExpOnKill;
             }
         }
     }
@@ -151,18 +155,22 @@ public class GameManager : MonoBehaviour {
     }
 
     public void ExpOnHurt(Player damageDealer, Player reciever, float percentDealt) {
-        if (damageDealer != null) {
-            float experianceGain = percentDealt;
-            if (damageDealer.rank > reciever.rank)
-                experianceGain *= Mathf.Pow(ExpPenaltyPerLvl, damageDealer.rank - reciever.rank); // Scale Experiance gain down by amount overleveled
-            else
-                experianceGain *= 1 + ExpBonusPerLvl * (reciever.rank - damageDealer.rank); // Scale Experiance gain up according to amount underleveled
-            StartCoroutine(ExperianceOverTime(damageDealer, experianceGain));
-        }
+        if (damageDealer != null)
+            StartCoroutine(ExperianceOverTime(damageDealer, ScaleExpGain(damageDealer.rank, reciever.rank, percentDealt * ExpGainPerDamage)));
     }
 
     public void ExpOnKill(Player killer, Player killed) {
-        ExpOnHurt(killer, killed, 0.5f);
+        if (killer != null)
+            StartCoroutine(ExperianceOverTime(killer, ScaleExpGain(killer.rank, killed.rank, ExpGainOnKill)));
+    }
+
+    private float ScaleExpGain(int dealerRank, int recieverRank, float amount) {
+        float experianceGain = amount;
+        if (dealerRank > recieverRank)
+            experianceGain *= Mathf.Pow(ExpPenaltyPerLvl, dealerRank - recieverRank); // Scale Experiance gain down by amount overleveled
+        else
+            experianceGain *= 1 + ExpBonusPerLvl * (recieverRank - dealerRank); // Scale Experiance gain up according to amount underleveled
+        return experianceGain;
     }
 
     /// <summary>
@@ -217,7 +225,7 @@ public class GameManager : MonoBehaviour {
                 player.SetController(Instantiate<GameObject>(GameManager.instance.PlayerPrefab.gameObject, spawnTile.transform.position, Quaternion.identity).GetComponent<PlayerController>());
                 moveCamera.targets.Add(player.controller.gameObject);
                 activePlayersControllers.Add(player.controller.gameObject);
-                player.onDeath += Player_onDeath;
+                player.OnDeath += Player_onDeath;
             }
             isReady = false;
         }
@@ -226,7 +234,7 @@ public class GameManager : MonoBehaviour {
             foreach (GameObject g in activePlayersControllers)
                 Destroy(g);
             foreach (Player player in players)
-                player.onDeath -= Player_onDeath;
+                player.OnDeath -= Player_onDeath;
         }
 
         private void Player_onDeath(Player killer, Player killed) {

@@ -4,7 +4,6 @@ using UnityEngine;
 
 [System.Serializable]
 public class Buff {
-    public float duration;
     public readonly float startTime;
     public readonly float endTime;
     public float timeRemaining {
@@ -13,71 +12,74 @@ public class Buff {
     public bool isPermenant {
         get { return float.IsPositiveInfinity(endTime); }
     }
-    [SerializeField]
-    public List<PlayerStats.Modifier> modifiers;
-    internal Player player; // Player that this powerup is attached to
+    public readonly object Source;
 
+    [SerializeField]
+    public List<PlayerStats.Modifier> Modifiers;
     // List of functions to be called every update on a player
-    public List<Trigger> triggers = new List<Trigger>();
+    [SerializeField]
+    public List<Trigger> Triggers;
 
     // Create new power-up instance for editing in inspector
-    public Buff() { }
+    public Buff() {
+        Modifiers = new List<PlayerStats.Modifier>();
+        Triggers = new List<Trigger>();
+    }
 
     // Contructor used to clone instance of powerup
-    private Buff(Player player, bool isPermenant = false) {
-        this.player = player;
+    private Buff(float duration, object source) {
+        Triggers = new List<Trigger>();
+        this.Source = source;
         startTime = Time.time;
-        endTime = isPermenant ? float.PositiveInfinity : Time.time + duration;
+        endTime = Time.time + duration;
     }
 
     // Create a deep copy of this powerup instance. Used for when adding a new powerup to a player
-    public Buff Clone(Player player, bool isPermenant = false) {
-        Buff copy = new Buff(player, isPermenant);
-        foreach (Trigger t in triggers) {
-            copy.triggers.Add(t.Copy(copy));
+    public Buff DeepCopy(float duration, object source) {
+        Buff copy = new Buff(duration, source);
+        copy.Modifiers = Modifiers;
+        foreach (Trigger t in Triggers) {
+            copy.Triggers.Add(t.DeepCopy(copy));
         }
         return copy;
     }
 
-    // Contains a weapon that activates when a condition is triggered
+    // Contains an activate function and a condition that should activate it
     [System.Serializable]
-    public class Trigger {
-        [System.NonSerialized] // Prevent serialization loop
-        private Buff buff;
+    public class Trigger {  // Unity does not support Serialization of Derived Classes, so we will have to find another way to make more types of triggers
+        public List<PlayerStats.Modifier> modifiers;
+        public TriggerCondition condition;
+        public float cooldown;
+        private float refreshTime = 0;
         public WeaponData triggerWeapon;
         private Weapon weapon;
-        public float cooldown;
-        public List<PlayerStats.Modifier> modifiers;
-        public Type type;
-
-        private float refreshTime;
-
-        public Trigger(WeaponData triggerWeapon, Buff buff) {
-            this.buff = buff;
-            this.triggerWeapon = triggerWeapon;
-            weapon = triggerWeapon.NewInstance(buff.player);
-            refreshTime = 0;
-        }
 
         // Activate weapon if off cooldown
-        public void Activate() {
+        public void Activate(Player player) {
             if (refreshTime <= Time.time) {
-                weapon.Activate();
+                OnActivate(player);
                 refreshTime = Time.time + cooldown;
             }
         }
 
+        // What happens when trigger is activated
+        private void OnActivate(Player player) {
+            if (weapon == null)
+                weapon = triggerWeapon.NewInstance(player);
+            weapon.Activate();
+        }
+
         // Create a deep copy of this class
-        public Trigger Copy(Buff buff) {
-            Trigger copy = new Trigger(triggerWeapon, buff) {
-                cooldown = cooldown,
-                modifiers = modifiers,
-                type = type
-            };
+        public Trigger DeepCopy(Buff buff) {
+            Trigger copy = new Trigger();
+            copy.modifiers = modifiers;
+            copy.condition = condition;
+            copy.cooldown = cooldown;
+            copy.triggerWeapon = triggerWeapon;
             return copy;
         }
 
-        // Different types of Triggers available
-        public enum Type { Update, Move, Stationary, Jump, Airborn, Land, Attack, Death, Touch, Hurt, StartDodge, EndDodge, Dodging }
+        // Different types of Trigger Conditions available
+        public enum TriggerCondition { Update, Move, Stationary, Jump, Airborn, Land, Attack, Death, Touch, Hurt, StartDodge, EndDodge, Dodging }
     }
 }

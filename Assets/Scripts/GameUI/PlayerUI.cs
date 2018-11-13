@@ -12,7 +12,7 @@ public class PlayerUI : MonoBehaviour {
     public Player player;
 
     private void Start() {
-        player.onAddPowerUp += powerUpShelf.AddPowerup;
+        player.OnAddPowerUp += powerUpShelf.AddPowerup;
     }
 
     private void Update() {

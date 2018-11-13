@@ -106,13 +106,13 @@ public class PlayerController : MonoBehaviour {
 
     private void AddListeners() {
         player.onHeal.AddListener(Heal);
-        player.onHurt += Hurt;
+        player.OnHurt += Hurt;
     }
 
     private void RemoveListeners() {
         if (player != null) {
             player.onHeal.RemoveListener(Heal);
-            player.onHurt -= Hurt;
+            player.OnHurt -= Hurt;
         }
     }
 
