@@ -11,10 +11,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01a933e661fff5d4298cfc7befe50327, type: 3}
   m_Name: DodgeDash
   m_EditorClassIdentifier: 
-  moveDuration: 0.3
-  cooldown: 0.4
+  name: Dodge Dash
+  image: {fileID: 0}
   description: A dash like in Overcooked, player can go forward and change directions
     but can take damage
   type: 0
-  SpeedMultiplier: 1
+  moveDuration: 0.3
+  cooldown: 0.4
+  moveType: 0
+  SpeedMultiplier: 1.2
   StopTime: 0.05

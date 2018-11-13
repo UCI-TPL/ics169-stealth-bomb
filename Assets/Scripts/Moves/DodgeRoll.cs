@@ -2,46 +2,51 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DodgeRoll : SpecialMove {  //later the roll will disable left/right moveem
 
-    public DodgeData data;
+[System.Serializable]
+public class DodgeRoll : Weapon
+{
+
+    private DodgeData data;
+
     float cooldown = 0.0f;
 
-    /* not currently used 
-    public DodgeDash(DodgeData data, PlayerController controller) : base(controller)
-    {
-        this.data = data;
-        this.controller = controller;
-    }
-    */
+    public DodgeRoll() : base() { }
 
-    public override void SetData(PlayerController controller, SpecialMoveData data) //replacement constructor
+    public DodgeRoll(WeaponData weaponData, Player player) : base(weaponData, player, Type.Move)
     {
-        this.controller = controller;
-        this.data = (DodgeData)data;
+        data = (DodgeData)weaponData;
     }
 
-    public override void Activate()
+
+    // OnActivate is called once when the weapon is activated
+    protected override void OnActivate()
     {
         if (cooldown <= Time.time)
         {
             cooldown = Time.time + data.cooldown;
-            StartCoroutine(Dodge());
+            player.controller.StartCoroutine(Dodge());
         }
     }
 
     public IEnumerator Dodge()
     {
-        
-        controller.rolling = true;
-        controller.dodgeSpeed = controller.player.stats.moveSpeed * data.SpeedMultiplier;//data.SpeedMultiplier;
-       // controller.GetComponent<Rigidbody>().AddForce(new Vector3(0, 1f, 0f));
+
+        player.controller.rolling = true;
+        player.controller.dodgeSpeed = player.controller.player.stats.moveSpeed * data.SpeedMultiplier; //the dodge begins by changing the playerspeed                                                                                        
         yield return new WaitForSeconds(data.moveDuration);
-        controller.dodgeSpeed = 0f; //the speed is set to 0 to decelarate the player at the end of the dodge
-        
+
+        player.controller.dodgeSpeed = 0f; //the speed is set to 0 to decelarate the player at the end of the dodge
         yield return new WaitForSeconds(data.StopTime);
-        controller.dodgeSpeed = controller.player.stats.moveSpeed;
-        controller.rolling = false;
-      
+
+        player.controller.dodgeSpeed = player.controller.player.stats.moveSpeed;
+        player.controller.rolling = false;
+
+    }
+
+    public override Weapon DeepCopy(WeaponData weaponData, Player player)
+    {
+        DodgeRoll copy = new DodgeRoll(weaponData, player);
+        return copy;
     }
 }

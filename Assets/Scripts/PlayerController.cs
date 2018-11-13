@@ -6,7 +6,8 @@ using Vector3Extensions;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour {
 
-    public SpecialMove specialMove; // Dodge, Ice Wall, etc. 
+    public Weapon specialMove;
+   // public SpecialMove specialMove; // Dodge, Ice Wall, etc. 
 
     private Player _player;
     public Player player {
@@ -210,18 +211,8 @@ public class PlayerController : MonoBehaviour {
         
     }
 
-    public void AttachComponent(SpecialMoveData moveData)
-    {
-        //specialMove = new DodgeDash(); //coroutines gave errors when I used 'new' so now it is a component
-        if (moveData.type == SpecialMoveData.MoveType.DodgeDash) //make one for every type of SpecialMove
-            specialMove = gameObject.AddComponent<DodgeDash>();
-        else if (moveData.type == SpecialMoveData.MoveType.DodgeRoll)
-            specialMove = gameObject.AddComponent<DodgeRoll>();
-        specialMove.SetData(this, moveData);
-    }
-
     private void SpecialMove() {
-        specialMove.Activate();
+        player.specialMove.Activate();
     }
 
     // Attempt to perform a jump

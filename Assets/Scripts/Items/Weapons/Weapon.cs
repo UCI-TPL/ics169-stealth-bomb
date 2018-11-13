@@ -76,7 +76,7 @@ public abstract class Weapon {
 
     // Classify weapons as charged or instant, Charged attacks cannot be used as triggers
     public enum Type {
-        Instant, Charge
+        Instant, Charge, Move
     }
 
     // This method was taken from https://stackoverflow.com/questions/7233905/how-to-detect-if-virtual-method-is-overridden-in-c-sharp/7234217#7234217

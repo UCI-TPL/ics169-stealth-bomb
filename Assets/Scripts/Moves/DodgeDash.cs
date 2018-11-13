@@ -2,45 +2,50 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DodgeDash : SpecialMove
+
+[System.Serializable]
+public class DodgeDash : Weapon
 {
-    public DodgeData data;
+
+    private DodgeData data;
+
     float cooldown = 0.0f;
 
-    /* not currently used 
-    public DodgeDash(DodgeData data, PlayerController controller) : base(controller)
-    {
-        this.data = data;
-        this.controller = controller;
-    }
-    */
+    public DodgeDash() : base() { }
 
-    public override void SetData(PlayerController controller, SpecialMoveData data) //replacement constructor
+    public DodgeDash(WeaponData weaponData, Player player) : base(weaponData, player, Type.Move)
     {
-        this.controller = controller;
-        this.data = (DodgeData)data;
+        Debug.Log("isn't this important??");
+        data = (DodgeData)weaponData;
     }
 
-    public override void Activate()
+
+    // OnActivate is called once when the move is activated
+    protected override void OnActivate()
     {
         if (cooldown <= Time.time)
         {
             cooldown = Time.time + data.cooldown;
-            StartCoroutine(Dodge());
+            player.controller.StartCoroutine(Dodge());
         }
     }
 
     public IEnumerator Dodge()
     {
-        controller.dodging = true;
-        controller.dodgeSpeed = controller.player.stats.moveSpeed * data.SpeedMultiplier;//data.SpeedMultiplier;
+        player.controller.dodging = true;
+        player.controller.dodgeSpeed = player.controller.player.stats.moveSpeed * data.SpeedMultiplier;//data.SpeedMultiplier;
         yield return new WaitForSeconds(data.moveDuration);
 
-        controller.dodgeSpeed = 0f; //the speed is set to 0 to decelarate the player at the end of the dodge
+        player.controller.dodgeSpeed = 0f; //the speed is set to 0 to decelarate the player at the end of the dodge
         yield return new WaitForSeconds(data.StopTime);
 
-        controller.dodgeSpeed = controller.player.stats.moveSpeed;
-        controller.dodging = false;
+        player.controller.dodgeSpeed = player.controller.player.stats.moveSpeed;
+        player.controller.dodging = false;
     }
 
+    public override Weapon DeepCopy(WeaponData weaponData, Player player)
+    {
+        DodgeDash copy = new DodgeDash(weaponData, player);
+        return copy;
+    }
 }
