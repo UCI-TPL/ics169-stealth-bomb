@@ -58,8 +58,6 @@ public class GameManager : MonoBehaviour {
     {
         
         DisablePlayersMovement(countdown);
-        //GameObject cText = Instantiate(countdownText,null, false);
-        Debug.Log("Here we are");
         countdownText.SetActive(true);
         for (int i = countdown; i > 0; i--)
         {

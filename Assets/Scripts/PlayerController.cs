@@ -266,8 +266,20 @@ public class PlayerController : MonoBehaviour {
 
     // Renders the players HP bar for a second.
 
+    public GameObject InstantiateSummon(GameObject sum) //Special Move scripts will call this to instantiate objects
+    {
+        GameObject summon = Instantiate(sum);
+        return summon;
+    }
+
+    public void DestroySummon(GameObject sum)//created since the Move Scripts were not able to use Destroy
+    {
+        Destroy(sum);
+    }
+
     IEnumerator HurtIndicator() //show the player that it is hurt 
     {
+        
         Color test = playerColor;
         rend.material.color = Color.white;
         yield return new WaitForSeconds(0.025f); //the player flashes white 

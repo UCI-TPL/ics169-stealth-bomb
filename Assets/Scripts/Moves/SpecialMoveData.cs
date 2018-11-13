@@ -16,7 +16,7 @@ public abstract class SpecialMoveData : WeaponData//<SpecialMove>
 
     public enum MoveType
     {
-        DodgeDash, DodgeRoll, IceWall, Summon, Shield
+        DodgeDash, DodgeRoll, Summon, Shield
     }
 
     /*
