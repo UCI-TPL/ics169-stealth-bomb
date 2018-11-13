@@ -28,7 +28,7 @@ public class TileManager : MonoBehaviour {
                 return _tileManager;
             _tileManager = FindObjectOfType<TileManager>();
             if (_tileManager == null) {
-                Debug.LogError("Tile Manager not found, Created new Tile Manager.");
+                Debug.LogWarning("Tile Manager not found, Created new Tile Manager.");
                 _tileManager = new GameObject("Tile Manager").AddComponent<TileManager>();
             }
             return _tileManager;

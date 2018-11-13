@@ -20,4 +20,8 @@ public class PlayerUI : MonoBehaviour {
         experianceSlider.value = player.experiance - Mathf.Floor(player.experiance);
         Crown.SetActive(player == GameManager.instance.leader);
     }
+
+    private void OnDestroy() {
+        player.onAddPowerUp -= powerUpShelf.AddPowerup;
+    }
 }
