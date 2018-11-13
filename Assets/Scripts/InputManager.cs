@@ -8,6 +8,7 @@ public class InputManager : MonoBehaviour {
 
     // Returns the current inputManager
     private static InputManager _inputManager;
+
     public static InputManager inputManager {
         get {
             if (_inputManager != null)
@@ -25,12 +26,22 @@ public class InputManager : MonoBehaviour {
 
     public Controller[] controllers = new Controller[4];
 
+    // Change the specified player's type of controller. Either xbox or mouse-and-keyboard
+    public void ChangeControllerType(int playerIndex, Controller.Type controllerType) {
+        if (controllerType == Controller.Type.Xbox)
+            controllers[playerIndex] = new XboxController(playerIndex);
+        else if (controllerType == Controller.Type.MouseKeyboard)
+            controllers[playerIndex] = new MouseKeyboard(playerIndex);
+    }
+
     // Used to scale controller joystick inputs to camera angle
     protected Vector2 cameraScale;
 
     // Set up controllers
     private void Awake() {
-        //controllers[0] = new MouseKeyboard();
+        // only temporary, need to make going from keyboard to controller more formal and streamlined!!!!!!!!!!
+        // controllers[0] = new MouseKeyboard(0);
+        // for (int i = 1; i < 4; ++i)
         for (int i = 0; i < 4; ++i)
             controllers[i] = new XboxController(i);
     }
@@ -50,12 +61,37 @@ public class InputManager : MonoBehaviour {
     // Controller object for Mouse and Keyboard, This is not implemented yet
     public class MouseKeyboard : Controller {
 
+        private int playerIndex;
+
         public override Vector2 MoveVector() {
             return new Vector2((Input.GetKey(KeyCode.D) ? 1 : 0) + (Input.GetKey(KeyCode.A) ? -1 : 0), (Input.GetKey(KeyCode.W) ? 1 : 0) + (Input.GetKey(KeyCode.S) ? -1 : 0)).normalized;
         }
 
         public override Vector2 AimVector() {
-            return MoveVector();
+            Vector2 aim = Vector2.zero;
+            Vector3 playerScreenPosition = Camera.main.WorldToScreenPoint(GameManager.instance.players[playerIndex].controller.transform.position);
+            // Debug.Log("player screen position: " + playerScreenPosition + ", mouse position: " + Input.mousePosition);
+            aim = new Vector2(Input.mousePosition.x - playerScreenPosition.x, Input.mousePosition.y - playerScreenPosition.y);
+            // Debug.Log(aim);
+            aim = (aim * inputManager.cameraScale).normalized;
+
+            // old method of computing mouse aim. broken! dont use it!!!
+            // Vector2 aim = Vector2.zero;
+            // Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            // RaycastHit hit;
+            // if (Physics.Raycast(ray, out hit)) {
+            //     // aim vector using mouse and keyboard can not be found without the player's transform/position.
+            //     Vector3 playerPosition = GameManager.instance.players[playerIndex].controller.transform.position;
+            //     float aimX = hit.transform.position.x - playerPosition.x;
+            //     float aimZ = hit.transform.position.z - playerPosition.z;
+            //     aim = (new Vector2(aimX, aimZ)).normalized;
+            //     Debug.Log(aim);
+            //     // transform.LookAt(new Vector3(hit.transform.position.x, transform.position.y, hit.transform.position.z));
+            // }
+            // Debug.Log("mouse position: " + Input.mousePosition);
+            return aim;
+            // return (new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")) * inputManager.cameraScale).normalized;
+            // return MoveVector();
         }
 
         public override void UpdateController() {
@@ -71,8 +107,9 @@ public class InputManager : MonoBehaviour {
             attack.Pressed = Input.GetKey(KeyCode.Mouse0);
         }
 
-        public MouseKeyboard() {
+        public MouseKeyboard(int playerIndex) {
             type = Type.MouseKeyboard;
+            this.playerIndex = playerIndex;
         }
     }
 
