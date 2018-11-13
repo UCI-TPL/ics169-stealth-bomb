@@ -8,6 +8,7 @@ public class InputManager : MonoBehaviour {
 
     // Returns the current inputManager
     private static InputManager _inputManager;
+
     public static InputManager inputManager {
         get {
             if (_inputManager != null)
@@ -25,12 +26,32 @@ public class InputManager : MonoBehaviour {
 
     public Controller[] controllers = new Controller[4];
 
+    // Change the specified player's type of controller. Either xbox or mouse-and-keyboard
+    public void ChangeControllerType(int playerIndex, Controller.Type controllerType) {
+        if (controllerType == Controller.Type.Xbox)
+            controllers[playerIndex] = new XboxController(playerIndex);
+        else if (controllerType == Controller.Type.MouseKeyboard)
+            controllers[playerIndex] = new MouseKeyboard(playerIndex);
+    }
+
+    // temporary method for turning on mouse and keyboard controls for player 1
+    public void UseMouseAndKeyboardForPlayer1(bool turnOn) {
+        if (turnOn) {
+            controllers[0] = new MouseKeyboard(0);
+        }
+        else {
+            controllers[0] = new XboxController(0);
+        }
+    }
+
     // Used to scale controller joystick inputs to camera angle
     protected Vector2 cameraScale;
 
     // Set up controllers
     private void Awake() {
-        //controllers[0] = new MouseKeyboard();
+        // only temporary, need to make going from keyboard to controller more formal and streamlined!!!!!!!!!!
+        // controllers[0] = new MouseKeyboard(0);
+        // for (int i = 1; i < 4; ++i)
         for (int i = 0; i < 4; ++i)
             controllers[i] = new XboxController(i);
     }
@@ -47,15 +68,47 @@ public class InputManager : MonoBehaviour {
             controllers[i].OnApplicationQuit();
     }
 
+    //public: UI element modification
+    public void mapInput(string action, string input)
+    {
+        controllers[0].setMapping(action, input);
+    }
+
+
     // Controller object for Mouse and Keyboard, This is not implemented yet
     public class MouseKeyboard : Controller {
+
+        private int playerIndex;
 
         public override Vector2 MoveVector() {
             return new Vector2((Input.GetKey(KeyCode.D) ? 1 : 0) + (Input.GetKey(KeyCode.A) ? -1 : 0), (Input.GetKey(KeyCode.W) ? 1 : 0) + (Input.GetKey(KeyCode.S) ? -1 : 0)).normalized;
         }
 
         public override Vector2 AimVector() {
-            return MoveVector();
+            Vector2 aim = Vector2.zero;
+            Vector3 playerScreenPosition = Camera.main.WorldToScreenPoint(GameManager.instance.players[playerIndex].controller.transform.position);
+            // Debug.Log("player screen position: " + playerScreenPosition + ", mouse position: " + Input.mousePosition);
+            aim = new Vector2(Input.mousePosition.x - playerScreenPosition.x, Input.mousePosition.y - playerScreenPosition.y);
+            // Debug.Log(aim);
+            aim = (aim * inputManager.cameraScale).normalized;
+
+            // old method of computing mouse aim. broken! dont use it!!!
+            // Vector2 aim = Vector2.zero;
+            // Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            // RaycastHit hit;
+            // if (Physics.Raycast(ray, out hit)) {
+            //     // aim vector using mouse and keyboard can not be found without the player's transform/position.
+            //     Vector3 playerPosition = GameManager.instance.players[playerIndex].controller.transform.position;
+            //     float aimX = hit.transform.position.x - playerPosition.x;
+            //     float aimZ = hit.transform.position.z - playerPosition.z;
+            //     aim = (new Vector2(aimX, aimZ)).normalized;
+            //     Debug.Log(aim);
+            //     // transform.LookAt(new Vector3(hit.transform.position.x, transform.position.y, hit.transform.position.z));
+            // }
+            // Debug.Log("mouse position: " + Input.mousePosition);
+            return aim;
+            // return (new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")) * inputManager.cameraScale).normalized;
+            // return MoveVector();
         }
 
         public override void UpdateController() {
@@ -69,10 +122,16 @@ public class InputManager : MonoBehaviour {
             if (Input.GetKeyUp(KeyCode.Mouse0))
                 attack.OnUp.Invoke();
             attack.Pressed = Input.GetKey(KeyCode.Mouse0);
+            if (Input.GetKeyDown(KeyCode.LeftShift))
+                dodge.OnDown.Invoke();
+            if (Input.GetKeyUp(KeyCode.LeftShift))
+                dodge.OnUp.Invoke();
+            dodge.Pressed = Input.GetKey(KeyCode.LeftShift);
         }
 
-        public MouseKeyboard() {
+        public MouseKeyboard(int playerIndex) {
             type = Type.MouseKeyboard;
+            this.playerIndex = playerIndex;
         }
     }
 
@@ -148,7 +207,7 @@ public class InputManager : MonoBehaviour {
             ClearAllButtonMapping();
             AddButtonMapping(ActionCode.Attack, ButtonCode.RightBumper);
             AddButtonMapping(ActionCode.Attack, ButtonCode.RightTrigger);
-            AddButtonMapping(ActionCode.Jump, ButtonCode.LeftTrigger);
+            //AddButtonMapping(ActionCode.Jump, ButtonCode.LeftTrigger);
             AddButtonMapping(ActionCode.Jump, ButtonCode.LeftBumper);
             AddButtonMapping(ActionCode.Dodge, ButtonCode.LeftTrigger);
             SetMoveJoyStick(JoyStickCode.Left);
@@ -206,6 +265,68 @@ public class InputManager : MonoBehaviour {
             ButtonMaps.Add(ActionCode.Jump, new HashSet<ButtonCode>());
             ButtonMaps.Add(ActionCode.Dodge, new HashSet<ButtonCode>());
             SetDefaultMapping();
+        }
+
+        
+
+        /*
+        input mapping customization
+        */
+
+        public override void setMapping(string a, string b)
+        {
+            Debug.Log("============================================");
+            // Debug.Log(op + b + a);
+            if (a == "move")
+            {
+                Debug.Log("in move");
+                if (b == "left")
+                    SetMoveJoyStick(JoyStickCode.Left);
+                else if (b == "right")
+                    SetMoveJoyStick(JoyStickCode.Right);
+            }
+            else if ( a == "aim")
+            {
+                if (b == "left")
+                    SetAimJoyStick(JoyStickCode.Left);
+                else if (b == "right")
+                    SetAimJoyStick(JoyStickCode.Right);
+            }
+            else
+            {
+                Controller.ActionCode newAction = getAction(a);
+                XboxController.ButtonCode newButton = GetButton(b);
+                AddButtonMapping(newAction, newButton);
+            }
+
+        }
+
+        private Controller.ActionCode getAction(string a)
+        {
+            Debug.Log("action: " + a);
+            if ( a == "attack")
+                return Controller.ActionCode.Attack;
+            else if ( a=="dodge")
+                return Controller.ActionCode.Dodge;
+            else if ( a=="jump")
+                return Controller.ActionCode.Jump;
+            
+            return Controller.ActionCode.Attack;
+        }
+
+        private XboxController.ButtonCode GetButton(string b)
+        {
+            Debug.Log("button: " + b);
+            if ( b== "leftBumper")
+                return XboxController.ButtonCode.LeftBumper;
+            else if (b == "leftTrigger")
+                return XboxController.ButtonCode.LeftTrigger;
+            else if (b == "rightBumper")
+                return XboxController.ButtonCode.RightBumper;
+            else if (b == "rightTrigger")
+                return XboxController.ButtonCode.RightTrigger;
+
+            return XboxController.ButtonCode.A;
         }
 
         #region Button Defenitions
@@ -582,6 +703,8 @@ public class InputManager : MonoBehaviour {
         public virtual void Vibrate(float strength, float duration, VibrationMode vibrationMode = VibrationMode.Flat) { }
         public virtual void OnApplicationQuit() { }
         public abstract void UpdateController();
+
+        public virtual void setMapping( string b, string a) {}
 
         // List of every PlayerAction available
         public enum ActionCode {

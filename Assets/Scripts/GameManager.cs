@@ -89,7 +89,6 @@ public class GameManager : MonoBehaviour {
             {
                 if (players == null)
                     SetUpPlayers();
-                // StartCoroutine(Countdown());
             }
         }
     }
@@ -103,6 +102,8 @@ public class GameManager : MonoBehaviour {
             {
                 readyPlayers = playerJoinManager.GetPLayerReadyStatusList();                // Have the GameManager store the players who are currently ready.
             }
+            rounds.Clear();
+            players = null;
         }
         else {
             if (rounds.Count <= 0 || !rounds[rounds.Count - 1].isActive) {
@@ -129,8 +130,13 @@ public class GameManager : MonoBehaviour {
         while (!round.isReady)
             yield return null;
         round.StartGame();
+        players[0].ResetSpecialMove(); 
+        StartCoroutine(Countdown());
     }
 
+    /// <summary>
+    /// Returns an array containing only active players
+    /// </summary>
     protected static Player[] GetActivePlayers(Player[] players) {
         List<Player> activePlayers = new List<Player>(players);
         for (int i = activePlayers.Count - 1; i >= 0; --i)
@@ -209,6 +215,11 @@ public class GameManager : MonoBehaviour {
             isLoading = isReady = false;
         }
 
+        ~GameRound() {
+            if (!isActive)
+                GameOver();
+        }
+
         public void LoadLevel() {
             isLoading = true;
             TileManager.tileManager.LoadLevel("LoadLevel").AddListener(delegate { isLoading = false; isReady = true; });
@@ -223,6 +234,7 @@ public class GameManager : MonoBehaviour {
                 player.ResetForRound();
                 SpawnTile spawnTile = spawnPoints.Dequeue();
                 player.SetController(Instantiate<GameObject>(GameManager.instance.PlayerPrefab.gameObject, spawnTile.transform.position, Quaternion.identity).GetComponent<PlayerController>());
+                //player.ResetSpecialMove(); //this is to make sure that the SpecialMove has a reference to PlayerController, it can't be in the constructor
                 moveCamera.targets.Add(player.controller.gameObject);
                 activePlayersControllers.Add(player.controller.gameObject);
                 player.OnDeath += Player_onDeath;
@@ -231,6 +243,8 @@ public class GameManager : MonoBehaviour {
         }
 
         private void GameOver() {
+            foreach (Player player in players)
+                player.ResetForRound();
             foreach (GameObject g in activePlayersControllers)
                 Destroy(g);
             foreach (Player player in players)
