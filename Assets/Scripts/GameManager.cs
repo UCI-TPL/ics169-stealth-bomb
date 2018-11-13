@@ -98,6 +98,8 @@ public class GameManager : MonoBehaviour {
             {
                 readyPlayers = playerJoinManager.GetPLayerReadyStatusList();                // Have the GameManager store the players who are currently ready.
             }
+            rounds.Clear();
+            players = null;
         }
         else {
             if (rounds.Count <= 0 || !rounds[rounds.Count - 1].isActive) {
@@ -128,6 +130,9 @@ public class GameManager : MonoBehaviour {
         StartCoroutine(Countdown());
     }
 
+    /// <summary>
+    /// Returns an array containing only active players
+    /// </summary>
     protected static Player[] GetActivePlayers(Player[] players) {
         List<Player> activePlayers = new List<Player>(players);
         for (int i = activePlayers.Count - 1; i >= 0; --i)
@@ -202,6 +207,11 @@ public class GameManager : MonoBehaviour {
             isLoading = isReady = false;
         }
 
+        ~GameRound() {
+            if (!isActive)
+                GameOver();
+        }
+
         public void LoadLevel() {
             isLoading = true;
             TileManager.tileManager.LoadLevel("LoadLevel").AddListener(delegate { isLoading = false; isReady = true; });
@@ -225,6 +235,8 @@ public class GameManager : MonoBehaviour {
         }
 
         private void GameOver() {
+            foreach (Player player in players)
+                player.ResetForRound();
             foreach (GameObject g in activePlayersControllers)
                 Destroy(g);
             foreach (Player player in players)
