@@ -22,6 +22,10 @@ public class MainMenuManager : MonoBehaviour {
 	public GameObject selectionMenuPanel;
 	public GameObject settingMenuPanel;
 
+	public GameObject xboxControllerDisplay;
+
+	public GameObject pcControllerDisplay;
+
 	private GameObject btn;
 	private Button b;
 
@@ -72,52 +76,54 @@ public class MainMenuManager : MonoBehaviour {
 		prevState = currentState;
 		currentState = GamePad.GetState(player1);
 
+		if (Input.GetAxis("Mouse X") == 0 || Input.GetAxis("Mouse Y") == 0) {
 		// for now, only player 1 should be able to control the main menu.
-		if (currentState.IsConnected && timer >= cooldown) {
-			if (mainMenuPanel.activeSelf == true) {
-				if (currentState.ThumbSticks.Left.Y > 0.0f /*&& prevState.ThumbSticks.Left.Y <= 0.0f*/) {
-					currentMainMenuButton--;
-					if (currentMainMenuButton < 1) {
-						currentMainMenuButton = mainMenuPanel.transform.childCount - 1;
+			if (currentState.IsConnected && timer >= cooldown) {
+				if (mainMenuPanel.activeSelf == true) {
+					if (currentState.ThumbSticks.Left.Y > 0.0f /*&& prevState.ThumbSticks.Left.Y <= 0.0f*/) {
+						currentMainMenuButton--;
+						if (currentMainMenuButton < 1) {
+							currentMainMenuButton = mainMenuPanel.transform.childCount - 1;
+						}
+						mainMenuButtons(currentMainMenuButton);
+						hasMoved = true;
 					}
-					mainMenuButtons(currentMainMenuButton);
-					hasMoved = true;
-				}
-				else if (currentState.ThumbSticks.Left.Y < 0.0f /*&& prevState.ThumbSticks.Left.Y >= 0.0f*/) {
-					currentMainMenuButton++;
-					if (currentMainMenuButton >= mainMenuPanel.transform.childCount) {
-						currentMainMenuButton = 1;
+					else if (currentState.ThumbSticks.Left.Y < 0.0f /*&& prevState.ThumbSticks.Left.Y >= 0.0f*/) {
+						currentMainMenuButton++;
+						if (currentMainMenuButton >= mainMenuPanel.transform.childCount) {
+							currentMainMenuButton = 1;
+						}
+						mainMenuButtons(currentMainMenuButton);
+						hasMoved = true;
 					}
-					mainMenuButtons(currentMainMenuButton);
-					hasMoved = true;
 				}
-			}
 
-			if (selectionMenuPanel.activeSelf == true) {
-				if (currentState.ThumbSticks.Left.X > 0) {
-					currentSelectionMenuButton++;
-					if (currentSelectionMenuButton > 3) {
-						currentSelectionMenuButton = 2;
+				if (selectionMenuPanel.activeSelf == true) {
+					if (currentState.ThumbSticks.Left.X > 0) {
+						currentSelectionMenuButton++;
+						if (currentSelectionMenuButton > 3) {
+							currentSelectionMenuButton = 2;
+						}
+						selectionMenuButtons(currentSelectionMenuButton);
+						hasMoved = true;
 					}
-					selectionMenuButtons(currentSelectionMenuButton);
-					hasMoved = true;
+				}
+				if (hasMoved) 
+				{
+					timer = 0.0f;
+					timer += 1.0f * Time.deltaTime;
 				}
 			}
-			if (hasMoved) 
-			{
-				timer = 0.0f;
+			else {
 				timer += 1.0f * Time.deltaTime;
 			}
-		}
-		else {
-			timer += 1.0f * Time.deltaTime;
-		}
 
-		// NOTE: this button may have to change later. Most likely will conflict with PlayerJoinManager.cs controls!!!
-		if (currentState.Buttons.A == ButtonState.Pressed /* && prevState.Buttons.A == ButtonState.Released */ && getCurrentPanel() != 2) {
-			b.onClick.Invoke();
+			// NOTE: this button may have to change later. Most likely will conflict with PlayerJoinManager.cs controls!!!
+			if (currentState.Buttons.A == ButtonState.Pressed /* && prevState.Buttons.A == ButtonState.Released */ && getCurrentPanel() != 2) {
+				b.onClick.Invoke();
+			}
+			Debug.Log("current main menu button: " + currentMainMenuButton);
 		}
-		Debug.Log("current main menu button: " + currentMainMenuButton);
 	}
 
 	/*
@@ -161,6 +167,26 @@ public class MainMenuManager : MonoBehaviour {
 				currentSettingsMenuButton = 2;
 				break;
 		}
+	}
+
+	public void SelectControllerDisplay(int i) {
+		if (selectionMenuPanel.activeSelf == true) {
+			switch (i) {
+				case 0:
+					xboxControllerDisplay.SetActive(true);
+					pcControllerDisplay.SetActive(false);
+					break;
+				case 1:
+					xboxControllerDisplay.SetActive(false);
+					pcControllerDisplay.SetActive(true);
+					break;
+			}
+		}
+	}
+
+	public void ResetControllerDisplay(bool doesNothing) {
+		xboxControllerDisplay.SetActive(true);
+		pcControllerDisplay.SetActive(false);
 	}
 
 

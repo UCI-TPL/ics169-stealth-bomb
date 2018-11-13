@@ -34,6 +34,16 @@ public class InputManager : MonoBehaviour {
             controllers[playerIndex] = new MouseKeyboard(playerIndex);
     }
 
+    // temporary method for turning on mouse and keyboard controls for player 1
+    public void UseMouseAndKeyboardForPlayer1(bool turnOn) {
+        if (turnOn) {
+            controllers[0] = new MouseKeyboard(0);
+        }
+        else {
+            controllers[0] = new XboxController(0);
+        }
+    }
+
     // Used to scale controller joystick inputs to camera angle
     protected Vector2 cameraScale;
 
@@ -105,6 +115,11 @@ public class InputManager : MonoBehaviour {
             if (Input.GetKeyUp(KeyCode.Mouse0))
                 attack.OnUp.Invoke();
             attack.Pressed = Input.GetKey(KeyCode.Mouse0);
+            if (Input.GetKeyDown(KeyCode.LeftShift))
+                dodge.OnDown.Invoke();
+            if (Input.GetKeyUp(KeyCode.LeftShift))
+                dodge.OnUp.Invoke();
+            dodge.Pressed = Input.GetKey(KeyCode.LeftShift);
         }
 
         public MouseKeyboard(int playerIndex) {
