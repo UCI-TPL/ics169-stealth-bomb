@@ -127,7 +127,7 @@ public class GameManager : MonoBehaviour {
     }
 
     private IEnumerator StartGameAfterLoad(GameRound round) {
-        while (!round.isReady)
+        while (round.State != GameRound.GameState.Ready)
             yield return null;
         round.StartGame();
         players[0].ResetSpecialMove(); 
@@ -200,10 +200,11 @@ public class GameManager : MonoBehaviour {
         public Dictionary<Player, float> initialExperiance;
         public Player[] players;
         public bool isActive {
-            get { return activePlayersControllers.Count > 1 || isLoading || isReady; }
+            get { return State != GameState.GameOver && State != GameState.Created; }
         }
-        public bool isLoading { get; private set; }
-        public bool isReady { get; private set; }
+        public GameState State { get; private set; }
+        public float StartTime { get; private set; }
+        public float ElapsedTime { get { return Time.time - StartTime; } }
         public List<GameObject> activePlayersControllers = new List<GameObject>();
 
         public GameRound(Player[] players) {
@@ -212,7 +213,7 @@ public class GameManager : MonoBehaviour {
             foreach (Player player in this.players) {
                 initialExperiance.Add(player, player.experiance);
             }
-            isLoading = isReady = false;
+            State = GameState.Created;
         }
 
         ~GameRound() {
@@ -221,11 +222,12 @@ public class GameManager : MonoBehaviour {
         }
 
         public void LoadLevel() {
-            isLoading = true;
-            TileManager.tileManager.LoadLevel("LoadLevel").AddListener(delegate { isLoading = false; isReady = true; });
+            State = GameState.Loading;
+            TileManager.tileManager.LoadLevel("LoadLevel").AddListener(delegate { State = GameState.Ready; });
         }
 
         public void StartGame() {
+            StartTime = Time.time;
             TileManager.tileManager.StartGame();
 
             Queue<SpawnTile> spawnPoints = new Queue<SpawnTile>(TileManager.tileManager.tileMap.SpawnTiles);
@@ -239,7 +241,18 @@ public class GameManager : MonoBehaviour {
                 activePlayersControllers.Add(player.controller.gameObject);
                 player.OnDeath += Player_onDeath;
             }
-            isReady = false;
+            State = GameState.Battle;
+            GameManager.instance.StartCoroutine(Update());
+        }
+
+        public IEnumerator Update() {
+            while (isActive) {
+                if (State == GameState.Battle && ElapsedTime > 20f) {
+                    TileManager.tileManager.StartCountdown();
+                    State = GameState.HurryUp;
+                }
+                yield return null;
+            }
         }
 
         private void GameOver() {
@@ -249,12 +262,17 @@ public class GameManager : MonoBehaviour {
                 Destroy(g);
             foreach (Player player in players)
                 player.OnDeath -= Player_onDeath;
+            State = GameState.GameOver;
         }
 
         private void Player_onDeath(Player killer, Player killed) {
             activePlayersControllers.Remove(killed.controller.gameObject);
-            if (!isActive)
+            if (activePlayersControllers.Count < 2)
                 GameOver();
+        }
+
+        public enum GameState {
+            Created, Loading, Ready, Battle, HurryUp, GameOver
         }
     }
 }

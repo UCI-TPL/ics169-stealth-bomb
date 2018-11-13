@@ -9,7 +9,6 @@ using Vector3Extensions;
 public class TileManager : MonoBehaviour {
 
     public TileMap tileMap;
-    public float timer;
     private string pastLevel = null;
 
     private Vector2 center;
@@ -68,8 +67,6 @@ public class TileManager : MonoBehaviour {
         TileDestroyQueue = CreateTileMapDestroyCalc(tileMap.Tiles, center, collapseBuffer);
 
         StopAllCoroutines();
-        CancelInvoke();
-        Invoke("StartCountdown", timer);
     }
 
     // Begin shrinking the terrain
