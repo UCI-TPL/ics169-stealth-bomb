@@ -29,6 +29,9 @@ public abstract class Weapon {
         overrideChargeUpdate = IsOverride("OnChargingUpdate");
     }
 
+    // Start is called once when the player Controller is created
+    protected virtual void Start() { }
+
     // Activate weapon. In other words, initiate attack
     public void Activate() {
         if (isCharging)
@@ -69,7 +72,11 @@ public abstract class Weapon {
     // Stop all processes in a weapon before removing
     public void RemoveWeapon() {
         Release();
+        OnRemove();
     }
+
+    // OnRemove is called once when the weapon is removed from the player
+    protected virtual void OnRemove() { }
 
     // Create a deep copy of this powerup instance. Used for when adding a new powerup to a player
     public abstract Weapon DeepCopy(WeaponData weaponData, Player player);
