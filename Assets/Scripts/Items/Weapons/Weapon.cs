@@ -29,8 +29,17 @@ public abstract class Weapon {
         overrideChargeUpdate = IsOverride("OnChargingUpdate");
     }
 
-    // Start is called once when the player Controller is created
+    // Called when player equips weapon either by swaping weapons or first starting game
+    public void EquipWeapon(PlayerController controller) {
+        Start();
+        controller.OnDestroyEvent.AddListener(End); 
+    }
+
+    // Start is called once when the weapon is first loaded in game use this to ensure PlayerController is active
     protected virtual void Start() { }
+
+    // End is called once when the weapon is removed from game
+    protected virtual void End() { }
 
     // Activate weapon. In other words, initiate attack
     public void Activate() {
@@ -70,13 +79,11 @@ public abstract class Weapon {
     protected virtual void OnRelease() { }
 
     // Stop all processes in a weapon before removing
-    public void RemoveWeapon() {
+    public void RemoveWeapon(PlayerController controller) {
         Release();
-        OnRemove();
+        controller.OnDestroyEvent.RemoveListener(End);
+        End();
     }
-
-    // OnRemove is called once when the weapon is removed from the player
-    protected virtual void OnRemove() { }
 
     // Create a deep copy of this powerup instance. Used for when adding a new powerup to a player
     public abstract Weapon DeepCopy(WeaponData weaponData, Player player);

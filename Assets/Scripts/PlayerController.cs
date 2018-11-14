@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using Vector3Extensions;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -61,6 +62,9 @@ public class PlayerController : MonoBehaviour {
     private static readonly float maxGroundDistance = 0.5f;
     private bool touchedGround;
 
+    // Event Call back for when the gameobject is destroyed
+    public readonly UnityEvent OnDestroyEvent = new UnityEvent();
+
     public bool isGrounded {
         get {
             if (touchedGround) {
@@ -117,6 +121,7 @@ public class PlayerController : MonoBehaviour {
 
     private void OnDestroy() {
         RemoveListeners();
+        OnDestroyEvent.Invoke();
     }
 
     // Perform movement every physics update

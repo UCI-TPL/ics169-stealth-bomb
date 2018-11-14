@@ -53,6 +53,7 @@ public class Player {
     public void SetController(PlayerController controller) {
         this.controller = controller;
         controller.player = this;
+        weapon.EquipWeapon(controller);
     }
 
     public void ResetForRound() {
@@ -170,7 +171,11 @@ public class Player {
     }
 
     public void ChangeWeapon(WeaponData data) {
-        weapon.RemoveWeapon();
+        Weapon oldWeapon = weapon;
         weapon = data.NewInstance(this);
+        if (controller != null) {
+            oldWeapon.RemoveWeapon(controller);
+            weapon.EquipWeapon(controller);
+        }
     }
 }
