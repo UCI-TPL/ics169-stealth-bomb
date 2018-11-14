@@ -61,14 +61,6 @@ public class PlayerController : MonoBehaviour {
     private static readonly float maxGroundDistance = 0.5f;
     private bool touchedGround;
 
-    // Required Variables for the Player's UI stuff.
-    public RectTransform playerUI_HPCanvas;
-    public RectTransform playerUI_HPMaskCanvas;
-    public UnityEngine.UI.Image playerUI_healthBar;
-
-    // flags for rendering player UI
-    private bool HP_CoroutineActive = false;
-
     public bool isGrounded {
         get {
             if (touchedGround) {
@@ -92,10 +84,6 @@ public class PlayerController : MonoBehaviour {
             Debug.LogError("Input Manager does not exist");
         rb = GetComponent<Rigidbody>();
         rend = rend == null ? GetComponent<Renderer>() : rend;
-
-        // To have HP bar render all the time remove this code, as well as code in the HurtPlayer method in Player.cs
-        playerUI_HPCanvas.gameObject.SetActive(false);
-        playerUI_HPMaskCanvas.gameObject.SetActive(false);   
     }
 
     // Set up controllers
@@ -156,21 +144,6 @@ public class PlayerController : MonoBehaviour {
         Vector3 scaledVector = (horizontalVector.y * forward) + (horizontalVector.x * right);
         if (scaledVector != Vector3.zero)
             transform.forward = scaledVector;
-
-        // MOVE THIS CRAP OUT INTO A SEPARATE SCRIPT EVENTUALLY.
-        if (player.health < player.stats.maxHealth)
-        {
-            playerUI_HPCanvas.gameObject.SetActive(true);
-            playerUI_HPMaskCanvas.gameObject.SetActive(true);
-        }
-        else
-        {
-            playerUI_HPCanvas.gameObject.SetActive(false);
-            playerUI_HPMaskCanvas.gameObject.SetActive(false);
-        }
-        playerUI_HPCanvas.rotation = Quaternion.Euler(90f, Camera.main.transform.rotation.eulerAngles.y, 0f);
-        playerUI_HPMaskCanvas.rotation = Quaternion.Euler(90f, Camera.main.transform.rotation.eulerAngles.y, 0f);
-        playerUI_healthBar.fillAmount = player.health / player.stats.maxHealth;
     }
 
     // Move the player using the the controller's move input scaled by the provided speed
@@ -263,8 +236,6 @@ public class PlayerController : MonoBehaviour {
         // render HP on heal
 
     }
-
-    // Renders the players HP bar for a second.
 
     public GameObject InstantiateSummon(GameObject sum) //Special Move scripts will call this to instantiate objects
     {

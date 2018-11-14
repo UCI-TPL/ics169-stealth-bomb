@@ -10,7 +10,7 @@ public abstract class Weapon {
     public Type type;
 
     protected Player player; // Player that this weapon is attached to
-    public float ChargeLevel { get { return Mathf.Clamp(GetChargeLevel(), 0, 1); } }
+    public float ChargeLevel { get { return isCharging ? Mathf.Clamp(GetChargeLevel(), 0, 1) : 0; } }
     protected virtual float GetChargeLevel() {
         return 0;
     }
