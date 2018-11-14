@@ -12,7 +12,18 @@ public class LaserBeam : MonoBehaviour {
     // Objects that make up the laserbeam effect
     public GameObject MainEffect;
     public GameObject Beam;
+    private Material BeamMaterial;
     public GameObject Front;
+    private Material FrontMaterial;
+
+    private void Awake() {
+        BeamMaterial = Beam.GetComponent<Renderer>().material;
+        if (BeamMaterial.shader.name != "LaserShader")
+            Debug.Log(name + " has incorrect shader, LaserShader required.");
+        FrontMaterial = Front.GetComponent<Renderer>().material;
+        if (FrontMaterial.shader.name != "LaserShader")
+            Debug.Log(name + " has incorrect shader, LaserShader required.");
+    }
 
     private void LateUpdate() {
         RaycastHit hit;
@@ -26,6 +37,14 @@ public class LaserBeam : MonoBehaviour {
         Beam.transform.localScale = new Vector3(Width, length/2, Width); // length / 2 because cylider is by default 2 units long
         Front.transform.localScale = Vector3.one * Width * FrontScale;
 
+        BeamMaterial.SetFloat("Vector1_5DB383F", length / Width / 4);
+
         MainEffect.transform.localPosition = Vector3.forward * Width / 2;
+    }
+
+    public void SetColor(Color color) {
+        Vector4 HDRColor = color * 4;
+        BeamMaterial.SetColor("Color_E025656E", HDRColor);
+        FrontMaterial.SetColor("Color_E025656E", HDRColor);
     }
 }

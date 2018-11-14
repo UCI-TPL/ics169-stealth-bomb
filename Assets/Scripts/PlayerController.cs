@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using Vector3Extensions;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -69,6 +70,9 @@ public class PlayerController : MonoBehaviour {
     // flags for rendering player UI
     private bool HP_CoroutineActive = false;
 
+    // Event Call back for when the gameobject is destroyed
+    public readonly UnityEvent OnDestroyEvent = new UnityEvent();
+
     public bool isGrounded {
         get {
             if (touchedGround) {
@@ -129,6 +133,7 @@ public class PlayerController : MonoBehaviour {
 
     private void OnDestroy() {
         RemoveListeners();
+        OnDestroyEvent.Invoke();
     }
 
     // Perform movement every physics update

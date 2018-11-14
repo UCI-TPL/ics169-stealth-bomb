@@ -18,19 +18,20 @@ public class LaserWeapon : Weapon {
         data = (LaserWeaponData)weaponData;
     }
 
-    //protected override void OnEquip() {
-    //    laserBeam = GameObject.Instantiate<GameObject>(data.LaserBeam.gameObject, player.controller.transform).GetComponent<LaserBeam>();
-    //    laserBeam.transform.forward = player.controller.transform.forward;
-    //    laserBeam.transform.position += laserBeam.transform.forward * 0.5f;
-    //}
+    protected override void Start() {
+        laserBeam = GameObject.Instantiate<GameObject>(data.LaserBeam.gameObject, player.controller.transform).GetComponent<LaserBeam>();
+        laserBeam.transform.forward = player.controller.transform.forward;
+        laserBeam.transform.position = player.controller.transform.position + laserBeam.transform.forward * 0.5f;
+        laserBeam.SetColor(player.controller.playerColor);
+        laserBeam.gameObject.SetActive(false);
+    }
+
+    protected override void End() {
+        GameObject.Destroy(laserBeam.gameObject);
+    }
 
     // OnActivate is called once when the weapon is activated
     protected override void OnActivate() {
-        if (laserBeam == null) {
-            laserBeam = GameObject.Instantiate<GameObject>(data.LaserBeam.gameObject, player.controller.transform).GetComponent<LaserBeam>();
-            laserBeam.transform.forward = player.controller.transform.forward;
-            laserBeam.transform.position = player.controller.transform.position + laserBeam.transform.forward * 0.5f;
-        }
         startChargeTime = Time.time;
         laserBeam.gameObject.SetActive(true);
         laserBeam.MaxLength = 0;
@@ -46,10 +47,6 @@ public class LaserWeapon : Weapon {
     // OnRelease is called once when the weapon is released
     protected override void OnRelease() {
         laserBeam.gameObject.SetActive(false);
-    }
-
-    protected override void OnRemove() {
-        GameObject.Destroy(laserBeam.gameObject);
     }
 
     // Create a deep copy of this weapon instance
