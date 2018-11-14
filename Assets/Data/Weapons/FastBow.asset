@@ -18,7 +18,7 @@ MonoBehaviour:
   instance:
     weaponData: {fileID: 11400000}
     type: 1
-  projectile: {fileID: 11400000, guid: 9df1e8c6a587d604684f97e370ea1793, type: 2}
+  projectile: {fileID: 11400000, guid: f1bc01067d95319499672205f598ff4e, type: 2}
   colorAddition: 0.1
   chargeTime: 0
   chargeLevels: 1
