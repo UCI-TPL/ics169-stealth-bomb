@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 // Require an inputManager
 [RequireComponent(typeof(InputManager))]
@@ -14,8 +15,8 @@ public class GameManager : MonoBehaviour {
 
     [Header("Important Scene Names")]
     public string mainMenuSceneName;
-
     private string currentSceneName;
+    
     // Important Data from the Main Menu.
     // this is by default set to true for all values so that the players spawn as normal if we start in a level.
     private bool[] readyPlayers = { true, true, true, true };
@@ -41,6 +42,11 @@ public class GameManager : MonoBehaviour {
     public GameObject countdownText;
 
     private List<GameRound> rounds = new List<GameRound>();
+
+    public void StartGame() {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        SetUpPlayers();
+    }
 
     // Use this for initialization
     void Awake () {
@@ -86,11 +92,11 @@ public class GameManager : MonoBehaviour {
                 if (playerJoinManager == null)
                     playerJoinManager = GameObject.FindGameObjectWithTag("player-join-manager").GetComponent<PlayerJoinManager>();
             }
-            else if (scene.name != mainMenuSceneName)           // WE ARE ASSUMING ANYTHING THAT ISN'T THE MAIN MENU IS A LEVEL. THIS IS CLEARLY NOT GOING TO BE THE CASE AT ALL TIMES, SO UPDATE THIS AS NEEDED.
-            {
-                if (players == null)
-                    SetUpPlayers();
-            }
+            // else if (scene.name != mainMenuSceneName)           // WE ARE ASSUMING ANYTHING THAT ISN'T THE MAIN MENU IS A LEVEL. THIS IS CLEARLY NOT GOING TO BE THE CASE AT ALL TIMES, SO UPDATE THIS AS NEEDED.
+            // {
+            //     if (players == null)
+            //         SetUpPlayers();
+            // }
             if (countdownText == null)
                 countdownText = GameObject.FindGameObjectWithTag("countdown");
         }
@@ -105,8 +111,8 @@ public class GameManager : MonoBehaviour {
             {
                 readyPlayers = playerJoinManager.GetPLayerReadyStatusList();                // Have the GameManager store the players who are currently ready.
             }
-            rounds.Clear();
-            players = null;
+            // rounds.Clear();
+            // players = null;
         }
         else {
             if (rounds.Count <= 0 || !rounds[rounds.Count - 1].isActive) {

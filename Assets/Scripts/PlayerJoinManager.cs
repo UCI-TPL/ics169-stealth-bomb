@@ -14,6 +14,7 @@ public class PlayerJoinManager : MonoBehaviour {
 	public bool debugMode = false;
 	public bool player1UsingMouseAndKeyboard = false;
 
+	// NOTE: these 2 variables are now obsolete!
 	[Tooltip("Turn this on if you want to load the next scene with the string of its name instead. If you turn this variable on, make sure that the variable nextLevel is filled out in the inspector!")]
 	public bool loadNextLevelByName = false;
 	[Tooltip("The name of the scene to load when players start a match.")]
@@ -180,71 +181,75 @@ public class PlayerJoinManager : MonoBehaviour {
 			// the normal conditions needed for the game to start
 			if (!debugMode) 
 			{
-				// Checks if enough players have confirmed they are ready.
-				if (newNumOfPlayersReady >= 2 && numOfPlayersReady < 2) {
-					// Display the UI element showing that the game is ready to start.
-					Debug.Log("Game is Ready to start!");
-					//calling UI -Kyle
-					selectionOP.gameIsReady();
-				}
-				else if (newNumOfPlayersReady < 2 /*&& numOfPlayersReady >= 2*/) {
-					// Turn off the UI element showing that the game is ready to start.
-					Debug.Log("There are not enough players for the game to start!");
-					//calling UI -Kyle
-					selectionOP.gameIsNotReady();
-				}
+				RunGameReadyChecksUsingXboxController(newNumOfPlayersReady, 2);
 
-				// if conditions met, start the match
-				if (numOfPlayersReady >= 2) {
-					for (int i = 0; i < playersReady.Length; i++) {
-						if (playersReady[i] == true) {
-							// If the right conditions are met, this is where the protocol for starting the game happens.
-							// NOTE: implementation is subject to change for now.
-							if (currentStates[i].Buttons.Start == ButtonState.Pressed && prevStates[i].Buttons.Start == ButtonState.Released) {
-								// playerManager.SetPlayersStatus(GetPLayerReadyStatusList());
-								if (loadNextLevelByName) 
-									SceneManager.LoadScene(nextLevel);
-								else 
-									SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);    // starts the scene used for the first level.
-							}
-						}
-					}
-				}
+				// // Checks if enough players have confirmed they are ready.
+				// if (newNumOfPlayersReady >= 2 && numOfPlayersReady < 2) {
+				// 	// Display the UI element showing that the game is ready to start.
+				// 	Debug.Log("Game is Ready to start!");
+				// 	//calling UI -Kyle
+				// 	selectionOP.gameIsReady();
+				// }
+				// else if (newNumOfPlayersReady < 2 /*&& numOfPlayersReady >= 2*/) {
+				// 	// Turn off the UI element showing that the game is ready to start.
+				// 	Debug.Log("There are not enough players for the game to start!");
+				// 	//calling UI -Kyle
+				// 	selectionOP.gameIsNotReady();
+				// }
+
+				// // if conditions met, start the match
+				// if (numOfPlayersReady >= 2) {
+				// 	for (int i = 0; i < playersReady.Length; i++) {
+				// 		if (playersReady[i] == true) {
+				// 			// If the right conditions are met, this is where the protocol for starting the game happens.
+				// 			// NOTE: implementation is subject to change for now.
+				// 			if (currentStates[i].Buttons.Start == ButtonState.Pressed && prevStates[i].Buttons.Start == ButtonState.Released) {
+				// 				// playerManager.SetPlayersStatus(GetPLayerReadyStatusList());
+				// 				if (loadNextLevelByName) 
+				// 					SceneManager.LoadScene(nextLevel);
+				// 				else 
+				// 					SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);    // starts the scene used for the first level.
+				// 			}
+				// 		}
+				// 	}
+				// }
 			}
 
 			// conditions when in debug mode. Debug mode allows the game to start with only 1 player (and maybe more).
 			else {
 				if (!player1UsingMouseAndKeyboard) {
-					// Checks if enough players have confirmed they are ready.
-					if (newNumOfPlayersReady >= 1 /* && numOfPlayersReady < 1*/) {
-						// Display the UI element showing that the game is ready to start.
-						Debug.Log("Game is Ready to start!");
-						//calling UI -Kyle
-						selectionOP.gameIsReady();
-					}
-					else if (newNumOfPlayersReady < 1 /* && numOfPlayersReady >= 1 */) {
-						// Turn off the UI element showing that the game is ready to start.
-						Debug.Log("There are not enough players for the game to start!");
-						//calling UI -Kyle
-						selectionOP.gameIsNotReady();
-					}
+					RunGameReadyChecksUsingXboxController(newNumOfPlayersReady, 1);
 
-					// if conditions met, start the match
-					if (numOfPlayersReady >= 1) {
-						for (int i = 0; i < playersReady.Length; i++) {
-							if (playersReady[i] == true) {
-								// If the right conditions are met, this is where the protocol for starting the game happens.
-								// NOTE: implementation is subject to change for now.
-								if (currentStates[i].Buttons.Start == ButtonState.Pressed && prevStates[i].Buttons.Start == ButtonState.Released) {
-									// playerManager.SetPlayersStatus(GetPLayerReadyStatusList());
-									if (loadNextLevelByName) 
-										SceneManager.LoadScene(nextLevel);
-									else 
-										SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);    // starts the scene used for the first level.
-								}
-							}
-						}
-					}
+					// // Checks if enough players have confirmed they are ready.
+					// if (newNumOfPlayersReady >= 1 /* && numOfPlayersReady < 1*/) {
+					// 	// Display the UI element showing that the game is ready to start.
+					// 	Debug.Log("Game is Ready to start!");
+					// 	//calling UI -Kyle
+					// 	selectionOP.gameIsReady();
+					// }
+					// else if (newNumOfPlayersReady < 1 /* && numOfPlayersReady >= 1 */) {
+					// 	// Turn off the UI element showing that the game is ready to start.
+					// 	Debug.Log("There are not enough players for the game to start!");
+					// 	//calling UI -Kyle
+					// 	selectionOP.gameIsNotReady();
+					// }
+
+					// // if conditions met, start the match
+					// if (numOfPlayersReady >= 1) {
+					// 	for (int i = 0; i < playersReady.Length; i++) {
+					// 		if (playersReady[i] == true) {
+					// 			// If the right conditions are met, this is where the protocol for starting the game happens.
+					// 			// NOTE: implementation is subject to change for now.
+					// 			if (currentStates[i].Buttons.Start == ButtonState.Pressed && prevStates[i].Buttons.Start == ButtonState.Released) {
+					// 				// playerManager.SetPlayersStatus(GetPLayerReadyStatusList());
+					// 				if (loadNextLevelByName) 
+					// 					SceneManager.LoadScene(nextLevel);
+					// 				else 
+					// 					SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);    // starts the scene used for the first level.
+					// 			}
+					// 		}
+					// 	}
+					// }
 				}
 				else {
 					selectionOP.playerIs(0);
@@ -258,10 +263,7 @@ public class PlayerJoinManager : MonoBehaviour {
 					for (int i = 0; i < playersReady.Length; i++) {
 						if (i == 0) {
 							if (Input.GetKeyDown(KeyCode.Return)) {
-								if (loadNextLevelByName) 
-									SceneManager.LoadScene(nextLevel);
-								else 
-									SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);    // starts the scene used for the first level.
+								GameManager.instance.StartGame();
 							}
 						}
 						else {
@@ -270,10 +272,7 @@ public class PlayerJoinManager : MonoBehaviour {
 								// NOTE: implementation is subject to change for now.
 								if (currentStates[i].Buttons.Start == ButtonState.Pressed && prevStates[i].Buttons.Start == ButtonState.Released) {
 									// playerManager.SetPlayersStatus(GetPLayerReadyStatusList());
-									if (loadNextLevelByName) 
-										SceneManager.LoadScene(nextLevel);
-									else 
-										SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);    // starts the scene used for the first level.
+									GameManager.instance.StartGame();
 								}
 							}
 						}
@@ -283,6 +282,36 @@ public class PlayerJoinManager : MonoBehaviour {
 
 			numOfPlayersReady = newNumOfPlayersReady;
 		}
+	}
+
+	void RunGameReadyChecksUsingXboxController(int newNumOfPlayersReady, int minNumOfPlayers) {
+		// Checks if enough players have confirmed they are ready.
+				if (newNumOfPlayersReady >= minNumOfPlayers) {
+					// Display the UI element showing that the game is ready to start.
+					Debug.Log("Game is Ready to start!");
+					//calling UI -Kyle
+					selectionOP.gameIsReady();
+				}
+				else if (newNumOfPlayersReady < minNumOfPlayers /*&& numOfPlayersReady >= 2*/) {
+					// Turn off the UI element showing that the game is ready to start.
+					Debug.Log("There are not enough players for the game to start!");
+					//calling UI -Kyle
+					selectionOP.gameIsNotReady();
+				}
+
+				// if conditions met, start the match
+				if (numOfPlayersReady >= minNumOfPlayers) {
+					for (int i = 0; i < playersReady.Length; i++) {
+						if (playersReady[i] == true && currentStates[i].IsConnected) {
+							// If the right conditions are met, this is where the protocol for starting the game happens.
+							// NOTE: implementation is subject to change for now.
+							if (currentStates[i].Buttons.Start == ButtonState.Pressed && prevStates[i].Buttons.Start == ButtonState.Released) {
+								// playerManager.SetPlayersStatus(GetPLayerReadyStatusList());
+								GameManager.instance.StartGame();
+							}
+						}
+					}
+				}
 	}
 
 
