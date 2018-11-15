@@ -48,20 +48,20 @@ public abstract class Weapon {
         isCharging = true;
         OnActivate();
         if (overrideChargeUpdate)
-            player.controller.StartCoroutine(ChargingUpdate());
+            player.controller.StartCoroutine(ChargingUpdate(numCharging));
     }
 
     // OnActivate is called once when the weapon is activated
     protected virtual void OnActivate() { }
 
     // Coroutine to repetedly call OnChargingUpdate while weapon is charging
-    private IEnumerator ChargingUpdate() {
+    private IEnumerator ChargingUpdate(int numCharging) {
+        ++this.numCharging;
         ++numCharging;
-        while (isCharging && numCharging == 1) {
+        while (isCharging && this.numCharging == numCharging) {
             OnChargingUpdate();
             yield return null;
         }
-        --numCharging;
     }
 
     // OnChargingUpdate is called once per frame while the weapon is charging
