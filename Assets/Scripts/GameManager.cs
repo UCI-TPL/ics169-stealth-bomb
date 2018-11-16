@@ -266,7 +266,7 @@ public class GameManager : MonoBehaviour {
             foreach (Player player in players)
                 player.ResetForRound();
             foreach (GameObject g in activePlayersControllers)
-                Destroy(g);
+                g.GetComponent<PlayerController>().Destroy();
             foreach (Player player in players)
                 player.OnDeath -= Player_onDeath;
             State = GameState.GameOver;

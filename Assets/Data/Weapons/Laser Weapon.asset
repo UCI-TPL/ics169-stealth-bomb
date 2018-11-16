@@ -20,5 +20,6 @@ MonoBehaviour:
   maxWidth: 1.5
   minWidth: 0.5
   damage: 35
+  DecayTimePerWidth: 0.25
   LaserBeam: {fileID: 114587784883638426, guid: 2edd6be0e30c60e4e93cea76b1d52611,
     type: 2}

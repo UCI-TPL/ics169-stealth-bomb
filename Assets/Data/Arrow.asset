@@ -16,4 +16,4 @@ MonoBehaviour:
   damage: 10
   lifetime: 0.35
   spreadAngle: 10
-  knockbackForce: 7
+  knockbackForce: 15

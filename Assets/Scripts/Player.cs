@@ -107,7 +107,7 @@ public class Player {
         if (health <= 0) {
             controller.input.controllers[playerNumber].Vibrate(1.0f, 1f, InputManager.Controller.VibrationMode.Diminish);
             OnDeath(lastHurtBy, this);
-            GameObject.Destroy(controller.gameObject);
+            controller.Destroy();
         }
     }
 

@@ -1737,6 +1737,8 @@ MonoBehaviour:
   wallCollider: {fileID: 136752097907207242}
   crown: {fileID: 1673957208925718}
   friction: 20
+  airResistance: 5
+  terminalVelocity: 15
   acceleration: 10
   Colors:
   - {r: 1, g: 0.23266676, b: 0.2216981, a: 1}

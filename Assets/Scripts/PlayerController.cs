@@ -31,6 +31,8 @@ public class PlayerController : MonoBehaviour {
     public GameObject crown;
 
     public float friction = 1f;
+    public float airResistance = 1f;
+    public float terminalVelocity = 1f;
     [Tooltip("time it takes to go from 0 to max speed is 1 second / acceleration")]
     public float acceleration = 10f;
 
@@ -119,9 +121,10 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    private void OnDestroy() {
+    public void Destroy() {
         RemoveListeners();
         OnDestroyEvent.Invoke();
+        GameObject.Destroy(gameObject);
     }
 
     // Perform movement every physics update
@@ -169,11 +172,21 @@ public class PlayerController : MonoBehaviour {
             lastForwardMovement = horizontalVector.normalized;
             lastScaledVector = scaledVector.normalized;
         }
-            
+
 
         if (isGrounded) { // If grounded apply friction
             Vector3 frictionVector = -friction * rb.velocity; // Friction is a negative percentage of current velocity
-            Debug.DrawRay(floorCollider.transform.position + Vector3.down * floorCollider.bounds.extents.y, frictionVector, Color.blue);
+            // Debug.DrawRay(floorCollider.transform.position + Vector3.down * floorCollider.bounds.extents.y, frictionVector, Color.blue);
+            Debug.DrawRay(floorCollider.transform.position + Vector3.down * floorCollider.bounds.extents.y, scaledVector, Color.green);
+            frictionVector -= Vector3.Project(frictionVector, scaledVector); // Scale friction to remove the forward direction, so friction doesnt slow player in moving direction
+            Debug.DrawRay(floorCollider.transform.position + Vector3.down * floorCollider.bounds.extents.y, frictionVector, Color.red);
+            rb.velocity += frictionVector * Time.fixedDeltaTime; // Add friction to velocity
+        }
+        else  { // In air apply Air Resistance
+            Vector3 upVector = Vector3.Project(rb.velocity, Physics.gravity);
+            Vector3 scaledVelocity = rb.velocity - upVector + upVector.normalized * Mathf.Max(upVector.magnitude - terminalVelocity, 0); // Calculate y velocity over terminal velocity
+            Vector3 frictionVector = -airResistance * scaledVelocity; // Friction is a negative percentage of current velocity
+            // Debug.DrawRay(floorCollider.transform.position + Vector3.down * floorCollider.bounds.extents.y, frictionVector, Color.blue);
             Debug.DrawRay(floorCollider.transform.position + Vector3.down * floorCollider.bounds.extents.y, scaledVector, Color.green);
             frictionVector -= Vector3.Project(frictionVector, scaledVector); // Scale friction to remove the forward direction, so friction doesnt slow player in moving direction
             Debug.DrawRay(floorCollider.transform.position + Vector3.down * floorCollider.bounds.extents.y, frictionVector, Color.red);

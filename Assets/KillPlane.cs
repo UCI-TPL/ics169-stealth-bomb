@@ -13,7 +13,5 @@ public class KillPlane : MonoBehaviour {
             CameraShake.ShakeDiminish(4, 1);
             Instantiate<GameObject>(OffScreenDeathEffect, other.transform.position, Quaternion.identity);
         }
-        else
-            Destroy(other.gameObject);
     }
 }
