@@ -9,7 +9,7 @@ public class LaserWeaponData : WeaponData<LaserWeapon> {
     public float maxLength = 15;
     public float maxWidth = 1.5f;
     public float minWidth = 0.5f;
-    public int damage = 35;
+    public float hitCooldown = 0.2f;
     public float DecayTimePerWidth = 0.5f;
     public LaserBeam LaserBeam;
 }

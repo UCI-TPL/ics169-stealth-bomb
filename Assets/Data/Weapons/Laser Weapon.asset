@@ -12,14 +12,17 @@ MonoBehaviour:
   m_Name: Laser Weapon
   m_EditorClassIdentifier: 
   name: Laser
-  image: {fileID: 21300000, guid: ce3999ecb96c51042b953110d424038d, type: 3}
+  image: {fileID: 21300000, guid: 64d51824b67f3944daf245665a75e2fd, type: 3}
   description: BIG LASER
   type: 2
+  cooldown: 0.25
+  knockbackStrength: 1
+  damage: 5
   maxChargeTime: 0.5
   maxLength: 20
   maxWidth: 1.5
   minWidth: 0.5
-  damage: 35
+  hitCooldown: 0.2
   DecayTimePerWidth: 0.25
   LaserBeam: {fileID: 114587784883638426, guid: 2edd6be0e30c60e4e93cea76b1d52611,
     type: 2}

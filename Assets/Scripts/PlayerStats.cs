@@ -16,6 +16,7 @@ public class PlayerStats {
         AddStat("max_health", 100);
         AddStat("dodge_time", 0.2f); //how long the dodge lasts
         AddStat("dodge_recharge", 0.8f); //how long the player waits before dodging again
+        AddStat("damage", 1); // Base damage the player does
     }
 
     public float moveSpeed {
@@ -34,8 +35,12 @@ public class PlayerStats {
         get { return GetStat("dodge_time"); }
     }
 
-    public float dodgeRecharge    {
+    public float dodgeRecharge {
         get { return GetStat("dodge_recharge"); }
+    }
+
+    public float Damage {
+        get { return GetStat("damage"); }
     }
 
 

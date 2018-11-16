@@ -112,8 +112,8 @@ public class Player {
     }
 
     public void InGameUpdate() {
-        while (buffs.Count > 0 && buffs[0].endTime <= Time.time)
-            RemoveBuff(buffs[0]);
+        while (buffs.Count > 0 && buffs[buffs.Count-1].endTime <= Time.time) // Check end of buffs list for expired buffs
+            RemoveBuff(buffs[buffs.Count - 1]);
 
         if (OnUpdate != null)
             OnUpdate(this);
@@ -150,7 +150,7 @@ public class Player {
     }
 
     private static int CompareLowerBuffDuration(Buff L, Buff R) {
-        return L.timeRemaining <= R.timeRemaining ? -1 : 1;
+        return L.timeRemaining >= R.timeRemaining ? -1 : 1; // Buffs expiring sooner go at the end
     }
     
     // Remove each modifier granted by the power-up and remove the power-up from list of power-ups

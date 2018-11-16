@@ -67,6 +67,7 @@ public class Buff {
             if (weapon == null)
                 weapon = triggerWeapon.NewInstance(player);
             weapon.Activate();
+            weapon.Release();
         }
 
         // Create a deep copy of this class
@@ -80,6 +81,6 @@ public class Buff {
         }
 
         // Different types of Trigger Conditions available
-        public enum TriggerCondition { Update, Move, Stationary, Jump, Airborn, Land, Attack, Death, Touch, Hurt, StartDodge, EndDodge, Dodging }
+        public enum TriggerCondition { Update, Move, Stationary, Jump, Airborn, Land, Attack, Death, Touch, Hurt, StartDodge, EndDodge, Dodging, Hit}
     }
 }

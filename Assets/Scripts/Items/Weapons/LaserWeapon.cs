@@ -7,7 +7,7 @@ public class LaserWeapon : Weapon {
     private LaserWeaponData data;
     private Queue<LaserBeam> laserBeamPool = new Queue<LaserBeam>();
     private LaserBeam CurrentBeam;
-    private bool active;
+    private float activeID;
 
     private float startChargeTime;
     protected override float GetChargeLevel() {
@@ -21,7 +21,7 @@ public class LaserWeapon : Weapon {
     }
 
     protected override void Start() {
-        active = true;
+        activeID = 0;
     }
 
     protected override void End() {
@@ -29,7 +29,7 @@ public class LaserWeapon : Weapon {
             CurrentBeam.StartCoroutine(TurnOffBeam(CurrentBeam, data.DecayTimePerWidth));
             CurrentBeam = null;
         }
-        active = false;
+        ++activeID;
         while (laserBeamPool.Count > 0)
             GameObject.Destroy(laserBeamPool.Dequeue().gameObject);
     }
@@ -57,6 +57,7 @@ public class LaserWeapon : Weapon {
     }
 
     private IEnumerator TurnOffBeam(LaserBeam laserBeam, float duration) {
+        float curID = activeID;
         laserBeam.transform.SetParent(null);
         laserBeam.DisableParticles();
         float currentVelocity = Time.deltaTime / duration;
@@ -66,15 +67,18 @@ public class LaserWeapon : Weapon {
         }
         laserBeam.Width = 0;
         laserBeam.gameObject.SetActive(false);
-        if (active) {
+        if (curID != activeID) {
             laserBeamPool.Enqueue(laserBeam);
         }
         else
             GameObject.Destroy(laserBeam.gameObject);
     }
-
+    
     private LaserBeam CreateLaserBeam() {
         LaserBeam laserBeam = GameObject.Instantiate<GameObject>(data.LaserBeam.gameObject, player.controller.transform).GetComponent<LaserBeam>();
+        laserBeam.OnHit.AddListener((Vector3 origin, GameObject target) => { Hit(origin, target); });
+        laserBeam.IgnoreCollision = player.controller.gameObject;
+        laserBeam.hitCooldown = data.hitCooldown;
         laserBeam.gameObject.SetActive(false);
         return laserBeam;
     }

@@ -23,6 +23,11 @@ public abstract class Weapon {
     protected int numCharging = 0; // This is how many charging coroutines are active at once, This allows us to ensure only one charge at a time
     private bool overrideChargeUpdate = false;
 
+    public float KnockbackStrength { get { return GetKnockbackStrength(); } }
+    protected virtual float GetKnockbackStrength() { // Override this to change how strength of knockback is calculated
+        return weaponData.knockbackStrength;
+    }
+
     public Weapon() { }
 
     // Contructor used to clone instance of weapon
@@ -109,6 +114,35 @@ public abstract class Weapon {
         Release();
         controller.OnDestroyEvent.RemoveListener(OnDestroyEvent);
         End();
+    }
+
+    /// <summary>
+    /// Handles applying damage, knockback, and other effects when a player is hit
+    /// </summary>
+    /// <param name="origin"> Location the hit originated from </param>
+    /// <param name="target"> Object hit </param>
+    /// <param name="extraData"> Extra data to be passed on to other supporting functions </param>
+    protected void Hit(Vector3 origin, GameObject target, object extraData = null) {
+        PlayerController targetPlayerController = target.GetComponent<PlayerController>(); // Check if target is a player
+        if (targetPlayerController != null) {
+            OnHit(origin, targetPlayerController, extraData); // Activate OnHit effects and get damage dealt
+            targetPlayerController.player.Hurt(player, GetDamageDealt(origin, targetPlayerController, extraData)); // Hurt hit player
+            Knockback(origin, targetPlayerController, extraData); // Knockback hit player
+        }
+    }
+
+    // OnHit is called once when a player is hit, Return value is ammount of damage dealt
+    protected virtual void OnHit(Vector3 origin, PlayerController targetPlayerController, object extraData) { }
+
+    // GetDamageDealt returns damage
+    protected virtual float GetDamageDealt(Vector3 origin, PlayerController targetPlayerController, object extraData) {
+        return weaponData.damage * player.stats.Damage;
+    }
+
+    // Default knockback implementation, Knock the target back
+    protected virtual void Knockback(Vector3 origin, PlayerController targetPlayerController, object extraData) {
+        // Get direction relative to origin and apply knockback strength
+        targetPlayerController.Knockback((targetPlayerController.transform.position - origin).normalized * KnockbackStrength);
     }
 
     // Create a deep copy of this powerup instance. Used for when adding a new powerup to a player
