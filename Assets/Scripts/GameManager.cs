@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour {
     
     // Important Data from the Main Menu.
     // this is by default set to true for all values so that the players spawn as normal if we start in a level.
-    private bool[] readyPlayers = { true, true, true, true };
+    //private bool[] readyPlayers = { true, true, true, true };
 
     public PlayerData DefaultPlayerData;
     public PlayerController PlayerPrefab;
@@ -43,9 +43,10 @@ public class GameManager : MonoBehaviour {
 
     private List<GameRound> rounds = new List<GameRound>();
 
-    public void StartGame() {
+    public void StartGame(bool[] playersReady) {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-        SetUpPlayers();
+        rounds.Clear();
+        SetUpPlayers(playersReady);
     }
 
     // Use this for initialization
@@ -95,7 +96,7 @@ public class GameManager : MonoBehaviour {
             else if (scene.name != mainMenuSceneName)           // WE ARE ASSUMING ANYTHING THAT ISN'T THE MAIN MENU IS A LEVEL. THIS IS CLEARLY NOT GOING TO BE THE CASE AT ALL TIMES, SO UPDATE THIS AS NEEDED.
             {
                 if (players == null)
-                    SetUpPlayers(); // Set up players if game is not started in main menu
+                    SetUpPlayers(new bool[] { true, true, true, true}); // Set up players if game is not started in main menu
             }
             if (countdownText == null)
                 countdownText = GameObject.FindGameObjectWithTag("countdown");
@@ -105,16 +106,14 @@ public class GameManager : MonoBehaviour {
     // Update exists here to handle some things are need to be done during a scene, not when a scene is loaded.
     void Update()
     {
-        if (currentSceneName == mainMenuSceneName)                                          // If the game manager is in the main menu...
-        {
-            if (playerJoinManager != null)                                                  // If there is a PlayerJoinManager in the scene...
-            {
-                readyPlayers = playerJoinManager.GetPLayerReadyStatusList();                // Have the GameManager store the players who are currently ready.
-            }
-            // rounds.Clear();
-            // players = null;
-        }
-        else {
+        //if (currentSceneName == mainMenuSceneName)                                          // If the game manager is in the main menu...
+        //{
+        //    if (playerJoinManager != null)                                                  // If there is a PlayerJoinManager in the scene...
+        //    {
+        //        readyPlayers = playerJoinManager.GetPLayerReadyStatusList();                // Have the GameManager store the players who are currently ready.
+        //    }
+        //}
+        if (currentSceneName != mainMenuSceneName) {
             if (rounds.Count <= 0 || !rounds[rounds.Count - 1].isActive) {
                 GameRound newRound = new GameRound(GetActivePlayers(players));
                 rounds.Add(newRound);
@@ -124,7 +123,7 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    public void SetUpPlayers() {
+    public void SetUpPlayers(bool[] readyPlayers) {
         players = new Player[readyPlayers.Length];
         for (int i = 0; i < readyPlayers.Length; ++i) {
             if (readyPlayers[i]) {

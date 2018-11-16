@@ -263,7 +263,7 @@ public class PlayerJoinManager : MonoBehaviour {
 					for (int i = 0; i < playersReady.Length; i++) {
 						if (i == 0) {
 							if (Input.GetKeyDown(KeyCode.Return)) {
-								GameManager.instance.StartGame();
+								GameManager.instance.StartGame(GetPLayerReadyStatusList());
 							}
 						}
 						else {
@@ -272,7 +272,7 @@ public class PlayerJoinManager : MonoBehaviour {
 								// NOTE: implementation is subject to change for now.
 								if (currentStates[i].Buttons.Start == ButtonState.Pressed && prevStates[i].Buttons.Start == ButtonState.Released) {
 									// playerManager.SetPlayersStatus(GetPLayerReadyStatusList());
-									GameManager.instance.StartGame();
+									GameManager.instance.StartGame(GetPLayerReadyStatusList());
 								}
 							}
 						}
@@ -307,7 +307,7 @@ public class PlayerJoinManager : MonoBehaviour {
 							// NOTE: implementation is subject to change for now.
 							if (currentStates[i].Buttons.Start == ButtonState.Pressed && prevStates[i].Buttons.Start == ButtonState.Released) {
 								// playerManager.SetPlayersStatus(GetPLayerReadyStatusList());
-								GameManager.instance.StartGame();
+								GameManager.instance.StartGame(GetPLayerReadyStatusList());
 							}
 						}
 					}

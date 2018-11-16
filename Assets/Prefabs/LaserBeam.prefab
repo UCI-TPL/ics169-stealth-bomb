@@ -192,7 +192,7 @@ Transform:
   m_Children:
   - {fileID: 4277923843630326}
   m_Father: {fileID: 4455245078060272}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!4 &4277923843630326
 Transform:
@@ -231,6 +231,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4732004457596870}
+  - {fileID: 4947566065137154}
   - {fileID: 4912143365187154}
   - {fileID: 4017113048968792}
   m_Father: {fileID: 4937457926774966}
@@ -248,7 +249,6 @@ Transform:
   m_Children:
   - {fileID: 4865617980648048}
   - {fileID: 4733609176070102}
-  - {fileID: 4947566065137154}
   m_Father: {fileID: 4455245078060272}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
@@ -290,7 +290,7 @@ Transform:
   m_Children:
   - {fileID: 4309566547234026}
   m_Father: {fileID: 4455245078060272}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!4 &4937457926774966
 Transform:
@@ -299,7 +299,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1626507231324782}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11.083134, y: 6, z: 9.028539}
+  m_LocalPosition: {x: 11.637321, y: 6, z: 10.724889}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4455245078060272}
@@ -312,12 +312,12 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1903062207771262}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.5, z: 0}
+  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 4732004457596870}
-  m_RootOrder: 2
+  m_Father: {fileID: 4455245078060272}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &23026451037398414
 MeshRenderer:
@@ -614,7 +614,7 @@ MonoBehaviour:
   MaxLength: 15
   Width: 1
   FrontScale: 1.5
-  Speed: 4
+  Speed: 5
   CollideMask:
     serializedVersion: 2
     m_Bits: 2048
@@ -722,7 +722,7 @@ ParticleSystem:
       m_RotationOrder: 4
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
-  scalingMode: 1
+  scalingMode: 0
   randomSeed: 0
   InitialModule:
     serializedVersion: 3
