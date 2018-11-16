@@ -92,11 +92,11 @@ public class GameManager : MonoBehaviour {
                 if (playerJoinManager == null)
                     playerJoinManager = GameObject.FindGameObjectWithTag("player-join-manager").GetComponent<PlayerJoinManager>();
             }
-            // else if (scene.name != mainMenuSceneName)           // WE ARE ASSUMING ANYTHING THAT ISN'T THE MAIN MENU IS A LEVEL. THIS IS CLEARLY NOT GOING TO BE THE CASE AT ALL TIMES, SO UPDATE THIS AS NEEDED.
-            // {
-            //     if (players == null)
-            //         SetUpPlayers();
-            // }
+            else if (scene.name != mainMenuSceneName)           // WE ARE ASSUMING ANYTHING THAT ISN'T THE MAIN MENU IS A LEVEL. THIS IS CLEARLY NOT GOING TO BE THE CASE AT ALL TIMES, SO UPDATE THIS AS NEEDED.
+            {
+                if (players == null)
+                    SetUpPlayers(); // Set up players if game is not started in main menu
+            }
             if (countdownText == null)
                 countdownText = GameObject.FindGameObjectWithTag("countdown");
         }

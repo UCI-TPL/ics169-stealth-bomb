@@ -32,11 +32,17 @@ public abstract class Weapon {
     // Called when player equips weapon either by swaping weapons or first starting game
     public void EquipWeapon(PlayerController controller) {
         Start();
-        controller.OnDestroyEvent.AddListener(End); 
+        controller.OnDestroyEvent.AddListener(OnDestroyEvent); 
     }
 
     // Start is called once when the weapon is first loaded in game use this to ensure PlayerController is active
     protected virtual void Start() { }
+
+    // OnDestroy is called when the player controller is destroyed;
+    private void OnDestroyEvent() {
+        isCharging = false;
+        End();
+    }
 
     // End is called once when the weapon is removed from game
     protected virtual void End() { }
@@ -81,7 +87,7 @@ public abstract class Weapon {
     // Stop all processes in a weapon before removing
     public void RemoveWeapon(PlayerController controller) {
         Release();
-        controller.OnDestroyEvent.RemoveListener(End);
+        controller.OnDestroyEvent.RemoveListener(OnDestroyEvent);
         End();
     }
 

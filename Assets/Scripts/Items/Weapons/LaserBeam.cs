@@ -50,6 +50,18 @@ public class LaserBeam : MonoBehaviour {
         UpdateParticles(length, Width / 2);
     }
 
+    public void EnableParticles() {
+        beamParticleSystem.Play();
+    }
+
+    public void DisableParticles() {
+        beamParticleSystem.Stop();
+    }
+
+    private void OnDisable() {
+        UpdateParticles(0, 0);
+    }
+
     private void UpdateParticles(float length, float radius) {
         var shape = beamParticleSystem.shape;
         shape.length = Mathf.Max(length - 5, 0);
