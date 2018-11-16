@@ -15,8 +15,12 @@ public abstract class Weapon {
         return 0;
     }
 
+    private float cooldownExpirationTime = 0;
+    public bool OffCooldown { get { return cooldownExpirationTime <= Time.time; } }
+    private bool attackQueued = false;
+
     protected bool isCharging = false;
-    protected int numCharging = 0;// This is how many charging coroutines are active at once, This allows us to limit to one charge
+    protected int numCharging = 0; // This is how many charging coroutines are active at once, This allows us to ensure only one charge at a time
     private bool overrideChargeUpdate = false;
 
     public Weapon() { }
@@ -40,7 +44,8 @@ public abstract class Weapon {
 
     // OnDestroy is called when the player controller is destroyed;
     private void OnDestroyEvent() {
-        isCharging = false;
+        attackQueued = false; // Make sure to remove queued attack
+        isCharging = false; // Make sure to reset charging
         End();
     }
 
@@ -49,12 +54,26 @@ public abstract class Weapon {
 
     // Activate weapon. In other words, initiate attack
     public void Activate() {
-        if (isCharging)
-            Release();
-        isCharging = true;
-        OnActivate();
-        if (overrideChargeUpdate)
-            player.controller.StartCoroutine(ChargingUpdate(numCharging));
+        if (OffCooldown) { // Activate if off cooldown
+            cooldownExpirationTime = Time.time + weaponData.cooldown; // reset cooldown
+            attackQueued = false; // removed queued attack
+            if (isCharging) // If the weapon is already charging, release the charge and reactivate
+                Release();
+            isCharging = true;
+            OnActivate();
+            if (overrideChargeUpdate) // Only start OnCharginUpdate coroutine if its been overriden in derived class, This is for slight optimization
+                player.controller.StartCoroutine(ChargingUpdate(numCharging));
+        } else if (!attackQueued) { // Queue another attack if attack is on cooldown
+            attackQueued = true;
+            player.controller.StartCoroutine(QueueingAttack());
+        }
+    }
+
+    private IEnumerator QueueingAttack() {
+        while (attackQueued) {
+            Activate();
+            yield return null;
+        }
     }
 
     // OnActivate is called once when the weapon is activated
@@ -62,9 +81,9 @@ public abstract class Weapon {
 
     // Coroutine to repetedly call OnChargingUpdate while weapon is charging
     private IEnumerator ChargingUpdate(int numCharging) {
-        ++this.numCharging;
+        ++this.numCharging; // Increment current charging number
         ++numCharging;
-        while (isCharging && this.numCharging == numCharging) {
+        while (isCharging && this.numCharging == numCharging) { // Stop if current charging number has changed, This prevents there every being more than one charging coroutine active
             OnChargingUpdate();
             yield return null;
         }
@@ -75,6 +94,7 @@ public abstract class Weapon {
 
     // Release attack or ending a charge
     public void Release() {
+        attackQueued = false; // Unqueue attack if attack button is released
         if (isCharging) {
             OnRelease();
             isCharging = false;

@@ -21,7 +21,9 @@ public abstract class WeaponData<WeaponType> : WeaponData where WeaponType : Wea
 }
 
 public abstract class WeaponData : ItemData {
-    
+
+    public float cooldown = 0;
+
     public abstract Weapon NewInstance(Player player);
 
     public override void Use(Player player) {
