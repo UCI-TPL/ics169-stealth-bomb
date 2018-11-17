@@ -125,7 +125,7 @@ public class PlayerJoinManager : MonoBehaviour {
 						if (!prevStates[i].IsConnected) {
 							// FINISH!!!!!
 							// This is where we will turn on the correct UI element showing that player to press A.
-							Debug.Log("Player " + players[i] + " controller fis connected.");
+							// Debug.Log("Player " + players[i] + " controller fis connected.");
 
 							//calling UI -Kyle
 							selectionOP.playerIs(i);
@@ -255,7 +255,7 @@ public class PlayerJoinManager : MonoBehaviour {
 					selectionOP.playerIs(0);
 					selectionOP.playerIsReady();
 					// Checks if enough players have confirmed they are ready.
-					Debug.Log("Game is Ready to start!");
+					// Debug.Log("Game is Ready to start!");
 					//calling UI -Kyle
 					selectionOP.gameIsReady();
 
@@ -288,13 +288,13 @@ public class PlayerJoinManager : MonoBehaviour {
 		// Checks if enough players have confirmed they are ready.
 				if (newNumOfPlayersReady >= minNumOfPlayers) {
 					// Display the UI element showing that the game is ready to start.
-					Debug.Log("Game is Ready to start!");
+					// Debug.Log("Game is Ready to start!");
 					//calling UI -Kyle
 					selectionOP.gameIsReady();
 				}
 				else if (newNumOfPlayersReady < minNumOfPlayers /*&& numOfPlayersReady >= 2*/) {
 					// Turn off the UI element showing that the game is ready to start.
-					Debug.Log("There are not enough players for the game to start!");
+					// Debug.Log("There are not enough players for the game to start!");
 					//calling UI -Kyle
 					selectionOP.gameIsNotReady();
 				}

@@ -123,7 +123,7 @@ public class MainMenuManager : MonoBehaviour {
 			if (currentState.Buttons.A == ButtonState.Pressed /* && prevState.Buttons.A == ButtonState.Released */ && getCurrentPanel() != 2) {
 				b.onClick.Invoke();
 			}
-			Debug.Log("current main menu button: " + currentMainMenuButton);
+			// Debug.Log("current main menu button: " + currentMainMenuButton);
 		}
 	}
 
