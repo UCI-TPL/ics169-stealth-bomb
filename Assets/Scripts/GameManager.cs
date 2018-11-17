@@ -49,6 +49,12 @@ public class GameManager : MonoBehaviour {
         SetUpPlayers(playersReady);
     }
 
+    public static void ReturnMenu() {
+        foreach (GameRound round in instance.rounds)
+            round.EndGame();
+        SceneManager.LoadScene(instance.mainMenuSceneName);
+    }
+
     // Use this for initialization
     void Awake () {
         if (instance == null)
@@ -223,8 +229,8 @@ public class GameManager : MonoBehaviour {
             State = GameState.Created;
         }
 
-        ~GameRound() {
-            if (!isActive)
+        public void EndGame() {
+            if (isActive)
                 GameOver();
         }
 
@@ -253,7 +259,10 @@ public class GameManager : MonoBehaviour {
 
         public IEnumerator Update() {
             while (isActive) {
-                if (State == GameState.Battle && ElapsedTime > 20f) {
+                print(State);
+                if (activePlayersControllers.Count < 2)
+                    GameOver();
+                else if (State == GameState.Battle && ElapsedTime > 20f) {
                     TileManager.tileManager.StartCountdown();
                     State = GameState.HurryUp;
                 }
@@ -273,8 +282,6 @@ public class GameManager : MonoBehaviour {
 
         private void Player_onDeath(Player killer, Player killed) {
             activePlayersControllers.Remove(killed.controller.gameObject);
-            if (activePlayersControllers.Count < 2)
-                GameOver();
         }
 
         public enum GameState {
