@@ -43,7 +43,7 @@ public class PlayerUI_inGame : MonoBehaviour {
         playerUI_healthBar.fillAmount = playerCon.player.health / playerCon.player.stats.maxHealth;
 
         // Aiming Arrow Fill Amount
-        playerUI_AimArrowMaskL.fillAmount = playerCon.player.weapon.ChargeLevel;
-        playerUI_AimArrowMaskR.fillAmount = playerCon.player.weapon.ChargeLevel;
+        playerUI_AimArrowMaskL.fillAmount = playerCon.player.controller.Weapon.ChargeLevel;
+        playerUI_AimArrowMaskR.fillAmount = playerCon.player.controller.Weapon.ChargeLevel;
     }
 }

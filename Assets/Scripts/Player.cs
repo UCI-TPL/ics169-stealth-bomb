@@ -33,8 +33,8 @@ public class Player {
     public delegate void powerupDel(PowerupData powerupData, Buff buff);
     public event powerupDel OnAddPowerUp;
 
-    // Currently equiped weapon
-    public Weapon weapon;
+    // Currently stored weapon
+    public WeaponData weaponData;
 
     public Weapon specialMove; //give this to the controlelr
 
@@ -53,7 +53,7 @@ public class Player {
     public void SetController(PlayerController controller) {
         this.controller = controller;
         controller.player = this;
-        weapon.EquipWeapon(controller);
+        controller.EquipWeapon(weaponData.NewInstance(this));
     }
 
     public void ResetForRound() {
@@ -77,7 +77,7 @@ public class Player {
     }
 
     public void ResetWeapon() {
-        weapon = playerData.defaultWeapon.NewInstance(this);
+        ChangeWeapon(playerData.defaultWeapon);
     }
 
     public void ResetHealth() {
@@ -171,11 +171,8 @@ public class Player {
     }
 
     public void ChangeWeapon(WeaponData data) {
-        Weapon oldWeapon = weapon;
-        weapon = data.NewInstance(this);
-        if (controller != null) {
-            oldWeapon.RemoveWeapon(controller);
-            weapon.EquipWeapon(controller);
-        }
+        weaponData = data;
+        if (controller != null)
+            controller.EquipWeapon(weaponData.NewInstance(this));
     }
 }

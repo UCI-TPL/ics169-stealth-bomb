@@ -8,7 +8,8 @@ using Vector3Extensions;
 public class PlayerController : MonoBehaviour {
 
     public Weapon specialMove;
-   // public SpecialMove specialMove; // Dodge, Ice Wall, etc. 
+    // public SpecialMove specialMove; // Dodge, Ice Wall, etc. 
+    public Weapon Weapon { get; private set; }
 
     private Player _player;
     public Player player {
@@ -178,7 +179,12 @@ public class PlayerController : MonoBehaviour {
             frictionVector = -friction * rb.velocity; // Friction is a negative percentage of current velocity
         else  { // In air apply Air Resistance
             Vector3 upVector = Vector3.Project(rb.velocity, Physics.gravity); // get upwardVelocity with respect to gravity, if for some reason gravity is not straight down this will still work
-            Vector3 scaledVelocity = rb.velocity - upVector + upVector.normalized * Mathf.Max(upVector.magnitude - terminalVelocity, 0); // Calculate y velocity over terminal velocity
+            Vector3 terminalVector = -Physics.gravity.normalized * terminalVelocity;
+            Vector3 scaledVelocity = rb.velocity;
+            if (Vector3.Distance(upVector, terminalVector) < Vector3.Distance(upVector, -terminalVector) && upVector.magnitude > terminalVelocity)
+                scaledVelocity -= terminalVector; // Calculate y velocity greater than terminal velocity
+            else
+                scaledVelocity -= upVector; // Ignore y velocity if falling or not over terminal velocity
             frictionVector = -airResistance * scaledVelocity; // Friction is a negative percentage of current velocity
         }
         // Debug.DrawRay(floorCollider.transform.position + Vector3.down * floorCollider.bounds.extents.y, frictionVector, Color.blue);
@@ -224,13 +230,20 @@ public class PlayerController : MonoBehaviour {
     // On Attack down
     private void ActivateAttack() {
         if(allowAttack)
-            player.weapon.Activate();   
+            Weapon.Activate();   
     }
 
     // On Attack up
     private void ReleaseAttack() {
         if(allowAttack)
-            player.weapon.Release();
+            Weapon.Release();
+    }
+
+    public void EquipWeapon(Weapon weapon) {
+        if (Weapon != null)
+            Weapon.RemoveWeapon(this);
+        Weapon = weapon;
+        Weapon.EquipWeapon(this);
     }
 
     public void Knockback(Vector3 direction) {

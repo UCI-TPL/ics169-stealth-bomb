@@ -67,7 +67,7 @@ public class LaserWeapon : Weapon {
         }
         laserBeam.Width = 0;
         laserBeam.gameObject.SetActive(false);
-        if (curID != activeID) {
+        if (curID == activeID) {
             laserBeamPool.Enqueue(laserBeam);
         }
         else

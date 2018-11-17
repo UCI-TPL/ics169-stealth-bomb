@@ -16,7 +16,7 @@ MonoBehaviour:
   description: BIG LASER
   type: 2
   cooldown: 0.25
-  knockbackStrength: 2
+  knockbackStrength: 5
   damage: 5
   maxChargeTime: 0.5
   maxLength: 20

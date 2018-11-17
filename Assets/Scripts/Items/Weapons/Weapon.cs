@@ -142,7 +142,7 @@ public abstract class Weapon {
     // Default knockback implementation, Knock the target back
     protected virtual void Knockback(Vector3 origin, PlayerController targetPlayerController, object extraData) {
         // Get direction relative to origin and apply knockback strength
-        targetPlayerController.Knockback((targetPlayerController.transform.position - origin).normalized * KnockbackStrength);
+        targetPlayerController.Knockback(((targetPlayerController.transform.position - origin).normalized + Vector3.up*0.25f).normalized * KnockbackStrength);
     }
 
     // Create a deep copy of this powerup instance. Used for when adding a new powerup to a player
