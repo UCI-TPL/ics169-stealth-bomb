@@ -54,6 +54,7 @@ public class PlayerController : MonoBehaviour {
     private bool allowAttack = true; //used to disable movement during the countdown
     public bool dodging;
     public bool rolling;
+    public bool braking; 
     public float dodgeSpeed  = 0f;
 
     // Required variables for jumping and detecting ground collisions
@@ -198,7 +199,10 @@ public class PlayerController : MonoBehaviour {
             Vector3 newVelocity = rb.velocity + scaledVector * Time.fixedDeltaTime * acceleration; // Clamp velocity to either max speed or current speed(if player was launched)
             if(!dodging && !rolling) //don't clamp while dodging
                 newVelocity = Vector3.ClampMagnitude(new Vector3(newVelocity.x, 0, newVelocity.z), Mathf.Max(oldVelocity.magnitude, speed * input.controllers[player.playerNumber].MoveVector().magnitude + 0.1f) - 0.1f);
-            rb.velocity = new Vector3(newVelocity.x, rb.velocity.y, newVelocity.z);
+            if (braking)
+                rb.velocity = new Vector3(0f, newVelocity.y, 0f);
+            else
+                rb.velocity = new Vector3(newVelocity.x, rb.velocity.y, newVelocity.z);
         }
         
     }
@@ -206,6 +210,11 @@ public class PlayerController : MonoBehaviour {
     private void SpecialMove() {
         if (allowAttack && isGrounded)
             player.specialMove.Activate();
+    }
+
+    public void ResetVelocity()
+    {
+        rb.velocity = new Vector3(0f, rb.velocity.y, 0f);
     }
 
     // Attempt to perform a jump
