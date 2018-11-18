@@ -248,6 +248,11 @@ public class PlayerController : MonoBehaviour {
             Weapon.Release();
     }
 
+    public void ResetCharge()
+    {
+        Weapon.ResetCharge();
+    }
+
     public void EquipWeapon(Weapon weapon) {
         if (Weapon != null)
             Weapon.RemoveWeapon(this);

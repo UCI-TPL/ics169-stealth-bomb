@@ -259,7 +259,7 @@ public class GameManager : MonoBehaviour {
 
         public IEnumerator Update() {
             while (isActive) {
-                print(State);
+                //print(State);
                 if (activePlayersControllers.Count < 2)
                     GameOver();
                 else if (State == GameState.Battle && ElapsedTime > 20f) {

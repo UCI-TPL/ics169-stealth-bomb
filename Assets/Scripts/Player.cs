@@ -40,6 +40,8 @@ public class Player {
 
     private Vector3 prevPosition;
 
+    public bool Invincible = false;
+
     public Player(int playerNumber, PlayerData playerData) {
         this.playerNumber = playerNumber;
         this.playerData = playerData;
@@ -89,8 +91,22 @@ public class Player {
         onHeal.Invoke();
     }
 
+    public void EnableInvincibility(float duration)
+    {
+        controller.StartCoroutine(EnableInvincibilityTimer(duration));
+    }
+
+    private IEnumerator EnableInvincibilityTimer(float duration)
+    {
+        Invincible = true;
+        yield return new WaitForSeconds(duration);
+        Invincible = false;
+    }
+
     /// <summary>Deals damage to this player and returns the percentage of damage dealt</summary>
     public float Hurt(Player damageDealer, float damage) {
+        if (Invincible) //no damage is done if invincable
+            return 0.0f;
         float damageDealt = Mathf.Min(damage, health);
         health -= damageDealt;
         float percent = damageDealt / stats.maxHealth; // Percentage of max health dealt

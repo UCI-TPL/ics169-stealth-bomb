@@ -25,6 +25,13 @@ public class ChargeWeapon : Weapon {
         startChargeTime = Time.time;
     }
 
+    public override void ResetCharge() //call this to restart the charge process
+    {
+        isCharging = false;
+        rend.material.color = player.controller.playerColor;
+    }
+
+
     // OnChargingUpdate is called once per frame while the weapon is charging
     protected override void OnChargingUpdate() {
         if (rend.material.color.maxColorComponent >= data.GlowLimit) //make this higher for that big crazy aura

@@ -33,9 +33,12 @@ public class DodgeRoll : Weapon
     {
 
         player.controller.rolling = true;
-        player.controller.dodgeSpeed = player.controller.player.stats.moveSpeed * data.SpeedMultiplier; //the dodge begins by changing the playerspeed                                                                                        
-        yield return new WaitForSeconds(data.moveDuration);
+        player.controller.dodgeSpeed = player.controller.player.stats.moveSpeed * data.SpeedMultiplier; //the dodge begins by changing the playerspeed  
+ 
 
+        player.EnableInvincibility(data.moveDuration / 2);  //the player is Invincible for half of the roll
+
+        yield return new WaitForSeconds(data.moveDuration);
         player.controller.dodgeSpeed = 0f; //the speed is set to 0 to decelarate the player at the end of the dodge
         yield return new WaitForSeconds(data.StopTime);
 
