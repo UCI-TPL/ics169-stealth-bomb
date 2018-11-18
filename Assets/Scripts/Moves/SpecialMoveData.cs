@@ -10,7 +10,6 @@ public abstract class SpecialMoveData : WeaponData//<SpecialMove>
 {
 
     public float moveDuration; //how long is the move
-    public float cooldown; //how long till the move can be used again 
 
     public MoveType moveType;
 

@@ -28,10 +28,14 @@ public class InputManager : MonoBehaviour {
 
     // Change the specified player's type of controller. Either xbox or mouse-and-keyboard
     public void ChangeControllerType(int playerIndex, Controller.Type controllerType) {
-        if (controllerType == Controller.Type.Xbox)
-            controllers[playerIndex] = new XboxController(playerIndex);
-        else if (controllerType == Controller.Type.MouseKeyboard)
-            controllers[playerIndex] = new MouseKeyboard(playerIndex);
+        switch (controllerType) {
+            case Controller.Type.Xbox:
+                controllers[playerIndex] = new XboxController(playerIndex);
+                break;
+            case Controller.Type.MouseKeyboard:
+                controllers[playerIndex] = new MouseKeyboard(playerIndex);
+                break;
+        }
     }
 
     // temporary method for turning on mouse and keyboard controls for player 1
@@ -134,7 +138,7 @@ public class InputManager : MonoBehaviour {
             this.playerIndex = playerIndex;
         }
     }
-
+    
     // Controller object for Xbox controllers
     public class XboxController : Controller {
         private PlayerIndex playerIndex;

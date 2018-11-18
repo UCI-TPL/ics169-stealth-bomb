@@ -11,5 +11,4 @@ public class ChargeWeaponData : WeaponData<ChargeWeapon> {
     public float chargeLevels = 3;
     public int numProj = 1;
     public float projSpeed = 4; //this is the base speed, it will be multiplied by charge level
-    public int damage = 35; 
 }
