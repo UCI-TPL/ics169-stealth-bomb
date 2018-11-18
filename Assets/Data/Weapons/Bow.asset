@@ -16,13 +16,15 @@ MonoBehaviour:
   description: Charge to fire an arrow.
   type: 2
   cooldown: 0.25
+  knockbackStrength: 0
+  damage: 35
   instance:
     weaponData: {fileID: 11400000}
     type: 1
   projectile: {fileID: 11400000, guid: 9df1e8c6a587d604684f97e370ea1793, type: 2}
-  colorAddition: 1
+  colorAddition: 0.3
+  GlowLimit: 2.5
   chargeTime: 0.1666
   chargeLevels: 3
   numProj: 1
   projSpeed: 10
-  damage: 35

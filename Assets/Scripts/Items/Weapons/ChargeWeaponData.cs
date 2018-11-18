@@ -6,7 +6,10 @@ using UnityEngine;
 public class ChargeWeaponData : WeaponData<ChargeWeapon> {
 
     public ProjectileData projectile;
-    public float colorAddition = 25f;
+    [Tooltip("The lower the number, the faster the color change")]
+    public float colorAddition = 0.5f;
+    [Tooltip("Limits the size of the aura/glow")]
+    public float GlowLimit = 3; //where the aura/glow stops growing 
     public float chargeTime = 0.5f; //time between charge levels
     public float chargeLevels = 3;
     public int numProj = 1;

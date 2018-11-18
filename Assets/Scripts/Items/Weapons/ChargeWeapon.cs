@@ -25,24 +25,34 @@ public class ChargeWeapon : Weapon {
         startChargeTime = Time.time;
     }
 
+    public override void ResetCharge() //call this to restart the charge process
+    {
+        isCharging = false;
+        rend.material.color = player.controller.playerColor;
+    }
+
+
     // OnChargingUpdate is called once per frame while the weapon is charging
     protected override void OnChargingUpdate() {
-        switch((int)(ChargeLevel * data.chargeLevels))
+        if (rend.material.color.maxColorComponent >= data.GlowLimit) //make this higher for that big crazy aura
+            return;
+        else if((ChargeLevel * data.chargeLevels) > 1f) //colors only change the the weapon charges higher than one, so no glow for the fast bow
+            rend.material.color = rend.material.color + ((player.controller.playerColor / data.colorAddition) * Time.deltaTime);
+
+        /* use this for different phases of color attacks 
+        switch ((int)(ChargeLevel * data.chargeLevels)) 
         {
             case 1:
                 rend.material.color = rend.material.color + ((Color.red / data.colorAddition) * Time.deltaTime);
                 break;
             case 2:
-                rend.material.color = rend.material.color +  (Color.magenta / data.colorAddition)  * Time.deltaTime;
+                rend.material.color = rend.material.color +  (Color.blue / data.colorAddition)  * Time.deltaTime;
                 break;
             case 3:
-                //rend.material.color = rend.material.color + (Color.green / data.colorAddition)  * Time.deltaTime;
+                rend.material.color = rend.material.color + (Color.green / data.colorAddition)  * Time.deltaTime;
                 break;
-            default: //no color change after a certain point
-                break;
-
         }
-        //rend.material.color = rend.material.color + (Color.red / data.colorAddition);
+        */
     }
 
     // OnRelease is called once when the weapon is released

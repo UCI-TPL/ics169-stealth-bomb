@@ -19,8 +19,6 @@ public class SummonData : SpecialMoveData    //should be named DodgeDashData
     {
         if (moveType == SpecialMoveData.MoveType.Summon) //make one for every type of SpecialMove
             return (new SummonWall(this, player));
-        //else if (moveType == SpecialMoveData.MoveType.DodgeRoll)
-        //    return (new DodgeRoll(this, player));
         return null;
     }
 

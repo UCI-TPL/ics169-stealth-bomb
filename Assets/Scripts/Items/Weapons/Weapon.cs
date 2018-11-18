@@ -47,6 +47,8 @@ public abstract class Weapon {
     // Start is called once when the weapon is first loaded in game use this to ensure PlayerController is active
     protected virtual void Start() { }
 
+    public virtual void ResetCharge() { } //ChargeWeapon will use this to reset charge
+
     // OnDestroy is called when the player controller is destroyed;
     private void OnDestroyEvent() {
         attackQueued = false; // Make sure to remove queued attack
@@ -86,6 +88,7 @@ public abstract class Weapon {
 
     // Coroutine to repetedly call OnChargingUpdate while weapon is charging
     private IEnumerator ChargingUpdate(int numCharging) {
+       
         ++this.numCharging; // Increment current charging number
         ++numCharging;
         while (isCharging && this.numCharging == numCharging) { // Stop if current charging number has changed, This prevents there every being more than one charging coroutine active

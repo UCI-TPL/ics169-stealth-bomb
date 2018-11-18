@@ -32,14 +32,21 @@ public class DodgeDash : Weapon
     public IEnumerator Dodge()
     {
         player.controller.dodging = true;
+        player.controller.ResetCharge();
         player.controller.dodgeSpeed = player.controller.player.stats.moveSpeed * data.SpeedMultiplier;//data.SpeedMultiplier;
+        player.controller.DisableAttack(data.moveDuration);
         yield return new WaitForSeconds(data.moveDuration);
 
-        player.controller.dodgeSpeed = 0f; //the speed is set to 0 to decelarate the player at the end of the dodge
-        yield return new WaitForSeconds(data.StopTime);
 
+        player.controller.ResetVelocity();
+        player.controller.dodgeSpeed = 0f; //the speed is set to 0 to decelarate the player at the end of the dodge
+        
+        //player.controller.braking = true;  // this is a different brake implementation, this replaced the dodgeSpeed and ResetVelocity one
+        yield return new WaitForSeconds(data.StopTime);
+        //player.controller.braking = false;
         player.controller.dodgeSpeed = player.controller.player.stats.moveSpeed;
         player.controller.dodging = false;
+
     }
 
     public override Weapon DeepCopy(WeaponData weaponData, Player player)
