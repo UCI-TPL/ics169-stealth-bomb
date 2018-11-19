@@ -69,6 +69,24 @@ public class TileManager : MonoBehaviour {
         StopAllCoroutines();
     }
 
+    //private void UpdateMesh() {
+    //    if (GameObject.Find("Tile Map") != null) {
+    //        MeshFilter[] filters = GameObject.Find("Tile Map").GetComponentsInChildren<MeshFilter>();
+    //        Mesh test = new Mesh();
+    //        CombineInstance[] combines = new CombineInstance[filters.Length];
+
+    //        for (int i = 0; i < filters.Length; ++i) {
+    //            combines[i].subMeshIndex = 0;
+    //            combines[i].mesh = filters[i].sharedMesh;
+    //            combines[i].transform = filters[i].transform.localToWorldMatrix;
+    //        }
+
+    //        test.CombineMeshes(combines);
+
+    //        GetComponent<MeshFilter>().sharedMesh = test;
+    //    }
+    //}
+
     // Begin shrinking the terrain
     public void StartCountdown() {
         StartCoroutine("CollapseCircle", collapseTime);
