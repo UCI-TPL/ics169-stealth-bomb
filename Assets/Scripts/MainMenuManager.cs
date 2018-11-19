@@ -21,7 +21,7 @@ public class MainMenuManager : MonoBehaviour {
 	public GameObject mainMenuPanel;
 	public GameObject selectionMenuPanel;
 	public GameObject settingMenuPanel;
-	public GameObject playerOneCustomMappingPanel;
+	public GameObject customMappingPanels;
 
 	public GameObject xboxControllerDisplay;
 
@@ -146,7 +146,7 @@ public class MainMenuManager : MonoBehaviour {
 				mainMenuPanel.SetActive(true);
 				selectionMenuPanel.SetActive(false);
 				settingMenuPanel.SetActive(false);
-				playerOneCustomMappingPanel.SetActive(false);
+				customMappingPanels.SetActive(false);
 				mainMenuButtons(1);
 				currentMainMenuButton = 1;
 				break;
@@ -156,7 +156,7 @@ public class MainMenuManager : MonoBehaviour {
 				mainMenuPanel.SetActive(false);
 				selectionMenuPanel.SetActive(true);
 				settingMenuPanel.SetActive(false);
-				playerOneCustomMappingPanel.SetActive(false);
+				customMappingPanels.SetActive(false);
 				selectionMenuButtons(2);
 				currentSelectionMenuButton = 2;
 				break;
@@ -166,16 +166,43 @@ public class MainMenuManager : MonoBehaviour {
 				mainMenuPanel.SetActive(false);
 				selectionMenuPanel.SetActive(false);
 				settingMenuPanel.SetActive(true);
-				playerOneCustomMappingPanel.SetActive(false);
+				customMappingPanels.SetActive(false);
 				settingMenuButtons(2);
 				currentSettingsMenuButton = 2;
 				break;
-			case 4:
+			case 4: //player one mapping
 				mainMenuPanel.SetActive(false);
 				selectionMenuPanel.SetActive(false);
 				settingMenuPanel.SetActive(false);
-				playerOneCustomMappingPanel.SetActive(true);
+				// customMappingPanels.SetActive(false);
+				customMappingPanels.SetActive(true);
+				// customMappingPanels.transform.GetChild(0).gameObject.SetActive(true);
 				break;
+			// case 5: //player two mapping
+			// 	mainMenuPanel.SetActive(false);
+			// 	selectionMenuPanel.SetActive(false);
+			// 	settingMenuPanel.SetActive(false);
+			// 	customMappingPanels.SetActive(false);
+			// 	customMappingPanels.SetActive(true);
+			// 	customMappingPanels.transform.GetChild(1).gameObject.SetActive(true);
+			// 	break;
+			// case 6: //playe three mapping
+			// 	mainMenuPanel.SetActive(false);
+			// 	selectionMenuPanel.SetActive(false);
+			// 	settingMenuPanel.SetActive(false);
+			// 	customMappingPanels.SetActive(false);
+			// 	customMappingPanels.SetActive(true);
+			// 	customMappingPanels.transform.GetChild(2).gameObject.SetActive(true);
+			// 	break;
+			// case 7: //player four mapping
+			// 	mainMenuPanel.SetActive(false);
+			// 	selectionMenuPanel.SetActive(false);
+			// 	settingMenuPanel.SetActive(false);
+			// 	customMappingPanels.SetActive(false);
+			// 	customMappingPanels.SetActive(true);
+			// 	customMappingPanels.transform.GetChild(3).gameObject.SetActive(true);
+			// 	break;
+				
 		}
 	}
 

@@ -72,11 +72,23 @@ public class InputManager : MonoBehaviour {
             controllers[i].OnApplicationQuit();
     }
 
-    //public: UI element modification
-    public void mapInput(string action, string input)
+    #region mapping interface for UI
+    /*
+    - Kyle
+    public method to update input mapping
+     */
+    public void mapInput(string action, string input, int player)
     {
-        controllers[0].setMapping(action, input);
+        controllers[player].setMapping(action, input);
     }
+
+    public void removeInputMapping( string action, string input, int player)
+    {
+        controllers[player].removeMapping(action, input);
+    }
+
+    
+    #endregion
 
 
     // Controller object for Mouse and Keyboard, This is not implemented yet
@@ -210,7 +222,8 @@ public class InputManager : MonoBehaviour {
         private void SetDefaultMapping() {
             ClearAllButtonMapping();
             AddButtonMapping(ActionCode.Attack, ButtonCode.RightBumper);
-            AddButtonMapping(ActionCode.Attack, ButtonCode.RightTrigger);
+            RemoveButtonMapping(ActionCode.Attack, ButtonCode.RightBumper);
+            AddButtonMapping(ActionCode.Jump, ButtonCode.RightBumper);
             //AddButtonMapping(ActionCode.Jump, ButtonCode.LeftTrigger);
             AddButtonMapping(ActionCode.Jump, ButtonCode.LeftBumper);
             AddButtonMapping(ActionCode.Dodge, ButtonCode.LeftTrigger);
@@ -268,32 +281,31 @@ public class InputManager : MonoBehaviour {
             ButtonMaps.Add(ActionCode.Attack, new HashSet<ButtonCode>());
             ButtonMaps.Add(ActionCode.Jump, new HashSet<ButtonCode>());
             ButtonMaps.Add(ActionCode.Dodge, new HashSet<ButtonCode>());
-            SetDefaultMapping();
+            // SetDefaultMapping();
         }
 
         
 
         /*
+        - Kyle
         input mapping customization
         */
-
+        #region  mapping customization
         public override void setMapping(string a, string b)
         {
-            Debug.Log("============================================");
-            // Debug.Log(op + b + a);
+             Debug.Log("add new mapping: button: " + b + " action: " + a);
             if (a == "move")
             {
-                Debug.Log("in move");
-                if (b == "left")
+                if (b == "leftStick")
                     SetMoveJoyStick(JoyStickCode.Left);
-                else if (b == "right")
+                else if (b == "rightStick")
                     SetMoveJoyStick(JoyStickCode.Right);
             }
             else if ( a == "aim")
             {
-                if (b == "left")
+                if (b == "leftStick")
                     SetAimJoyStick(JoyStickCode.Left);
-                else if (b == "right")
+                else if (b == "rightStick")
                     SetAimJoyStick(JoyStickCode.Right);
             }
             else
@@ -302,12 +314,37 @@ public class InputManager : MonoBehaviour {
                 XboxController.ButtonCode newButton = GetButton(b);
                 AddButtonMapping(newAction, newButton);
             }
+        }
 
+        public override void removeMapping(string a, string b)
+        {
+            // if (a == "move")
+            // {
+            //     if (b == "leftStick")
+            //         SetMoveJoyStick(JoyStickCode.Left);
+            //     else if (b == "rightStick")
+            //         SetMoveJoyStick(JoyStickCode.Right);
+            // }
+            // else if ( a == "aim")
+            // {
+            //     if (b == "leftStick")
+            //         SetAimJoyStick(JoyStickCode.Left);
+            //     else if (b == "rightStick")
+            //         SetAimJoyStick(JoyStickCode.Right);
+            // }
+            // else
+            // {
+                if (b == "leftStick" || b == "rightSTick")
+                    return;
+                Controller.ActionCode oldAction = getAction(a);
+                XboxController.ButtonCode oldButton = GetButton(b);
+                RemoveButtonMapping(oldAction, oldButton);
+            // }
         }
 
         private Controller.ActionCode getAction(string a)
         {
-            Debug.Log("action: " + a);
+            
             if ( a == "attack")
                 return Controller.ActionCode.Attack;
             else if ( a=="dodge")
@@ -320,8 +357,7 @@ public class InputManager : MonoBehaviour {
 
         private XboxController.ButtonCode GetButton(string b)
         {
-            Debug.Log("button: " + b);
-            if ( b== "leftBumper")
+            if ( b == "leftBumper")
                 return XboxController.ButtonCode.LeftBumper;
             else if (b == "leftTrigger")
                 return XboxController.ButtonCode.LeftTrigger;
@@ -329,9 +365,18 @@ public class InputManager : MonoBehaviour {
                 return XboxController.ButtonCode.RightBumper;
             else if (b == "rightTrigger")
                 return XboxController.ButtonCode.RightTrigger;
+            else if (b == "A")
+                return XboxController.ButtonCode.A;
+            else if (b == "B")
+                return XboxController.ButtonCode.B;
+            else if (b == "X")
+                return XboxController.ButtonCode.X;
+            else if (b == "Y")
+                return XboxController.ButtonCode.Y;
 
             return XboxController.ButtonCode.A;
         }
+        #endregion
 
         #region Button Defenitions
         private void ADown(Action action) {
@@ -709,6 +754,7 @@ public class InputManager : MonoBehaviour {
         public abstract void UpdateController();
 
         public virtual void setMapping( string b, string a) {}
+        public virtual void removeMapping( string b, string a) {}
 
         // List of every PlayerAction available
         public enum ActionCode {

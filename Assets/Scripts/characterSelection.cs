@@ -50,7 +50,7 @@ public class characterSelection : MonoBehaviour {
 	public void playerIs(int p)
 	{
 		player = p;
-		Debug.Log("player is: " + player);
+		// Debug.Log("player is: " + player);
 	}
 
 	public void playerDisconnected()
