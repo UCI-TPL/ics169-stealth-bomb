@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour {
     // this is by default set to true for all values so that the players spawn as normal if we start in a level.
     //private bool[] readyPlayers = { true, true, true, true };
 
+    [Header("In-game: Player Related")]
     public PlayerData DefaultPlayerData;
     public PlayerController PlayerPrefab;
     // Important Data in any non Main Menu scene.
@@ -37,8 +38,15 @@ public class GameManager : MonoBehaviour {
     [Tooltip("Amount of bonus experiance per level under")]
     public float ExpBonusPerLvl = 0.25f;
 
-    public int countdown = 3; //at the start of a round
+    // variables for the game "timer"
+    [Header("In-Game: 'Timer' Related")]
+    public float TimeBeforeCrumble = 30f;
+    public float TimeDecreasePerPlayer = 10f;
+    
+    //public int PlayersKilled = 0;
 
+    [Header("In-Game: Starting Countdown")]
+    public int countdown = 3; //at the start of a round
     public GameObject countdownText;
 
     private List<GameRound> rounds = new List<GameRound>();
@@ -219,6 +227,7 @@ public class GameManager : MonoBehaviour {
         public float StartTime { get; private set; }
         public float ElapsedTime { get { return Time.time - StartTime; } }
         public List<GameObject> activePlayersControllers = new List<GameObject>();
+        private int PlayersKilled = 0;
 
         public GameRound(Player[] players) {
             this.players = players;
@@ -242,6 +251,7 @@ public class GameManager : MonoBehaviour {
         public void StartGame() {
             StartTime = Time.time;
             TileManager.tileManager.StartGame();
+            PlayersKilled = 0;
 
             Queue<SpawnTile> spawnPoints = new Queue<SpawnTile>(TileManager.tileManager.tileMap.SpawnTiles);
             FollowTargetsCamera moveCamera = Camera.main.GetComponentInParent<FollowTargetsCamera>();
@@ -262,7 +272,7 @@ public class GameManager : MonoBehaviour {
                 //print(State);
                 if (activePlayersControllers.Count < 2)
                     GameOver();
-                else if (State == GameState.Battle && ElapsedTime > 20f) {
+                else if (State == GameState.Battle && ElapsedTime > GameManager.instance.TimeBeforeCrumble - (GameManager.instance.TimeDecreasePerPlayer * PlayersKilled)) {
                     TileManager.tileManager.StartCountdown();
                     State = GameState.HurryUp;
                 }
@@ -281,6 +291,7 @@ public class GameManager : MonoBehaviour {
         }
 
         private void Player_onDeath(Player killer, Player killed) {
+            PlayersKilled++;
             activePlayersControllers.Remove(killed.controller.gameObject);
         }
 
