@@ -58,6 +58,7 @@ public class InputManager : MonoBehaviour {
         // for (int i = 1; i < 4; ++i)
         for (int i = 0; i < 4; ++i)
             controllers[i] = new XboxController(i);
+        ChangeControllerType(0, Controller.Type.MouseKeyboard);
     }
 
     // Update every controller every frame

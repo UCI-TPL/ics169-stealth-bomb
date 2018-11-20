@@ -76,7 +76,7 @@ public class LaserWeapon : Weapon {
     
     private LaserBeam CreateLaserBeam() {
         LaserBeam laserBeam = GameObject.Instantiate<GameObject>(data.LaserBeam.gameObject, player.controller.transform).GetComponent<LaserBeam>();
-        laserBeam.OnHit.AddListener((Vector3 origin, GameObject target) => { Hit(origin, target); });
+        laserBeam.OnHit.AddListener((Vector3 origin, GameObject target) => { Hit(origin, target, ChargeLevel); });
         laserBeam.IgnoreCollision = player.controller.gameObject;
         laserBeam.hitCooldown = data.hitCooldown;
         laserBeam.gameObject.SetActive(false);
@@ -89,6 +89,10 @@ public class LaserWeapon : Weapon {
         laserBeam.transform.position = player.controller.transform.position + laserBeam.transform.forward * 0.5f;
         laserBeam.SetColor(player.controller.playerColor);
         laserBeam.EnableParticles();
+    }
+
+    protected override float GetDamageDealt(Vector3 origin, PlayerController targetPlayerController, object extraData) {
+        return weaponData.damage * player.stats.Damage * (float)extraData;
     }
 
     // Create a deep copy of this weapon instance

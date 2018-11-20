@@ -65,7 +65,7 @@ public class TileManager : MonoBehaviour {
         newRadius = radius;
 
         TileDestroyQueue = CreateTileMapDestroyCalc(tileMap.Tiles, center, collapseBuffer);
-
+        
         StopAllCoroutines();
     }
 
@@ -81,7 +81,7 @@ public class TileManager : MonoBehaviour {
     //            combines[i].transform = filters[i].transform.localToWorldMatrix;
     //        }
 
-    //        test.CombineMeshes(combines);
+    //        test.CombineMeshes(combines, false);
 
     //        GetComponent<MeshFilter>().sharedMesh = test;
     //    }
