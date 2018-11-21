@@ -1750,6 +1750,7 @@ MonoBehaviour:
   lastScaledVector: {x: 0, y: 0, z: 0}
   dodging: 0
   rolling: 0
+  braking: 0
   dodgeSpeed: 0
 --- !u!114 &114484350781344532
 MonoBehaviour:

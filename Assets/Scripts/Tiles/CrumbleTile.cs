@@ -5,6 +5,7 @@ using UnityEngine;
 public class CrumbleTile : Tile {
 
     private Material crumbleMaterial;
+    public float shakeCooldown = 0.02f;
     public float destroyEffDuration = 0.5f;
     public float destroyEffSpeed = 5f;
     public GameObject particles;
@@ -23,9 +24,17 @@ public class CrumbleTile : Tile {
     private IEnumerator CrumbleEffect(float duration) {
         float startTime = Time.time;
         float endTime = Time.time + duration;
+        float shakeTimer = Time.time;
+        float targetScale = 1;
+        float currentScale = 1;
+        float scaleVelocity = 0;
         while (endTime >= Time.time) {
-            float scale = Random.Range(0.9f, 1.1f);
-            crumbleMaterial.SetVector("Vector3_B38DBA48", Vector3.one * scale); // Set object scale with shader vertex offset
+            if (shakeTimer <= Time.time) {
+                targetScale = Random.Range(0.9f, 1.1f);
+                shakeTimer = Mathf.Max(Time.time, shakeTimer + shakeCooldown);
+            }
+            currentScale = Mathf.SmoothDamp(currentScale, targetScale, ref scaleVelocity, shakeCooldown);
+            crumbleMaterial.SetVector("Vector3_B38DBA48", Vector3.one * currentScale); // Set object scale with shader vertex offset
             crumbleMaterial.SetFloat("Vector1_B581EF45", (Time.time - startTime)/duration); // Set shader crumble level
             yield return null;
         }

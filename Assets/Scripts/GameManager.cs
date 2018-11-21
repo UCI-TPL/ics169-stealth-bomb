@@ -28,6 +28,8 @@ public class GameManager : MonoBehaviour {
     // Important Data in any non Main Menu scene.
     public Player[] players { get; private set; }
     public Player leader;
+    [Tooltip("Ranks required to win")]
+    public int maxRank = 10;
     [Tooltip("Amount of experiance per precent life dealt")]
     public float ExpGainPerDamage = 0.5f;
     [Tooltip("Amount of experiance for killing blow")]
@@ -53,9 +55,11 @@ public class GameManager : MonoBehaviour {
     private List<GameRound> rounds = new List<GameRound>();
 
     public void StartGame(bool[] playersReady) {
+        string s = "Players Recieved from Main Menu: ";
         for (int i = 0; i < playersReady.Length; ++i) {
-            Debug.Log("player " + i.ToString() + ": " + playersReady[i].ToString());
+          s += "player " + i.ToString() + ": " + playersReady[i].ToString() + "  ";
         }
+        Debug.Log(s);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         rounds.Clear();
         SetUpPlayers(playersReady);
@@ -113,8 +117,10 @@ public class GameManager : MonoBehaviour {
             }
             else if (scene.name != mainMenuSceneName)           // WE ARE ASSUMING ANYTHING THAT ISN'T THE MAIN MENU IS A LEVEL. THIS IS CLEARLY NOT GOING TO BE THE CASE AT ALL TIMES, SO UPDATE THIS AS NEEDED.
             {
-                if (players == null)
-                    SetUpPlayers(new bool[] { true, true, true, true}); // Set up players if game is not started in main menu
+                if (players == null) {
+                    Debug.LogWarning("GameManager did not recieve players from main menu, defaulting to 4 players on, This is correct if starting editor from game scene");
+                    SetUpPlayers(new bool[] { true, true, true, true }); // Set up players if game is not started in main menu
+                }
             }
             if (countdownText == null)
                 countdownText = GameObject.FindGameObjectWithTag("countdown");
@@ -220,19 +226,19 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    private class GameRound {
+    public class GameRound {
 
         public Dictionary<Player, float> initialExperiance;
         public Player[] players;
         public bool isActive {
-            get { return State != GameState.GameOver && State != GameState.Created; }
+            get { return State != GameState.Finished && State != GameState.Created; }
         }
         public GameState State { get; private set; }
         public float StartTime { get; private set; }
         public float ElapsedTime { get { return Time.time - StartTime; } }
         public List<GameObject> activePlayersControllers = new List<GameObject>();
         public List<GameObject> ghostPlayerControllers = new List<GameObject>();
-        private int PlayersKilled = 0;
+        public int PlayersAlive { get { return activePlayersControllers.Count; } }
 
         public bool roundEnding = false;
 
@@ -247,7 +253,7 @@ public class GameManager : MonoBehaviour {
 
         public void EndGame() {
             if (isActive)
-                GameOver();
+                Reset();
         }
 
         public void LoadLevel() {
@@ -256,10 +262,14 @@ public class GameManager : MonoBehaviour {
         }
 
         public void StartGame() {
+            string s = "Starting round with players: ";
+            foreach (Player player in players)
+                s += player.playerNumber.ToString() + ", ";
+            Debug.Log(s);
+
             StartTime = Time.time;
             TileManager.tileManager.StartGame();
-            PlayersKilled = 0;
-            roundEnding = false;
+            
             Queue<SpawnTile> spawnPoints = new Queue<SpawnTile>(TileManager.tileManager.tileMap.SpawnTiles);
             FollowTargetsCamera moveCamera = Camera.main.GetComponentInParent<FollowTargetsCamera>();
             foreach (Player player in players) {
@@ -276,33 +286,37 @@ public class GameManager : MonoBehaviour {
 
 
         public IEnumerator Update() {
-            while (isActive) {
-                //print(State);
+            while (State == GameState.Battle || State == GameState.HurryUp) {
                 if (activePlayersControllers.Count < 2)
                     GameOver();
-                else if (State == GameState.Battle && ElapsedTime > GameManager.instance.TimeBeforeCrumble - (GameManager.instance.TimeDecreasePerPlayer * PlayersKilled)) {
-                    TileManager.tileManager.StartCountdown();
-                    State = GameState.HurryUp;
+                switch (State) {
+                    case GameState.Battle:
+                        if (ElapsedTime > GameManager.instance.TimeBeforeCrumble - (GameManager.instance.TimeDecreasePerPlayer * (players.Length - PlayersAlive))) {
+                            TileManager.tileManager.StartCountdown();
+                            State = GameState.HurryUp;
+                        }
+                        break;
                 }
                 yield return null;
             }
         }
 
         private void GameOver() {
-            roundEnding = true;
-            foreach (Player player in players)
-                player.ResetForRound();
+            State = GameState.ProgressScreen;
+            ProgressScreenUI.Instance.StartProgressScreen(this).AddListener(Reset);
+        }
+
+        private void Reset() {
             foreach (GameObject g in activePlayersControllers)
                 g.GetComponent<PlayerController>().Destroy();
             foreach (GameObject g in ghostPlayerControllers)
                 g.GetComponent<PlayerController>().Destroy();
             foreach (Player player in players)
                 player.OnDeath -= Player_onDeath;
-            State = GameState.GameOver;
+            State = GameState.Finished;
         }
 
         private void Player_onDeath(Player killer, Player killed) {
-            PlayersKilled++;
             activePlayersControllers.Remove(killed.controller.gameObject);
             /*
             Vector3 deathPosition = killed.controller.transform.position;
@@ -322,7 +336,7 @@ public class GameManager : MonoBehaviour {
         }
 
         public enum GameState {
-            Created, Loading, Ready, Battle, HurryUp, GameOver
+            Created, Loading, Ready, Battle, HurryUp, ProgressScreen, Finished
         }
     }
 }
