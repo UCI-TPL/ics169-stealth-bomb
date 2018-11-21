@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using XInputDotNetPure;
 
 public class InputManager : MonoBehaviour {
 
     // Returns the current inputManager
     private static InputManager _inputManager;
+    private bool keyboardEnabled;
 
     public static InputManager inputManager {
         get {
@@ -38,14 +40,27 @@ public class InputManager : MonoBehaviour {
         }
     }
 
-    // temporary method for turning on mouse and keyboard controls for player 1
-    public void UseMouseAndKeyboardForPlayer1(bool turnOn) {
-        if (turnOn) {
-            controllers[0] = new MouseKeyboard(0);
-        }
-        else {
-            controllers[0] = new XboxController(0);
-        }
+    // OLD(temporary method for turning on mouse and keyboard controls for player 1)
+    // Current: if turnOn is true, turns on mouse and keyboard for first player in controller index without an active controller.
+    //          if turnOn is false, turns off mouse and keyboard for all players.
+    public void UseMouseAndKeyboardForFirstDisconnectedPlayer(bool turnOn) {
+        // if (turnOn) {
+        //     for (int i = 0; i < controllers.Length; ++i) {
+        //         if (controllers[i].type == Controller.Type.Xbox && !((XboxController) controllers[i]).isActive) {
+        //             ChangeControllerType(i, Controller.Type.MouseKeyboard);
+        //             break;
+        //         }
+        //     }
+        // }
+        // else {
+        //     for (int i = 0; i < controllers.Length; ++i) {
+        //         if (controllers[i].type == Controller.Type.MouseKeyboard) {
+        //             ChangeControllerType(i, Controller.Type.Xbox);
+        //         }
+        //     }
+        // }
+
+        keyboardEnabled = turnOn;
     }
 
     // Used to scale controller joystick inputs to camera angle
@@ -55,14 +70,37 @@ public class InputManager : MonoBehaviour {
     private void Awake() {
         // only temporary, need to make going from keyboard to controller more formal and streamlined!!!!!!!!!!
         // controllers[0] = new MouseKeyboard(0);
+        keyboardEnabled = false;
         // for (int i = 1; i < 4; ++i)
         for (int i = 0; i < 4; ++i)
             controllers[i] = new XboxController(i);
-        ChangeControllerType(0, Controller.Type.MouseKeyboard);
+        // ChangeControllerType(0, Controller.Type.MouseKeyboard);
     }
 
     // Update every controller every frame
     private void Update() {
+        if (SceneManager.GetActiveScene().name.Equals("mainMenu")) {
+            for (int i = 0; i < controllers.Length; ++i) {
+                if (keyboardEnabled) {
+                    GamePadState testState = GamePad.GetState((PlayerIndex) i);
+                    if (!testState.IsConnected && controllers[i].type != Controller.Type.MouseKeyboard) {
+                        ChangeControllerType(i, Controller.Type.MouseKeyboard);
+                        break;
+                    }
+                    else {
+                        if (testState.IsConnected && controllers[i].type == Controller.Type.MouseKeyboard) {
+                            ChangeControllerType(i, Controller.Type.Xbox);
+                        }
+                    }
+                }
+                else {
+                    if (controllers[i].type == Controller.Type.MouseKeyboard) {
+                        ChangeControllerType(i, Controller.Type.Xbox);
+                    }
+                }
+            }
+        }
+
         cameraScale = new Vector2(Mathf.Sin(Mathf.Deg2Rad * Camera.main.transform.eulerAngles.x), 1);
         for (int i = 0; i < 4; ++i)
             controllers[i].UpdateController();
