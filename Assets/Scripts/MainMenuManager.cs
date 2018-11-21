@@ -160,6 +160,7 @@ public class MainMenuManager : MonoBehaviour {
 				customMappingPanels.SetActive(false);
 				selectionMenuButtons(2);
 				currentSelectionMenuButton = 2;
+				InputManager.inputManager.UseMouseAndKeyboardForFirstDisconnectedPlayer(false);
 				break;
 
 			//Setting Menu

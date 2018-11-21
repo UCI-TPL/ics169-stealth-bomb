@@ -67,14 +67,14 @@ public class InputManager : MonoBehaviour {
             ChangeControllerType(3, Controller.Type.Xbox);
         }
 
-        keyboardEnabled = turnOn;
+        // keyboardEnabled = turnOn;
     }
 
     // Used to scale controller joystick inputs to camera angle
     protected Vector2 cameraScale;
 
     // Set up controllers
-    private void Awake() {
+    private void Start() {
         // only temporary, need to make going from keyboard to controller more formal and streamlined!!!!!!!!!!
         // controllers[0] = new MouseKeyboard(0);
         keyboardEnabled = false;
