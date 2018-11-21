@@ -55,6 +55,7 @@ public class MainMenuManager : MonoBehaviour {
 		currentSettingsMenuButton = 2;
 		timer = 7.5f;
 		hasMoved = false;
+		InputManager.inputManager.UseMouseAndKeyboardForFirstDisconnectedPlayer(false);
 	}
 
 	void Update() {
@@ -159,6 +160,7 @@ public class MainMenuManager : MonoBehaviour {
 				customMappingPanels.SetActive(false);
 				selectionMenuButtons(2);
 				currentSelectionMenuButton = 2;
+				InputManager.inputManager.UseMouseAndKeyboardForFirstDisconnectedPlayer(false);
 				break;
 
 			//Setting Menu

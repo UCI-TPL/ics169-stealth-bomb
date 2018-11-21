@@ -53,7 +53,7 @@ public class populateList : MonoBehaviour {
 			mapMatrix[i].Add("dodge", "leftTrigger");
 			mapMatrix[i].Add("attack", "rightBumper");
 		}
-		populateControlLists();
+		//populateControlLists();
 		
 	}
 

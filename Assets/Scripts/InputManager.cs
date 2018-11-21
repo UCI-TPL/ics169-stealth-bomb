@@ -60,14 +60,21 @@ public class InputManager : MonoBehaviour {
         //     }
         // }
 
-        keyboardEnabled = turnOn;
+        if (turnOn) {
+            ChangeControllerType(3, Controller.Type.MouseKeyboard);
+        }
+        else {
+            ChangeControllerType(3, Controller.Type.Xbox);
+        }
+
+        // keyboardEnabled = turnOn;
     }
 
     // Used to scale controller joystick inputs to camera angle
     protected Vector2 cameraScale;
 
     // Set up controllers
-    private void Awake() {
+    private void Start() {
         // only temporary, need to make going from keyboard to controller more formal and streamlined!!!!!!!!!!
         // controllers[0] = new MouseKeyboard(0);
         keyboardEnabled = false;
@@ -79,27 +86,27 @@ public class InputManager : MonoBehaviour {
 
     // Update every controller every frame
     private void Update() {
-        if (SceneManager.GetActiveScene().name.Equals("mainMenu")) {
-            for (int i = 0; i < controllers.Length; ++i) {
-                if (keyboardEnabled) {
-                    GamePadState testState = GamePad.GetState((PlayerIndex) i);
-                    if (!testState.IsConnected && controllers[i].type != Controller.Type.MouseKeyboard) {
-                        ChangeControllerType(i, Controller.Type.MouseKeyboard);
-                        break;
-                    }
-                    else {
-                        if (testState.IsConnected && controllers[i].type == Controller.Type.MouseKeyboard) {
-                            ChangeControllerType(i, Controller.Type.Xbox);
-                        }
-                    }
-                }
-                else {
-                    if (controllers[i].type == Controller.Type.MouseKeyboard) {
-                        ChangeControllerType(i, Controller.Type.Xbox);
-                    }
-                }
-            }
-        }
+        // if (SceneManager.GetActiveScene().name.Equals("mainMenu")) {
+        //     for (int i = 0; i < controllers.Length; ++i) {
+        //         if (keyboardEnabled) {
+        //             GamePadState testState = GamePad.GetState((PlayerIndex) i);
+        //             if (!testState.IsConnected && controllers[i].type != Controller.Type.MouseKeyboard) {
+        //                 ChangeControllerType(i, Controller.Type.MouseKeyboard);
+        //                 break;
+        //             }
+        //             else {
+        //                 if (testState.IsConnected && controllers[i].type == Controller.Type.MouseKeyboard) {
+        //                     ChangeControllerType(i, Controller.Type.Xbox);
+        //                 }
+        //             }
+        //         }
+        //         else {
+        //             if (controllers[i].type == Controller.Type.MouseKeyboard) {
+        //                 ChangeControllerType(i, Controller.Type.Xbox);
+        //             }
+        //         }
+        //     }
+        // }
 
         cameraScale = new Vector2(Mathf.Sin(Mathf.Deg2Rad * Camera.main.transform.eulerAngles.x), 1);
         for (int i = 0; i < 4; ++i)
@@ -322,7 +329,7 @@ public class InputManager : MonoBehaviour {
             ButtonMaps.Add(ActionCode.Jump, new HashSet<ButtonCode>());
             ButtonMaps.Add(ActionCode.Dodge, new HashSet<ButtonCode>());
             ButtonMaps.Add(ActionCode.Start, new HashSet<ButtonCode>());
-            // SetDefaultMapping();
+            SetDefaultMapping();
         }
 
         
