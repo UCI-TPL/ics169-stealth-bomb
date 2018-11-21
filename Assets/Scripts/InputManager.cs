@@ -58,7 +58,7 @@ public class InputManager : MonoBehaviour {
         // for (int i = 1; i < 4; ++i)
         for (int i = 0; i < 4; ++i)
             controllers[i] = new XboxController(i);
-        ChangeControllerType(0, Controller.Type.MouseKeyboard);
+        ChangeControllerType(3, Controller.Type.MouseKeyboard);
     }
 
     // Update every controller every frame
@@ -223,8 +223,8 @@ public class InputManager : MonoBehaviour {
         private void SetDefaultMapping() {
             ClearAllButtonMapping();
             AddButtonMapping(ActionCode.Attack, ButtonCode.RightBumper);
-            RemoveButtonMapping(ActionCode.Attack, ButtonCode.RightBumper);
-            AddButtonMapping(ActionCode.Jump, ButtonCode.RightBumper);
+            //RemoveButtonMapping(ActionCode.Attack, ButtonCode.RightBumper);
+            //AddButtonMapping(ActionCode.Jump, ButtonCode.RightBumper);
             //AddButtonMapping(ActionCode.Jump, ButtonCode.LeftTrigger);
             AddButtonMapping(ActionCode.Jump, ButtonCode.LeftBumper);
             AddButtonMapping(ActionCode.Dodge, ButtonCode.LeftTrigger);
@@ -282,7 +282,7 @@ public class InputManager : MonoBehaviour {
             ButtonMaps.Add(ActionCode.Attack, new HashSet<ButtonCode>());
             ButtonMaps.Add(ActionCode.Jump, new HashSet<ButtonCode>());
             ButtonMaps.Add(ActionCode.Dodge, new HashSet<ButtonCode>());
-            // SetDefaultMapping();
+            SetDefaultMapping();
         }
 
         

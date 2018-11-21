@@ -221,13 +221,14 @@ public class GameManager : MonoBehaviour {
         public Dictionary<Player, float> initialExperiance;
         public Player[] players;
         public bool isActive {
-            get { return State != GameState.GameOver && State != GameState.Created; }
+            get { return State != GameState.Finished && State != GameState.Created; }
         }
         public GameState State { get; private set; }
         public float StartTime { get; private set; }
         public float ElapsedTime { get { return Time.time - StartTime; } }
         public List<GameObject> activePlayersControllers = new List<GameObject>();
-        private int PlayersKilled = 0;
+        public List<GameObject> ghostPlayersControllers = new List<GameObject>();
+        public int PlayersAlive { get { return activePlayersControllers.Count; } }
 
         public GameRound(Player[] players) {
             this.players = players;
@@ -240,7 +241,7 @@ public class GameManager : MonoBehaviour {
 
         public void EndGame() {
             if (isActive)
-                GameOver();
+                Reset();
         }
 
         public void LoadLevel() {
@@ -251,7 +252,6 @@ public class GameManager : MonoBehaviour {
         public void StartGame() {
             StartTime = Time.time;
             TileManager.tileManager.StartGame();
-            PlayersKilled = 0;
 
             Queue<SpawnTile> spawnPoints = new Queue<SpawnTile>(TileManager.tileManager.tileMap.SpawnTiles);
             FollowTargetsCamera moveCamera = Camera.main.GetComponentInParent<FollowTargetsCamera>();
@@ -268,35 +268,40 @@ public class GameManager : MonoBehaviour {
         }
 
         public IEnumerator Update() {
-            while (isActive) {
-                //print(State);
+            while (State == GameState.Battle || State == GameState.HurryUp) {
                 if (activePlayersControllers.Count < 2)
                     GameOver();
-                else if (State == GameState.Battle && ElapsedTime > GameManager.instance.TimeBeforeCrumble - (GameManager.instance.TimeDecreasePerPlayer * PlayersKilled)) {
-                    TileManager.tileManager.StartCountdown();
-                    State = GameState.HurryUp;
+                switch (State) {
+                    case GameState.Battle:
+                        if (ElapsedTime > GameManager.instance.TimeBeforeCrumble - (GameManager.instance.TimeDecreasePerPlayer * (players.Length - PlayersAlive))) {
+                            TileManager.tileManager.StartCountdown();
+                            State = GameState.HurryUp;
+                        }
+                        break;
                 }
                 yield return null;
             }
         }
 
         private void GameOver() {
-            foreach (Player player in players)
-                player.ResetForRound();
+            State = GameState.ProgressScreen;
+            ProgressScreenUI.Instance.StartProgressScreen().AddListener(Reset);
+        }
+
+        private void Reset() {
             foreach (GameObject g in activePlayersControllers)
                 g.GetComponent<PlayerController>().Destroy();
             foreach (Player player in players)
                 player.OnDeath -= Player_onDeath;
-            State = GameState.GameOver;
+            State = GameState.Finished;
         }
 
         private void Player_onDeath(Player killer, Player killed) {
-            PlayersKilled++;
             activePlayersControllers.Remove(killed.controller.gameObject);
         }
 
         public enum GameState {
-            Created, Loading, Ready, Battle, HurryUp, GameOver
+            Created, Loading, Ready, Battle, HurryUp, ProgressScreen, Finished
         }
     }
 }
