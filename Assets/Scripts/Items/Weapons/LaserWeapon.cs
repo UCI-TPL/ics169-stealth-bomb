@@ -48,6 +48,7 @@ public class LaserWeapon : Weapon {
     protected override void OnChargingUpdate() {
         CurrentBeam.MaxLength = Mathf.Lerp(0, data.maxLength, ChargeLevel);
         CurrentBeam.Width = Mathf.Lerp(data.minWidth, data.maxWidth, ChargeLevel);
+        CurrentBeam.hitCooldown = Mathf.Lerp(data.hitCooldown / 2, data.hitCooldown, ChargeLevel);
     }
 
     // OnRelease is called once when the weapon is released
@@ -78,7 +79,7 @@ public class LaserWeapon : Weapon {
         LaserBeam laserBeam = GameObject.Instantiate<GameObject>(data.LaserBeam.gameObject, player.controller.transform).GetComponent<LaserBeam>();
         laserBeam.OnHit.AddListener((Vector3 origin, GameObject target) => { Hit(origin, target, ChargeLevel); });
         laserBeam.IgnoreCollision = player.controller.gameObject;
-        laserBeam.hitCooldown = data.hitCooldown;
+        //laserBeam.hitCooldown = data.hitCooldown;
         laserBeam.gameObject.SetActive(false);
         return laserBeam;
     }
