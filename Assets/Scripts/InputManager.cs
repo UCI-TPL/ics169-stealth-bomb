@@ -60,6 +60,13 @@ public class InputManager : MonoBehaviour {
         //     }
         // }
 
+        if (turnOn) {
+            ChangeControllerType(3, Controller.Type.MouseKeyboard);
+        }
+        else {
+            ChangeControllerType(3, Controller.Type.Xbox);
+        }
+
         keyboardEnabled = turnOn;
     }
 
@@ -79,27 +86,27 @@ public class InputManager : MonoBehaviour {
 
     // Update every controller every frame
     private void Update() {
-        if (SceneManager.GetActiveScene().name.Equals("mainMenu")) {
-            for (int i = 0; i < controllers.Length; ++i) {
-                if (keyboardEnabled) {
-                    GamePadState testState = GamePad.GetState((PlayerIndex) i);
-                    if (!testState.IsConnected && controllers[i].type != Controller.Type.MouseKeyboard) {
-                        ChangeControllerType(i, Controller.Type.MouseKeyboard);
-                        break;
-                    }
-                    else {
-                        if (testState.IsConnected && controllers[i].type == Controller.Type.MouseKeyboard) {
-                            ChangeControllerType(i, Controller.Type.Xbox);
-                        }
-                    }
-                }
-                else {
-                    if (controllers[i].type == Controller.Type.MouseKeyboard) {
-                        ChangeControllerType(i, Controller.Type.Xbox);
-                    }
-                }
-            }
-        }
+        // if (SceneManager.GetActiveScene().name.Equals("mainMenu")) {
+        //     for (int i = 0; i < controllers.Length; ++i) {
+        //         if (keyboardEnabled) {
+        //             GamePadState testState = GamePad.GetState((PlayerIndex) i);
+        //             if (!testState.IsConnected && controllers[i].type != Controller.Type.MouseKeyboard) {
+        //                 ChangeControllerType(i, Controller.Type.MouseKeyboard);
+        //                 break;
+        //             }
+        //             else {
+        //                 if (testState.IsConnected && controllers[i].type == Controller.Type.MouseKeyboard) {
+        //                     ChangeControllerType(i, Controller.Type.Xbox);
+        //                 }
+        //             }
+        //         }
+        //         else {
+        //             if (controllers[i].type == Controller.Type.MouseKeyboard) {
+        //                 ChangeControllerType(i, Controller.Type.Xbox);
+        //             }
+        //         }
+        //     }
+        // }
 
         cameraScale = new Vector2(Mathf.Sin(Mathf.Deg2Rad * Camera.main.transform.eulerAngles.x), 1);
         for (int i = 0; i < 4; ++i)
