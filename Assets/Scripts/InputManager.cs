@@ -52,7 +52,7 @@ public class InputManager : MonoBehaviour {
     protected Vector2 cameraScale;
 
     // Set up controllers
-    private void Awake() {
+    private void Start() {
         // only temporary, need to make going from keyboard to controller more formal and streamlined!!!!!!!!!!
         // controllers[0] = new MouseKeyboard(0);
         // for (int i = 1; i < 4; ++i)
@@ -282,7 +282,7 @@ public class InputManager : MonoBehaviour {
             ButtonMaps.Add(ActionCode.Attack, new HashSet<ButtonCode>());
             ButtonMaps.Add(ActionCode.Jump, new HashSet<ButtonCode>());
             ButtonMaps.Add(ActionCode.Dodge, new HashSet<ButtonCode>());
-            SetDefaultMapping();
+            // SetDefaultMapping();
         }
 
         
