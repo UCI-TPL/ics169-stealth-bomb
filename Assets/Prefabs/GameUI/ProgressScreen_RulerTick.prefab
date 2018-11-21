@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 114291842163297188}
   - component: {fileID: 114388490143338834}
   m_Layer: 5
-  m_Name: RulerTick
+  m_Name: ProgressScreen_RulerTick
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

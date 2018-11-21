@@ -13,3 +13,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultWeapon: {fileID: 11400000, guid: 402d85fe57f92094685452857a0715b0, type: 2}
   defaultSpecialMove: {fileID: 11400000, guid: 8f845288885848b41a628736545cc5a7, type: 2}
+  Colors:
+  - {r: 1, g: 0.23266676, b: 0.2216981, a: 1}
+  - {r: 0.16509432, g: 0.36372915, b: 1, a: 1}
+  - {r: 0.9733331, g: 1, b: 0, a: 1}
+  - {r: 0, g: 1, b: 0.003575325, a: 1}

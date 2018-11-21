@@ -28,6 +28,8 @@ public class GameManager : MonoBehaviour {
     // Important Data in any non Main Menu scene.
     public Player[] players { get; private set; }
     public Player leader;
+    [Tooltip("Ranks required to win")]
+    public int maxRank = 10;
     [Tooltip("Amount of experiance per precent life dealt")]
     public float ExpGainPerDamage = 0.5f;
     [Tooltip("Amount of experiance for killing blow")]
@@ -220,7 +222,7 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    private class GameRound {
+    public class GameRound {
 
         public Dictionary<Player, float> initialExperiance;
         public Player[] players;
@@ -292,7 +294,7 @@ public class GameManager : MonoBehaviour {
 
         private void GameOver() {
             State = GameState.ProgressScreen;
-            ProgressScreenUI.Instance.StartProgressScreen().AddListener(Reset);
+            ProgressScreenUI.Instance.StartProgressScreen(this).AddListener(Reset);
         }
 
         private void Reset() {

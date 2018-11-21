@@ -11,10 +11,11 @@ public class Player {
     public PlayerData playerData { get; private set; }
 
     public int playerNumber;
-    
+    public Color Color { get { return GameManager.instance.DefaultPlayerData.Colors[playerNumber]; } } // Player's color
+
     public float health { get; private set; }
     public float experiance { get; private set; }
-    public int rank { get { return Mathf.FloorToInt(experiance) + 1; } }
+    public int rank { get { return Mathf.FloorToInt(experiance); } }
 
     private List<Buff> permPowerups = new List<Buff>();
     private List<Buff> buffs = new List<Buff>();
