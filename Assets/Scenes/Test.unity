@@ -1065,10 +1065,14 @@ MonoBehaviour:
   DefaultPlayerData: {fileID: 11400000, guid: a943fa26298abe5409b720607ae16d86, type: 2}
   PlayerPrefab: {fileID: 114453241457146372, guid: 1525c93e4ceebd542b02ed13a439c69e,
     type: 2}
+  GhostPrefab: {fileID: 114915584109743972, guid: 3de74a03e7a0b0a419ba791ce75a70a5,
+    type: 2}
   ExpGainPerDamage: 0.5
   ExpGainOnKill: 0.25
   ExpPenaltyPerLvl: 0.75
   ExpBonusPerLvl: 0.25
+  TimeBeforeCrumble: 30
+  TimeDecreasePerPlayer: 10
   countdown: 3
   countdownText: {fileID: 0}
 --- !u!1 &1515384151

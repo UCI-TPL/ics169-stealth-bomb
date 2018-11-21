@@ -33,6 +33,8 @@ public class Player {
     public delegate void powerupDel(PowerupData powerupData, Buff buff);
     public event powerupDel OnAddPowerUp;
 
+    public bool ghost = false;
+
     // Currently stored weapon
     public WeaponData weaponData;
 
@@ -52,10 +54,20 @@ public class Player {
         experiance = 0;
     }
 
+    public void SetGhost(PlayerController controller)
+    {
+        this.controller = controller;
+        controller.player = this;
+        controller.playerColor = Color.white;
+        controller.EquipWeapon(weaponData.NewInstance(this));
+        ghost = true;
+    }
+
     public void SetController(PlayerController controller) {
         this.controller = controller;
         controller.player = this;
         controller.EquipWeapon(weaponData.NewInstance(this));
+       
     }
 
     public void ResetForRound() {
@@ -105,7 +117,7 @@ public class Player {
 
     /// <summary>Deals damage to this player and returns the percentage of damage dealt</summary>
     public float Hurt(Player damageDealer, float damage) {
-        if (Invincible) //no damage is done if invincable
+        if (Invincible || ghost) //no damage is done if invincable
             return 0.0f;
         float damageDealt = Mathf.Min(damage, health);
         health -= damageDealt;

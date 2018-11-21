@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour {
     [Header("In-game: Player Related")]
     public PlayerData DefaultPlayerData;
     public PlayerController PlayerPrefab;
+    public PlayerController GhostPrefab;
     // Important Data in any non Main Menu scene.
     public Player[] players { get; private set; }
     public Player leader;
@@ -227,7 +228,10 @@ public class GameManager : MonoBehaviour {
         public float StartTime { get; private set; }
         public float ElapsedTime { get { return Time.time - StartTime; } }
         public List<GameObject> activePlayersControllers = new List<GameObject>();
+        public List<GameObject> ghostPlayerControllers = new List<GameObject>();
         private int PlayersKilled = 0;
+
+        public bool roundEnding = false;
 
         public GameRound(Player[] players) {
             this.players = players;
@@ -252,7 +256,7 @@ public class GameManager : MonoBehaviour {
             StartTime = Time.time;
             TileManager.tileManager.StartGame();
             PlayersKilled = 0;
-
+            roundEnding = false;
             Queue<SpawnTile> spawnPoints = new Queue<SpawnTile>(TileManager.tileManager.tileMap.SpawnTiles);
             FollowTargetsCamera moveCamera = Camera.main.GetComponentInParent<FollowTargetsCamera>();
             foreach (Player player in players) {
@@ -266,6 +270,7 @@ public class GameManager : MonoBehaviour {
             State = GameState.Battle;
             GameManager.instance.StartCoroutine(Update());
         }
+
 
         public IEnumerator Update() {
             while (isActive) {
@@ -281,9 +286,12 @@ public class GameManager : MonoBehaviour {
         }
 
         private void GameOver() {
+            roundEnding = true;
             foreach (Player player in players)
                 player.ResetForRound();
             foreach (GameObject g in activePlayersControllers)
+                g.GetComponent<PlayerController>().Destroy();
+            foreach (GameObject g in ghostPlayerControllers)
                 g.GetComponent<PlayerController>().Destroy();
             foreach (Player player in players)
                 player.OnDeath -= Player_onDeath;
@@ -293,6 +301,21 @@ public class GameManager : MonoBehaviour {
         private void Player_onDeath(Player killer, Player killed) {
             PlayersKilled++;
             activePlayersControllers.Remove(killed.controller.gameObject);
+            /*
+            Vector3 deathPosition = killed.controller.transform.position;
+            if(deathPosition.y < 6.5)
+                return;
+            instance.StartCoroutine(InstantiateGhost(killed.playerNumber, killed, deathPosition));
+            */
+        }
+
+        public IEnumerator InstantiateGhost(int killedNum, Player killed, Vector3 deathPosition)
+        {
+            yield return new WaitForSeconds(0.5f);
+            players[killedNum].ResetHealth();
+            players[killedNum].SetGhost(Instantiate<GameObject>(GameManager.instance.GhostPrefab.gameObject, deathPosition, Quaternion.identity).GetComponent<PlayerController>());
+            ghostPlayerControllers.Add(players[killedNum].controller.gameObject);
+            players[killedNum].OnDeath += Player_onDeath;
         }
 
         public enum GameState {
