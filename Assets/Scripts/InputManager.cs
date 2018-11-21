@@ -322,7 +322,7 @@ public class InputManager : MonoBehaviour {
             ButtonMaps.Add(ActionCode.Jump, new HashSet<ButtonCode>());
             ButtonMaps.Add(ActionCode.Dodge, new HashSet<ButtonCode>());
             ButtonMaps.Add(ActionCode.Start, new HashSet<ButtonCode>());
-            // SetDefaultMapping();
+            SetDefaultMapping();
         }
 
         
