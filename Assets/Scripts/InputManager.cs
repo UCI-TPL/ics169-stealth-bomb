@@ -329,7 +329,7 @@ public class InputManager : MonoBehaviour {
             ButtonMaps.Add(ActionCode.Jump, new HashSet<ButtonCode>());
             ButtonMaps.Add(ActionCode.Dodge, new HashSet<ButtonCode>());
             ButtonMaps.Add(ActionCode.Start, new HashSet<ButtonCode>());
-            SetDefaultMapping();
+            // SetDefaultMapping();
         }
 
         
@@ -341,7 +341,7 @@ public class InputManager : MonoBehaviour {
         #region  mapping customization
         public override void setMapping(string a, string b)
         {
-             Debug.Log("add new mapping: button: " + b + " action: " + a);
+            //  Debug.Log("add new mapping: button: " + b + " action: " + a);
             if (a == "move")
             {
                 if (b == "leftStick")

@@ -53,7 +53,7 @@ public class populateList : MonoBehaviour {
 			mapMatrix[i].Add("dodge", "leftTrigger");
 			mapMatrix[i].Add("attack", "rightBumper");
 		}
-		//populateControlLists();
+		populateControlLists();
 		
 	}
 
@@ -158,18 +158,73 @@ public class populateList : MonoBehaviour {
 		string[] sticks = Enum.GetNames(typeof(Sticks));
 		List<string> s = new List<string>(sticks);
 		Move.AddOptions(s);
-		Move.value = 0;
-		Aim.AddOptions(s);
-		Aim.value = 1;
 
 		string[] buttons = Enum.GetNames(typeof(Buttons));
 		List<string> s2 = new List<string>(buttons);
 		Attack.AddOptions(s2);
-		Attack.value = 5;
+		Aim.AddOptions(s);
 		Dodge.AddOptions(s2);
-		Dodge.value = 6;
 		Jump.AddOptions(s2);
+
+		//player one is initialized by value change, and display default
+		im.mapInput("move", mapMatrix[playerID]["move"], 0);
+		Aim.value = 1;
+		Attack.value = 5;
+		Dodge.value = 6;
 		Jump.value = 4;
+
+		//init for player two, three, and four
+		for (int p=1; p<4; ++p)
+		{
+			im.mapInput("move", mapMatrix[playerID]["move"], playerID);
+			im.mapInput("aim", mapMatrix[playerID]["aim"], playerID);
+			im.mapInput("attack", mapMatrix[playerID]["attack"], playerID);
+			im.mapInput("dodge", mapMatrix[playerID]["dodge"], playerID);
+			im.mapInput("jump", mapMatrix[playerID]["jump"], playerID);
+		}
+	}
+
+	public void updatePersonalLists( int id )
+	{
+		Move.value = getButtonNumCode(mapMatrix[id]["move"]);
+		Aim.value = getButtonNumCode(mapMatrix[id]["aim"]);
+		Attack.value = getButtonNumCode(mapMatrix[id]["attack"]);
+		Dodge.value = getButtonNumCode(mapMatrix[id]["dodge"]);
+		Jump.value = getButtonNumCode(mapMatrix[id]["jump"]);
+		
+	}
+
+	private int getButtonNumCode( string action )
+	{
+		int code = -1;
+		switch(action)
+		{
+			case "A":
+				code = 0;
+				break;
+			case "B":
+				code = 1;
+				break;
+			case "X":
+				code = 2;
+				break;
+			case "Y":
+				code = 3;
+				break;
+			case "leftBumper":
+				code = 4;
+				break;
+			case "rightBumper":
+				code = 5;
+				break;
+			case "leftTrigger":
+				code = 6;
+				break;
+			case "rightTrigger":
+				code = 7;
+				break;
+		}
+		return code;
 	}
 
 	public void playerIs(int i)
