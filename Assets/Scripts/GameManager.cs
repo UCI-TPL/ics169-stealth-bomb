@@ -55,9 +55,11 @@ public class GameManager : MonoBehaviour {
     private List<GameRound> rounds = new List<GameRound>();
 
     public void StartGame(bool[] playersReady) {
+        string s = "Players Recieved from Main Menu: ";
         for (int i = 0; i < playersReady.Length; ++i) {
-            Debug.Log("player " + i.ToString() + ": " + playersReady[i].ToString());
+          s += "player " + i.ToString() + ": " + playersReady[i].ToString() + "  ";
         }
+        Debug.Log(s);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         rounds.Clear();
         SetUpPlayers(playersReady);
@@ -115,8 +117,10 @@ public class GameManager : MonoBehaviour {
             }
             else if (scene.name != mainMenuSceneName)           // WE ARE ASSUMING ANYTHING THAT ISN'T THE MAIN MENU IS A LEVEL. THIS IS CLEARLY NOT GOING TO BE THE CASE AT ALL TIMES, SO UPDATE THIS AS NEEDED.
             {
-                if (players == null)
-                    SetUpPlayers(new bool[] { true, true, true, true}); // Set up players if game is not started in main menu
+                if (players == null) {
+                    Debug.LogWarning("GameManager did not recieve players from main menu, defaulting to 4 players on, This is correct if starting editor from game scene");
+                    SetUpPlayers(new bool[] { true, true, true, true }); // Set up players if game is not started in main menu
+                }
             }
             if (countdownText == null)
                 countdownText = GameObject.FindGameObjectWithTag("countdown");
@@ -258,6 +262,11 @@ public class GameManager : MonoBehaviour {
         }
 
         public void StartGame() {
+            string s = "Starting round with players: ";
+            foreach (Player player in players)
+                s += player.playerNumber.ToString() + ", ";
+            Debug.Log(s);
+
             StartTime = Time.time;
             TileManager.tileManager.StartGame();
             

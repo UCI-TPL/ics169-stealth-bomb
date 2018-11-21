@@ -60,7 +60,7 @@ public class ProgressScreenUI : MonoBehaviour {
         StartCoroutine(SlowPause(2, 0.05f));
         SetUpProgressScreen(round);
 
-        InvokeUnscaled(UpdateExperiance, 1.5f);
+        InvokeUnscaled(UpdateExperiance, 1f);
 
         // Setup the closing the progress screen by pressing start
         StartCoroutine(InvokeAfterPressStart(round.players, closeScreen));
