@@ -55,6 +55,7 @@ public class MainMenuManager : MonoBehaviour {
 		currentSettingsMenuButton = 2;
 		timer = 7.5f;
 		hasMoved = false;
+		InputManager.inputManager.UseMouseAndKeyboardForFirstDisconnectedPlayer(false);
 	}
 
 	void Update() {
