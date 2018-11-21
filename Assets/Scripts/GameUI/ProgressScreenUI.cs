@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
+[ExecuteInEditMode]
 [RequireComponent(typeof(Canvas))]
 public class ProgressScreenUI : MonoBehaviour {
     
@@ -21,10 +23,22 @@ public class ProgressScreenUI : MonoBehaviour {
 
     [SerializeField]
     private RectTransform ProgressScreenRect;
+    [SerializeField]
+    private RectTransform PlayerIconsRect;
+
+    [Header("Ruler Settings")]
+    [SerializeField]
+    private RankRulerUI rankRulerUI;
+    [SerializeField]
+    private LayoutElement RulerTextLayoutElement;
 
     // Use this for initialization
     void Awake () {
         canvas = GetComponent<Canvas>();
+    }
+
+    private void Update() {
+        RulerTextLayoutElement.minWidth = RulerTextLayoutElement.preferredWidth = PlayerIconsRect.rect.width;
     }
 
     /// <summary>
@@ -34,8 +48,8 @@ public class ProgressScreenUI : MonoBehaviour {
     public UnityEvent StartProgressScreen() {
         UnityEvent closeScreen = new UnityEvent();
         StopAllCoroutines();
-        DisplayScreen(1.5f);
-        StartCoroutine(SlowPause(5, 0.01f));
+        DisplayScreen(1f);
+        StartCoroutine(SlowPause(2, 0.05f));
         return closeScreen;
     }
 
@@ -48,6 +62,7 @@ public class ProgressScreenUI : MonoBehaviour {
         Vector3 targetPosition = ProgressScreenRect.position; // saves the default position as the target position
         ProgressScreenRect.anchoredPosition = new Vector2(0, -canvas.GetComponent<RectTransform>().rect.height); // Places the screen just under the screen out of view
         StartCoroutine(MoveSmooth(ProgressScreenRect, targetPosition, animDuration));
+        rankRulerUI.SetRange(0, 10);
     }
 
     // Move to a position over a duration and slowing down near end
@@ -55,7 +70,7 @@ public class ProgressScreenUI : MonoBehaviour {
         float endTime = Time.unscaledTime + duration;
         Vector3 distance = rt.position - targetPosition;
         while (endTime > Time.unscaledTime) {
-            rt.position = targetPosition + distance * Mathf.Pow((endTime - Time.unscaledTime) / duration, 2f);
+            rt.position = targetPosition + distance * Mathf.Pow((endTime - Time.unscaledTime) / duration, 3f);
             yield return null;
         }
         rt.position = targetPosition;
