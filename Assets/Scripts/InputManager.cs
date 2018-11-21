@@ -261,11 +261,10 @@ public class InputManager : MonoBehaviour {
         private void SetDefaultMapping() {
             ClearAllButtonMapping();
             AddButtonMapping(ActionCode.Attack, ButtonCode.RightBumper);
-            RemoveButtonMapping(ActionCode.Attack, ButtonCode.RightBumper);
-            AddButtonMapping(ActionCode.Jump, ButtonCode.RightBumper);
-            //AddButtonMapping(ActionCode.Jump, ButtonCode.LeftTrigger);
+            AddButtonMapping(ActionCode.Attack, ButtonCode.RightTrigger);
             AddButtonMapping(ActionCode.Jump, ButtonCode.LeftBumper);
             AddButtonMapping(ActionCode.Dodge, ButtonCode.LeftTrigger);
+            AddButtonMapping(ActionCode.Start, ButtonCode.Start);
             SetMoveJoyStick(JoyStickCode.Left);
             SetAimJoyStick(JoyStickCode.Right);
         }
@@ -312,14 +311,17 @@ public class InputManager : MonoBehaviour {
             ActionTests.Add(ActionCode.Attack, new ButtonTest());
             ActionTests.Add(ActionCode.Jump, new ButtonTest());
             ActionTests.Add(ActionCode.Dodge, new ButtonTest());
+            ActionTests.Add(ActionCode.Start, new ButtonTest());
 
             ActionEvents.Add(ActionCode.Attack, attack);
             ActionEvents.Add(ActionCode.Jump, jump);
             ActionEvents.Add(ActionCode.Dodge, dodge);
+            ActionEvents.Add(ActionCode.Start, start);
 
             ButtonMaps.Add(ActionCode.Attack, new HashSet<ButtonCode>());
             ButtonMaps.Add(ActionCode.Jump, new HashSet<ButtonCode>());
             ButtonMaps.Add(ActionCode.Dodge, new HashSet<ButtonCode>());
+            ButtonMaps.Add(ActionCode.Start, new HashSet<ButtonCode>());
             // SetDefaultMapping();
         }
 
@@ -785,6 +787,7 @@ public class InputManager : MonoBehaviour {
         public readonly ButtonEvent attack = new ButtonEvent();
         public readonly ButtonEvent jump = new ButtonEvent();
         public readonly ButtonEvent dodge = new ButtonEvent();
+        public readonly ButtonEvent start = new ButtonEvent();
         public abstract Vector2 MoveVector();
         public abstract Vector2 AimVector();
 
@@ -797,7 +800,7 @@ public class InputManager : MonoBehaviour {
 
         // List of every PlayerAction available
         public enum ActionCode {
-            Attack, Jump, Dodge
+            Attack, Jump, Dodge, Start
         }
 
         // Type of Controller
