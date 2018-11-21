@@ -53,6 +53,9 @@ public class GameManager : MonoBehaviour {
     private List<GameRound> rounds = new List<GameRound>();
 
     public void StartGame(bool[] playersReady) {
+        for (int i = 0; i < playersReady.Length; ++i) {
+            Debug.Log("player " + i.ToString() + ": " + playersReady[i].ToString());
+        }
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         rounds.Clear();
         SetUpPlayers(playersReady);
