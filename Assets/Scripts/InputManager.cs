@@ -110,6 +110,8 @@ public class InputManager : MonoBehaviour {
         //     }
         // }
 
+        Debug.Log("player 4 controller type: " + controllers[3].type);
+
         cameraScale = new Vector2(Mathf.Sin(Mathf.Deg2Rad * Camera.main.transform.eulerAngles.x), 1);
         for (int i = 0; i < 4; ++i)
             controllers[i].UpdateController();

@@ -71,6 +71,7 @@ public class PlayerJoinManager : MonoBehaviour {
 
 	public void KeyboardActive(bool turnOn) {
 		playerUsingMouseAndKeyboard = turnOn;
+		InputManager.inputManager.UseMouseAndKeyboardForFirstDisconnectedPlayer(turnOn);
 	}
 
 	// void Awake() {
@@ -84,7 +85,7 @@ public class PlayerJoinManager : MonoBehaviour {
 	// }
 
 	// Use this for initialization
-	void Start () {
+	private void Start () {
 		players = new PlayerIndex[4];
 		currentStates = new GamePadState[4];
 		prevStates = new GamePadState[4];
@@ -114,6 +115,7 @@ public class PlayerJoinManager : MonoBehaviour {
 	// NOTE: May want to reimplement Update to function more as a state machine later!!!
 	void Update () {
 		PlayerJoinScreenActive = (currentMenu.getCurrentPanel() == 2);
+		Debug.Log("playerUsingMouseAndKeyboard: " + playerUsingMouseAndKeyboard);
 		if (PlayerJoinScreenActive) 
 		{
 			// checks to see if a player is using mouse and keyboard.

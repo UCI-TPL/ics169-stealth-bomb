@@ -4358,12 +4358,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1155569461314492, guid: 40632a0e2689da549ac1d33e92138743,
     type: 2}
   m_PrefabInternal: {fileID: 513490736}
---- !u!114 &513490738 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 114946860565535868, guid: 40632a0e2689da549ac1d33e92138743,
-    type: 2}
-  m_PrefabInternal: {fileID: 513490736}
-  m_Script: {fileID: 11500000, guid: 830765641182702488086bf34010f242, type: 3}
 --- !u!1001 &524493917
 Prefab:
   m_ObjectHideFlags: 0
@@ -9830,17 +9824,6 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 513490738}
-        m_MethodName: UseMouseAndKeyboardForFirstDisconnectedPlayer
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 200392768}
         m_MethodName: KeyboardActive
         m_Mode: 0
