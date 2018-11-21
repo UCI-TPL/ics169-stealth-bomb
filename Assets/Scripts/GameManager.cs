@@ -258,7 +258,7 @@ public class GameManager : MonoBehaviour {
 
         public void LoadLevel() {
             State = GameState.Loading;
-            TileManager.tileManager.LoadLevel("LoadLevel").AddListener(delegate { State = GameState.Ready; });
+            TileManager.tileManager.LoadLevel("LoadLevel", delegate { State = GameState.Ready; });
         }
 
         public void StartGame() {

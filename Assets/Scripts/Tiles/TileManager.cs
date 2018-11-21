@@ -17,8 +17,6 @@ public class TileManager : MonoBehaviour {
     public Rect mapArea {
         get { return new Rect(center - newRadius + new Vector2(collapseBuffer, collapseBuffer), 2 * (newRadius - new Vector2(collapseBuffer, collapseBuffer))); }
     }
-    // whether the tile manager is done loading next level
-    public bool isLoading { get; private set; }
 
     private static TileManager _tileManager;
     public static TileManager tileManager {
@@ -190,27 +188,24 @@ public class TileManager : MonoBehaviour {
     }
 
     // Removes the old level and loads in new level
-    public UnityEvent LoadLevel(string name) {
+    public void LoadLevel(string name, UnityAction OnFinishLoad) {
         GameObject g = GameObject.Find("Tile Map");
         if (g != null)
             Destroy(g);
         if (pastLevel != null)
             DeleteOldLevel();
         pastLevel = name;
-        UnityEvent onLoad = new UnityEvent();
-        StartCoroutine(LoadLevelAsync(name, onLoad));
-        return onLoad;
+        StartCoroutine(LoadLevelAsync(name, OnFinishLoad));
     }
 
     // Loads scene and starts game once finished
-    private IEnumerator LoadLevelAsync(string name, UnityEvent onLoad) {
-        isLoading = true;
+    private IEnumerator LoadLevelAsync(string name, UnityAction OnFinishLoad) {
         AsyncOperation asyncLoadLevel = SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
         while (!asyncLoadLevel.isDone) {
             yield return new WaitForEndOfFrame();
         }
-        isLoading = false;
-        onLoad.Invoke();
+        if (OnFinishLoad != null)
+            OnFinishLoad.Invoke();
     }
 
     // Remove old scene

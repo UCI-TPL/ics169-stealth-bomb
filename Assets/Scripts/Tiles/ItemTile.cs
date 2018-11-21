@@ -20,7 +20,7 @@ public class ItemTile : Tile {
     private float CooldownPercent {
         get { return (Time.time - cooldownStartTime) / cooldown; }
     }
-    public bool Available { get { return CooldownPercent >= 1; } }
+    public bool Available { get; private set; }
     [SerializeField]
     private float updateRate = 0.25f;
 
@@ -54,6 +54,7 @@ public class ItemTile : Tile {
     // Reset the cooldown by setting required variables
     private void ResetCooldown() {
         cooldownStartTime = Time.time;
+        Available = false;
     }
 
     // Destroy the Spawner as soon as the ground under it is decaying
@@ -68,6 +69,8 @@ public class ItemTile : Tile {
         while (true) {
             if (Physics.OverlapSphere(transform.position, overlapRadius, ItemContainerLayer).Length > 0)
                 ResetCooldown();
+            else if (CooldownPercent > 1)
+                Available = true;
             yield return wait;
         }
     }
