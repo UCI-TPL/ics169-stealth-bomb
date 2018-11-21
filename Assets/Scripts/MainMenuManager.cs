@@ -10,10 +10,9 @@ public class MainMenuManager : MonoBehaviour {
 
 	/*
 	int menu represents the current menu
-	0 - quit
-	1 - main menu
-	2 - selection menu
-	3 - setting menu
+	0 - quit								1 - main menu
+	2 - character selection menu			3 - setting menu
+	4 - settiong : player button mapping	
 	 */
 	private static int menu = 0;
 	
@@ -172,38 +171,12 @@ public class MainMenuManager : MonoBehaviour {
 				settingMenuButtons(3);
 				currentSettingsMenuButton = 3;
 				break;
-			case 4: //player one mapping
+			case 4: //players mapping
 				mainMenuPanel.SetActive(false);
 				selectionMenuPanel.SetActive(false);
 				settingMenuPanel.SetActive(false);
-				// customMappingPanels.SetActive(false);
 				customMappingPanels.SetActive(true);
-				// customMappingPanels.transform.GetChild(0).gameObject.SetActive(true);
 				break;
-			// case 5: //player two mapping
-			// 	mainMenuPanel.SetActive(false);
-			// 	selectionMenuPanel.SetActive(false);
-			// 	settingMenuPanel.SetActive(false);
-			// 	customMappingPanels.SetActive(false);
-			// 	customMappingPanels.SetActive(true);
-			// 	customMappingPanels.transform.GetChild(1).gameObject.SetActive(true);
-			// 	break;
-			// case 6: //playe three mapping
-			// 	mainMenuPanel.SetActive(false);
-			// 	selectionMenuPanel.SetActive(false);
-			// 	settingMenuPanel.SetActive(false);
-			// 	customMappingPanels.SetActive(false);
-			// 	customMappingPanels.SetActive(true);
-			// 	customMappingPanels.transform.GetChild(2).gameObject.SetActive(true);
-			// 	break;
-			// case 7: //player four mapping
-			// 	mainMenuPanel.SetActive(false);
-			// 	selectionMenuPanel.SetActive(false);
-			// 	settingMenuPanel.SetActive(false);
-			// 	customMappingPanels.SetActive(false);
-			// 	customMappingPanels.SetActive(true);
-			// 	customMappingPanels.transform.GetChild(3).gameObject.SetActive(true);
-			// 	break;
 				
 		}
 	}

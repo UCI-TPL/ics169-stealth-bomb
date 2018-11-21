@@ -53,7 +53,7 @@ public class populateList : MonoBehaviour {
 			mapMatrix[i].Add("dodge", "leftTrigger");
 			mapMatrix[i].Add("attack", "rightBumper");
 		}
-		populateControlLists();
+		// populateControlLists();
 		
 	}
 
@@ -174,13 +174,13 @@ public class populateList : MonoBehaviour {
 		Jump.value = 4;
 
 		//init for player two, three, and four
-		for (int p=1; p<4; ++p)
+		for (int p=1; p<3; ++p)
 		{
-			im.mapInput("move", mapMatrix[playerID]["move"], playerID);
-			im.mapInput("aim", mapMatrix[playerID]["aim"], playerID);
-			im.mapInput("attack", mapMatrix[playerID]["attack"], playerID);
-			im.mapInput("dodge", mapMatrix[playerID]["dodge"], playerID);
-			im.mapInput("jump", mapMatrix[playerID]["jump"], playerID);
+			im.mapInput("move", mapMatrix[p]["move"], p);
+			im.mapInput("aim", mapMatrix[p]["aim"], p);
+			im.mapInput("attack", mapMatrix[p]["attack"], p);
+			im.mapInput("dodge", mapMatrix[p]["dodge"], p);
+			im.mapInput("jump", mapMatrix[p]["jump"], p);
 		}
 	}
 
