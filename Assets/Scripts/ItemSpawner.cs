@@ -3,13 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ItemSpawner : MonoBehaviour {
-
-    public GameObject itemContainer;
-    public GameObject powerupContainer;
-    public GameObject weaponContainer;
+    
+    private static ItemSpawner instance;
+    public static ItemSpawner Instance {
+        get {
+            if (instance != null)
+                return instance;
+            instance = FindObjectOfType<ItemSpawner>();
+            if (instance == null)
+                Debug.LogWarning("ItemSpawner not found, Items will not spawn, please add an Item Spawner to GameManager");
+            return instance;
+        }
+    }
+    
     public ItemList itemList;
     public float spawnRateMin;
     public float spawnRateMax;
+
+    private Dictionary<int, List<ItemTile>> SpawnersPerTier = new Dictionary<int, List<ItemTile>>(); 
 
     private float cooldown;
 
@@ -17,15 +28,39 @@ public class ItemSpawner : MonoBehaviour {
         ResetCooldown();
     }
 
+    public void UpdateSpawnPoints(TileMap tileMap) {
+        SpawnersPerTier = new Dictionary<int, List<ItemTile>>();
+        for (int i = 0; i < itemList.tiers.Length; ++i)
+            SpawnersPerTier.Add(i, new List<ItemTile>());
+        foreach (ItemTile itemTile in tileMap.ItemTiles) {
+            for (int tier = itemTile.minTier; tier <= Mathf.Min(itemTile.maxTier, itemList.tiers.Length - 1); ++tier)
+                SpawnersPerTier[tier].Add(itemTile);
+        }
+    }
+
     // Update is called once per frame
     void Update () {
 		if (cooldown <= Time.time) {
             ItemData item = itemList.RandomItem();
-            GameObject g = Instantiate(item.type == ItemData.Type.Powerup ? powerupContainer : item.type == ItemData.Type.Weapon ? weaponContainer : itemContainer, new Vector3(Mathf.Round(Random.Range(TileManager.tileManager.mapArea.min.x, TileManager.tileManager.mapArea.max.x)) +0.5f, transform.position.y + 1.5f, Mathf.Round(Random.Range(TileManager.tileManager.mapArea.min.y, TileManager.tileManager.mapArea.max.y)) +0.5f), Quaternion.identity);
-            g.GetComponent<ItemContainer>().SetItemData(item);
+            List<ItemTile> availableTiles = GetAvailableItemTiles(0);
+            if (availableTiles.Count > 0)
+                availableTiles[Random.Range(0, availableTiles.Count)].SpawnItem(item);
             ResetCooldown();
         }
 	}
+
+    private List<ItemTile> GetAvailableItemTiles(int tier) {
+        List<ItemTile> resultList = new List<ItemTile>();
+        if (!SpawnersPerTier.ContainsKey(tier))
+            return resultList;
+        for (int i = SpawnersPerTier[tier].Count - 1; i >= 0; --i) {
+            if (SpawnersPerTier[tier][i] == null)
+                SpawnersPerTier[tier].RemoveAt(i);
+            else if (SpawnersPerTier[tier][i].Available)
+                resultList.Add(SpawnersPerTier[tier][i]);
+        }
+        return resultList;
+    }
 
     private float ResetCooldown() {
         return cooldown = Time.time + Random.Range(spawnRateMin, spawnRateMax);

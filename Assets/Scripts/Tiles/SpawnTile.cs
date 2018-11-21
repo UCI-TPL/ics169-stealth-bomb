@@ -25,5 +25,9 @@ public class SpawnTile : Tile {
         Gizmos.DrawWireCube(transform.position, transform.lossyScale);
         Gizmos.color = new Color(1, 0.25f, 0.25f, 0.5f);
         Gizmos.DrawCube(transform.position, transform.lossyScale);
+
+#if UNITY_EDITOR
+        Handles.Label(transform.position, "Priority: " + priority.ToString());
+#endif
     }
 }

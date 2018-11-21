@@ -1,22 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using UnityEngine;
 
 public class ItemTile : Tile {
-
+    
     public GameObject itemContainer;
     public GameObject powerupContainer;
     public GameObject weaponContainer;
-    public ItemList itemList;
-    public float spawnRateMin;
-    public float spawnRateMax;
+    public float cooldown = 1;
+    public float overlapRadius = 4;
+    public int minTier = 0;
+    public int maxTier = int.MaxValue;
     public LayerMask ItemContainerLayer;
 
-    private float lastSpawnTime;
-    private float cooldown;
-    private float cooldownPercent {
-        get { return (Time.time - lastSpawnTime) / cooldown; }
+    private float cooldownStartTime = 0;
+    private float CooldownPercent {
+        get { return (Time.time - cooldownStartTime) / cooldown; }
     }
+    public bool Available { get { return CooldownPercent >= 1; } }
     [SerializeField]
     private float updateRate = 0.25f;
 
@@ -26,30 +30,11 @@ public class ItemTile : Tile {
     }
 
     private void Start() {
-        if (itemList == null) {
-            Debug.Log(name + " is missing an Item list for it's drop table, This spawner will be disabled");
-            gameObject.SetActive(false);
-        }
-        ResetCooldown();
-        StartCoroutine(SpawnItems(updateRate));
-    }
-
-    // Continuously spawn items with updates happening at the specified rate
-    private IEnumerator SpawnItems(float updateRate) {
-        yield return new WaitForSeconds(Random.Range(0, updateRate)); // This just slightly offsets it from other spawners with the same update rate
-        WaitForSeconds wait = new WaitForSeconds(updateRate);
-
-        while (true) { // Once the GameManager is implemented change this to run while a game is active
-            if (cooldownPercent >= 1) { // This can be changed to make spawner faster by making it spawn at lower percents
-                SpawnItem(itemList.RandomItem());
-                ResetCooldown();
-            }
-            yield return wait;
-        }
+        StartCoroutine(CheckOverlap(updateRate));
     }
 
     // Spawn the provided item with the correct Item Container
-    private void SpawnItem(ItemData data) {
+    public void SpawnItem(ItemData data) {
         GameObject container;
         switch (data.type) {
             case ItemData.Type.Powerup:
@@ -67,9 +52,8 @@ public class ItemTile : Tile {
     }
 
     // Reset the cooldown by setting required variables
-    private float ResetCooldown() {
-        lastSpawnTime = Time.time;
-        return cooldown = Random.Range(spawnRateMin, spawnRateMax);
+    private void ResetCooldown() {
+        cooldownStartTime = Time.time;
     }
 
     // Destroy the Spawner as soon as the ground under it is decaying
@@ -77,15 +61,35 @@ public class ItemTile : Tile {
         Destroy(gameObject);
     }
 
-    private void OnTriggerStay(Collider other) {
-        if (other.gameObject.GetComponent<ItemContainer>() != null)
-            ResetCooldown();
+    // Continuously check if any items overlap this spawner's area and if so reset the cooldown
+    private IEnumerator CheckOverlap(float updateRate) {
+        WaitForSeconds wait = new WaitForSeconds(updateRate);
+
+        while (true) {
+            if (Physics.OverlapSphere(transform.position, overlapRadius, ItemContainerLayer).Length > 0)
+                ResetCooldown();
+            yield return wait;
+        }
     }
 
     private void OnDrawGizmos() {
-        Gizmos.color = new Color(1f, 1f, 1f, 0.75f);
-        Gizmos.DrawWireCube(transform.position, transform.lossyScale);
-        Gizmos.color = new Color(0.75f, 0.75f, 0.75f, 0.5f);
-        Gizmos.DrawCube(transform.position, transform.lossyScale);
+        if (Available) {
+            Gizmos.color = new Color(0.5f, 1f, 0.5f, 0.75f);
+            Gizmos.DrawWireCube(transform.position, transform.lossyScale);
+            Gizmos.color = new Color(0f, 1f, 0f, 0.75f);
+            Gizmos.DrawCube(transform.position, transform.lossyScale);
+        } else {
+            Gizmos.color = new Color(1f, 0.5f, 0.5f, 0.75f);
+            Gizmos.DrawWireCube(transform.position, transform.lossyScale);
+            Gizmos.color = new Color(1f, 0f, 0f, 0.75f);
+            Gizmos.DrawCube(transform.position, transform.lossyScale);
+        }
+
+        Gizmos.color = new Color(1, 0.25f, 0.25f, 0.15f);
+        Gizmos.DrawSphere(transform.position, overlapRadius);
+
+#if UNITY_EDITOR
+        Handles.Label(transform.position, "Cooldown Time: " + cooldown.ToString());
+#endif
     }
 }

@@ -269,7 +269,8 @@ public class GameManager : MonoBehaviour {
 
             StartTime = Time.time;
             TileManager.tileManager.StartGame();
-            
+
+            ItemSpawner.Instance.UpdateSpawnPoints(TileManager.tileManager.tileMap);
             Queue<SpawnTile> spawnPoints = new Queue<SpawnTile>(TileManager.tileManager.tileMap.SpawnTiles);
             FollowTargetsCamera moveCamera = Camera.main.GetComponentInParent<FollowTargetsCamera>();
             foreach (Player player in players) {
