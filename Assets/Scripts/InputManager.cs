@@ -67,7 +67,7 @@ public class InputManager : MonoBehaviour {
     protected Vector2 cameraScale;
 
     // Set up controllers
-    private void Start() {
+    private void Awake() {
         // only temporary, need to make going from keyboard to controller more formal and streamlined!!!!!!!!!!
         // controllers[0] = new MouseKeyboard(0);
         keyboardEnabled = false;
