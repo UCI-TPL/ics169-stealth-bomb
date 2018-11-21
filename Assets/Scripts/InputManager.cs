@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using XInputDotNetPure;
 
 public class InputManager : MonoBehaviour {
 
     // Returns the current inputManager
     private static InputManager _inputManager;
+    private bool keyboardEnabled;
 
     public static InputManager inputManager {
         get {
@@ -38,14 +40,27 @@ public class InputManager : MonoBehaviour {
         }
     }
 
-    // temporary method for turning on mouse and keyboard controls for player 1
-    public void UseMouseAndKeyboardForPlayer1(bool turnOn) {
-        if (turnOn) {
-            controllers[0] = new MouseKeyboard(0);
-        }
-        else {
-            controllers[0] = new XboxController(0);
-        }
+    // OLD(temporary method for turning on mouse and keyboard controls for player 1)
+    // Current: if turnOn is true, turns on mouse and keyboard for first player in controller index without an active controller.
+    //          if turnOn is false, turns off mouse and keyboard for all players.
+    public void UseMouseAndKeyboardForFirstDisconnectedPlayer(bool turnOn) {
+        // if (turnOn) {
+        //     for (int i = 0; i < controllers.Length; ++i) {
+        //         if (controllers[i].type == Controller.Type.Xbox && !((XboxController) controllers[i]).isActive) {
+        //             ChangeControllerType(i, Controller.Type.MouseKeyboard);
+        //             break;
+        //         }
+        //     }
+        // }
+        // else {
+        //     for (int i = 0; i < controllers.Length; ++i) {
+        //         if (controllers[i].type == Controller.Type.MouseKeyboard) {
+        //             ChangeControllerType(i, Controller.Type.Xbox);
+        //         }
+        //     }
+        // }
+
+        keyboardEnabled = turnOn;
     }
 
     // Used to scale controller joystick inputs to camera angle
@@ -55,14 +70,37 @@ public class InputManager : MonoBehaviour {
     private void Start() {
         // only temporary, need to make going from keyboard to controller more formal and streamlined!!!!!!!!!!
         // controllers[0] = new MouseKeyboard(0);
+        keyboardEnabled = false;
         // for (int i = 1; i < 4; ++i)
         for (int i = 0; i < 4; ++i)
             controllers[i] = new XboxController(i);
-        ChangeControllerType(3, Controller.Type.MouseKeyboard);
+        // ChangeControllerType(0, Controller.Type.MouseKeyboard);
     }
 
     // Update every controller every frame
     private void Update() {
+        if (SceneManager.GetActiveScene().name.Equals("mainMenu")) {
+            for (int i = 0; i < controllers.Length; ++i) {
+                if (keyboardEnabled) {
+                    GamePadState testState = GamePad.GetState((PlayerIndex) i);
+                    if (!testState.IsConnected && controllers[i].type != Controller.Type.MouseKeyboard) {
+                        ChangeControllerType(i, Controller.Type.MouseKeyboard);
+                        break;
+                    }
+                    else {
+                        if (testState.IsConnected && controllers[i].type == Controller.Type.MouseKeyboard) {
+                            ChangeControllerType(i, Controller.Type.Xbox);
+                        }
+                    }
+                }
+                else {
+                    if (controllers[i].type == Controller.Type.MouseKeyboard) {
+                        ChangeControllerType(i, Controller.Type.Xbox);
+                    }
+                }
+            }
+        }
+
         cameraScale = new Vector2(Mathf.Sin(Mathf.Deg2Rad * Camera.main.transform.eulerAngles.x), 1);
         for (int i = 0; i < 4; ++i)
             controllers[i].UpdateController();
@@ -223,11 +261,10 @@ public class InputManager : MonoBehaviour {
         private void SetDefaultMapping() {
             ClearAllButtonMapping();
             AddButtonMapping(ActionCode.Attack, ButtonCode.RightBumper);
-            //RemoveButtonMapping(ActionCode.Attack, ButtonCode.RightBumper);
-            //AddButtonMapping(ActionCode.Jump, ButtonCode.RightBumper);
-            //AddButtonMapping(ActionCode.Jump, ButtonCode.LeftTrigger);
+            AddButtonMapping(ActionCode.Attack, ButtonCode.RightTrigger);
             AddButtonMapping(ActionCode.Jump, ButtonCode.LeftBumper);
             AddButtonMapping(ActionCode.Dodge, ButtonCode.LeftTrigger);
+            AddButtonMapping(ActionCode.Start, ButtonCode.Start);
             SetMoveJoyStick(JoyStickCode.Left);
             SetAimJoyStick(JoyStickCode.Right);
         }
@@ -274,14 +311,17 @@ public class InputManager : MonoBehaviour {
             ActionTests.Add(ActionCode.Attack, new ButtonTest());
             ActionTests.Add(ActionCode.Jump, new ButtonTest());
             ActionTests.Add(ActionCode.Dodge, new ButtonTest());
+            ActionTests.Add(ActionCode.Start, new ButtonTest());
 
             ActionEvents.Add(ActionCode.Attack, attack);
             ActionEvents.Add(ActionCode.Jump, jump);
             ActionEvents.Add(ActionCode.Dodge, dodge);
+            ActionEvents.Add(ActionCode.Start, start);
 
             ButtonMaps.Add(ActionCode.Attack, new HashSet<ButtonCode>());
             ButtonMaps.Add(ActionCode.Jump, new HashSet<ButtonCode>());
             ButtonMaps.Add(ActionCode.Dodge, new HashSet<ButtonCode>());
+            ButtonMaps.Add(ActionCode.Start, new HashSet<ButtonCode>());
             // SetDefaultMapping();
         }
 
@@ -747,6 +787,7 @@ public class InputManager : MonoBehaviour {
         public readonly ButtonEvent attack = new ButtonEvent();
         public readonly ButtonEvent jump = new ButtonEvent();
         public readonly ButtonEvent dodge = new ButtonEvent();
+        public readonly ButtonEvent start = new ButtonEvent();
         public abstract Vector2 MoveVector();
         public abstract Vector2 AimVector();
 
@@ -759,7 +800,7 @@ public class InputManager : MonoBehaviour {
 
         // List of every PlayerAction available
         public enum ActionCode {
-            Attack, Jump, Dodge
+            Attack, Jump, Dodge, Start
         }
 
         // Type of Controller

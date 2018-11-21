@@ -167,8 +167,8 @@ public class MainMenuManager : MonoBehaviour {
 				selectionMenuPanel.SetActive(false);
 				settingMenuPanel.SetActive(true);
 				customMappingPanels.SetActive(false);
-				settingMenuButtons(2);
-				currentSettingsMenuButton = 2;
+				settingMenuButtons(3);
+				currentSettingsMenuButton = 3;
 				break;
 			case 4: //player one mapping
 				mainMenuPanel.SetActive(false);

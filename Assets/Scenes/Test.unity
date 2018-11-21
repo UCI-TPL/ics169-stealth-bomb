@@ -3104,8 +3104,17 @@ MonoBehaviour:
 Transform:
   m_CorrespondingSourceObject: {fileID: 4654388171540258, guid: 6e1c5b92de91e5c4cbf8c3465f6e501f,
     type: 2}
-  m_PrefabInternal: {fileID: 1738452241}
---- !u!1 &1744827747
+  GhostPrefab: {fileID: 114915584109743972, guid: 3de74a03e7a0b0a419ba791ce75a70a5,
+    type: 2}
+  ExpGainPerDamage: 0.5
+  ExpGainOnKill: 0.25
+  ExpPenaltyPerLvl: 0.75
+  ExpBonusPerLvl: 0.25
+  TimeBeforeCrumble: 30
+  TimeDecreasePerPlayer: 10
+  countdown: 3
+  countdownText: {fileID: 0}
+--- !u!1 &1515384151
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 1979667382503732, guid: 4ad7f4d2f3de87e4a859d3de585ea85f,
