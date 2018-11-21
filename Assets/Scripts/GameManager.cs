@@ -175,7 +175,7 @@ public class GameManager : MonoBehaviour {
     /// </summary>
     private void UpdateRank() {
         float highestRank = 0;
-        foreach (Player player in players) {
+        foreach (Player player in GetActivePlayers(players)) {
             if (player.rank > highestRank) {
                 highestRank = player.rank;
                 leader = player;
