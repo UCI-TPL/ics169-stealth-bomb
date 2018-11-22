@@ -215,10 +215,12 @@ public class InputManager : MonoBehaviour {
         private delegate Vector2 TestJoyStick();
 
         // LOTS OF ORGANIZING CODE so that things can be tested with just the enum values
-        private Dictionary<ButtonCode, ButtonTest> ButtonMap = new Dictionary<ButtonCode, ButtonTest>();
-        private Dictionary<JoyStickCode, TestJoyStick> JoyStickMap = new Dictionary<JoyStickCode, TestJoyStick>();
-        private Dictionary<ActionCode, ButtonTest> ActionTests = new Dictionary<ActionCode, ButtonTest>();
-        private Dictionary<ActionCode, ButtonEvent> ActionEvents = new Dictionary<ActionCode, ButtonEvent>();
+        private readonly Dictionary<ButtonCode, ButtonTest> ButtonMap = new Dictionary<ButtonCode, ButtonTest>();
+        private readonly Dictionary<JoyStickCode, TestJoyStick> JoyStickMap = new Dictionary<JoyStickCode, TestJoyStick>();
+        private readonly ButtonTest AttackTest = new ButtonTest();
+        private readonly ButtonTest JumpTest = new ButtonTest();
+        private readonly ButtonTest DodgeTest = new ButtonTest();
+        private readonly ButtonTest StartTest = new ButtonTest();
 
         // Public variables showing what the controlls are currently mapped to
         public readonly Dictionary<ActionCode, HashSet<ButtonCode>> ButtonMaps = new Dictionary<ActionCode, HashSet<ButtonCode>>();
@@ -236,25 +238,40 @@ public class InputManager : MonoBehaviour {
         // Add a button mapping to the specified action
         public void AddButtonMapping(ActionCode action, ButtonCode button) {
             if (ButtonMaps[action].Add(button))
-                ActionTests[action] += ButtonMap[button];
+                TestFromActionCode(action).AddTest(ButtonMap[button]);
         }
 
         // Remove a button mapping from the specified action
         public void RemoveButtonMapping(ActionCode action, ButtonCode button) {
             if (ButtonMaps[action].Remove(button))
-                ActionTests[action] -= ButtonMap[button];
+                TestFromActionCode(action).RemoveTest(ButtonMap[button]);
         }
 
         // Remove all button mappings related to an action
         public void ClearButtonMapping(ActionCode action) {
             ButtonMaps[action].Clear();
-            ActionTests[action].Clear();
+            TestFromActionCode(action).Clear();
         }
 
         // Remove all button mappings for all actions
         public void ClearAllButtonMapping() {
             foreach (ActionCode action in System.Enum.GetValues(typeof(ActionCode))) {
                 ClearButtonMapping(action);
+            }
+        }
+
+        private ButtonTest TestFromActionCode(ActionCode code) {
+            switch(code) {
+                case ActionCode.Attack:
+                    return AttackTest;
+                case ActionCode.Dodge:
+                    return DodgeTest;
+                case ActionCode.Jump:
+                    return JumpTest;
+                case ActionCode.Start:
+                    return StartTest;
+                default:
+                    return AttackTest;
             }
         }
 
@@ -282,14 +299,33 @@ public class InputManager : MonoBehaviour {
 
         // Update button events, invoking them if condition is met
         private void UpdateEvents() {
-            foreach (ActionCode action in System.Enum.GetValues(typeof(ActionCode))) {
-                ActionTests[action].Down(delegate { ActionEvents[action].OnDown.Invoke(); });
-                ActionTests[action].Up(delegate { ActionEvents[action].OnUp.Invoke(); });
-                bool testAll = false;
-                foreach (TestEvent del in ActionTests[action].Pressed.GetInvocationList())
-                    testAll = testAll || del();
-                ActionEvents[action].Pressed = testAll;
-            }
+            AttackTest.Down(delegate { attack.OnDown.Invoke(); });
+            AttackTest.Up(delegate { attack.OnUp.Invoke(); });
+            bool testAll = false;
+            foreach (TestEvent del in AttackTest.Pressed.GetInvocationList())
+                testAll = testAll || del();
+            attack.Pressed = testAll;
+
+            JumpTest.Down(delegate { jump.OnDown.Invoke(); });
+            JumpTest.Up(delegate { jump.OnUp.Invoke(); });
+            testAll = false;
+            foreach (TestEvent del in JumpTest.Pressed.GetInvocationList())
+                testAll = testAll || del();
+            jump.Pressed = testAll;
+
+            DodgeTest.Down(delegate { dodge.OnDown.Invoke(); });
+            DodgeTest.Up(delegate { dodge.OnUp.Invoke(); });
+            testAll = false;
+            foreach (TestEvent del in DodgeTest.Pressed.GetInvocationList())
+                testAll = testAll || del();
+            dodge.Pressed = testAll;
+
+            StartTest.Down(delegate { start.OnDown.Invoke(); });
+            StartTest.Up(delegate { start.OnUp.Invoke(); });
+            testAll = false;
+            foreach (TestEvent del in StartTest.Pressed.GetInvocationList())
+                testAll = testAll || del();
+            start.Pressed = testAll;
         }
 
         // Create a new Xbox controller with the specified player number
@@ -318,16 +354,6 @@ public class InputManager : MonoBehaviour {
             JoyStickMap.Add(JoyStickCode.Left, LeftJoyStickTest);
             JoyStickMap.Add(JoyStickCode.Right, RightJoyStickTest);
             JoyStickMap.Add(JoyStickCode.DPad, DPadJoyStickTest);
-
-            ActionTests.Add(ActionCode.Attack, new ButtonTest());
-            ActionTests.Add(ActionCode.Jump, new ButtonTest());
-            ActionTests.Add(ActionCode.Dodge, new ButtonTest());
-            ActionTests.Add(ActionCode.Start, new ButtonTest());
-
-            ActionEvents.Add(ActionCode.Attack, attack);
-            ActionEvents.Add(ActionCode.Jump, jump);
-            ActionEvents.Add(ActionCode.Dodge, dodge);
-            ActionEvents.Add(ActionCode.Start, start);
 
             ButtonMaps.Add(ActionCode.Attack, new HashSet<ButtonCode>());
             ButtonMaps.Add(ActionCode.Jump, new HashSet<ButtonCode>());
@@ -770,6 +796,18 @@ public class InputManager : MonoBehaviour {
                 Down = delegate { };
                 Up = delegate { };
                 Pressed = delegate { return false; };
+            }
+
+            public void AddTest(ButtonTest other) {
+                Down += other.Down;
+                Up += other.Up;
+                Pressed += other.Pressed;
+            }
+
+            public void RemoveTest(ButtonTest other) {
+                Down -= other.Down;
+                Up -= other.Up;
+                Pressed -= other.Pressed;
             }
 
             // Add a button map

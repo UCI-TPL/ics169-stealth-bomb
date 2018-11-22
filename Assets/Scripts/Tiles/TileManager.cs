@@ -135,7 +135,6 @@ public class TileManager : MonoBehaviour {
             #endif //Editor only tag
             yield return new WaitForSeconds(updateRate);
         } while (ratio > -0.2); // quit loop if something goes wrong
-        LoadLevel("TowerLevel");
     }
 
     // Display a debug area in the scene view showing current state of map collapsing
