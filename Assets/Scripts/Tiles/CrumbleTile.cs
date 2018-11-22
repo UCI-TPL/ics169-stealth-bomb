@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class CrumbleTile : Tile {
 
+    private const int MaxParticles = 150;
+    private readonly static Queue<ParticleSystem> ParticlePool = new Queue<ParticleSystem>();
+    private static Transform ParticlePoolParent;
+
     private Material crumbleMaterial;
     public float shakeCooldown = 0.02f;
     public float destroyEffDuration = 0.5f;
@@ -11,6 +15,13 @@ public class CrumbleTile : Tile {
     public GameObject particles;
 
     private void Start() {
+        if (ParticlePoolParent == null)
+            ParticlePoolParent = new GameObject("CrumbleParticlePool").transform;
+        while (ParticlePool.Count < MaxParticles) { // Preload pool of particle systems during load time, so that play will be smoother(Instantiate is really slow)
+            GameObject g = Instantiate(particles, ParticlePoolParent);
+            g.SetActive(false);
+            ParticlePool.Enqueue(g.GetComponent<ParticleSystem>());
+        }
         crumbleMaterial = GetComponent<Renderer>().material;
         if (crumbleMaterial.shader.name != "Crumble")
             Debug.Log(name + " has incorrect shader, Crumble shader required.");
@@ -18,7 +29,14 @@ public class CrumbleTile : Tile {
 
     protected override void BreakingEffect(float duration) {
         StartCoroutine(CrumbleEffect(duration));
-        Instantiate<GameObject>(particles, transform.position, Quaternion.identity);
+        // Pull out the first particle system from the queue and reinsert it at the end
+        ParticleSystem p = ParticlePool.Dequeue();
+        ParticlePool.Enqueue(p);
+        // Reuse old particle system taken from the pool
+        p.transform.position = transform.position;
+        p.gameObject.SetActive(true);
+        p.Simulate(0, true, true);
+        p.Play(true);
     }
 
     private IEnumerator CrumbleEffect(float duration) {
