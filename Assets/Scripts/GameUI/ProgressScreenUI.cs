@@ -38,7 +38,8 @@ public class ProgressScreenUI : MonoBehaviour {
     [SerializeField]
     private LayoutElement RulerTextLayoutElement;
 
-    private Dictionary<Player, PlayerProgressObject> PlayerUIs = new Dictionary<Player, PlayerProgressObject>();
+    private List<PlayerProgressObject> PlayerUIs = new List<PlayerProgressObject>();
+    private Player[] players;
 
     // Use this for initialization
     void Awake () {
@@ -56,6 +57,7 @@ public class ProgressScreenUI : MonoBehaviour {
     /// <param name="round"> Gameround the progress screen is to display </param>
     /// <param name="action"> Event thats invoked when the progress screen is closed. </param>
     public void StartProgressScreen(GameManager.GameRound round, UnityAction action = null) {
+        players = round.players; // Save list of players
         DisplayScreen(1f);
         StartCoroutine(SlowPause(2, 0.05f));
         SetUpProgressScreen(round);
@@ -73,8 +75,8 @@ public class ProgressScreenUI : MonoBehaviour {
     }
 
     private void UpdateExperiance() {
-        foreach (KeyValuePair<Player, PlayerProgressObject> pair in PlayerUIs) {
-            StartCoroutine(ExperianceOverTime(pair.Value.ExperianceSlider, pair.Key.experiance));
+        for (int i = 0; i < players.Length; ++i) {
+            StartCoroutine(ExperianceOverTime(PlayerUIs[i].ExperianceSlider, players[i].experiance));
         }
     }
 
@@ -121,19 +123,22 @@ public class ProgressScreenUI : MonoBehaviour {
     }
 
     private void SetUpProgressScreen(GameManager.GameRound round) {
-        foreach (KeyValuePair<Player, PlayerProgressObject> pair in PlayerUIs) { // Destroy previous player icons
-            Destroy(pair.Value.GO_icon);
-            Destroy(pair.Value.GO_progressBar);
-        }
-        PlayerUIs.Clear();
-        foreach (Player player in round.players) { // Create new player icons with player colors
-            GameObject playerIcon = Instantiate<GameObject>(PlayerIconPrefab, PlayerIconsRect);
-            playerIcon.GetComponent<Image>().color = player.Color;
-            GameObject playerSlider = Instantiate<GameObject>(ProgressScreenSliderPrefab, ProgressScreenSliderRect);
-            PlayerProgressObject playerProgressObject = new PlayerProgressObject(playerIcon, playerSlider);
+        for (int i = 0; i < players.Length; ++i) {
+            PlayerProgressObject playerProgressObject;
+            if (PlayerUIs.Count <= i) { // If there are not enough already created Player UIs then make a new one
+                GameObject playerIcon = Instantiate<GameObject>(PlayerIconPrefab, PlayerIconsRect);
+                GameObject playerSlider = Instantiate<GameObject>(ProgressScreenSliderPrefab, ProgressScreenSliderRect);
+                playerProgressObject = new PlayerProgressObject(playerIcon, playerSlider);
+                PlayerUIs.Add(playerProgressObject);
+            }
+            else { // Reuse previously created PlayerUIs
+                playerProgressObject = PlayerUIs[i];
+                playerProgressObject.GO_icon.SetActive(true);
+                playerProgressObject.GO_progressBar.SetActive(true);
+            }
+            playerProgressObject.GO_icon.GetComponent<Image>().color = players[i].Color;
             playerProgressObject.ExperianceSlider.maxValue = GameManager.instance.maxRank;
-            playerProgressObject.ExperianceSlider.value = round.initialExperiance[player];
-            PlayerUIs.Add(player, playerProgressObject);
+            playerProgressObject.ExperianceSlider.value = round.initialExperiance[players[i]];
         }
         rankRulerUI.SetRange(0, GameManager.instance.maxRank); // Setup ruler to display number of ranks
     }

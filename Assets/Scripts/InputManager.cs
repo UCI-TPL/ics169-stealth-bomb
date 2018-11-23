@@ -727,8 +727,8 @@ public class InputManager : MonoBehaviour {
         }
 
         private IEnumerator VibrateDuration(float strength, float duration) {
-            float endTime = Time.time + duration;
-            while (endTime >= Time.time) {
+            float endTime = Time.unscaledTime + duration;
+            while (endTime >= Time.unscaledTime) {
                 GamePad.SetVibration(playerIndex, strength, strength);
                 yield return null;
             }
@@ -736,10 +736,10 @@ public class InputManager : MonoBehaviour {
         }
 
         private IEnumerator VibrateDiminish(float strength, float duration) {
-            float endTime = Time.time + duration;
+            float endTime = Time.unscaledTime + duration;
             float newStrength;
-            while (endTime >= Time.time) {
-                newStrength = strength * (-Mathf.Pow(1 - (endTime - Time.time) / duration, 2) + 1);
+            while (endTime >= Time.unscaledTime) {
+                newStrength = strength * (-Mathf.Pow(1 - (endTime - Time.unscaledTime) / duration, 2) + 1);
                 GamePad.SetVibration(playerIndex, newStrength, newStrength);
                 yield return null;
             }

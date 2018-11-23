@@ -48,7 +48,10 @@ public class TileManager : MonoBehaviour {
     private Queue<TileDestroyCalc> TileDestroyQueue;
 
     // List of mesh data for all tiles still in play, Used by MeshCombiner to optimize performance
+    private List<Material> subMeshMaterials;
     private List<TileCombineInstances> subMeshCombineInstances;
+    private MeshRenderer meshRenderer;
+    private MeshFilter meshFilter;
 
     public void StartGame() {
         tileMap = ReadTileMap(); // Read Tile Map currently in scene into memory
@@ -67,6 +70,8 @@ public class TileManager : MonoBehaviour {
 
         TileDestroyQueue = CreateTileMapDestroyCalc(tileMap.Tiles, center, collapseBuffer);
 
+        meshRenderer = GetComponent<MeshRenderer>();
+        meshFilter = GetComponent<MeshFilter>();
         InitializeMeshCombiner();
         UpdateMesh();
 
@@ -83,6 +88,7 @@ public class TileManager : MonoBehaviour {
 
     private void InitializeMeshCombiner() {
         Dictionary<Material, int> materialKey = new Dictionary<Material, int>();
+        subMeshMaterials = new List<Material>();
         subMeshCombineInstances = new List<TileCombineInstances>();
 
         foreach (Tile t in tileMap.Tiles) {
@@ -97,29 +103,33 @@ public class TileManager : MonoBehaviour {
                     subMeshCombineInstances[materialKey[ct.BaseMaterial]].Add(ct, combineInstance);
                 else {
                     materialKey.Add(ct.BaseMaterial, subMeshCombineInstances.Count);
+                    subMeshMaterials.Add(ct.BaseMaterial);
                     subMeshCombineInstances.Add(new TileCombineInstances());
                     subMeshCombineInstances[subMeshCombineInstances.Count - 1].Add(ct, combineInstance);
                 }
             }
         }
-        Material[] subMeshMaterials = new Material[materialKey.Count];
-        foreach (KeyValuePair<Material, int> pair in materialKey)
-            subMeshMaterials[pair.Value] = pair.Key;
-        GetComponent<MeshRenderer>().sharedMaterials = subMeshMaterials;
+        meshRenderer.sharedMaterials = subMeshMaterials.ToArray();
     }
 
     private void UpdateMesh() {
         CombineInstance[] subMeshes = new CombineInstance[subMeshCombineInstances.Count];
-        for (int i = 0; i < subMeshCombineInstances.Count; ++i) {
+        for (int i = subMeshCombineInstances.Count-1; i >= 0; --i) {
             subMeshCombineInstances[i].RemoveExpired();
-            Mesh subMesh = new Mesh();
-            subMesh.CombineMeshes(subMeshCombineInstances[i].combineInstances.ToArray(), true);
-            subMeshes[i] = new CombineInstance { subMeshIndex = 0, mesh = subMesh, transform = Matrix4x4.identity };
+            if (subMeshCombineInstances[i].combineInstances.Count > 0) {
+                Mesh subMesh = new Mesh();
+                subMesh.CombineMeshes(subMeshCombineInstances[i].combineInstances.ToArray(), true);
+                subMeshes[i] = new CombineInstance { subMeshIndex = 0, mesh = subMesh, transform = Matrix4x4.identity };
+            } else {
+                subMeshCombineInstances.RemoveAt(i);
+                subMeshMaterials.RemoveAt(i);
+                meshRenderer.sharedMaterials = subMeshMaterials.ToArray();
+            }
         }
 
         Mesh combinedMesh = new Mesh();
         combinedMesh.CombineMeshes(subMeshes, false);
-        GetComponent<MeshFilter>().sharedMesh = combinedMesh;
+        meshFilter.sharedMesh = combinedMesh;
     }
 
     // Begin shrinking the terrain

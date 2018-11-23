@@ -15,17 +15,24 @@ public class RankRulerUI : MonoBehaviour {
     }
 
     public void SetRange(int minRank, int maxRank) {
-        foreach (RectTransform tick in createdTicks)
-            Destroy(tick.gameObject);
-        createdTicks.Clear();
-        float separator = 1f / (maxRank - minRank);
-        for (int i = maxRank - minRank; i >= 0; --i) {
-            RectTransform newTick = Instantiate<GameObject>(rulerTickPrefab, transform).GetComponent<RectTransform>();
+        int totalRange = maxRank - minRank;
+        float separator = 1f / totalRange;
+        for (int i = totalRange; i >= 0; --i) {
+            RectTransform newTick;
+            if (createdTicks.Count <= totalRange - i) {
+                newTick = Instantiate<GameObject>(rulerTickPrefab, transform).GetComponent<RectTransform>();
+                createdTicks.Add(newTick);
+            }
+            else {
+                newTick = createdTicks[totalRange - i];
+                newTick.gameObject.SetActive(true);
+            }
             newTick.anchorMin = new Vector2(separator * i, 0);
             newTick.anchorMax = new Vector2(separator * i, 1);
             newTick.anchoredPosition = Vector2.zero;
             newTick.GetComponentInChildren<Text>().text = (minRank + i).ToString();
-            createdTicks.Add(newTick);
         }
+        for (int i = totalRange; i < createdTicks.Count; ++i)
+            createdTicks[i].gameObject.SetActive(false);
     }
 }
