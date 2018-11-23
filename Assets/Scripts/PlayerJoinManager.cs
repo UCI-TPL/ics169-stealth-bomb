@@ -119,24 +119,24 @@ public class PlayerJoinManager : MonoBehaviour {
 		if (PlayerJoinScreenActive) 
 		{
 			// checks to see if a player is using mouse and keyboard.
-			// if (playerUsingMouseAndKeyboard) {
-			// 	for (int i = 0; i <= playersReady.Length; i++) {
-			// 		if (i == playersReady.Length) {
-			// 			playerUsingKeyboardIdx = -1;
-			// 			break;
-			// 		}
-			// 		if (InputManager.inputManager.controllers[i].type == InputManager.Controller.Type.MouseKeyboard) {
-			// 			playerUsingKeyboardIdx = i;
-			// 			break;
-			// 		}
-			// 	}
-			// }
+			if (playerUsingMouseAndKeyboard) {
+				for (int i = 0; i <= playersReady.Length; i++) {
+					if (i == playersReady.Length) {
+						playerUsingKeyboardIdx = -1;
+						break;
+					}
+					if (InputManager.inputManager.controllers[i].type == InputManager.Controller.Type.MouseKeyboard) {
+						playerUsingKeyboardIdx = i;
+						break;
+					}
+				}
+			}
 
 			// This loop checks to see which controllers are connected to display confirmation UI element for that controller.
 			for (int i = 0; i < 4; i++) {
 				// prevStates[i] = currentStates[i];
 				// currentStates[i] = GamePad.GetState(players[i]);
-				if (i != 3 || !playerUsingMouseAndKeyboard) {
+				if (i != playerUsingKeyboardIdx || !playerUsingMouseAndKeyboard) {
 					prevStates[i] = currentStates[i];
 					currentStates[i] = GamePad.GetState(players[i]);
 					if (currentStates[i].IsConnected) {
@@ -148,6 +148,9 @@ public class PlayerJoinManager : MonoBehaviour {
 							//calling UI -Kyle
 							selectionOP.playerIs(i);
 							selectionOP.playerConnected();
+
+							// test this line later!!!
+							playersReady[i] = false;
 							
 						}
 					}
@@ -336,7 +339,7 @@ public class PlayerJoinManager : MonoBehaviour {
 				if (numOfPlayersReady >= minNumOfPlayers) {
 					// if conditions met, start the match
 					for (int i = 0; i < playersReady.Length; i++) {
-						if (i == 3 && playerUsingMouseAndKeyboard) {
+						if (i == playerUsingKeyboardIdx && playerUsingMouseAndKeyboard) {
 							if (Input.GetKeyDown(KeyCode.Return)) {
 								GameManager.instance.StartGame(GetPLayerReadyStatusList());
 							}

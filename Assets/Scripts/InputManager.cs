@@ -44,30 +44,30 @@ public class InputManager : MonoBehaviour {
     // Current: if turnOn is true, turns on mouse and keyboard for first player in controller index without an active controller.
     //          if turnOn is false, turns off mouse and keyboard for all players.
     public void UseMouseAndKeyboardForFirstDisconnectedPlayer(bool turnOn) {
-        // if (turnOn) {
-        //     for (int i = 0; i < controllers.Length; ++i) {
-        //         if (controllers[i].type == Controller.Type.Xbox && !((XboxController) controllers[i]).isActive) {
-        //             ChangeControllerType(i, Controller.Type.MouseKeyboard);
-        //             break;
-        //         }
-        //     }
-        // }
-        // else {
-        //     for (int i = 0; i < controllers.Length; ++i) {
-        //         if (controllers[i].type == Controller.Type.MouseKeyboard) {
-        //             ChangeControllerType(i, Controller.Type.Xbox);
-        //         }
-        //     }
-        // }
-
         if (turnOn) {
-            ChangeControllerType(3, Controller.Type.MouseKeyboard);
+            for (int i = 0; i < controllers.Length; ++i) {
+                if (controllers[i].type == Controller.Type.Xbox && !((XboxController) controllers[i]).isActive) {
+                    ChangeControllerType(i, Controller.Type.MouseKeyboard);
+                    break;
+                }
+            }
         }
         else {
-            ChangeControllerType(3, Controller.Type.Xbox);
+            for (int i = 0; i < controllers.Length; ++i) {
+                if (controllers[i].type == Controller.Type.MouseKeyboard) {
+                    ChangeControllerType(i, Controller.Type.Xbox);
+                }
+            }
         }
 
-        // keyboardEnabled = turnOn;
+        // if (turnOn) {
+        //     ChangeControllerType(3, Controller.Type.MouseKeyboard);
+        // }
+        // else {
+        //     ChangeControllerType(3, Controller.Type.Xbox);
+        // }
+
+        keyboardEnabled = turnOn;
     }
 
     // Used to scale controller joystick inputs to camera angle
@@ -88,29 +88,30 @@ public class InputManager : MonoBehaviour {
 
     // Update every controller every frame
     private void Update() {
-        // if (SceneManager.GetActiveScene().name.Equals("mainMenu")) {
-        //     for (int i = 0; i < controllers.Length; ++i) {
-        //         if (keyboardEnabled) {
-        //             GamePadState testState = GamePad.GetState((PlayerIndex) i);
-        //             if (!testState.IsConnected && controllers[i].type != Controller.Type.MouseKeyboard) {
-        //                 ChangeControllerType(i, Controller.Type.MouseKeyboard);
-        //                 break;
-        //             }
-        //             else {
-        //                 if (testState.IsConnected && controllers[i].type == Controller.Type.MouseKeyboard) {
-        //                     ChangeControllerType(i, Controller.Type.Xbox);
-        //                 }
-        //             }
-        //         }
-        //         else {
-        //             if (controllers[i].type == Controller.Type.MouseKeyboard) {
-        //                 ChangeControllerType(i, Controller.Type.Xbox);
-        //             }
-        //         }
-        //     }
-        // }
+        if (SceneManager.GetActiveScene().name.Equals("mainMenu")) {
+            for (int i = 0; i < controllers.Length; ++i) {
+                if (keyboardEnabled) {
+                    GamePadState testState = GamePad.GetState((PlayerIndex) i);
+                    if (!testState.IsConnected /* && controllers[i].type != Controller.Type.MouseKeyboard */) {
+                        if (controllers[i].type != Controller.Type.MouseKeyboard)
+                            ChangeControllerType(i, Controller.Type.MouseKeyboard);
+                        break;
+                    }
+                    else {
+                        if (testState.IsConnected && controllers[i].type == Controller.Type.MouseKeyboard) {
+                            ChangeControllerType(i, Controller.Type.Xbox);
+                        }
+                    }
+                }
+                else {
+                    if (controllers[i].type == Controller.Type.MouseKeyboard) {
+                        ChangeControllerType(i, Controller.Type.Xbox);
+                    }
+                }
+            }
+        }
 
-        Debug.Log("player 4 controller type: " + controllers[3].type);
+        Debug.Log("players' controller types: " + controllers[0].type + controllers[1].type + controllers[2].type + controllers[3].type);
 
         cameraScale = new Vector2(Mathf.Sin(Mathf.Deg2Rad * Camera.main.transform.eulerAngles.x), 1);
         for (int i = 0; i < 4; ++i)
