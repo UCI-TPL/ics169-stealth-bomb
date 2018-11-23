@@ -53,9 +53,9 @@ public class ProgressScreenUI : MonoBehaviour {
     /// <summary>
     /// Displays the progress screen overlay, and pauses game.
     /// </summary>
-    /// <returns> Event thats invoked when the progress screen is closed. </returns>
-    public UnityEvent StartProgressScreen(GameManager.GameRound round) {
-        UnityEvent closeScreen = new UnityEvent();
+    /// <param name="round"> Gameround the progress screen is to display </param>
+    /// <param name="action"> Event thats invoked when the progress screen is closed. </param>
+    public void StartProgressScreen(GameManager.GameRound round, UnityAction action = null) {
         DisplayScreen(1f);
         StartCoroutine(SlowPause(2, 0.05f));
         SetUpProgressScreen(round);
@@ -63,14 +63,13 @@ public class ProgressScreenUI : MonoBehaviour {
         InvokeUnscaled(UpdateExperiance, 1f);
 
         // Setup the closing the progress screen by pressing start
-        StartCoroutine(InvokeAfterPressStart(round.players, closeScreen));
-        closeScreen.AddListener(delegate {
+        StartCoroutine(InvokeOnPressStart(round.players, delegate {
             StopAllCoroutines(); // Ensure all coroutines and invokes are reset
             CancelInvoke();
             Time.timeScale = 1;
+            action.Invoke();
             ProgressScreenRect.gameObject.SetActive(false);
-        });
-        return closeScreen;
+        }));
     }
 
     private void UpdateExperiance() {
@@ -94,19 +93,20 @@ public class ProgressScreenUI : MonoBehaviour {
     }
 
     /// <summary>
-    /// Invokes the event after an of the listed players press start
+    /// Invokes the event after any of the listed players press start
     /// </summary>
     /// <param name="players"> List of players to listen to </param>
     /// <param name="unityEvent"> Event to be invoked </param>
-    /// <returns></returns>
-    private IEnumerator InvokeAfterPressStart(Player[] players, UnityEvent unityEvent) {
-        bool testStartPressed = false;
-        while (!testStartPressed) {
-            foreach (Player player in players)
-                testStartPressed = testStartPressed || InputManager.inputManager.controllers[player.playerNumber].start.Pressed;
+    private IEnumerator InvokeOnPressStart(Player[] players, UnityAction action) {
+        bool pressedStart = false;
+        UnityAction checkStart = delegate { pressedStart = true; };
+        foreach (Player player in players)
+            InputManager.inputManager.controllers[player.playerNumber].start.OnDown.AddListener(checkStart);
+        while (!pressedStart)
             yield return null;
-        }
-        unityEvent.Invoke();
+        foreach (Player player in players)
+            InputManager.inputManager.controllers[player.playerNumber].start.OnDown.RemoveListener(checkStart);
+        action.Invoke();
     }
 
     /// <summary>

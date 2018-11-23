@@ -146,7 +146,7 @@ public class Player {
 
         if (OnUpdate != null)
             OnUpdate(this);
-        if (controller.isMoving && controller.isGrounded)
+        if (controller.IsMoving && controller.IsGrounded)
             if (OnMove != null)
                 OnMove(this);
 

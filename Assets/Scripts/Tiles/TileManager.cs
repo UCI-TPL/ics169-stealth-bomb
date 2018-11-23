@@ -47,6 +47,9 @@ public class TileManager : MonoBehaviour {
 
     private Queue<TileDestroyCalc> TileDestroyQueue;
 
+    // List of mesh data for all tiles still in play, Used by MeshCombiner to optimize performance
+    private List<TileCombineInstances> subMeshCombineInstances;
+
     public void StartGame() {
         tileMap = ReadTileMap(); // Read Tile Map currently in scene into memory
         if (tileMap == null || tileMap.Tiles.Length == 0) { // If no map, create a random map
@@ -63,27 +66,61 @@ public class TileManager : MonoBehaviour {
         newRadius = radius;
 
         TileDestroyQueue = CreateTileMapDestroyCalc(tileMap.Tiles, center, collapseBuffer);
-        
+
+        InitializeMeshCombiner();
+        UpdateMesh();
+
         StopAllCoroutines();
+        StartCoroutine(UpdateMeshRepeat(warningTimer));
     }
 
-    //private void UpdateMesh() {
-    //    if (GameObject.Find("Tile Map") != null) {
-    //        MeshFilter[] filters = GameObject.Find("Tile Map").GetComponentsInChildren<MeshFilter>();
-    //        Mesh test = new Mesh();
-    //        CombineInstance[] combines = new CombineInstance[filters.Length];
+    private IEnumerator UpdateMeshRepeat(float updateRate) {
+        while (newRadius.x > 0) {
+            UpdateMesh();
+            yield return new WaitForSeconds(updateRate);
+        }
+    }
 
-    //        for (int i = 0; i < filters.Length; ++i) {
-    //            combines[i].subMeshIndex = 0;
-    //            combines[i].mesh = filters[i].sharedMesh;
-    //            combines[i].transform = filters[i].transform.localToWorldMatrix;
-    //        }
+    private void InitializeMeshCombiner() {
+        Dictionary<Material, int> materialKey = new Dictionary<Material, int>();
+        subMeshCombineInstances = new List<TileCombineInstances>();
 
-    //        test.CombineMeshes(combines, false);
+        foreach (Tile t in tileMap.Tiles) {
+            if (t != null && t.GetType() == typeof(CrumbleTile)) {
+                CrumbleTile ct = (CrumbleTile)t;
+                CombineInstance combineInstance = new CombineInstance {
+                    subMeshIndex = 0,
+                    mesh = ct.meshFilter.sharedMesh,
+                    transform = ct.transform.localToWorldMatrix
+                };
+                if (materialKey.ContainsKey(ct.BaseMaterial))
+                    subMeshCombineInstances[materialKey[ct.BaseMaterial]].Add(ct, combineInstance);
+                else {
+                    materialKey.Add(ct.BaseMaterial, subMeshCombineInstances.Count);
+                    subMeshCombineInstances.Add(new TileCombineInstances());
+                    subMeshCombineInstances[subMeshCombineInstances.Count - 1].Add(ct, combineInstance);
+                }
+            }
+        }
+        Material[] subMeshMaterials = new Material[materialKey.Count];
+        foreach (KeyValuePair<Material, int> pair in materialKey)
+            subMeshMaterials[pair.Value] = pair.Key;
+        GetComponent<MeshRenderer>().sharedMaterials = subMeshMaterials;
+    }
 
-    //        GetComponent<MeshFilter>().sharedMesh = test;
-    //    }
-    //}
+    private void UpdateMesh() {
+        CombineInstance[] subMeshes = new CombineInstance[subMeshCombineInstances.Count];
+        for (int i = 0; i < subMeshCombineInstances.Count; ++i) {
+            subMeshCombineInstances[i].RemoveExpired();
+            Mesh subMesh = new Mesh();
+            subMesh.CombineMeshes(subMeshCombineInstances[i].combineInstances.ToArray(), true);
+            subMeshes[i] = new CombineInstance { subMeshIndex = 0, mesh = subMesh, transform = Matrix4x4.identity };
+        }
+
+        Mesh combinedMesh = new Mesh();
+        combinedMesh.CombineMeshes(subMeshes, false);
+        GetComponent<MeshFilter>().sharedMesh = combinedMesh;
+    }
 
     // Begin shrinking the terrain
     public void StartCountdown() {
@@ -171,9 +208,9 @@ public class TileManager : MonoBehaviour {
 
     // Destroys all tiles in that z and x position
     private IEnumerator DestroyPillar(int col, int row) {
-        for (int height = 0; height < tileMap.Tiles.GetLength(1); ++height) {
-            if (tileMap.Tiles[col, height, row] != null)
-                tileMap.Tiles[col, height, row].Destroy(warningTimer); // Destroy tile after warning time
+        foreach (Tile t in tileMap.GetPillar(col, row)) {
+            if (t != null)
+                t.Destroy(warningTimer); // Destroy tile after warning time
             yield return new WaitForSeconds(pillarDestroyDelay);
         }
     }
@@ -229,6 +266,24 @@ public class TileManager : MonoBehaviour {
                 return other.destroyDistance.CompareTo(destroyDistance);
             else
                 throw new ArgumentException("Object is not a TileDestroyCalc");
+        }
+    }
+
+    private class TileCombineInstances {
+        public List<CrumbleTile> tiles = new List<CrumbleTile>();
+        public List<CombineInstance> combineInstances = new List<CombineInstance>();
+
+        public void Add(CrumbleTile tile, CombineInstance combineInstance) {
+            tiles.Add(tile);
+            combineInstances.Add(combineInstance);
+        }
+
+        public void RemoveExpired() {
+            for (int i = tiles.Count - 1; i >= 0; --i)
+                if (tiles[i] == null || tiles[i].crumbling) {
+                    tiles.RemoveAt(i);
+                    combineInstances.RemoveAt(i);
+                }
         }
     }
 }

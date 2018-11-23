@@ -14,6 +14,11 @@ public class CrumbleTile : Tile {
     public float destroyEffSpeed = 5f;
     public GameObject particles;
 
+    public Material BaseMaterial;
+    public MeshFilter meshFilter;
+    private MeshRenderer meshRenderer;
+    public bool crumbling = false;
+
     private void Start() {
         if (ParticlePoolParent == null)
             ParticlePoolParent = new GameObject("CrumbleParticlePool").transform;
@@ -25,9 +30,13 @@ public class CrumbleTile : Tile {
         crumbleMaterial = GetComponent<Renderer>().material;
         if (crumbleMaterial.shader.name != "Crumble")
             Debug.Log(name + " has incorrect shader, Crumble shader required.");
+        crumbleMaterial.SetFloat("Vector1_674F81FE", Random.Range(0, 100f)); // Set shader dissolve level
+        meshFilter = GetComponent<MeshFilter>();
+        meshRenderer = GetComponent<MeshRenderer>();
     }
 
     protected override void BreakingEffect(float duration) {
+        meshRenderer.enabled = crumbling = true;
         StartCoroutine(CrumbleEffect(duration));
         // Pull out the first particle system from the queue and reinsert it at the end
         ParticleSystem p = ParticlePool.Dequeue();
@@ -48,7 +57,7 @@ public class CrumbleTile : Tile {
         float scaleVelocity = 0;
         while (endTime >= Time.time) {
             if (shakeTimer <= Time.time) {
-                targetScale = Random.Range(0.9f, 1.1f);
+                targetScale = Random.Range(1.01f, 1.2f);
                 shakeTimer = Mathf.Max(Time.time, shakeTimer + shakeCooldown);
             }
             currentScale = Mathf.SmoothDamp(currentScale, targetScale, ref scaleVelocity, shakeCooldown);

@@ -304,7 +304,7 @@ public class GameManager : MonoBehaviour {
 
         private void GameOver() {
             State = GameState.ProgressScreen;
-            ProgressScreenUI.Instance.StartProgressScreen(this).AddListener(Reset);
+            ProgressScreenUI.Instance.StartProgressScreen(this, Reset);
         }
 
         private void Reset() {

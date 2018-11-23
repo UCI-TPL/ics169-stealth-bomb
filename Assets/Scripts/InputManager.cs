@@ -88,6 +88,7 @@ public class InputManager : MonoBehaviour {
             controllers[i] = new XboxController(i);
         // ChangeControllerType(0, Controller.Type.MouseKeyboard);
 #if UNITY_ANDROID || UNITY_IOS
+        Debug.Log("Mobile Device Detected");
         ChangeControllerType(0, Controller.Type.TouchScreen);
 #endif
     }
@@ -751,10 +752,12 @@ public class InputManager : MonoBehaviour {
 
         // Update This controller's events
         public override void UpdateController() {
+#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
             prevState = state;
             state = GamePad.GetState(playerIndex);
             if (isActive)
                 UpdateEvents();
+#endif
         }
 
         // Compare ButtonStates and return whether the button had just been pressed
@@ -866,6 +869,13 @@ public class InputManager : MonoBehaviour {
         }
 
         public override void UpdateController() {
+            bool anyTouch = false;
+            foreach (Touch touch in Input.touches)
+                if (touch.phase == TouchPhase.Began)
+                    anyTouch = true;
+            if (anyTouch)
+                start.OnDown.Invoke();
+
             if (RightTouchStart.x < 0) {
                 foreach (Touch touch in Input.touches) {
                     if (touch.phase == TouchPhase.Began && touch.position.x < Camera.main.pixelWidth / 2) {

@@ -49,7 +49,7 @@ MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1965115019997768}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -112,3 +112,6 @@ MonoBehaviour:
   destroyEffDuration: 0.5
   destroyEffSpeed: 5
   particles: {fileID: 1951624619801250, guid: 708f4849a0de89348b0f4dc761d0091c, type: 2}
+  BaseMaterial: {fileID: 2100000, guid: 8c460df70ef1fcd42810a0b38a3f23ca, type: 2}
+  BaseMesh: {fileID: 4300000, guid: 2e4922b834fda7e41b0708ad9da381eb, type: 3}
+  crumbling: 0
