@@ -7,7 +7,6 @@ public class PlayerUI_inGame : MonoBehaviour {
     private PlayerController playerCon;                         // Player Controller already gets the Player object for us, so just use that one.
     [Header("HP Bar")]
     public RectTransform playerUI_HPCanvas;
-    public RectTransform playerUI_HPMaskCanvas;
     public UnityEngine.UI.Image playerUI_healthBar;
 
     [Header("Aiming Arrow")]
@@ -16,34 +15,23 @@ public class PlayerUI_inGame : MonoBehaviour {
 
     // flags for rendering player UI
     private bool HP_CoroutineActive = false;
+    private Transform cameraTransform;
 
     void Awake()
     {
         playerCon = gameObject.GetComponent<PlayerController>();
         // To have HP bar render all the time remove this code, as well as code in the HurtPlayer method in Player.cs
         playerUI_HPCanvas.gameObject.SetActive(false);
-        playerUI_HPMaskCanvas.gameObject.SetActive(false);
+        cameraTransform = Camera.main.transform;
     }
 
     void LateUpdate()
     {
-        // MOVE THIS CRAP OUT INTO A SEPARATE SCRIPT EVENTUALLY.
-        if (playerCon.player.health < playerCon.player.stats.maxHealth)
-        {
-            playerUI_HPCanvas.gameObject.SetActive(true);
-            playerUI_HPMaskCanvas.gameObject.SetActive(true);
-        }
-        else
-        {
-            playerUI_HPCanvas.gameObject.SetActive(false);
-            playerUI_HPMaskCanvas.gameObject.SetActive(false);
-        }
-        playerUI_HPCanvas.rotation = Quaternion.Euler(90f, Camera.main.transform.rotation.eulerAngles.y, 0f);
-        playerUI_HPMaskCanvas.rotation = Quaternion.Euler(90f, Camera.main.transform.rotation.eulerAngles.y, 0f);
+        playerUI_HPCanvas.gameObject.SetActive(playerCon.player.health < playerCon.player.stats.maxHealth);
+        playerUI_HPCanvas.rotation = Quaternion.Euler(90f, cameraTransform.rotation.eulerAngles.y, 0f);
         playerUI_healthBar.fillAmount = playerCon.player.health / playerCon.player.stats.maxHealth;
 
         // Aiming Arrow Fill Amount
-        playerUI_AimArrowMaskL.fillAmount = playerCon.player.controller.Weapon.ChargeLevel;
-        playerUI_AimArrowMaskR.fillAmount = playerCon.player.controller.Weapon.ChargeLevel;
+        playerUI_AimArrowMaskL.fillAmount = playerUI_AimArrowMaskR.fillAmount  = playerCon.Weapon.ChargeLevel;
     }
 }

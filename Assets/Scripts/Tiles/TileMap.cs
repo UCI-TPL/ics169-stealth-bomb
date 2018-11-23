@@ -45,4 +45,29 @@ public class TileMap {
         }
         return tiles;
     }
+
+    /// <summary>
+    /// Searches through the tile map for all tiles in the y axis for a given x and z cord
+    /// </summary>
+    /// <param name="x"> X position in the TileMap </param>
+    /// <param name="z"> Z position in the TileMap </param>
+    /// <param name="startHeight"> Starting height to search from </param>
+    /// <param name="checkNull"> Whether null tiles should be ignored </param>
+    /// <returns> Array of all Tiles with the given cords </returns>
+    public Tile[] GetPillar(int x, int z, int startHeight = 0, bool checkNull = false) {
+        if (checkNull) {
+            List<Tile> result = new List<Tile>();
+            for (int height = startHeight; height < Tiles.GetLength(1); ++height) {
+                if (Tiles[x, height, z] != null)
+                    result.Add(Tiles[x, height, z]);
+            }
+            return result.ToArray();
+        } else {
+            Tile[] result = new Tile[Mathf.Max(Tiles.GetLength(1) - startHeight, 0)];
+            for (int height = startHeight; height < Tiles.GetLength(1); ++height) {
+                result[height - startHeight] = Tiles[x, height, z];
+            }
+            return result;
+        }
+    }
 }

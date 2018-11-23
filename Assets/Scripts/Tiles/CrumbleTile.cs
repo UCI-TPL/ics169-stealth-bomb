@@ -4,21 +4,48 @@ using UnityEngine;
 
 public class CrumbleTile : Tile {
 
+    private const int MaxParticles = 150;
+    private readonly static Queue<ParticleSystem> ParticlePool = new Queue<ParticleSystem>();
+    private static Transform ParticlePoolParent;
+
     private Material crumbleMaterial;
     public float shakeCooldown = 0.02f;
     public float destroyEffDuration = 0.5f;
     public float destroyEffSpeed = 5f;
     public GameObject particles;
 
+    public Material BaseMaterial;
+    public MeshFilter meshFilter;
+    private MeshRenderer meshRenderer;
+    public bool crumbling = false;
+
     private void Start() {
+        if (ParticlePoolParent == null)
+            ParticlePoolParent = new GameObject("CrumbleParticlePool").transform;
+        while (ParticlePool.Count < MaxParticles) { // Preload pool of particle systems during load time, so that play will be smoother(Instantiate is really slow)
+            GameObject g = Instantiate(particles, ParticlePoolParent);
+            g.SetActive(false);
+            ParticlePool.Enqueue(g.GetComponent<ParticleSystem>());
+        }
         crumbleMaterial = GetComponent<Renderer>().material;
         if (crumbleMaterial.shader.name != "Crumble")
             Debug.Log(name + " has incorrect shader, Crumble shader required.");
+        crumbleMaterial.SetFloat("Vector1_674F81FE", Random.Range(0, 100f)); // Set shader dissolve level
+        meshFilter = GetComponent<MeshFilter>();
+        meshRenderer = GetComponent<MeshRenderer>();
     }
 
     protected override void BreakingEffect(float duration) {
+        meshRenderer.enabled = crumbling = true;
         StartCoroutine(CrumbleEffect(duration));
-        Instantiate<GameObject>(particles, transform.position, Quaternion.identity);
+        // Pull out the first particle system from the queue and reinsert it at the end
+        ParticleSystem p = ParticlePool.Dequeue();
+        ParticlePool.Enqueue(p);
+        // Reuse old particle system taken from the pool
+        p.transform.position = transform.position;
+        p.gameObject.SetActive(true);
+        p.Simulate(0, true, true);
+        p.Play(true);
     }
 
     private IEnumerator CrumbleEffect(float duration) {
@@ -30,7 +57,7 @@ public class CrumbleTile : Tile {
         float scaleVelocity = 0;
         while (endTime >= Time.time) {
             if (shakeTimer <= Time.time) {
-                targetScale = Random.Range(0.9f, 1.1f);
+                targetScale = Random.Range(1.01f, 1.2f);
                 shakeTimer = Mathf.Max(Time.time, shakeTimer + shakeCooldown);
             }
             currentScale = Mathf.SmoothDamp(currentScale, targetScale, ref scaleVelocity, shakeCooldown);

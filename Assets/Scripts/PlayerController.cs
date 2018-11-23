@@ -69,19 +69,25 @@ public class PlayerController : MonoBehaviour {
     // Event Call back for when the gameobject is destroyed
     public readonly UnityEvent OnDestroyEvent = new UnityEvent();
 
-    public bool isGrounded {
+    private float lastGroundCheck = 0;
+    private bool isGrounded = false;
+    public bool IsGrounded {
         get {
-            if (touchedGround) {
-                if (CheckGroundDistance() < maxGroundDistance) {
-                    return true;
+            if (lastGroundCheck == Time.fixedTime)
+                return isGrounded;
+            else {
+                lastGroundCheck = Time.fixedTime;
+                if (touchedGround) {
+                    if (CheckGroundDistance() < maxGroundDistance)
+                        return isGrounded = true;
+                    touchedGround = false;
                 }
-                touchedGround = false;
+                return isGrounded = false;
             }
-            return false;
         }
     }
 
-    public bool isMoving {
+    public bool IsMoving {
         get { return rb.velocity.magnitude > 0.1f; }
     }
 
@@ -132,7 +138,7 @@ public class PlayerController : MonoBehaviour {
     // Perform movement every physics update
     private void FixedUpdate() {
         if(!dodging && !rolling)
-            Move(isGrounded ? player.stats.moveSpeed : player.stats.airSpeed);
+            Move(IsGrounded ? player.stats.moveSpeed : player.stats.airSpeed);
         else
             Move(dodgeSpeed); //hopefully this allows air dodges
         if (input.controllers[player.playerNumber].jump.Pressed) {
@@ -150,7 +156,7 @@ public class PlayerController : MonoBehaviour {
         crown.SetActive(player == GameManager.instance.leader);
 
         Vector2 horizontalVector = input.controllers[player.playerNumber].AimVector();
-        Debug.DrawRay(transform.position, transform.forward*100, Color.white);
+        //Debug.DrawRay(transform.position, transform.forward*100, Color.white);
         Vector3 scaledVector = (horizontalVector.y * forward) + (horizontalVector.x * right);
         if (scaledVector != Vector3.zero)
             transform.forward = scaledVector;
@@ -176,7 +182,7 @@ public class PlayerController : MonoBehaviour {
         }
 
         Vector3 frictionVector;
-        if (isGrounded) // If grounded apply friction
+        if (IsGrounded) // If grounded apply friction
             frictionVector = -friction * rb.velocity; // Friction is a negative percentage of current velocity
         else  { // In air apply Air Resistance
             Vector3 upVector = Vector3.Project(rb.velocity, Physics.gravity); // get upwardVelocity with respect to gravity, if for some reason gravity is not straight down this will still work
@@ -189,9 +195,9 @@ public class PlayerController : MonoBehaviour {
             frictionVector = -airResistance * scaledVelocity; // Friction is a negative percentage of current velocity
         }
         // Debug.DrawRay(floorCollider.transform.position + Vector3.down * floorCollider.bounds.extents.y, frictionVector, Color.blue);
-        Debug.DrawRay(floorCollider.transform.position + Vector3.down * floorCollider.bounds.extents.y, scaledVector, Color.green);
+        //Debug.DrawRay(floorCollider.transform.position + Vector3.down * floorCollider.bounds.extents.y, scaledVector, Color.green);
         frictionVector -= Vector3.Project(frictionVector, scaledVector); // Scale friction to remove the forward direction, so friction doesnt slow player in moving direction
-        Debug.DrawRay(floorCollider.transform.position + Vector3.down * floorCollider.bounds.extents.y, frictionVector, Color.red);
+        //Debug.DrawRay(floorCollider.transform.position + Vector3.down * floorCollider.bounds.extents.y, frictionVector, Color.red);
         rb.velocity += frictionVector * Time.fixedDeltaTime; // Add friction to velocity
 
         if (allowMovement) {
@@ -208,7 +214,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void SpecialMove() {
-        if (allowAttack && isGrounded)
+        if (allowAttack && IsGrounded)
             player.specialMove.Activate();
     }
 
@@ -219,7 +225,7 @@ public class PlayerController : MonoBehaviour {
 
     // Attempt to perform a jump
     private void Jump() {
-        if (jumpedReleased && allowMovement && isGrounded) { //Checking if on the ground and movement is allowed
+        if (jumpedReleased && allowMovement && IsGrounded) { //Checking if on the ground and movement is allowed
             jumpedReleased = false;
             jumped = true;
             rb.velocity = rb.velocity += (2 * -Physics.gravity * player.stats.jumpForce * jumpGravityMultiplier).Sqrt();

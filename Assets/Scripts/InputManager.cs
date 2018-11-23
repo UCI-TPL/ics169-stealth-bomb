@@ -37,6 +37,9 @@ public class InputManager : MonoBehaviour {
             case Controller.Type.MouseKeyboard:
                 controllers[playerIndex] = new MouseKeyboard(playerIndex);
                 break;
+            case Controller.Type.TouchScreen:
+                controllers[playerIndex] = new TouchScreenController();
+                break;
         }
     }
 
@@ -84,6 +87,10 @@ public class InputManager : MonoBehaviour {
         for (int i = 0; i < 4; ++i)
             controllers[i] = new XboxController(i);
         // ChangeControllerType(0, Controller.Type.MouseKeyboard);
+#if UNITY_ANDROID || UNITY_IOS
+        Debug.Log("Mobile Device Detected");
+        ChangeControllerType(0, Controller.Type.TouchScreen);
+#endif
     }
 
     // Update every controller every frame
@@ -111,7 +118,7 @@ public class InputManager : MonoBehaviour {
             }
         }
 
-        Debug.Log("players' controller types: " + controllers[0].type + controllers[1].type + controllers[2].type + controllers[3].type);
+        //Debug.Log("players' controller types: " + controllers[0].type + controllers[1].type + controllers[2].type + controllers[3].type);
 
         cameraScale = new Vector2(Mathf.Sin(Mathf.Deg2Rad * Camera.main.transform.eulerAngles.x), 1);
         for (int i = 0; i < 4; ++i)
@@ -123,7 +130,7 @@ public class InputManager : MonoBehaviour {
             controllers[i].OnApplicationQuit();
     }
 
-    #region mapping interface for UI
+#region mapping interface for UI
     /*
     - Kyle
     public method to update input mapping
@@ -139,7 +146,7 @@ public class InputManager : MonoBehaviour {
     }
 
     
-    #endregion
+#endregion
 
 
     // Controller object for Mouse and Keyboard, This is not implemented yet
@@ -333,7 +340,7 @@ public class InputManager : MonoBehaviour {
         public XboxController(int playerIndex) {
             type = Type.Xbox;
             this.playerIndex = (PlayerIndex)playerIndex;
-            #region Button Defenitions
+#region Button Defenitions
             ButtonMap.Add(ButtonCode.A, new ButtonTest(ADown, AUp, APressed));
             ButtonMap.Add(ButtonCode.B, new ButtonTest(BDown, BUp, BPressed));
             ButtonMap.Add(ButtonCode.X, new ButtonTest(XDown, XUp, XPressed));
@@ -351,7 +358,7 @@ public class InputManager : MonoBehaviour {
             ButtonMap.Add(ButtonCode.LeftBumper, new ButtonTest(LeftBumperDown, LeftBumperUp, LeftBumperPressed));
             ButtonMap.Add(ButtonCode.RightTrigger, new ButtonTest(RightTriggerDown, RightTriggerUp, RightTriggerPressed));
             ButtonMap.Add(ButtonCode.LeftTrigger, new ButtonTest(LeftTriggerDown, LeftTriggerUp, LeftTriggerPressed));
-            #endregion
+#endregion
             JoyStickMap.Add(JoyStickCode.Left, LeftJoyStickTest);
             JoyStickMap.Add(JoyStickCode.Right, RightJoyStickTest);
             JoyStickMap.Add(JoyStickCode.DPad, DPadJoyStickTest);
@@ -369,7 +376,7 @@ public class InputManager : MonoBehaviour {
         - Kyle
         input mapping customization
         */
-        #region  mapping customization
+#region  mapping customization
         public override void setMapping(string a, string b)
         {
             //  Debug.Log("add new mapping: button: " + b + " action: " + a);
@@ -455,9 +462,9 @@ public class InputManager : MonoBehaviour {
 
             return XboxController.ButtonCode.A;
         }
-        #endregion
+#endregion
 
-        #region Button Defenitions
+#region Button Defenitions
         private void ADown(Action action) {
             if (ButtonDown(state.Buttons.A, prevState.Buttons.A))
                 action();
@@ -695,7 +702,7 @@ public class InputManager : MonoBehaviour {
         private bool RightTriggerPressed() {
             return state.Triggers.Right > 0;
         }
-        #endregion
+#endregion
 
         private Vector2 LeftJoyStickTest() {
             return new Vector2(state.ThumbSticks.Left.X, state.ThumbSticks.Left.Y);
@@ -721,8 +728,8 @@ public class InputManager : MonoBehaviour {
         }
 
         private IEnumerator VibrateDuration(float strength, float duration) {
-            float endTime = Time.time + duration;
-            while (endTime >= Time.time) {
+            float endTime = Time.unscaledTime + duration;
+            while (endTime >= Time.unscaledTime) {
                 GamePad.SetVibration(playerIndex, strength, strength);
                 yield return null;
             }
@@ -730,10 +737,10 @@ public class InputManager : MonoBehaviour {
         }
 
         private IEnumerator VibrateDiminish(float strength, float duration) {
-            float endTime = Time.time + duration;
+            float endTime = Time.unscaledTime + duration;
             float newStrength;
-            while (endTime >= Time.time) {
-                newStrength = strength * (-Mathf.Pow(1 - (endTime - Time.time) / duration, 2) + 1);
+            while (endTime >= Time.unscaledTime) {
+                newStrength = strength * (-Mathf.Pow(1 - (endTime - Time.unscaledTime) / duration, 2) + 1);
                 GamePad.SetVibration(playerIndex, newStrength, newStrength);
                 yield return null;
             }
@@ -746,10 +753,12 @@ public class InputManager : MonoBehaviour {
 
         // Update This controller's events
         public override void UpdateController() {
+#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
             prevState = state;
             state = GamePad.GetState(playerIndex);
             if (isActive)
                 UpdateEvents();
+#endif
         }
 
         // Compare ButtonStates and return whether the button had just been pressed
@@ -829,6 +838,99 @@ public class InputManager : MonoBehaviour {
                 return b;
             }
         }
+    }    // Controller object for Mouse and Keyboard, This is not implemented yet
+    public class TouchScreenController : Controller {
+
+        private TouchControlsUI touchControlsUI;
+        private TouchControlsUI TouchControlsUI {
+            get {
+                if (touchControlsUI != null)
+                    return touchControlsUI;
+                touchControlsUI = FindObjectOfType<TouchControlsUI>();
+                if (touchControlsUI == null)
+                    Debug.LogError("touchControlsUI not found");
+                return touchControlsUI;
+            }
+        }
+        private int RightTouchID;
+        private Vector2 RightTouchStart = -Vector2.one;
+        private Vector2 RightTouchEnd = -Vector2.one;
+        private int LeftTouchID;
+        private Vector2 LeftTouchStart = -Vector2.one;
+        private Vector2 LeftTouchEnd = -Vector2.one;
+
+        public override Vector2 MoveVector() {
+            Vector2 direction = RightTouchEnd - RightTouchStart;
+            return RightTouchStart.x >= 0 ? ( direction.magnitude > TouchControlsUI.JoystickRadiusRatio.x * Camera.main.pixelWidth ? direction.normalized : direction / Camera.main.pixelRect.size / TouchControlsUI.JoystickRadiusRatio ) : Vector2.zero;
+        }
+
+        public override Vector2 AimVector() {
+            Vector2 direction = LeftTouchEnd - LeftTouchStart;
+            return LeftTouchStart.x >= 0 ? (direction.magnitude > TouchControlsUI.JoystickRadiusRatio.x * Camera.main.pixelWidth ? direction.normalized : direction / Camera.main.pixelRect.size / TouchControlsUI.JoystickRadiusRatio ) : Vector2.zero;
+        }
+
+        public override void UpdateController() {
+            bool anyTouch = false;
+            foreach (Touch touch in Input.touches)
+                if (touch.phase == TouchPhase.Began)
+                    anyTouch = true;
+            if (anyTouch)
+                start.OnDown.Invoke();
+
+            if (RightTouchStart.x < 0) {
+                foreach (Touch touch in Input.touches) {
+                    if (touch.phase == TouchPhase.Began && touch.position.x < Camera.main.pixelWidth / 2) {
+                        RightTouchID = touch.fingerId;
+                        RightTouchStart = touch.position;
+                        TouchControlsUI.SetRightJoystickPosition(RightTouchStart / Camera.main.pixelRect.size);
+                        break;
+                    }
+                }
+            }
+            foreach (Touch touch in Input.touches) {
+                if (touch.fingerId == RightTouchID) {
+                    if (touch.phase == TouchPhase.Ended) {
+                        RightTouchStart = -Vector2.one;
+                        TouchControlsUI.HideRightJoystick();
+                        break;
+                    }
+                    RightTouchEnd = touch.position;
+                    TouchControlsUI.SetRightJoystickDirection(MoveVector());
+                    break;
+                }
+            }
+
+            if (LeftTouchStart.x < 0) {
+                foreach (Touch touch in Input.touches) {
+                    if (touch.phase == TouchPhase.Began && touch.position.x > Camera.main.pixelWidth / 2) {
+                        LeftTouchID = touch.fingerId;
+                        LeftTouchStart = touch.position;
+                        TouchControlsUI.SetLeftJoystickPosition(LeftTouchStart / Camera.main.pixelRect.size);
+                        attack.OnDown.Invoke();
+                        break;
+                    }
+                }
+            }
+            foreach (Touch touch in Input.touches) {
+                if (touch.fingerId == LeftTouchID) {
+                    if (touch.phase == TouchPhase.Ended) {
+                        LeftTouchStart = -Vector2.one;
+                        TouchControlsUI.HideLeftJoystick();
+                        attack.OnUp.Invoke();
+                        break;
+                    }
+                    LeftTouchEnd = touch.position;
+                    TouchControlsUI.SetLeftJoystickDirection(AimVector());
+                    break;
+                }
+            }
+            
+            attack.Pressed = AimVector() != Vector2.zero;
+        }
+
+        public TouchScreenController() {
+            type = Type.TouchScreen;
+        }
     }
 
     public abstract class Controller {
@@ -855,7 +957,7 @@ public class InputManager : MonoBehaviour {
 
         // Type of Controller
         public enum Type {
-            Xbox, MouseKeyboard
+            Xbox, MouseKeyboard, TouchScreen
         }
 
         public enum VibrationMode {

@@ -10,43 +10,56 @@ public class PlayerStats {
 
     public PlayerStats(Player player) {
         this.player = player;
-        AddStat("move_speed", 7.5f); //blocks per second
-        AddStat("air_speed", 50);  //percent of movespeed
-        AddStat("jump_force", 1.5f); //blocks per jump (1,2,3)
-        AddStat("max_health", 100);
-        AddStat("dodge_time", 0.2f); //how long the dodge lasts
-        AddStat("dodge_recharge", 0.8f); //how long the player waits before dodging again
-        AddStat("damage", 1); // Base damage the player does
+        AddStat("move_speed", MoveSpeedStat); //blocks per second
+        AddStat("air_speed", AirSpeedStat);  //percent of movespeed
+        AddStat("jump_force", JumpForceStat); //blocks per jump (1,2,3)
+        AddStat("max_health", MaxHealthStat);
+        AddStat("dodge_time", DodgeTimeStat); //how long the dodge lasts
+        AddStat("dodge_recharge", DodgeRechargeStat); //how long the player waits before dodging again
+        AddStat("damage", DamageStat); // Base damage the player does
     }
 
+    private readonly Stat MoveSpeedStat = new Stat(7.5f);
+    private readonly Stat JumpForceStat = new Stat(1.5f);
+    private readonly Stat MaxHealthStat = new Stat(100);
+    private readonly Stat AirSpeedStat = new Stat(50);
+    private readonly Stat DodgeTimeStat = new Stat(0.2f);
+    private readonly Stat DodgeRechargeStat = new Stat(0.8f);
+    private readonly Stat DamageStat = new Stat(1);
+
     public float moveSpeed {
-        get { return GetStat("move_speed"); }
+        get { return MoveSpeedStat.Value; }
     }
     public float jumpForce {
-        get { return GetStat("jump_force"); } //9 + (GetStat("jump_force") - 1) * 3; } //1 return 9, 2 returns 12, 3 returns 15
+        get { return JumpForceStat.Value; }
     }
     public float maxHealth {
-        get { return GetStat("max_health"); }
+        get { return MaxHealthStat.Value; }
     }
     public float airSpeed    {
-        get { return (GetStat("air_speed")/100) * moveSpeed;  }
+        get { return (AirSpeedStat.Value / 100) * moveSpeed;  }
     }
     public float dodgeTime    {
-        get { return GetStat("dodge_time"); }
+        get { return DodgeTimeStat.Value; }
     }
 
     public float dodgeRecharge {
-        get { return GetStat("dodge_recharge"); }
+        get { return DodgeRechargeStat.Value; }
     }
 
     public float Damage {
-        get { return GetStat("damage"); }
+        get { return DamageStat.Value; }
     }
 
 
     // Add a new stat
     private void AddStat(string name, float value) {
         stats.Add(name, new Stat(value));
+    }
+
+    // Add a new stat
+    private void AddStat(string name, Stat stat) {
+        stats.Add(name, stat);
     }
 
     // Attempts to grab a stat, if that stat does not exist display error
@@ -124,6 +137,7 @@ public class PlayerStats {
                         Value = 1;
                     break;
             }
+            isDirty = false;
         }
 
         // Returns sum of all values in a set of modifiers 
