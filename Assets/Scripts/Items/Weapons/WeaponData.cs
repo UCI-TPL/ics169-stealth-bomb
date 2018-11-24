@@ -25,6 +25,7 @@ public abstract class WeaponData : ItemData {
     public float cooldown = 0;
     public float knockbackStrength = 0;
     public float damage = 0;
+    public BuffData[] buffs;
 
     public abstract Weapon NewInstance(Player player);
 

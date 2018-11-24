@@ -28,6 +28,8 @@ public abstract class Weapon {
         return weaponData.knockbackStrength;
     }
 
+    private Buff[] weaponBuffs;
+
     public Weapon() { }
 
     // Contructor used to clone instance of weapon
@@ -40,8 +42,26 @@ public abstract class Weapon {
 
     // Called when player equips weapon either by swaping weapons or first starting game
     public void EquipWeapon(PlayerController controller) {
+        weaponBuffs = new Buff[weaponData.buffs.Length];
+        for (int i = 0; i < weaponBuffs.Length; ++i) {
+            weaponBuffs[i] = weaponData.buffs[i].Instance(Mathf.Infinity, this);
+            player.AddBuff(weaponBuffs[i]);
+        }
         Start();
-        controller.OnDestroyEvent.AddListener(OnDestroyEvent); 
+        controller.OnDestroyEvent.AddListener(OnDestroyEvent);
+    }
+    
+    public void UnequipWeapon(PlayerController controller) {
+        Release();
+        controller.OnDestroyEvent.RemoveListener(OnDestroyEvent);
+        RemoveWeapon();
+    }
+
+    // Stop all processes in a weapon before removing
+    public void RemoveWeapon() {
+        foreach (Buff buff in weaponBuffs)
+            player.RemoveBuff(buff);
+        End();
     }
 
     // Start is called once when the weapon is first loaded in game use this to ensure PlayerController is active
@@ -53,7 +73,7 @@ public abstract class Weapon {
     private void OnDestroyEvent() {
         attackQueued = false; // Make sure to remove queued attack
         isCharging = false; // Make sure to reset charging
-        End();
+        RemoveWeapon();
     }
 
     // End is called once when the weapon is removed from game
@@ -111,13 +131,6 @@ public abstract class Weapon {
 
     // OnRelease is called once when the weapon is released
     protected virtual void OnRelease() { }
-
-    // Stop all processes in a weapon before removing
-    public void RemoveWeapon(PlayerController controller) {
-        Release();
-        controller.OnDestroyEvent.RemoveListener(OnDestroyEvent);
-        End();
-    }
 
     /// <summary>
     /// Handles applying damage, knockback, and other effects when a player is hit

@@ -17,6 +17,7 @@ public class PlayerStats {
         AddStat("dodge_time", DodgeTimeStat); //how long the dodge lasts
         AddStat("dodge_recharge", DodgeRechargeStat); //how long the player waits before dodging again
         AddStat("damage", DamageStat); // Base damage the player does
+        AddStat("turn_speed", TurnSpeedStat); // Angles a player can turn per sec
     }
 
     private readonly Stat MoveSpeedStat = new Stat(7.5f);
@@ -26,6 +27,7 @@ public class PlayerStats {
     private readonly Stat DodgeTimeStat = new Stat(0.2f);
     private readonly Stat DodgeRechargeStat = new Stat(0.8f);
     private readonly Stat DamageStat = new Stat(1);
+    private readonly Stat TurnSpeedStat = new Stat(2880);
 
     public float moveSpeed {
         get { return MoveSpeedStat.Value; }
@@ -49,6 +51,9 @@ public class PlayerStats {
 
     public float Damage {
         get { return DamageStat.Value; }
+    }
+    public float TurnSpeed {
+        get { return TurnSpeedStat.Value; }
     }
 
 
@@ -98,7 +103,6 @@ public class PlayerStats {
             get { if (isDirty)
                     UpdateValue();
                 return _value; }
-            private set { _value = value; }
         }
 
         public Stat(float baseValue, Type type = Type.Numerical) {
@@ -109,6 +113,7 @@ public class PlayerStats {
             modifiers.Add(Modifier.ModifierType.Increased, new List<Modifier>());
             modifiers.Add(Modifier.ModifierType.More, new List<Modifier>());
             modifiers.Add(Modifier.ModifierType.Bool, new List<Modifier>());
+            modifiers.Add(Modifier.ModifierType.Override, new List<Modifier>());
         }
 
         // Add modifier based on its type;
@@ -126,16 +131,20 @@ public class PlayerStats {
 
         // Updates the property's value
         private void UpdateValue() {
-            switch (type) { // Check the type of property (Numerical or Boolean)
-                case Type.Numerical:
-                    Value = (baseValue + TotalMods(modifiers[Modifier.ModifierType.Flat])) * (1+TotalMods(modifiers[Modifier.ModifierType.Increased])); // Adds all flat modifiers and multiplies by increased modifiers
-                    foreach (Modifier m in modifiers[Modifier.ModifierType.More]) // Multiplies every more modifier separately
-                        Value *= 1 + m.value;
-                    break;
-                case Type.Bool:
-                    if (TotalMods(modifiers[Modifier.ModifierType.Bool]) + baseValue > 0) // Check if boolean modifiers add up to true
-                        Value = 1;
-                    break;
+            if (modifiers[Modifier.ModifierType.Override].Count > 0)
+                _value = modifiers[Modifier.ModifierType.Override][modifiers[Modifier.ModifierType.Override].Count - 1].value; // Get last added override modifier
+            else {
+                switch (type) { // Check the type of property (Numerical or Boolean)
+                    case Type.Numerical:
+                        _value = (baseValue + TotalMods(modifiers[Modifier.ModifierType.Flat])) * (1 + TotalMods(modifiers[Modifier.ModifierType.Increased])); // Adds all flat modifiers and multiplies by increased modifiers
+                        foreach (Modifier m in modifiers[Modifier.ModifierType.More]) // Multiplies every more modifier separately
+                            _value *= 1 + m.value;
+                        break;
+                    case Type.Bool:
+                        if (TotalMods(modifiers[Modifier.ModifierType.Bool]) + baseValue > 0) // Check if boolean modifiers add up to true
+                            _value = 1;
+                        break;
+                }
             }
             isDirty = false;
         }
@@ -164,6 +173,6 @@ public class PlayerStats {
             this.type = type;
         }
 
-        public enum ModifierType { Flat, Increased, More, Bool}; // How the modifier affects properties
+        public enum ModifierType { Flat, Increased, More, Bool, Override}; // How the modifier affects properties
     }
 }

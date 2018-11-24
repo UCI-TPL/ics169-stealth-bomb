@@ -7,7 +7,7 @@ public class LaserWeapon : Weapon {
     private LaserWeaponData data;
     private Queue<LaserBeam> laserBeamPool = new Queue<LaserBeam>();
     private LaserBeam CurrentBeam;
-    private float activeID;
+    private Buff laserbuff;
 
     private float startChargeTime;
     protected override float GetChargeLevel() {
@@ -21,7 +21,7 @@ public class LaserWeapon : Weapon {
     }
 
     protected override void Start() {
-        activeID = 0;
+        laserbuff = data.laserBuff.Instance(Mathf.Infinity, this);
     }
 
     protected override void End() {
@@ -29,9 +29,9 @@ public class LaserWeapon : Weapon {
             CurrentBeam.TurnOffBeam(null, data.DecayTimePerWidth);
             CurrentBeam = null;
         }
-        ++activeID;
         while (laserBeamPool.Count > 0)
             GameObject.Destroy(laserBeamPool.Dequeue().gameObject);
+        player.RemoveBuff(laserbuff);
     }
 
     // OnActivate is called once when the weapon is activated
@@ -42,6 +42,7 @@ public class LaserWeapon : Weapon {
         CurrentBeam.gameObject.SetActive(true);
         CurrentBeam.MaxLength = 0;
         CurrentBeam.Width = data.minWidth;
+        player.AddBuff(laserbuff);
     }
 
     // OnChargingUpdate is called once per frame while the weapon is charging
@@ -55,6 +56,7 @@ public class LaserWeapon : Weapon {
     protected override void OnRelease() {
         CurrentBeam.TurnOffBeam(laserBeamPool, data.DecayTimePerWidth);
         CurrentBeam = null;
+        player.RemoveBuff(laserbuff);
     }
     
     private LaserBeam CreateLaserBeam() {

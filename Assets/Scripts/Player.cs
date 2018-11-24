@@ -184,19 +184,20 @@ public class Player {
     
     // Remove each modifier granted by the power-up and remove the power-up from list of power-ups
     public void RemoveBuff(Buff buff) {
-        foreach (PlayerStats.Modifier m in buff.Modifiers) // Remove all modifiers granted by this powerup
-            stats.RemoveModifier(m);
-        foreach (Buff.Trigger t in buff.Triggers) {// Remove all the powerup's triggers from the respective event calls
-            switch (t.condition) {
-                case Buff.Trigger.TriggerCondition.Update:
-                    OnUpdate -= t.Activate;
-                    break;
-                case Buff.Trigger.TriggerCondition.Move:
-                    OnMove -= t.Activate;
-                    break;
+        if (buffs.Remove(buff)) { // Remove powerup from list of powerups
+            foreach (PlayerStats.Modifier m in buff.Modifiers) // Remove all modifiers granted by this powerup
+                stats.RemoveModifier(m);
+            foreach (Buff.Trigger t in buff.Triggers) {// Remove all the powerup's triggers from the respective event calls
+                switch (t.condition) {
+                    case Buff.Trigger.TriggerCondition.Update:
+                        OnUpdate -= t.Activate;
+                        break;
+                    case Buff.Trigger.TriggerCondition.Move:
+                        OnMove -= t.Activate;
+                        break;
+                }
             }
         }
-        buffs.Remove(buff); // Remove powerup from list of powerups
     }
 
     public void ChangeWeapon(WeaponData data) {

@@ -74,7 +74,7 @@ public class LaserBeam : MonoBehaviour {
 
         RaycastHit hit;
         float length;
-        if (Physics.Raycast(transform.position, transform.forward, out hit, MaxLength, CollideMask, QueryTriggerInteraction.Ignore)) {
+        if (Physics.Raycast(transform.position, transform.forward, out hit, MaxLength * mainEffect.transform.lossyScale.z, CollideMask, QueryTriggerInteraction.Ignore)) {
             end.transform.position = hit.point;
             length = Vector3.Distance(front.transform.localPosition, end.transform.localPosition); // length is distance betwen beginning point(front) and end point(end)
         }

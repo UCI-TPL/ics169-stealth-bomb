@@ -18,11 +18,13 @@ MonoBehaviour:
   cooldown: 0.25
   knockbackStrength: 3
   damage: 1.5
+  buffs: []
   maxChargeTime: 1.5
   maxLength: 15
   maxWidth: 1.5
   minWidth: 0.5
   hitCooldown: 0.1
   DecayTimePerWidth: 0.25
+  laserBuff: {fileID: 11400000, guid: 3867f4c823c2d984babb9713aad5cdef, type: 2}
   LaserBeam: {fileID: 114587784883638426, guid: 2edd6be0e30c60e4e93cea76b1d52611,
     type: 2}

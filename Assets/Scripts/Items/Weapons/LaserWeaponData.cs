@@ -11,5 +11,6 @@ public class LaserWeaponData : WeaponData<LaserWeapon> {
     public float minWidth = 0.5f;
     public float hitCooldown = 0.2f;
     public float DecayTimePerWidth = 0.5f;
+    public BuffData laserBuff;
     public LaserBeam LaserBeam;
 }

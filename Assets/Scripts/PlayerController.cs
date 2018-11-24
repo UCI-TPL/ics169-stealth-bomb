@@ -159,7 +159,7 @@ public class PlayerController : MonoBehaviour {
         //Debug.DrawRay(transform.position, transform.forward*100, Color.white);
         Vector3 scaledVector = (horizontalVector.y * forward) + (horizontalVector.x * right);
         if (scaledVector != Vector3.zero)
-            transform.forward = scaledVector;
+            transform.forward = Vector3.RotateTowards(transform.forward, scaledVector, player.stats.TurnSpeed * Mathf.Deg2Rad * Time.deltaTime, 0);
     }
 
     // Move the player using the the controller's move input scaled by the provided speed
@@ -195,9 +195,14 @@ public class PlayerController : MonoBehaviour {
             frictionVector = -airResistance * scaledVelocity; // Friction is a negative percentage of current velocity
         }
         // Debug.DrawRay(floorCollider.transform.position + Vector3.down * floorCollider.bounds.extents.y, frictionVector, Color.blue);
-        //Debug.DrawRay(floorCollider.transform.position + Vector3.down * floorCollider.bounds.extents.y, scaledVector, Color.green);
-        frictionVector -= Vector3.Project(frictionVector, scaledVector); // Scale friction to remove the forward direction, so friction doesnt slow player in moving direction
-        //Debug.DrawRay(floorCollider.transform.position + Vector3.down * floorCollider.bounds.extents.y, frictionVector, Color.red);
+        // Debug.DrawRay(floorCollider.transform.position + Vector3.down * floorCollider.bounds.extents.y, scaledVector, Color.green);
+
+        // Remove friction in the desired move direction if moving slower than max speed in that direction
+        Vector3 velocityInDirection = Vector3.Project(rb.velocity, scaledVector); // Get velocity in the desired move direction
+        if (Vector3.Distance(velocityInDirection, scaledVector) < Vector3.Distance(velocityInDirection, -scaledVector) && velocityInDirection.magnitude < scaledVector.magnitude * speed) // Check if we are moving slower than our maximum speed
+            frictionVector -= Vector3.Project(frictionVector, scaledVector); // Scale friction to remove the forward direction, so friction doesnt slow player in moving direction
+        // Debug.DrawRay(floorCollider.transform.position + Vector3.down * floorCollider.bounds.extents.y, frictionVector, Color.red);
+        
         rb.velocity += frictionVector * Time.fixedDeltaTime; // Add friction to velocity
 
         if (allowMovement) {
@@ -261,7 +266,7 @@ public class PlayerController : MonoBehaviour {
 
     public void EquipWeapon(Weapon weapon) {
         if (Weapon != null)
-            Weapon.RemoveWeapon(this);
+            Weapon.UnequipWeapon(this);
         Weapon = weapon;
         Weapon.EquipWeapon(this);
     }
