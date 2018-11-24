@@ -26,7 +26,7 @@ public class LaserWeapon : Weapon {
 
     protected override void End() {
         if (CurrentBeam != null) {
-            CurrentBeam.StartCoroutine(TurnOffBeam(CurrentBeam, data.DecayTimePerWidth));
+            CurrentBeam.TurnOffBeam(null, data.DecayTimePerWidth);
             CurrentBeam = null;
         }
         ++activeID;
@@ -53,26 +53,8 @@ public class LaserWeapon : Weapon {
 
     // OnRelease is called once when the weapon is released
     protected override void OnRelease() {
-        CurrentBeam.StartCoroutine(TurnOffBeam(CurrentBeam, data.DecayTimePerWidth));
+        CurrentBeam.TurnOffBeam(laserBeamPool, data.DecayTimePerWidth);
         CurrentBeam = null;
-    }
-
-    private IEnumerator TurnOffBeam(LaserBeam laserBeam, float duration) {
-        float curID = activeID;
-        laserBeam.transform.SetParent(null);
-        laserBeam.DisableParticles();
-        float currentVelocity = Time.deltaTime / duration;
-        while (laserBeam.Width > 0) {
-            yield return null;
-            laserBeam.Width -= currentVelocity;
-        }
-        laserBeam.Width = 0;
-        laserBeam.gameObject.SetActive(false);
-        if (curID == activeID) {
-            laserBeamPool.Enqueue(laserBeam);
-        }
-        else
-            GameObject.Destroy(laserBeam.gameObject);
     }
     
     private LaserBeam CreateLaserBeam() {

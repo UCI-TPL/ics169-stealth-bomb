@@ -18,14 +18,31 @@ public class LaserBeam : MonoBehaviour {
     public float hitCooldown = 0.2f;
     [HideInInspector]
     public GameObject IgnoreCollision;
+    public float baseAlphaCutoff = 0.6f;
+    private float alphaCutoff;
+    private float AlphaCutoff {
+        get {
+            return alphaCutoff;
+        }
+        set {
+            alphaCutoff = value;
+            beamMaterial.SetFloat("_AlphaCutoff", alphaCutoff);
+            frontMaterial.SetFloat("_AlphaCutoff", alphaCutoff);
+            endMaterial.SetFloat("_AlphaCutoff", alphaCutoff);
+        }
+    }
+    private Vector4 HDRColor;
 
     // Objects that make up the laserbeam effect
     public GameObject mainEffect;
     public GameObject beam;
+    public GameObject innerBeam;
     private Material beamMaterial;
     public GameObject front;
+    public GameObject innerFront;
     private Material frontMaterial;
     public GameObject end;
+    public GameObject innerEnd;
     private Material endMaterial;
     public ParticleSystem beamParticleSystem;
 
@@ -44,6 +61,7 @@ public class LaserBeam : MonoBehaviour {
         endMaterial = end.GetComponent<Renderer>().material;
         if (endMaterial.shader.name != "LaserShader")
             Debug.Log(name + " has incorrect shader, LaserShader required.");
+        ResetBeam();
     }
 
     private void Update() {
@@ -70,12 +88,43 @@ public class LaserBeam : MonoBehaviour {
         front.transform.localScale = Vector3.one * Width * FrontScale;
         end.transform.localScale = Vector3.one * Width;
 
-        beamMaterial.SetFloat("Vector1_5DB383F", length / Width / 2);
+        beamMaterial.SetFloat("Vector1_5DB383F", length / Width / 4);
         beamMaterial.SetFloat("Vector1_81F1F082", Speed);
-        frontMaterial.SetFloat("Vector1_81F1F082", Speed/2);
+        frontMaterial.SetFloat("Vector1_81F1F082", Speed / 2);
         endMaterial.SetFloat("Vector1_81F1F082", Speed / 2);
 
         UpdateParticles(length, Width / 2);
+    }
+
+    public void ResetBeam() {
+        AlphaCutoff = baseAlphaCutoff;
+        SetInnerBeamScale(1);
+    }
+
+    public void TurnOffBeam(Queue<LaserBeam> laserBeamPool, float duration) {
+        StartCoroutine(TurnOffBeamCoroutine(laserBeamPool, duration));
+    }
+
+    private IEnumerator TurnOffBeamCoroutine(Queue<LaserBeam> laserBeamPool, float duration) {
+        transform.SetParent(null);
+        DisableParticles();
+        float velocity = 1 / (Width * duration);
+        float scale = 1;
+        Vector4 color = HDRColor/2;
+        while (AlphaCutoff < 1) {
+            yield return null;
+            AlphaCutoff += velocity * Time.deltaTime * baseAlphaCutoff / 2;
+            SetInnerBeamScale(Mathf.Max(0, scale -= velocity * Time.deltaTime));
+            SetColor(color / (2 - scale));
+        }
+        AlphaCutoff = 1;
+        gameObject.SetActive(false);
+        ResetBeam();
+        if (laserBeamPool != null) {
+            laserBeamPool.Enqueue(this);
+        }
+        else
+            GameObject.Destroy(gameObject);
     }
 
     public void EnableParticles() {
@@ -90,6 +139,12 @@ public class LaserBeam : MonoBehaviour {
         UpdateParticles(0, 0);
     }
 
+    private void SetInnerBeamScale(float scale) {
+        innerBeam.transform.localScale = new Vector3(scale, 1, scale);
+        innerFront.transform.localScale = Vector3.one * scale;
+        innerEnd.transform.localScale = Vector3.one * scale;
+    }
+
     private void UpdateParticles(float length, float radius) {
         var shape = beamParticleSystem.shape;
         shape.length = Mathf.Max(length - 5, 0);
@@ -100,7 +155,7 @@ public class LaserBeam : MonoBehaviour {
     }
 
     public void SetColor(Color color) {
-        Vector4 HDRColor = color * 2;
+        HDRColor = color * 2;
         beamMaterial.SetColor("Color_E025656E", HDRColor);
         frontMaterial.SetColor("Color_E025656E", HDRColor);
         endMaterial.SetColor("Color_E025656E", HDRColor);
