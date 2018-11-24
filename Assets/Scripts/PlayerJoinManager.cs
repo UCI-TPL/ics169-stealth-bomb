@@ -115,7 +115,7 @@ public class PlayerJoinManager : MonoBehaviour {
 	// NOTE: May want to reimplement Update to function more as a state machine later!!!
 	void Update () {
 		PlayerJoinScreenActive = (currentMenu.getCurrentPanel() == 2);
-		Debug.Log("playerUsingMouseAndKeyboard: " + playerUsingMouseAndKeyboard);
+		// Debug.Log("playerUsingMouseAndKeyboard: " + playerUsingMouseAndKeyboard);
 		if (PlayerJoinScreenActive) 
 		{
 			// checks to see if a player is using mouse and keyboard.
@@ -132,19 +132,19 @@ public class PlayerJoinManager : MonoBehaviour {
 				}
 			}
 
+			// Debug.Log("playerUsingKeyboardIdx = " + playerUsingKeyboardIdx);
+
 			// This loop checks to see which controllers are connected to display confirmation UI element for that controller.
 			for (int i = 0; i < 4; i++) {
-				// prevStates[i] = currentStates[i];
-				// currentStates[i] = GamePad.GetState(players[i]);
-				if (i != playerUsingKeyboardIdx || !playerUsingMouseAndKeyboard) {
-					prevStates[i] = currentStates[i];
-					currentStates[i] = GamePad.GetState(players[i]);
+				prevStates[i] = currentStates[i];
+				currentStates[i] = GamePad.GetState(players[i]);
+				if (currentStates[i].IsConnected || i != playerUsingKeyboardIdx || !playerUsingMouseAndKeyboard) {
+					// prevStates[i] = currentStates[i];
+					// currentStates[i] = GamePad.GetState(players[i]);
 					if (currentStates[i].IsConnected) {
 						if (!prevStates[i].IsConnected) {
-							// FINISH!!!!!
 							// This is where we will turn on the correct UI element showing that player to press A.
 							// Debug.Log("Player " + players[i] + " controller fis connected.");
-
 							//calling UI -Kyle
 							selectionOP.playerIs(i);
 							selectionOP.playerConnected();
@@ -155,7 +155,6 @@ public class PlayerJoinManager : MonoBehaviour {
 						}
 					}
 					else if (!currentStates[i].IsConnected /* && prevStates[i].IsConnected*/) {
-						// FINISH!!!!!
 						// Revert that player's UI section to not connected/empty.
 						// Debug.Log("Player " + players[i] + " controller has Disconnected!");
 						playersReady[i] = false;
@@ -197,6 +196,8 @@ public class PlayerJoinManager : MonoBehaviour {
 					}
 				}
 			}
+
+			// Debug.Log("players ready: " + playersReady[0] + ", " + playersReady[1] + ", " + playersReady[2] + ", " + playersReady[3]);
 
 			int newNumOfPlayersReady = 0;
 			for (int i = 0; i < playersReady.Length; i++) {
