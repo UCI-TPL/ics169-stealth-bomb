@@ -9,7 +9,7 @@ using Vector3Extensions;
 public class TileManager : MonoBehaviour {
 
     public TileMap tileMap;
-    private string pastLevel = null;
+    private Scene pastLevel;
 
     private Vector2 center;
     private Vector2 radius;
@@ -71,7 +71,11 @@ public class TileManager : MonoBehaviour {
         TileDestroyQueue = CreateTileMapDestroyCalc(tileMap.Tiles, center, collapseBuffer);
 
         meshRenderer = GetComponent<MeshRenderer>();
+        if (meshRenderer == null)
+            meshRenderer = gameObject.AddComponent<MeshRenderer>();
         meshFilter = GetComponent<MeshFilter>();
+        if (meshFilter == null)
+            meshFilter = gameObject.AddComponent<MeshFilter>();
         InitializeMeshCombiner();
         UpdateMesh();
 
@@ -238,9 +242,9 @@ public class TileManager : MonoBehaviour {
         GameObject g = GameObject.Find("Tile Map");
         if (g != null)
             Destroy(g);
-        if (pastLevel != null)
+        if (pastLevel.isLoaded)
             DeleteOldLevel();
-        pastLevel = name;
+        pastLevel = SceneManager.GetSceneByName(name);
         StartCoroutine(LoadLevelAsync(name, OnFinishLoad));
     }
 
@@ -248,7 +252,7 @@ public class TileManager : MonoBehaviour {
     private IEnumerator LoadLevelAsync(string name, UnityAction OnFinishLoad) {
         AsyncOperation asyncLoadLevel = SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
         while (!asyncLoadLevel.isDone) {
-            yield return new WaitForEndOfFrame();
+            yield return null;
         }
         if (OnFinishLoad != null)
             OnFinishLoad.Invoke();

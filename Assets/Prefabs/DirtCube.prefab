@@ -113,5 +113,5 @@ MonoBehaviour:
   destroyEffSpeed: 5
   particles: {fileID: 1951624619801250, guid: 708f4849a0de89348b0f4dc761d0091c, type: 2}
   BaseMaterial: {fileID: 2100000, guid: 2cf666e0c8f1ed748a8693b3bba2f009, type: 2}
-  BaseMesh: {fileID: 4300000, guid: 2e4922b834fda7e41b0708ad9da381eb, type: 3}
+  meshFilter: {fileID: 0}
   crumbling: 0

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Events;
 
 // Require an inputManager
 [RequireComponent(typeof(InputManager))]
@@ -53,6 +54,7 @@ public class GameManager : MonoBehaviour {
     public GameObject countdownText;
 
     private List<GameRound> rounds = new List<GameRound>();
+    private bool inGame = false;
 
     public void StartGame(bool[] playersReady) {
         string s = "Players Recieved from Main Menu: ";
@@ -60,12 +62,33 @@ public class GameManager : MonoBehaviour {
           s += "player " + i.ToString() + ": " + playersReady[i].ToString() + "  ";
         }
         Debug.Log(s);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         rounds.Clear();
         SetUpPlayers(playersReady);
+        StartCoroutine(LoadLevelAsync(SceneManager.GetActiveScene().buildIndex + 1, delegate { StartCoroutine(UpdateGame()); }));
+    }
+
+    // Loads scene and starts game once finished
+    private IEnumerator LoadLevelAsync(int sceneBuildIndex, UnityAction OnFinishLoad) {
+        AsyncOperation asyncLoadLevel = SceneManager.LoadSceneAsync(sceneBuildIndex);
+        while (!asyncLoadLevel.isDone) {
+            yield return null;
+        }
+        if (OnFinishLoad != null)
+            OnFinishLoad.Invoke();
+    }
+
+    // Loads scene and starts game once finished
+    private IEnumerator LoadLevelAsync(string sceneName, UnityAction OnFinishLoad) {
+        AsyncOperation asyncLoadLevel = SceneManager.LoadSceneAsync(sceneName);
+        while (!asyncLoadLevel.isDone) {
+            yield return null;
+        }
+        if (OnFinishLoad != null)
+            OnFinishLoad.Invoke();
     }
 
     public static void ReturnMenu() {
+        instance.inGame = false;
         foreach (GameRound round in instance.rounds)
             round.EndGame();
         SceneManager.LoadScene(instance.mainMenuSceneName);
@@ -85,15 +108,16 @@ public class GameManager : MonoBehaviour {
 
     IEnumerator Countdown()
     {
-        
+        float startTime = Time.time;
         DisablePlayersMovement(countdown);
         countdownText.SetActive(true);
-        for (int i = countdown; i > 0; i--)
-        {
-            countdownText.GetComponent<Text>().text = i.ToString();
-            yield return new WaitForSeconds(1f);
+        float timeRemaining;
+        while (inGame && (timeRemaining = startTime + countdown - Time.time) > 0) {
+            countdownText.GetComponent<Text>().text = Mathf.Ceil(timeRemaining).ToString();
+            yield return null;
         }
-        countdownText.SetActive(false);
+        if (countdownText != null) // Ensure that game scene is still active, its possible that player returned to main menu
+            countdownText.SetActive(false);
     }
 
     void DisablePlayersMovement(float duration)
@@ -120,6 +144,7 @@ public class GameManager : MonoBehaviour {
                 if (players == null) {
                     Debug.LogWarning("GameManager did not recieve players from main menu, defaulting to 4 players on, This is correct if starting editor from game scene");
                     SetUpPlayers(new bool[] { true, true, true, true }); // Set up players if game is not started in main menu
+                    StartCoroutine(UpdateGame());
                 }
             }
             if (countdownText == null)
@@ -128,22 +153,17 @@ public class GameManager : MonoBehaviour {
     }
 
     // Update exists here to handle some things are need to be done during a scene, not when a scene is loaded.
-    void Update()
+    IEnumerator UpdateGame()
     {
-        //if (currentSceneName == mainMenuSceneName)                                          // If the game manager is in the main menu...
-        //{
-        //    if (playerJoinManager != null)                                                  // If there is a PlayerJoinManager in the scene...
-        //    {
-        //        readyPlayers = playerJoinManager.GetPLayerReadyStatusList();                // Have the GameManager store the players who are currently ready.
-        //    }
-        //}
-        if (currentSceneName != mainMenuSceneName) {
+        inGame = true;
+        while (inGame) {
             if (rounds.Count <= 0 || !rounds[rounds.Count - 1].isActive) {
                 GameRound newRound = new GameRound(GetActivePlayers(players));
                 rounds.Add(newRound);
                 newRound.LoadLevel();
                 StartCoroutine(StartGameAfterLoad(newRound));
             }
+            yield return null;
         }
     }
 

@@ -14,12 +14,18 @@ public class CrumbleTile : Tile {
     public float destroyEffSpeed = 5f;
     public GameObject particles;
 
+    [HideInInspector]
     public Material BaseMaterial;
+    [HideInInspector]
     public MeshFilter meshFilter;
     private MeshRenderer meshRenderer;
+    [HideInInspector]
     public bool crumbling = false;
 
-    private void Start() {
+    private void Awake() {
+        meshFilter = GetComponent<MeshFilter>();
+        meshRenderer = GetComponent<MeshRenderer>();
+        BaseMaterial = meshRenderer.sharedMaterial;
         if (ParticlePoolParent == null)
             ParticlePoolParent = new GameObject("CrumbleParticlePool").transform;
         while (ParticlePool.Count < MaxParticles) { // Preload pool of particle systems during load time, so that play will be smoother(Instantiate is really slow)
@@ -31,8 +37,6 @@ public class CrumbleTile : Tile {
         if (crumbleMaterial.shader.name != "Crumble")
             Debug.Log(name + " has incorrect shader, Crumble shader required.");
         crumbleMaterial.SetFloat("Vector1_674F81FE", Random.Range(0, 100f)); // Set shader dissolve level
-        meshFilter = GetComponent<MeshFilter>();
-        meshRenderer = GetComponent<MeshRenderer>();
     }
 
     protected override void BreakingEffect(float duration) {
