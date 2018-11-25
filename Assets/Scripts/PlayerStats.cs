@@ -17,6 +17,7 @@ public class PlayerStats {
         AddStat("dodge_time", DodgeTimeStat); //how long the dodge lasts
         AddStat("dodge_recharge", DodgeRechargeStat); //how long the player waits before dodging again
         AddStat("damage", DamageStat); // Base damage the player does
+        AddStat("attack_speed", AttackSpeedStat); // Base attacks per sec
         AddStat("turn_speed", TurnSpeedStat); // Angles a player can turn per sec
     }
 
@@ -27,6 +28,7 @@ public class PlayerStats {
     private readonly Stat DodgeTimeStat = new Stat(0.2f);
     private readonly Stat DodgeRechargeStat = new Stat(0.8f);
     private readonly Stat DamageStat = new Stat(1);
+    private readonly Stat AttackSpeedStat = new Stat(1);
     private readonly Stat TurnSpeedStat = new Stat(2880);
 
     public float moveSpeed {
@@ -44,13 +46,14 @@ public class PlayerStats {
     public float dodgeTime    {
         get { return DodgeTimeStat.Value; }
     }
-
     public float dodgeRecharge {
         get { return DodgeRechargeStat.Value; }
     }
-
     public float Damage {
         get { return DamageStat.Value; }
+    }
+    public float AttackSpeed {
+        get { return AttackSpeedStat.Value; }
     }
     public float TurnSpeed {
         get { return TurnSpeedStat.Value; }

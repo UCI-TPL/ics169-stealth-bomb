@@ -77,7 +77,7 @@ public class LaserWeapon : Weapon {
     }
 
     protected override float GetDamageDealt(Vector3 origin, PlayerController targetPlayerController, object extraData) {
-        return weaponData.damage * player.stats.Damage * (float)extraData;
+        return data.damage * player.stats.Damage * (float)extraData;
     }
 
     // Create a deep copy of this weapon instance

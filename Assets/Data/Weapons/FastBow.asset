@@ -15,9 +15,11 @@ MonoBehaviour:
   image: {fileID: 21300000, guid: c7c269c0629756f45976acb35b2c822a, type: 3}
   description: ITS FAST
   type: 2
+  autoAttack: 0
   cooldown: 0.35
-  knockbackStrength: 0
-  damage: 35
+  knockbackStrength: 20
+  damage: 10
+  buffs: []
   instance:
     weaponData: {fileID: 11400000}
     type: 1

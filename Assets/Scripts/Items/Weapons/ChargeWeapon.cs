@@ -60,7 +60,7 @@ public class ChargeWeapon : Weapon {
         rend.material.color = player.controller.playerColor;
         //Debug.Log("Releasing with a chargeTime of " + chargeLevel);
         //if (chargeLevel >= 1) { }
-        data.projectile.Shoot(player, data.projSpeed * Mathf.Pow(Mathf.Floor(ChargeLevel * data.chargeLevels), 2), data.numProj);
+        data.projectile.Shoot(player, data.projSpeed * Mathf.Pow(Mathf.Floor(ChargeLevel * data.chargeLevels), 2), data.numProj, (Vector3 origin, Vector3 contactPoint, GameObject target) => { Hit(origin, target); });
         //Projectile arrow = GameObject.Instantiate(data.arrow, player.controller.ShootPoint.transform.position, player.transform.rotation, null); //this instantiates the arrow as an attack
         //arrow.player = player;
         //arrow.speed = data.projSpeed * Mathf.Floor(chargeLevel);

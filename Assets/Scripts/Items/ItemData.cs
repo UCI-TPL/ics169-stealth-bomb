@@ -7,6 +7,7 @@ public abstract class ItemData : ScriptableObject {
     public new string name;
     public Sprite image;
     public string description;
+    [HideInInspector]
     public Type type;
 
     private void OnEnable() {

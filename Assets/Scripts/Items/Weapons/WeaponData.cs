@@ -5,6 +5,7 @@ using UnityEngine;
 
 public abstract class WeaponData<WeaponType> : WeaponData where WeaponType : Weapon, new() {
 
+    [HideInInspector]
     public WeaponType instance;
 
     private void OnEnable() {
@@ -22,6 +23,7 @@ public abstract class WeaponData<WeaponType> : WeaponData where WeaponType : Wea
 
 public abstract class WeaponData : ItemData {
 
+    public bool autoAttack = false;
     public float cooldown = 0;
     public float knockbackStrength = 0;
     public float damage = 0;

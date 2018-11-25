@@ -114,7 +114,8 @@ public class PlayerController : MonoBehaviour {
         input.controllers[player.playerNumber].attack.OnDown.AddListener(ActivateAttack);
         input.controllers[player.playerNumber].attack.OnUp.AddListener(ReleaseAttack);
         input.controllers[player.playerNumber].jump.OnUp.AddListener(ReleaseJump);
-        input.controllers[player.playerNumber].dodge.OnDown.AddListener(SpecialMove);
+        input.controllers[player.playerNumber].dodge.OnDown.AddListener(ActivateSpecialMove);
+        input.controllers[player.playerNumber].dodge.OnUp.AddListener(ReleaseSpecialMove);
     }
 
     private void AddListeners() {
@@ -215,12 +216,16 @@ public class PlayerController : MonoBehaviour {
             else
                 rb.velocity = new Vector3(newVelocity.x, rb.velocity.y, newVelocity.z);
         }
-        
+
     }
 
-    private void SpecialMove() {
-        if (allowAttack && IsGrounded)
+    private void ActivateSpecialMove() {
+        if (allowAttack)
             player.specialMove.Activate();
+    }
+
+    private void ReleaseSpecialMove() {
+        player.specialMove.Release();
     }
 
     public void ResetVelocity()

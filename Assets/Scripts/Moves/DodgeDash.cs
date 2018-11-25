@@ -8,9 +8,7 @@ public class DodgeDash : Weapon
 {
 
     private DodgeData data;
-
-    float cooldown = 0.0f;
-
+    
     public DodgeDash() : base() { }
 
     public DodgeDash(WeaponData weaponData, Player player) : base(weaponData, player, Type.Move)
@@ -20,13 +18,8 @@ public class DodgeDash : Weapon
 
 
     // OnActivate is called once when the move is activated
-    protected override void OnActivate()
-    {
-        if (cooldown <= Time.time)
-        {
-            cooldown = Time.time + data.cooldown;
-            player.controller.StartCoroutine(Dodge());
-        }
+    protected override void OnActivate() {
+        player.controller.StartCoroutine(Dodge());
     }
 
     public IEnumerator Dodge()

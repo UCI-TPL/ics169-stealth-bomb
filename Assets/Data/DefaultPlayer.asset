@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f129241ccb8f48447832194804c158db, type: 3}
   m_Name: DefaultPlayer
   m_EditorClassIdentifier: 
-  defaultWeapon: {fileID: 11400000, guid: 0ccfffd68a54a7d4db7277b934c85704, type: 2}
+  defaultWeapon: {fileID: 11400000, guid: bbf933dd4d37d784ab26bf44cb2ab321, type: 2}
   defaultSpecialMove: {fileID: 11400000, guid: 8f845288885848b41a628736545cc5a7, type: 2}
   Colors:
   - {r: 1, g: 0.23266676, b: 0.2216981, a: 1}

@@ -15,13 +15,14 @@ public abstract class Weapon {
         return 0;
     }
 
+    private bool AutoAttack { get { return weaponData.autoAttack; } }
     private float cooldownExpirationTime = 0;
     public bool OffCooldown { get { return cooldownExpirationTime <= Time.time; } }
     private bool attackQueued = false;
 
     protected bool isCharging = false;
     protected int numCharging = 0; // This is how many charging coroutines are active at once, This allows us to ensure only one charge at a time
-    private bool overrideChargeUpdate = false;
+    private readonly bool overrideChargeUpdate = false;
 
     public float KnockbackStrength { get { return GetKnockbackStrength(); } }
     protected virtual float GetKnockbackStrength() { // Override this to change how strength of knockback is calculated
@@ -81,18 +82,24 @@ public abstract class Weapon {
 
     // Activate weapon. In other words, initiate attack
     public void Activate() {
-        if (OffCooldown) { // Activate if off cooldown
-            cooldownExpirationTime = Time.time + weaponData.cooldown; // reset cooldown
-            attackQueued = false; // removed queued attack
-            if (isCharging) // If the weapon is already charging, release the charge and reactivate
-                Release();
-            isCharging = true;
-            OnActivate();
-            if (overrideChargeUpdate) // Only start OnCharginUpdate coroutine if its been overriden in derived class, This is for slight optimization
-                player.controller.StartCoroutine(ChargingUpdate(numCharging));
-        } else if (!attackQueued) { // Queue another attack if attack is on cooldown
+        if (!attackQueued && (!OffCooldown || AutoAttack)) { // Start queueing attacks if attack is on cooldown or AutoAttack is true
             attackQueued = true;
             player.controller.StartCoroutine(QueueingAttack());
+        }
+        if (OffCooldown) { // Activate if off cooldown
+            cooldownExpirationTime = Time.time + weaponData.cooldown; // reset cooldown
+            attackQueued = AutoAttack; // removed queued attack if auto attack is false
+
+            if (type == Type.Charge) { // Only start charging stuff if weapon is marked as charging type weapon
+                if (isCharging) // If the weapon is already charging, release the charge and reactivate
+                    EndCharge();
+                isCharging = true;
+            }
+
+            OnActivate();
+
+            if (overrideChargeUpdate) // Only start OnCharginUpdate coroutine if its been overriden in derived class, This is for slight optimization
+                player.controller.StartCoroutine(ChargingUpdate(numCharging));
         }
     }
 
@@ -124,9 +131,15 @@ public abstract class Weapon {
     public void Release() {
         attackQueued = false; // Unqueue attack if attack button is released
         if (isCharging) {
-            OnRelease();
-            isCharging = false;
+            EndCharge();
         }
+    }
+
+    // Stops charging
+    private void EndCharge() {
+        OnRelease();
+        ++numCharging;
+        isCharging = false;
     }
 
     // OnRelease is called once when the weapon is released

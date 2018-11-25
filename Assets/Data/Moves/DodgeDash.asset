@@ -16,9 +16,11 @@ MonoBehaviour:
   description: A dash like in Overcooked, player can go forward and change directions
     but can take damage
   type: 0
+  autoAttack: 0
   cooldown: 0.2
   knockbackStrength: 0
   damage: 0
+  buffs: []
   moveDuration: 0.125
   moveType: 0
   SpeedMultiplier: 3

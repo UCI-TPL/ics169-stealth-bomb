@@ -3,7 +3,11 @@ guid: 1b8a3826a99a9f34fbb3754a8a0facac
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - image: {instanceID: 0}
+  - laserBuff: {fileID: 11400000, guid: 3867f4c823c2d984babb9713aad5cdef, type: 2}
+  - LaserBeam: {fileID: 114587784883638426, guid: 2edd6be0e30c60e4e93cea76b1d52611,
+      type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
