@@ -40,7 +40,7 @@ Transform:
   m_GameObject: {fileID: 1944683509401604}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -9.18, y: 3.9, z: 5.378}
-  m_LocalScale: {x: 0.4, y: 0.4, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -226,10 +226,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70b170e231376454abd8783b791304ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 54612792617523452}
   trail: {fileID: 96182481458528356}
-  speed: 1
-  damage: 100
   collider: {fileID: 65851718138537896}
-  data: {fileID: 11400000, guid: 9df1e8c6a587d604684f97e370ea1793, type: 2}
-  player: {fileID: 0}

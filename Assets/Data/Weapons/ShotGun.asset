@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: ShotGun
   m_EditorClassIdentifier: 
   name: ShotGun
-  image: {fileID: 21300000, guid: c7c269c0629756f45976acb35b2c822a, type: 3}
+  image: {fileID: 21300000, guid: 45a8f358c236cb848b5fe99249f20a17, type: 3}
   description: Its a shot gun
   type: 2
   autoAttack: 1
