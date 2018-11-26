@@ -6,7 +6,7 @@ Material:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Fire2
+  m_Name: Fire5
   m_Shader: {fileID: 4800000, guid: 5c241efcb846fd948a937a4da389b49a, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -87,9 +87,9 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - Color_6A227EA: {r: 2.4847064, g: 1.9123133, b: 0.18212508, a: 0}
-    - Color_7573F193: {r: 0.59460354, g: 0.027981343, b: 0, a: 0}
-    - Color_FCE1E3EB: {r: 1.1119373, g: 0.44244626, b: 0.05239495, a: 0}
+    - Color_6A227EA: {r: 0.3131831, g: 2.106868, b: 2.7189987, a: 0}
+    - Color_7573F193: {r: 0, g: 0.22135983, b: 0, a: 0}
+    - Color_FCE1E3EB: {r: 0.0399734, g: 0.49849173, b: 0.25716633, a: 0}
     - _Color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
