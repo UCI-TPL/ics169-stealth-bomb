@@ -13,7 +13,7 @@ public class BlackHoleWeapon : Weapon {
 	public BlackHoleWeapon(): base() { }
 
 	public BlackHoleWeapon(WeaponData weaponData, Player player): base(weaponData, player, Type.Instant) {
-		this.data = (BlackHoleWeaponData) weaponData;
+		data = (BlackHoleWeaponData) weaponData;
 	}
 
 	// Use this for initialization
@@ -35,9 +35,9 @@ public class BlackHoleWeapon : Weapon {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		// Debug.Log("caught players: " + (caughtPlayers[0] != null) + ", " + (caughtPlayers[1] != null) + ", " + (caughtPlayers[2] != null) + ", " + (caughtPlayers[3] != null));
-	}
+	// void Update () {
+	// 	// Debug.Log("caught players: " + (caughtPlayers[0] != null) + ", " + (caughtPlayers[1] != null) + ", " + (caughtPlayers[2] != null) + ", " + (caughtPlayers[3] != null));
+	// }
 
 	// void FixedUpdate() {
 	// 	for (int i = 0; i < caughtPlayers.Length; i++) {
