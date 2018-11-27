@@ -87,6 +87,9 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
+    private Vector3 lastPosition;
+    private float distanceMoved;
+    private float distanceCounter;
     public bool IsMoving {
         get { return rb.velocity.magnitude > 0.1f; }
     }
@@ -110,6 +113,7 @@ public class PlayerController : MonoBehaviour {
         right.Scale(new Vector3(1, 0, 1));
         right.Normalize();
         rend.material.color = playerColor; //setting the player color based on playeNum 
+        lastPosition = transform.position;
 
         input.controllers[player.playerNumber].attack.OnDown.AddListener(ActivateAttack);
         input.controllers[player.playerNumber].attack.OnUp.AddListener(ReleaseAttack);
@@ -138,7 +142,7 @@ public class PlayerController : MonoBehaviour {
 
     // Perform movement every physics update
     private void FixedUpdate() {
-        if(!dodging && !rolling)
+        if (!dodging && !rolling)
             Move(IsGrounded ? player.stats.moveSpeed : player.stats.airSpeed);
         else
             Move(dodgeSpeed); //hopefully this allows air dodges
@@ -161,6 +165,10 @@ public class PlayerController : MonoBehaviour {
         Vector3 scaledVector = (horizontalVector.y * forward) + (horizontalVector.x * right);
         if (scaledVector != Vector3.zero)
             transform.forward = Vector3.RotateTowards(transform.forward, scaledVector, player.stats.TurnSpeed * Mathf.Deg2Rad * Time.deltaTime, 0);
+
+        distanceMoved += (transform.position - lastPosition).magnitude;
+        lastPosition = transform.position;
+        UpdateTriggers();
     }
 
     // Move the player using the the controller's move input scaled by the provided speed
@@ -217,6 +225,13 @@ public class PlayerController : MonoBehaviour {
                 rb.velocity = new Vector3(newVelocity.x, rb.velocity.y, newVelocity.z);
         }
 
+    }
+
+    private void UpdateTriggers() {
+        if (IsMoving && IsGrounded && distanceMoved - distanceCounter >= 0.75) {
+            distanceCounter = distanceMoved;
+            player.OnMove.Invoke(player);
+        }
     }
 
     private void ActivateSpecialMove() {

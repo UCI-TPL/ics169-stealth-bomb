@@ -15,4 +15,10 @@ MonoBehaviour:
   image: {fileID: 21300000, guid: 3bedf194dee3f75428ce324b6740f7b4, type: 3}
   description: Creates fire on the ground under the player
   type: 2
-  firePrefab: {fileID: 1434408715701018, guid: 3b39dc403a8cf4e4a895d6b8648b9ca0, type: 2}
+  autoAttack: 0
+  cooldown: 0
+  knockbackStrength: 1
+  damage: 1
+  buffs: []
+  firePrefab: {fileID: 1904072828529592, guid: d5e26e09eb612ff4d91fbb46eff687c7, type: 2}
+  hitCooldown: 0.1

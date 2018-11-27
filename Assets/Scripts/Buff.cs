@@ -53,6 +53,7 @@ public class Buff {
         private float refreshTime = 0;
         public WeaponData triggerWeapon;
         private Weapon weapon;
+        private PlayerController controller;
 
         // Activate weapon if off cooldown
         public void Activate(Player player) {
@@ -64,8 +65,10 @@ public class Buff {
 
         // What happens when trigger is activated
         private void OnActivate(Player player) {
-            if (weapon == null)
+            if (controller != player.controller) {
                 weapon = triggerWeapon.NewInstance(player);
+                weapon.EquipWeapon(controller = player.controller);
+            }
             weapon.Activate();
             weapon.Release();
         }

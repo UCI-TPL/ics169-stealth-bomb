@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+public class PlayerAction : UnityEvent<Player> { }
+
 public class Player {
     
     public PlayerStats stats { get; private set; }
@@ -23,9 +25,8 @@ public class Player {
     private Player lastHurtBy;
 
     // Events
-    public delegate void playerEventDel(Player player);
-    private event playerEventDel OnUpdate;
-    private event playerEventDel OnMove;
+    public PlayerAction OnUpdate = new PlayerAction();
+    public PlayerAction OnMove = new PlayerAction();
     public delegate void onHurtDel(Player damageDealer, Player reciever, float percentDealt);
     public event onHurtDel OnHurt;
     public UnityEvent onHeal = new UnityEvent();
@@ -145,10 +146,10 @@ public class Player {
             RemoveBuff(buffs[buffs.Count - 1]);
 
         if (OnUpdate != null)
-            OnUpdate(this);
-        if (controller.IsMoving && controller.IsGrounded)
-            if (OnMove != null)
-                OnMove(this);
+            OnUpdate.Invoke(this);
+        //if (controller.IsMoving && controller.IsGrounded)
+        //    if (OnMove != null)
+        //        OnMove.Invoke(this);
 
         CheckDeath();
     }
@@ -167,10 +168,10 @@ public class Player {
         foreach (Buff.Trigger t in buff.Triggers) { // Add all the powerup's triggers to the respective event calls
             switch (t.condition) {
                 case Buff.Trigger.TriggerCondition.Update:
-                    OnUpdate += t.Activate;
+                    OnUpdate.AddListener(t.Activate);
                     break;
                 case Buff.Trigger.TriggerCondition.Move:
-                    OnMove += t.Activate;
+                    OnMove.AddListener(t.Activate);
                     break;
             }
         }
@@ -190,10 +191,10 @@ public class Player {
             foreach (Buff.Trigger t in buff.Triggers) {// Remove all the powerup's triggers from the respective event calls
                 switch (t.condition) {
                     case Buff.Trigger.TriggerCondition.Update:
-                        OnUpdate -= t.Activate;
+                        OnUpdate.RemoveListener(t.Activate);
                         break;
                     case Buff.Trigger.TriggerCondition.Move:
-                        OnMove -= t.Activate;
+                        OnMove.RemoveListener(t.Activate);
                         break;
                 }
             }

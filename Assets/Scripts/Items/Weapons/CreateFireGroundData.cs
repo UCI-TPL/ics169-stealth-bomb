@@ -6,5 +6,6 @@ using UnityEngine;
 public class CreateFireGroundData : WeaponData<CreateFireGround> {
 
     public GameObject firePrefab;
+    public float hitCooldown = 0.1f;
 
 }
