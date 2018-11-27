@@ -54,7 +54,7 @@ GameObject:
   - component: {fileID: 33493524329654934}
   - component: {fileID: 23515424310737986}
   - component: {fileID: 136194088084984508}
-  m_Layer: 9
+  m_Layer: 14
   m_Name: FloorCubeCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,7 +72,7 @@ GameObject:
   - component: {fileID: 33495071218869604}
   - component: {fileID: 23815010869446528}
   - component: {fileID: 136373776112355620}
-  m_Layer: 9
+  m_Layer: 14
   m_Name: FloorCubeCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -211,7 +211,7 @@ GameObject:
   - component: {fileID: 33135999584372136}
   - component: {fileID: 23392787381709290}
   - component: {fileID: 136399482423930240}
-  m_Layer: 9
+  m_Layer: 14
   m_Name: FloorCubeCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -263,7 +263,7 @@ GameObject:
   - component: {fileID: 33579291714805680}
   - component: {fileID: 23071723494650402}
   - component: {fileID: 136752097907207242}
-  m_Layer: 9
+  m_Layer: 14
   m_Name: WallCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -298,7 +298,7 @@ GameObject:
   - component: {fileID: 33512935075947270}
   - component: {fileID: 23706357759539844}
   - component: {fileID: 136848117751519630}
-  m_Layer: 9
+  m_Layer: 14
   m_Name: FloorCubeCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -488,7 +488,7 @@ GameObject:
   - component: {fileID: 33241421696587916}
   - component: {fileID: 23754456269865234}
   - component: {fileID: 135181991345102188}
-  m_Layer: 9
+  m_Layer: 14
   m_Name: FloorCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1676,7 +1676,7 @@ MonoBehaviour:
   rend: {fileID: 23428729641376972}
   ShootPoint: {fileID: 1042869990503360}
   floorCollider: {fileID: 135181991345102188}
-  wallCollider: {fileID: 136752097907207242}
+  HitBox: {fileID: 135886423390436444}
   crown: {fileID: 1673957208925718}
   friction: 20
   airResistance: 10

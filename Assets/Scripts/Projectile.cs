@@ -16,12 +16,18 @@ public class Projectile : MonoBehaviour {
 
     void Start () {
         origin = transform.position;
-        if (player.controller.floorCollider != null)
-            Physics.IgnoreCollision(player.controller.floorCollider, collider);
-        if (player.controller.wallCollider != null)
-            Physics.IgnoreCollision(player.controller.wallCollider, collider);
+        if (player.controller.HitBox != null)
+            Physics.IgnoreCollision(player.controller.HitBox, collider);
         trail.material.color = player.controller.playerColor;
     }
+
+    //private void OnTriggerEnter(Collider other) {
+    //    if (other.GetComponent<PlayerController>() != null) {
+    //        if (OnHit != null)
+    //            OnHit.Invoke(origin, transform.position, other.gameObject);
+    //        Destroy(gameObject);
+    //    }
+    //}
 
     private void OnCollisionEnter(Collision other) {
         if (OnHit != null)

@@ -5,7 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New CreateFireGroundData", menuName = "Item/Weapon/PowerupTriggers/CreateFireGroundData")]
 public class CreateFireGroundData : WeaponData<CreateFireGround> {
 
-    public GameObject firePrefab;
+    public BurningGround burningGroundPrefab;
     public float hitCooldown = 0.1f;
+    public float duration = 2f;
 
 }

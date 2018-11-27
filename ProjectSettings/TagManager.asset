@@ -22,12 +22,12 @@ TagManager:
   - 
   - PostProcessing
   - Player
-  - ItemContainer
+  - ItemPhysics
   - Ground
   - Attack
-  - 
-  - 
-  - 
+  - GroundEffect
+  - PlayerPhysics
+  - Item
   - 
   - 
   - 

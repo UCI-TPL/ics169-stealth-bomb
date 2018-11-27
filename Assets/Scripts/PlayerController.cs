@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour {
     public Renderer rend;
     public GameObject ShootPoint;
     public Collider floorCollider;
-    public Collider wallCollider;
+    public Collider HitBox;
     public GameObject crown;
 
     public float friction = 1f;

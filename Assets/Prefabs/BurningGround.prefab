@@ -19,8 +19,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4650027120359522}
-  - component: {fileID: 64139914292984638}
-  m_Layer: 0
+  - component: {fileID: 135599897179216222}
+  m_Layer: 13
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37,7 +37,7 @@ GameObject:
   - component: {fileID: 4527462952097408}
   - component: {fileID: 33112489496139800}
   - component: {fileID: 23070624582767776}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -52,9 +52,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4803750726854932}
-  - component: {fileID: 114839420915736056}
-  - component: {fileID: 54429771498447776}
-  m_Layer: 0
+  - component: {fileID: 114506184695875422}
+  - component: {fileID: 54728353731478782}
+  m_Layer: 13
   m_Name: BurningGround
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1904072828529592}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 12.5, y: 6.5, z: 12.5}
+  m_LocalPosition: {x: -4.128405, y: 24.506733, z: -2.5115538}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4527462952097408}
@@ -144,7 +144,7 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1311501880493484}
   m_Mesh: {fileID: 4300000, guid: ec0ae0ea81391034d93bbb976ff7ab5f, type: 3}
---- !u!54 &54429771498447776
+--- !u!54 &54728353731478782
 Rigidbody:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -159,21 +159,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!64 &64139914292984638
-MeshCollider:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1171033872969540}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 1
-  m_CookingOptions: 14
-  m_SkinWidth: 0.01
-  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &114839420915736056
+--- !u!114 &114506184695875422
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -184,6 +170,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c65fcf9294915124eb383198bcfc5554, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timer: 2
-  hitCooldown: 0.2
-  IgnoreCollision: {fileID: 0}
+  hitBox: {fileID: 135599897179216222}
+--- !u!135 &135599897179216222
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1171033872969540}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
