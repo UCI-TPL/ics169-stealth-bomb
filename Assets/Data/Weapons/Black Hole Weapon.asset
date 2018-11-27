@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd788bb8038d93b4d85a217a23467e7e, type: 3}
+  m_Name: Black Hole Weapon
+  m_EditorClassIdentifier: 
+  name: Black Hole
+  image: {fileID: 0}
+  description: Fires an arrow that, upon impact, creates a black hole which pulls
+    players towards center
+  type: 2
+  autoAttack: 0
+  cooldown: 0
+  knockbackStrength: 0
+  damage: 0
+  buffs: []
+  projectile: {fileID: 11400000, guid: 9df1e8c6a587d604684f97e370ea1793, type: 2}
+  blackHolePrefab: {fileID: 1115368707829486, guid: 8ef09f7d829499544acb1457f7bd23b3,
+    type: 2}
+  blackHoleGravity: 2.5
+  blackHoleRadius: 6
+  blackHoleDuration: 15
+  projSpeed: 30
+  numProj: 1
