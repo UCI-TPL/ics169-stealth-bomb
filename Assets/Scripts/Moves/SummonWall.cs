@@ -22,8 +22,6 @@ public class SummonWall : Weapon {
         if (cooldown <= Time.time)
         {
             cooldown = Time.time + data.cooldown;
-            Debug.Log("so it begings");
-              
             player.controller.StartCoroutine(Summon());
         }
     }
@@ -31,11 +29,13 @@ public class SummonWall : Weapon {
     public IEnumerator Summon()
     {
         Vector3 spawnPosition = player.controller.transform.position + (player.controller.transform.forward *  data.distanceFromPlayer);
-        GameObject summon = player.controller.InstantiateSummon(data.summon);
+        GameObject summon = GameObject.Instantiate(data.summon);
+        //GameObject summon = player.controller.InstantiateSummon(data.summon);
         summon.transform.position = spawnPosition;
         summon.transform.rotation = player.controller.transform.rotation;
         yield return new WaitForSeconds(data.moveDuration);
-        player.controller.DestroySummon(summon);
+        GameObject.Destroy(summon);
+        //player.controller.DestroySummon(summon);
     }
 
     public override Weapon DeepCopy(WeaponData weaponData, Player player)
