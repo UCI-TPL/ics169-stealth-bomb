@@ -14,7 +14,7 @@ public class ItemList : ScriptableObject {
     }
 
     public ItemData RandomItem(int tier) {
-        return tiers[tier].items[Random.Range(0, tiers[tier].items.Length)];
+        return tiers[tier].RandomItem();
     }
     
     public int RandomTier() {
@@ -46,11 +46,20 @@ public class ItemList : ScriptableObject {
         public float baseWeight;
         public ItemData[] items;
         [System.NonSerialized]
+        private float[] itemWeights;
+        [System.NonSerialized]
         private float addedWeight = 0;
         public float Weight { get { return baseWeight + addedWeight; } }
 
-        public void ResetWeight() {
+        public void ResetWeights() {
             addedWeight = 0;
+            ResetItemWeights();
+        }
+        
+        private void ResetItemWeights() {
+            itemWeights = new float[items.Length];
+            for (int i = 0; i < itemWeights.Length; ++i)
+                itemWeights[i] = 1;
         }
 
         public float IncreaseWeight(float multiple) {
@@ -61,6 +70,35 @@ public class ItemList : ScriptableObject {
 
         public void SubtractWeight(float amount) {
             addedWeight -= amount;
+        }
+
+        public ItemData RandomItem() {
+            if (itemWeights == null)
+                ResetItemWeights();
+            float totalWeight = items.Length;
+            float roll = Random.Range(0, totalWeight);
+            int result = 0;
+            float changePercent = 0;
+            for (int itemIndex = 0; itemIndex < itemWeights.Length; ++itemIndex) {
+                if ((roll -= itemWeights[itemIndex]) <= 0) {
+                    result = itemIndex;
+
+                    // calculate the change in weight required to balance out all tiers
+                    itemWeights[itemIndex] -= 1f;
+                    changePercent = 1f / (itemWeights.Length-1); // Decrease wight of tier if picked and save amount changed
+                    break;
+                }
+            }
+            for (int itemIndex = 0; itemIndex < itemWeights.Length; ++itemIndex) {
+                if (itemIndex == result)
+                    continue;
+                itemWeights[itemIndex] += (1f * changePercent); // Increase the weight of all tiers proportionate to tier just picked
+            }
+            foreach (float i in itemWeights) {
+                Debug.Log(i);
+            }
+
+            return items[result];
         }
     }
 }
