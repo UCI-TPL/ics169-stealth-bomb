@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 33112489496139800}
   - component: {fileID: 23070624582767776}
   m_Layer: 13
-  m_Name: Fire
+  m_Name: Ice
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 114506184695875422}
   - component: {fileID: 54728353731478782}
   m_Layer: 13
-  m_Name: BurningGround
+  m_Name: FreezingGround
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -117,7 +117,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 0e77a659a5db16e46bc8e7b4219ec745, type: 2}
+  - {fileID: 2100000, guid: 2ca8587a2a74de043bda799e1192d2ce, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -173,10 +173,10 @@ MonoBehaviour:
   hitBox: {fileID: 135599897179216222}
   renderer: {fileID: 23070624582767776}
   materialPerPlayer:
-  - {fileID: 2100000, guid: 0e77a659a5db16e46bc8e7b4219ec745, type: 2}
-  - {fileID: 2100000, guid: 54a7e125c087bdc499b585ae02220a1c, type: 2}
-  - {fileID: 2100000, guid: e444a22b1a7239f42bf55cb64b52efe7, type: 2}
-  - {fileID: 2100000, guid: 23c4e7c54584c324aa46a8672592db9b, type: 2}
+  - {fileID: 2100000, guid: 2ca8587a2a74de043bda799e1192d2ce, type: 2}
+  - {fileID: 2100000, guid: 2ca8587a2a74de043bda799e1192d2ce, type: 2}
+  - {fileID: 2100000, guid: 2ca8587a2a74de043bda799e1192d2ce, type: 2}
+  - {fileID: 2100000, guid: 2ca8587a2a74de043bda799e1192d2ce, type: 2}
 --- !u!135 &135599897179216222
 SphereCollider:
   m_ObjectHideFlags: 1
