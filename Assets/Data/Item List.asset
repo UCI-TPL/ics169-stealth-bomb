@@ -24,6 +24,5 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 204f52f175aac3a43b38bf3f8206b350, type: 2}
   - baseWeight: 20
     items:
-    - {fileID: 11400000, guid: 00e74e66a2d101a4d872a796ab686d0e, type: 2}
-    - {fileID: 11400000, guid: bc689dfbd49d9a94a85c7f6d48bce12e, type: 2}
     - {fileID: 11400000, guid: 0ccfffd68a54a7d4db7277b934c85704, type: 2}
+    - {fileID: 11400000, guid: bc689dfbd49d9a94a85c7f6d48bce12e, type: 2}

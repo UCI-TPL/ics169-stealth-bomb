@@ -94,10 +94,6 @@ public class ItemList : ScriptableObject {
                     continue;
                 itemWeights[itemIndex] += (1f * changePercent); // Increase the weight of all tiers proportionate to tier just picked
             }
-            foreach (float i in itemWeights) {
-                Debug.Log(i);
-            }
-
             return items[result];
         }
     }
