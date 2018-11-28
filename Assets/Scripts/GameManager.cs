@@ -259,6 +259,7 @@ public class GameManager : MonoBehaviour {
         public List<GameObject> activePlayersControllers = new List<GameObject>();
         public List<GameObject> ghostPlayerControllers = new List<GameObject>();
         public int PlayersAlive { get { return activePlayersControllers.Count; } }
+        private Scene roundScene;
 
         public bool roundEnding = false;
 
@@ -278,7 +279,7 @@ public class GameManager : MonoBehaviour {
 
         public void LoadLevel() {
             State = GameState.Loading;
-            TileManager.tileManager.LoadLevel("LoadLevel", delegate { State = GameState.Ready; });
+            TileManager.tileManager.LoadLevel("LoadLevel", (Scene loadedScene) => { State = GameState.Ready; roundScene = loadedScene; });
         }
 
         public void StartGame() {
@@ -287,6 +288,7 @@ public class GameManager : MonoBehaviour {
                 s += player.playerNumber.ToString() + ", ";
             Debug.Log(s);
 
+            SceneManager.SetActiveScene(roundScene);
             StartTime = Time.time;
             TileManager.tileManager.StartGame();
 

@@ -45,6 +45,8 @@ public class TileManager : MonoBehaviour {
     [Tooltip("Delay between destruction of tiles in a column")]
     public float pillarDestroyDelay = 0.05f;
 
+    public delegate void LoadSceneAction(Scene loadedScene);
+
     private Queue<TileDestroyCalc> TileDestroyQueue;
 
     // List of mesh data for all tiles still in play, Used by MeshCombiner to optimize performance
@@ -238,24 +240,25 @@ public class TileManager : MonoBehaviour {
     }
 
     // Removes the old level and loads in new level
-    public void LoadLevel(string name, UnityAction OnFinishLoad) {
+    public Scene LoadLevel(string name, LoadSceneAction OnFinishLoad) {
         GameObject g = GameObject.Find("Tile Map");
         if (g != null)
             Destroy(g);
         if (pastLevel.isLoaded)
             DeleteOldLevel();
-        pastLevel = SceneManager.GetSceneByName(name);
         StartCoroutine(LoadLevelAsync(name, OnFinishLoad));
+        return pastLevel;
     }
 
     // Loads scene and starts game once finished
-    private IEnumerator LoadLevelAsync(string name, UnityAction OnFinishLoad) {
+    private IEnumerator LoadLevelAsync(string name, LoadSceneAction OnFinishLoad) {
         AsyncOperation asyncLoadLevel = SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
         while (!asyncLoadLevel.isDone) {
             yield return null;
         }
+        pastLevel = SceneManager.GetSceneByName(name);
         if (OnFinishLoad != null)
-            OnFinishLoad.Invoke();
+            OnFinishLoad.Invoke(pastLevel);
     }
 
     // Remove old scene
