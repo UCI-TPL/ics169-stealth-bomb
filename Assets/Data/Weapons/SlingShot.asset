@@ -18,7 +18,7 @@ MonoBehaviour:
   autoAttack: 1
   cooldown: 0.2
   knockbackStrength: 8
-  damage: 5
+  damage: 10
   buffs: []
   projectile: {fileID: 11400000, guid: cc2f39c9384a2b84ab1b8e1b7c359c8e, type: 2}
   numProj: 1

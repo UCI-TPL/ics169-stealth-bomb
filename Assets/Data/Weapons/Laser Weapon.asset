@@ -18,9 +18,9 @@ MonoBehaviour:
   autoAttack: 0
   cooldown: 0.25
   knockbackStrength: 3
-  damage: 1.5
+  damage: 3
   buffs: []
-  maxChargeTime: 1.5
+  maxChargeTime: 1
   maxLength: 15
   maxWidth: 1.5
   minWidth: 0.5

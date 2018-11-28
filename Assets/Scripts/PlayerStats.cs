@@ -29,7 +29,7 @@ public class PlayerStats {
     private readonly Stat DodgeRechargeStat = new Stat(0.8f);
     private readonly Stat DamageStat = new Stat(1);
     private readonly Stat AttackSpeedStat = new Stat(1);
-    private readonly Stat TurnSpeedStat = new Stat(2880);
+    private readonly Stat TurnSpeedStat = new Stat(720);
 
     public float moveSpeed {
         get { return MoveSpeedStat.Value; }

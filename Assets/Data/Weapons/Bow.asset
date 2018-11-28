@@ -26,7 +26,7 @@ MonoBehaviour:
   projectile: {fileID: 11400000, guid: 9df1e8c6a587d604684f97e370ea1793, type: 2}
   colorAddition: 0.3
   GlowLimit: 2.5
-  chargeTime: 0.1666
+  chargeTime: 0.1
   chargeLevels: 3
   numProj: 1
   projSpeed: 10

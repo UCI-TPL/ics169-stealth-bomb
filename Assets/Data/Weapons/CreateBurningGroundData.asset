@@ -18,9 +18,9 @@ MonoBehaviour:
   autoAttack: 0
   cooldown: 0
   knockbackStrength: 1
-  damage: 1
+  damage: 1.5
   buffs: []
   burningGroundPrefab: {fileID: 114506184695875422, guid: d5e26e09eb612ff4d91fbb46eff687c7,
     type: 2}
   hitCooldown: 0.1
-  duration: 5
+  duration: 4

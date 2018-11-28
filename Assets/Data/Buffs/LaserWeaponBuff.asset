@@ -14,9 +14,9 @@ MonoBehaviour:
   baseBuff:
     Modifiers:
     - name: move_speed
-      value: -0.8
+      value: -0.5
       type: 2
     - name: turn_speed
-      value: 45
+      value: 90
       type: 4
     Triggers: []
