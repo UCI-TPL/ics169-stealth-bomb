@@ -292,6 +292,9 @@ public class PlayerController : MonoBehaviour {
         }
         Weapon = weapon;
         Weapon.EquipWeapon(this);
+
+        if (input.controllers[player.playerNumber].attack.Pressed && allowAttack) // If the attack button was held down at the time of equipting new weapon activate the new weapon
+            Weapon.Activate();
     }
 
     private void SwitchWeapon()    {

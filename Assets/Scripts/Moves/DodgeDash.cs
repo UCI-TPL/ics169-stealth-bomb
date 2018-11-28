@@ -25,9 +25,9 @@ public class DodgeDash : Weapon
     public IEnumerator Dodge()
     {
         player.controller.dodging = true;
-        player.controller.ResetCharge();
+        // player.controller.ResetCharge();
         player.controller.dodgeSpeed = player.controller.player.stats.moveSpeed * data.SpeedMultiplier;//data.SpeedMultiplier;
-        player.controller.DisableAttack(data.moveDuration);
+        // player.controller.DisableAttack(data.moveDuration);
         yield return new WaitForSeconds(data.moveDuration);
 
 
