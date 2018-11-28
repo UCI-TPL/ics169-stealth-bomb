@@ -6897,13 +6897,13 @@ Prefab:
       propertyPath: m_RootOrder
       value: 12
       objectReference: {fileID: 0}
-    - target: {fileID: 23962882917356760, guid: 8ef09f7d829499544acb1457f7bd23b3,
-        type: 2}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1115368707829486, guid: 8ef09f7d829499544acb1457f7bd23b3, type: 2}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 135566471239641730, guid: 8ef09f7d829499544acb1457f7bd23b3,
+        type: 2}
+      propertyPath: m_IsTrigger
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

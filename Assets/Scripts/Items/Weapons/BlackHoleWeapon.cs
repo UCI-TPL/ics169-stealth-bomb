@@ -10,6 +10,8 @@ public class BlackHoleWeapon : Weapon {
 
 	private PlayerController[] caughtPlayers;
 
+	private bool alreadyHit = false;
+
 	public BlackHoleWeapon(): base() { }
 
 	public BlackHoleWeapon(WeaponData weaponData, Player player): base(weaponData, player, Type.Instant) {
@@ -22,16 +24,24 @@ public class BlackHoleWeapon : Weapon {
 	}
 
 	protected override void OnActivate() {
+		alreadyHit = false;
 		data.projectile.Shoot(player, data.projSpeed, data.numProj, (Vector3 origin, Vector3 contactPoint, GameObject target) => { CreateBlackHole(contactPoint); });
 	}
 
 	protected override void OnHit(Vector3 origin, PlayerController targetPlayerController, object extraData) {
-		GameObject.Instantiate(data.blackHolePrefab, (Vector3) extraData, Quaternion.identity);
+		Debug.Log("Hit");
+		if (!alreadyHit) {
+			GameObject.Instantiate(data.blackHolePrefab, (Vector3) extraData, Quaternion.identity);
+			alreadyHit = true;
+		}
 	}
 
 	protected void CreateBlackHole(Vector3 spawnPoint) {
-		BlackHole blackHole = GameObject.Instantiate(data.blackHolePrefab, spawnPoint, Quaternion.identity).GetComponent<BlackHole>();
-		blackHole.SetupBlackHole(data.blackHoleRadius, player.playerNumber, data.blackHoleGravity, data.blackHoleDuration, player.controller.playerColor);
+		if (!alreadyHit) {
+			BlackHole blackHole = GameObject.Instantiate(data.blackHolePrefab, spawnPoint, Quaternion.identity).GetComponent<BlackHole>();
+			blackHole.SetupBlackHole(data.blackHoleRadius, player.playerNumber, data.blackHoleGravity, data.blackHoleDuration, player.controller.playerColor);
+			alreadyHit = true;
+		}
 	}
 	
 	// Update is called once per frame

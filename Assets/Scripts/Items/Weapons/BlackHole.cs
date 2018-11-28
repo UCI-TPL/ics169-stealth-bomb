@@ -20,12 +20,16 @@ public class BlackHole : MonoBehaviour {
 
 	private float time;
 
+	public GameObject center;
+
 	// these variables are just to remember old position of black hole prototype.
 	private float x = 13.55f;
 
 	private float y = 6.52f;
 
 	private float z = 14.72f;
+
+	private float defaultCenterScale = 0.5f;
 
 	void Awake() {
 		// material = gameObject.GetComponent<MeshRenderer>().materials[0];
@@ -92,6 +96,7 @@ public class BlackHole : MonoBehaviour {
 		ParticleSystem.ShapeModule shape = gameObject.GetComponent<ParticleSystem>().shape;
 		shape.radius = radius;
 		collider.radius = radius;
+		center.transform.localScale = new Vector3(radius*defaultCenterScale, radius*defaultCenterScale, radius*defaultCenterScale);
 		ignorePlayerIdx = playerNum;
 		blackHoleGravity = gravity;
 		blackHoleDuration = duration;
