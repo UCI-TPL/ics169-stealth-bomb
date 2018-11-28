@@ -12,17 +12,18 @@ MonoBehaviour:
   m_Name: Item List
   m_EditorClassIdentifier: 
   tiers:
-  - percent: 45
+  - baseWeight: 45
     items:
     - {fileID: 11400000, guid: ad2d9603dfcf19d41a66877d48aa241e, type: 2}
     - {fileID: 11400000, guid: c84350dacbdd4bb4184930b4700550d5, type: 2}
-  - percent: 35
+    - {fileID: 11400000, guid: bbf933dd4d37d784ab26bf44cb2ab321, type: 2}
+  - baseWeight: 35
     items:
     - {fileID: 11400000, guid: 9c71528773eb1544b94d39f9aefd88af, type: 2}
-    - {fileID: 11400000, guid: bbf933dd4d37d784ab26bf44cb2ab321, type: 2}
-    - {fileID: 11400000, guid: 204f52f175aac3a43b38bf3f8206b350, type: 2}
-  - percent: 20
-    items:
     - {fileID: 11400000, guid: 402d85fe57f92094685452857a0715b0, type: 2}
+    - {fileID: 11400000, guid: 204f52f175aac3a43b38bf3f8206b350, type: 2}
+  - baseWeight: 20
+    items:
+    - {fileID: 11400000, guid: 00e74e66a2d101a4d872a796ab686d0e, type: 2}
     - {fileID: 11400000, guid: bc689dfbd49d9a94a85c7f6d48bce12e, type: 2}
     - {fileID: 11400000, guid: 0ccfffd68a54a7d4db7277b934c85704, type: 2}

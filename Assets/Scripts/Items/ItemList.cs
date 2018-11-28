@@ -6,31 +6,61 @@ using UnityEngine;
 public class ItemList : ScriptableObject {
     public Tier[] tiers;
 
-    public float TotalPercent() {
+    public float TotalWeight() {
         float sum = 0;
         foreach (Tier t in tiers)
-            sum += t.percent;
+            sum += t.Weight;
         return sum;
     }
 
-    public ItemData RandomItem() {
-        Tier t = RandomTier();
-        return t.items[Random.Range(0, t.items.Length)];
+    public ItemData RandomItem(int tier) {
+        return tiers[tier].items[Random.Range(0, tiers[tier].items.Length)];
     }
     
-    private Tier RandomTier() {
-        float roll = Random.Range(0, TotalPercent());
-        foreach (Tier t in tiers) {
-            if ((roll -= t.percent) <= 0)
-                return t;
+    public int RandomTier() {
+        float totalWeight = TotalWeight();
+        float roll = Random.Range(0, totalWeight);
+        int result = -1;
+        float changePercent = 0;
+        for (int tierIndex = 0; tierIndex < tiers.Length; ++tierIndex) {
+            if ((roll -= tiers[tierIndex].Weight) <= 0) {
+                result = tierIndex;
+
+                // calculate the change in weight required to balance out all tiers
+                float totalWeightExclude = totalWeight - tiers[tierIndex].baseWeight;
+                tiers[tierIndex].SubtractWeight(tiers[tierIndex].baseWeight);
+                changePercent = tiers[tierIndex].baseWeight / totalWeightExclude; // Decrease wight of tier if picked and save amount changed
+                break;
+            }
         }
-        Debug.LogError("Item tier list is empty, could not get a random Item tier");
-        return null;
+        for (int tierIndex = 0; tierIndex < tiers.Length; ++tierIndex) {
+            if (tierIndex == result)
+                continue;
+            tiers[tierIndex].IncreaseWeight(1 + changePercent); // Increase the weight of all tiers proportionate to tier just picked
+        }
+        return result;
     }
 
     [System.Serializable]
     public class Tier {
-        public float percent;
+        public float baseWeight;
         public ItemData[] items;
+        [System.NonSerialized]
+        private float addedWeight = 0;
+        public float Weight { get { return baseWeight + addedWeight; } }
+
+        public void ResetWeight() {
+            addedWeight = 0;
+        }
+
+        public float IncreaseWeight(float multiple) {
+            float change = baseWeight * (multiple - 1);
+            addedWeight += change;
+            return change;
+        }
+
+        public void SubtractWeight(float amount) {
+            addedWeight -= amount;
+        }
     }
 }

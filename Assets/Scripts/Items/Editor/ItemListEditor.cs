@@ -26,7 +26,7 @@ public class ItemListEditor : Editor {
         float width = Screen.width-28;
 
         string errorString;
-        float totalPercent = script.TotalPercent();
+        float totalPercent = script.TotalWeight();
         errorString = totalPercent == 100 ? "" : "WARNING: Tiers add to " + totalPercent + "%";
 
         GUIStyle backgroundStyle = new GUIStyle();
@@ -34,7 +34,7 @@ public class ItemListEditor : Editor {
         backgroundStyle.normal.background = MakeTex(new Color(0.6f, 0.6f, 0.6f, 1f));
         GUILayout.BeginHorizontal(backgroundStyle, GUILayout.MaxHeight(50), GUILayout.Width(width));
         for (int i = 0; i < script.tiers.Length; ++i) {
-            HorizontalBox(colors[i % colors.Length], width * (script.tiers[i].percent / totalPercent));
+            HorizontalBox(colors[i % colors.Length], width * (script.tiers[i].Weight / totalPercent));
         }
         GUILayout.EndHorizontal();
         GUIStyle labelStyle = new GUIStyle(GUI.skin.label);

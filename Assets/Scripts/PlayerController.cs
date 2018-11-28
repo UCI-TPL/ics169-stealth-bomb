@@ -123,13 +123,11 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void AddListeners() {
-        player.onHeal.AddListener(Heal);
         player.OnHurt += Hurt;
     }
 
     private void RemoveListeners() {
         if (player != null) {
-            player.onHeal.RemoveListener(Heal);
             player.OnHurt -= Hurt;
         }
     }
@@ -303,15 +301,8 @@ public class PlayerController : MonoBehaviour {
 
     }
 
-    private void Heal() {
-        // render HP on heal
-
-    }
-
     IEnumerator HurtIndicator() //show the player that it is hurt 
     {
-        
-        Color test = playerColor;
         rend.material.color = Color.white;
         yield return new WaitForSeconds(0.025f); //the player flashes white 
         rend.material.color = playerColor;

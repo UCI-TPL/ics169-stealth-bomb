@@ -151,13 +151,15 @@ public abstract class Weapon {
     /// <param name="origin"> Location the hit originated from </param>
     /// <param name="target"> Object hit </param>
     /// <param name="extraData"> Extra data to be passed on to other supporting functions </param>
-    protected void Hit(Vector3 origin, GameObject target, object extraData = null) {
+    protected void Hit(Vector3 origin, GameObject target, object extraData = null, bool activateTriggers = true) {
         PlayerController targetPlayerController = target.GetComponent<PlayerController>(); // Check if target is a player
         if (targetPlayerController != null) {
             OnHit(origin, targetPlayerController, extraData); // Activate OnHit effects and get damage dealt
             targetPlayerController.player.Hurt(player, GetDamageDealt(origin, targetPlayerController, extraData)); // Hurt hit player
             Knockback(origin, targetPlayerController, extraData); // Knockback hit player
         }
+        //if (activateTriggers)
+        //    player.
     }
 
     // OnHit is called once when a player is hit, Return value is ammount of damage dealt

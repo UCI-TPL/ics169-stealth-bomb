@@ -41,10 +41,13 @@ public class ItemSpawner : MonoBehaviour {
     // Update is called once per frame
     void Update () {
 		if (cooldown <= Time.time) {
-            ItemData item = itemList.RandomItem();
-            List<ItemTile> availableTiles = GetAvailableItemTiles(0);
-            if (availableTiles.Count > 0)
-                availableTiles[Random.Range(0, availableTiles.Count)].SpawnItem(item);
+            for (int tier = itemList.RandomTier(); tier >= 0; --tier) {
+                List<ItemTile> availableTiles = GetAvailableItemTiles(tier);
+                if (availableTiles.Count > 0) {
+                    availableTiles[Random.Range(0, availableTiles.Count)].SpawnItem(itemList.RandomItem(tier));
+                    break;
+                }
+            }
             ResetCooldown();
         }
 	}
