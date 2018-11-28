@@ -6,7 +6,7 @@ Material:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Fire5
+  m_Name: Fire4_Yellow
   m_Shader: {fileID: 4800000, guid: 5c241efcb846fd948a937a4da389b49a, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -59,13 +59,14 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_36D58797: 0.33
-    - Vector1_74196B0B: 0.25
+    - Vector1_36D58797: 0.4
+    - Vector1_74196B0B: 0.2
     - Vector1_7444447D: 0.25
+    - Vector1_89482EFE: 0.5
     - Vector1_A51F2DC6: 4
     - Vector1_ABBD2186: 1.5
     - Vector1_BBB8920B: 2
-    - Vector1_BD36917E: 0.7
+    - Vector1_BD36917E: 0.8
     - Vector1_E01E5194: 1.5
     - _AlphaClip: 0
     - _Blend: 0
@@ -88,9 +89,9 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - Color_6A227EA: {r: 1.6738831, g: 3.898923, b: 0.6940491, a: 0}
-    - Color_7573F193: {r: 0.0048280177, g: 0.14484052, b: 0, a: 1}
-    - Color_FCE1E3EB: {r: 0.3105724, g: 2.1185474, b: 0, a: 0.23921569}
+    - Color_6A227EA: {r: 2.270603, g: 1.4027808, b: 0, a: 0}
+    - Color_7573F193: {r: 0.2924528, g: 0.1671159, b: 0, a: 1}
+    - Color_FCE1E3EB: {r: 1.0442877, g: 0.7524085, b: 0.08374006, a: 0.5019608}
     - _Color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}

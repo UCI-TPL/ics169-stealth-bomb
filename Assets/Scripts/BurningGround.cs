@@ -10,6 +10,11 @@ public class BurningGround : MonoBehaviour {
     public object Source { get; private set; }
     public Collider hitBox;
     private Collider IgnoreCollision;
+    [SerializeField]
+    private new MeshRenderer renderer;
+
+    [SerializeField]
+    private Material[] materialPerPlayer;
 
     public delegate void HitAction(Vector3 position, GameObject target);
     public HitAction OnHit;
@@ -22,7 +27,7 @@ public class BurningGround : MonoBehaviour {
     private readonly static Dictionary<object, HashSet<GameObject>> CooldownSet = new Dictionary<object, HashSet<GameObject>>();
 
     // Use this for initialization
-    public void Create(HitAction onHit, object source, Vector3 location, float duration, float hitCooldown, Collider ignoreCollision = null) {
+    public void Create(HitAction onHit, Player source, Vector3 location, float duration, float hitCooldown, Collider ignoreCollision = null) {
         if (!ActiveSource.ContainsKey(source)) {
             CooldownQueue.Add(source, new Queue<CooldownObject>());
             CooldownSet.Add(source, new HashSet<GameObject>());
@@ -41,6 +46,7 @@ public class BurningGround : MonoBehaviour {
             newInstance = Instantiate<GameObject>(gameObject, location, Quaternion.identity, parent).GetComponent<BurningGround>();
         }
         ++ActiveSource[source];
+        newInstance.renderer.sharedMaterial = materialPerPlayer[source.playerNumber];
         newInstance.OnHit = onHit;
         newInstance.Source = source;
         newInstance.HitCooldown = hitCooldown;

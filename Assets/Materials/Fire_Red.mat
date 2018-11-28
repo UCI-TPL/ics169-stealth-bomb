@@ -6,7 +6,7 @@ Material:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Fire
+  m_Name: Fire_Red
   m_Shader: {fileID: 4800000, guid: 5c241efcb846fd948a937a4da389b49a, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4

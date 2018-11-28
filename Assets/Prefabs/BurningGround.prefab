@@ -171,6 +171,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitBox: {fileID: 135599897179216222}
+  renderer: {fileID: 23070624582767776}
+  materialPerPlayer:
+  - {fileID: 2100000, guid: 0e77a659a5db16e46bc8e7b4219ec745, type: 2}
+  - {fileID: 2100000, guid: 54a7e125c087bdc499b585ae02220a1c, type: 2}
+  - {fileID: 2100000, guid: e444a22b1a7239f42bf55cb64b52efe7, type: 2}
+  - {fileID: 2100000, guid: 23c4e7c54584c324aa46a8672592db9b, type: 2}
 --- !u!135 &135599897179216222
 SphereCollider:
   m_ObjectHideFlags: 1
