@@ -235,6 +235,7 @@ public class InputManager : MonoBehaviour {
         private readonly ButtonTest JumpTest = new ButtonTest();
         private readonly ButtonTest DodgeTest = new ButtonTest();
         private readonly ButtonTest StartTest = new ButtonTest();
+        private readonly ButtonTest SwitchTest = new ButtonTest();
 
         // Public variables showing what the controlls are currently mapped to
         public readonly Dictionary<ActionCode, HashSet<ButtonCode>> ButtonMaps = new Dictionary<ActionCode, HashSet<ButtonCode>>();
@@ -284,6 +285,8 @@ public class InputManager : MonoBehaviour {
                     return JumpTest;
                 case ActionCode.Start:
                     return StartTest;
+                case ActionCode.Switch:
+                    return SwitchTest;
                 default:
                     return AttackTest;
             }
@@ -307,6 +310,7 @@ public class InputManager : MonoBehaviour {
             AddButtonMapping(ActionCode.Jump, ButtonCode.LeftBumper);
             AddButtonMapping(ActionCode.Dodge, ButtonCode.LeftTrigger);
             AddButtonMapping(ActionCode.Start, ButtonCode.Start);
+            AddButtonMapping(ActionCode.Switch, ButtonCode.Y);
             SetMoveJoyStick(JoyStickCode.Left);
             SetAimJoyStick(JoyStickCode.Right);
         }
@@ -340,6 +344,14 @@ public class InputManager : MonoBehaviour {
             foreach (TestEvent del in StartTest.Pressed.GetInvocationList())
                 testAll = testAll || del();
             start.Pressed = testAll;
+
+            SwitchTest.Down(delegate { Switch.OnDown.Invoke(); });
+            SwitchTest.Up(delegate { start.OnUp.Invoke(); });
+            testAll = false;
+            foreach (TestEvent del in StartTest.Pressed.GetInvocationList())
+                testAll = testAll || del();
+            Switch.Pressed = testAll;
+
         }
 
         // Create a new Xbox controller with the specified player number
@@ -373,6 +385,7 @@ public class InputManager : MonoBehaviour {
             ButtonMaps.Add(ActionCode.Jump, new HashSet<ButtonCode>());
             ButtonMaps.Add(ActionCode.Dodge, new HashSet<ButtonCode>());
             ButtonMaps.Add(ActionCode.Start, new HashSet<ButtonCode>());
+            ButtonMaps.Add(ActionCode.Switch, new HashSet<ButtonCode>());
             SetDefaultMapping();
         }
 
@@ -436,7 +449,8 @@ public class InputManager : MonoBehaviour {
 
         private Controller.ActionCode getAction(string a)
         {
-            
+         
+            Debug.Log("Here we are with "+a);
             if ( a == "attack")
                 return Controller.ActionCode.Attack;
             else if ( a=="dodge")
@@ -946,6 +960,7 @@ public class InputManager : MonoBehaviour {
         public readonly ButtonEvent jump = new ButtonEvent();
         public readonly ButtonEvent dodge = new ButtonEvent();
         public readonly ButtonEvent start = new ButtonEvent();
+        public readonly ButtonEvent Switch = new ButtonEvent();
         public abstract Vector2 MoveVector();
         public abstract Vector2 AimVector();
 
@@ -958,7 +973,7 @@ public class InputManager : MonoBehaviour {
 
         // List of every PlayerAction available
         public enum ActionCode {
-            Attack, Jump, Dodge, Start
+            Attack, Jump, Dodge, Start, Switch
         }
 
         // Type of Controller

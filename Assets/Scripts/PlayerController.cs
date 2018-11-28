@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour {
     public Weapon specialMove;
     // public SpecialMove specialMove; // Dodge, Ice Wall, etc. 
     public Weapon Weapon { get; private set; }
+    public Weapon PreviousWeapon;
 
     private Player _player;
     public Player player {
@@ -120,6 +121,7 @@ public class PlayerController : MonoBehaviour {
         input.controllers[player.playerNumber].jump.OnUp.AddListener(ReleaseJump);
         input.controllers[player.playerNumber].dodge.OnDown.AddListener(ActivateSpecialMove);
         input.controllers[player.playerNumber].dodge.OnUp.AddListener(ReleaseSpecialMove);
+        input.controllers[player.playerNumber].Switch.OnDown.AddListener(SwitchWeapon);
     }
 
     private void AddListeners() {
@@ -284,9 +286,19 @@ public class PlayerController : MonoBehaviour {
 
     public void EquipWeapon(Weapon weapon) {
         if (Weapon != null)
+        {
+            PreviousWeapon = this.Weapon;
             Weapon.UnequipWeapon(this);
+        }
         Weapon = weapon;
         Weapon.EquipWeapon(this);
+    }
+
+    private void SwitchWeapon()    {
+        if(PreviousWeapon != null)
+        {
+            EquipWeapon(PreviousWeapon);
+        }
     }
 
     public void Knockback(Vector3 direction) {
