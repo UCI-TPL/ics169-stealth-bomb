@@ -358,6 +358,7 @@ public class InputManager : MonoBehaviour {
         public XboxController(int playerIndex) {
             type = Type.Xbox;
             this.playerIndex = (PlayerIndex)playerIndex;
+            GamePad.GetState(this.playerIndex, GamePadDeadZone.None);
 #region Button Defenitions
             ButtonMap.Add(ButtonCode.A, new ButtonTest(ADown, AUp, APressed));
             ButtonMap.Add(ButtonCode.B, new ButtonTest(BDown, BUp, BPressed));
