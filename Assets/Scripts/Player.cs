@@ -176,7 +176,8 @@ public class Player {
             }
         }
         if (buff.Source.GetType() == typeof(PowerupData))
-            OnAddPowerUp((PowerupData)buff.Source, buff);
+            if (OnAddPowerUp != null)
+                OnAddPowerUp((PowerupData)buff.Source, buff);
     }
 
     private static int CompareLowerBuffDuration(Buff L, Buff R) {
