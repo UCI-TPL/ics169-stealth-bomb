@@ -26,8 +26,10 @@ public class CrumbleTile : Tile {
         meshFilter = GetComponent<MeshFilter>();
         meshRenderer = GetComponent<MeshRenderer>();
         BaseMaterial = meshRenderer.sharedMaterial;
-        if (ParticlePoolParent == null)
+        if (ParticlePoolParent == null) {
             ParticlePoolParent = new GameObject("CrumbleParticlePool").transform;
+            ParticlePoolParent.SetParent(GameManager.instance.PersistBetweenRounds);
+        }
         while (ParticlePool.Count < MaxParticles) { // Preload pool of particle systems during load time, so that play will be smoother(Instantiate is really slow)
             GameObject g = Instantiate(particles, ParticlePoolParent);
             g.SetActive(false);

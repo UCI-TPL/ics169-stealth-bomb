@@ -55,6 +55,8 @@ public class GameManager : MonoBehaviour {
 
     private List<GameRound> rounds = new List<GameRound>();
     private bool inGame = false;
+    public Transform PersistBetweenRounds { get; private set; }
+    public readonly UnityEvent RoundReset = new UnityEvent();
 
     public void StartGame(bool[] playersReady) {
         string s = "Players Recieved from Main Menu: ";
@@ -156,6 +158,7 @@ public class GameManager : MonoBehaviour {
     IEnumerator UpdateGame()
     {
         inGame = true;
+        PersistBetweenRounds = new GameObject("PersistBetweenRounds").transform;
         while (inGame) {
             if (rounds.Count <= 0 || !rounds[rounds.Count - 1].isActive) {
                 GameRound newRound = new GameRound(GetActivePlayers(players));
@@ -337,6 +340,7 @@ public class GameManager : MonoBehaviour {
             foreach (Player player in players)
                 player.OnDeath -= Player_onDeath;
             State = GameState.Finished;
+            GameManager.instance.RoundReset.Invoke();
         }
 
         private void Player_onDeath(Player killer, Player killed) {

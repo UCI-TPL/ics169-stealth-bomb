@@ -38,14 +38,18 @@ public class BurningGround : MonoBehaviour {
         if (ObjectPool.Count > 0) {
             newInstance = ObjectPool.Dequeue();
             newInstance.gameObject.SetActive(true);
+            newInstance.hitBox.enabled = true;
             newInstance.transform.position = location;
         }
         else {
-            if (parent == null)
+            if (parent == null) {
                 parent = new GameObject("BurningGroundObjects").transform;
+                //parent.SetParent(GameManager.instance.PersistBetweenRounds);
+            }
             newInstance = Instantiate<GameObject>(gameObject, location, Quaternion.identity, parent).GetComponent<BurningGround>();
         }
         ++ActiveSource[source];
+        newInstance.StartCoroutine(newInstance.StartAnimation(1, 0.25f));
         newInstance.renderer.sharedMaterial = materialPerPlayer[source.playerNumber];
         newInstance.OnHit = onHit;
         newInstance.Source = source;
@@ -62,10 +66,35 @@ public class BurningGround : MonoBehaviour {
     }
 
     private void DurationEnd() {
+        CancelInvoke();
         if (IgnoreCollision != null)
             Physics.IgnoreCollision(IgnoreCollision, hitBox, false);
-        ObjectPool.Enqueue(this);
+        hitBox.enabled = false;
+        StartCoroutine(DestroyAnimation(0.25f));
+    }
+
+    private IEnumerator StartAnimation(float scale, float duration) {
+        Vector3 velocity = Vector3.one * scale / duration;
+        transform.localScale = Vector3.zero;
+        while (transform.localScale.x < scale) {
+            transform.localScale += velocity * Time.deltaTime;
+            yield return null;
+        }
+        transform.localScale = Vector3.one * scale;
+    }
+
+    private IEnumerator DestroyAnimation(float duration) {
+        Vector3 velocity = transform.localScale / duration;
+        while (transform.localScale.x > 0) {
+            transform.localScale -= velocity * Time.deltaTime;
+            yield return null;
+        }
         gameObject.SetActive(false);
+        Requeue();
+    }
+
+    private void Requeue() {
+        ObjectPool.Enqueue(this);
         if (ActiveSource.ContainsKey(Source) && --ActiveSource[Source] <= 0)
             Remove(Source);
     }
