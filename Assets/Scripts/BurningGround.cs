@@ -12,6 +12,7 @@ public class BurningGround : MonoBehaviour {
     private Collider IgnoreCollision;
     [SerializeField]
     private new MeshRenderer renderer;
+    private float endTime;
 
     [SerializeField]
     private Material[] materialPerPlayer;
@@ -49,6 +50,8 @@ public class BurningGround : MonoBehaviour {
             newInstance = Instantiate<GameObject>(gameObject, location, Quaternion.identity, parent).GetComponent<BurningGround>();
         }
         ++ActiveSource[source];
+        newInstance.gameObject.SetActive(true);
+        newInstance.hitBox.enabled = true;
         newInstance.StartCoroutine(newInstance.StartAnimation(1, 0.25f));
         newInstance.renderer.sharedMaterial = materialPerPlayer[source.playerNumber];
         newInstance.OnHit = onHit;
@@ -58,15 +61,11 @@ public class BurningGround : MonoBehaviour {
         if (ignoreCollision != null)
             Physics.IgnoreCollision(ignoreCollision, newInstance.hitBox);
 
-        newInstance.StartTimer(duration);
-    }
-
-    private void StartTimer(float duration) {
-        Invoke("DurationEnd", duration);
+        newInstance.endTime = Time.time + duration;
     }
 
     private void DurationEnd() {
-        CancelInvoke();
+        StopAllCoroutines();
         if (IgnoreCollision != null)
             Physics.IgnoreCollision(IgnoreCollision, hitBox, false);
         hitBox.enabled = false;
@@ -106,6 +105,8 @@ public class BurningGround : MonoBehaviour {
     }
 
     private void Update() {
+        if (endTime < Time.time)
+            DurationEnd();
         while (CooldownQueue[Source].Count > 0 && CooldownQueue[Source].Peek().endTime <= Time.time)
             CooldownSet[Source].Remove(CooldownQueue[Source].Dequeue().gameObject);
     }
