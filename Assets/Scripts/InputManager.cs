@@ -87,10 +87,10 @@ public class InputManager : MonoBehaviour {
         for (int i = 0; i < 4; ++i)
             controllers[i] = new XboxController(i);
         // ChangeControllerType(0, Controller.Type.MouseKeyboard);
-//#if UNITY_ANDROID || UNITY_IOS
+#if UNITY_ANDROID || UNITY_IOS
         Debug.Log("Mobile Device Detected");
         ChangeControllerType(0, Controller.Type.TouchScreen);
-//#endif
+#endif
     }
 
     // Update every controller every frame
