@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 
 // Require an inputManager
+[RequireComponent(typeof(AudioManager))]
 [RequireComponent(typeof(InputManager))]
 public class GameManager : MonoBehaviour {
     public static GameManager instance;
@@ -13,6 +14,7 @@ public class GameManager : MonoBehaviour {
     [Header("Managers")]
     public InputManager inputManager;
     public PlayerJoinManager playerJoinManager;
+    public AudioManager audioManager;
 
     [Header("Important Scene Names")]
     public string mainMenuSceneName;
