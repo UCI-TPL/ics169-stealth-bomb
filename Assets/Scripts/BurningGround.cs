@@ -65,6 +65,7 @@ public class BurningGround : MonoBehaviour {
     }
 
     private void DurationEnd() {
+        endTime = 0;
         StopAllCoroutines();
         if (IgnoreCollision != null)
             Physics.IgnoreCollision(IgnoreCollision, hitBox, false);
@@ -105,7 +106,7 @@ public class BurningGround : MonoBehaviour {
     }
 
     private void Update() {
-        if (endTime < Time.time)
+        if (endTime == 0 && endTime < Time.time)
             DurationEnd();
         while (CooldownQueue[Source].Count > 0 && CooldownQueue[Source].Peek().endTime <= Time.time)
             CooldownSet[Source].Remove(CooldownQueue[Source].Dequeue().gameObject);

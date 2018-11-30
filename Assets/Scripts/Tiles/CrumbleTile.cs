@@ -29,6 +29,7 @@ public class CrumbleTile : Tile {
         if (ParticlePoolParent == null) {
             ParticlePoolParent = new GameObject("CrumbleParticlePool").transform;
             ParticlePoolParent.SetParent(GameManager.instance.PersistBetweenRounds);
+            ParticlePool.Clear();
         }
         while (ParticlePool.Count < MaxParticles) { // Preload pool of particle systems during load time, so that play will be smoother(Instantiate is really slow)
             GameObject g = Instantiate(particles, ParticlePoolParent);
@@ -47,11 +48,13 @@ public class CrumbleTile : Tile {
         // Pull out the first particle system from the queue and reinsert it at the end
         ParticleSystem p = ParticlePool.Dequeue();
         ParticlePool.Enqueue(p);
-        // Reuse old particle system taken from the pool
-        p.transform.position = transform.position;
-        p.gameObject.SetActive(true);
-        p.Simulate(0, true, true);
-        p.Play(true);
+        if (p != null) { // Check just to make sure there is a fall back if particle is for some reason deleted
+            // Reuse old particle system taken from the pool
+            p.transform.position = transform.position;
+            p.gameObject.SetActive(true);
+            p.Simulate(0, true, true);
+            p.Play(true);
+        }
     }
 
     private IEnumerator CrumbleEffect(float duration) {
