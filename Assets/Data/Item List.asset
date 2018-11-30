@@ -14,7 +14,7 @@ MonoBehaviour:
   tiers:
   - baseWeight: 45
     items:
-    - {fileID: 11400000, guid: bbf933dd4d37d784ab26bf44cb2ab321, type: 2}
+    - {fileID: 11400000, guid: 00e74e66a2d101a4d872a796ab686d0e, type: 2}
     - {fileID: 11400000, guid: c84350dacbdd4bb4184930b4700550d5, type: 2}
   - baseWeight: 35
     items:

@@ -21,9 +21,9 @@ MonoBehaviour:
   damage: 3
   buffs: []
   maxChargeTime: 1
-  maxLength: 15
-  maxWidth: 1.5
-  minWidth: 0.5
+  maxLength: 13
+  maxWidth: 1.2
+  minWidth: 0.2
   hitCooldown: 0.1
   DecayTimePerWidth: 0.25
   laserBuff: {fileID: 11400000, guid: 3867f4c823c2d984babb9713aad5cdef, type: 2}
