@@ -25,6 +25,7 @@ public class CrumbleTile : Tile {
     private void Awake() {
         meshFilter = GetComponent<MeshFilter>();
         meshRenderer = GetComponent<MeshRenderer>();
+        meshRenderer.enabled = false;
         BaseMaterial = meshRenderer.sharedMaterial;
         if (ParticlePoolParent == null) {
             ParticlePoolParent = new GameObject("CrumbleParticlePool").transform;
