@@ -42,19 +42,17 @@ public abstract class Weapon {
     }
 
     // Called when player equips weapon either by swaping weapons or first starting game
-    public void EquipWeapon(PlayerController controller) {
+    public void EquipWeapon() {
         weaponBuffs = new Buff[weaponData.buffs.Length];
         for (int i = 0; i < weaponBuffs.Length; ++i) {
             weaponBuffs[i] = weaponData.buffs[i].Instance(Mathf.Infinity, this);
             player.AddBuff(weaponBuffs[i]);
         }
         Start();
-        controller.OnDestroyEvent.AddListener(OnDestroyEvent);
     }
     
-    public void UnequipWeapon(PlayerController controller) {
+    public void UnequipWeapon() {
         Release();
-        controller.OnDestroyEvent.RemoveListener(OnDestroyEvent);
         RemoveWeapon();
     }
 
@@ -81,10 +79,10 @@ public abstract class Weapon {
     protected virtual void End() { }
 
     // Activate weapon. In other words, initiate attack
-    public void Activate() {
+    public void Activate(Vector3 origin, Vector3 direction, PlayerController targetController = null) {
         if (!attackQueued && (!OffCooldown || AutoAttack)) { // Start queueing attacks if attack is on cooldown or AutoAttack is true
             attackQueued = true;
-            player.controller.StartCoroutine(QueueingAttack());
+            player.controller.StartCoroutine(QueueingAttack(targetController));
         }
         if (OffCooldown) { // Activate if off cooldown
             cooldownExpirationTime = Time.time + weaponData.cooldown; // reset cooldown
@@ -103,9 +101,9 @@ public abstract class Weapon {
         }
     }
 
-    private IEnumerator QueueingAttack() {
+    private IEnumerator QueueingAttack(PlayerController targetController) {
         while (attackQueued) {
-            Activate();
+            Activate(Vector3.zero, Vector3.zero, targetController);
             yield return null;
         }
     }

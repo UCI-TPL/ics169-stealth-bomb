@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class PlayerAction : UnityEvent<Player> { }
+public class TriggerAction : UnityEvent<Vector3, Vector3, PlayerController> { }
 
 public class Player {
     
@@ -25,8 +25,8 @@ public class Player {
     private Player lastHurtBy;
 
     // Events
-    public PlayerAction OnUpdate = new PlayerAction();
-    public PlayerAction OnMove = new PlayerAction();
+    public TriggerAction OnUpdate = new TriggerAction();
+    public TriggerAction OnMove = new TriggerAction();
     public delegate void onHurtDel(Player damageDealer, Player reciever, float percentDealt);
     public event onHurtDel OnHurt;
     public UnityEvent onHeal = new UnityEvent();
@@ -145,8 +145,8 @@ public class Player {
         while (buffs.Count > 0 && buffs[buffs.Count-1].endTime <= Time.time) // Check end of buffs list for expired buffs
             RemoveBuff(buffs[buffs.Count - 1]);
 
-        if (OnUpdate != null)
-            OnUpdate.Invoke(this);
+        //if (OnUpdate != null)
+        //    OnUpdate.Invoke(this);
         //if (controller.IsMoving && controller.IsGrounded)
         //    if (OnMove != null)
         //        OnMove.Invoke(this);
@@ -166,6 +166,7 @@ public class Player {
         foreach (PlayerStats.Modifier m in buff.Modifiers) // Add power-up's modifiers to stats
             stats.AddModifier(m);
         foreach (Buff.Trigger t in buff.Triggers) { // Add all the powerup's triggers to the respective event calls
+            t.Enable(this);
             switch (t.condition) {
                 case Buff.Trigger.TriggerCondition.Update:
                     OnUpdate.AddListener(t.Activate);
@@ -190,6 +191,7 @@ public class Player {
             foreach (PlayerStats.Modifier m in buff.Modifiers) // Remove all modifiers granted by this powerup
                 stats.RemoveModifier(m);
             foreach (Buff.Trigger t in buff.Triggers) {// Remove all the powerup's triggers from the respective event calls
+                t.Disable();
                 switch (t.condition) {
                     case Buff.Trigger.TriggerCondition.Update:
                         OnUpdate.RemoveListener(t.Activate);

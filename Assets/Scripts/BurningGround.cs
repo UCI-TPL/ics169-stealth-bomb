@@ -106,7 +106,7 @@ public class BurningGround : MonoBehaviour {
     }
 
     private void Update() {
-        if (endTime == 0 && endTime < Time.time)
+        if (endTime != 0 && endTime < Time.time)
             DurationEnd();
         while (CooldownQueue[Source].Count > 0 && CooldownQueue[Source].Peek().endTime <= Time.time)
             CooldownSet[Source].Remove(CooldownQueue[Source].Dequeue().gameObject);
@@ -118,6 +118,11 @@ public class BurningGround : MonoBehaviour {
             CooldownQueue[Source].Enqueue(new CooldownObject(other.gameObject, HitCooldown));
             OnHit(transform.position, other.gameObject);
         }
+    }
+
+    private void OnDestroy() {
+        if (ObjectPool.Count > 0)
+            ObjectPool.Clear();
     }
 
     private struct CooldownObject {

@@ -136,7 +136,12 @@ public class InputManager : MonoBehaviour {
             controllers[i].OnApplicationQuit();
     }
 
-#region mapping interface for UI
+    private void OnDisable() {
+        for (int i = 0; i < 4; ++i)
+            controllers[i].OnApplicationQuit();
+    }
+
+    #region mapping interface for UI
     /*
     - Kyle
     public method to update input mapping

@@ -53,29 +53,46 @@ public class Buff {
         private float refreshTime = 0;
         public WeaponData triggerWeapon;
         private Weapon weapon;
-        private PlayerController controller;
+        private readonly Buff SourceBuff;
+
+        public Trigger() { }
+
+        private Trigger(Buff source) {
+            SourceBuff = source;
+        }
+
+        public void Enable(Player player) {
+            if (SourceBuff.Source.GetType() == typeof(Player)) {
+                weapon = triggerWeapon.NewInstance((Player)SourceBuff.Source);
+                weapon.EquipWeapon();
+            }
+            else {
+                weapon = triggerWeapon.NewInstance(player);
+                weapon.EquipWeapon();
+            }
+        }
+
+        public void Disable() {
+            weapon.UnequipWeapon();
+        }
 
         // Activate weapon if off cooldown
-        public void Activate(Player player) {
+        public void Activate(Vector3 origin, Vector3 direction, PlayerController targetController = null) {
             if (refreshTime <= Time.time) {
-                OnActivate(player);
+                OnActivate(origin, direction, targetController);
                 refreshTime = Time.time + cooldown;
             }
         }
 
         // What happens when trigger is activated
-        private void OnActivate(Player player) {
-            if (controller != player.controller) {
-                weapon = triggerWeapon.NewInstance(player);
-                weapon.EquipWeapon(controller = player.controller);
-            }
-            weapon.Activate();
+        private void OnActivate(Vector3 origin, Vector3 direction, PlayerController targetController = null) {
+            weapon.Activate(origin, direction, targetController);
             weapon.Release();
         }
 
         // Create a deep copy of this class
         public Trigger DeepCopy(Buff buff) {
-            Trigger copy = new Trigger();
+            Trigger copy = new Trigger(buff);
             copy.modifiers = modifiers;
             copy.condition = condition;
             copy.cooldown = cooldown;

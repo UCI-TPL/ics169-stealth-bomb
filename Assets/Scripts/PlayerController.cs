@@ -67,9 +67,6 @@ public class PlayerController : MonoBehaviour {
     private static readonly float maxGroundDistance = 0.5f;
     private bool touchedGround;
 
-    // Event Call back for when the gameobject is destroyed
-    public readonly UnityEvent OnDestroyEvent = new UnityEvent();
-
     private float lastGroundCheck = 0;
     private bool isGrounded = false;
     public bool IsGrounded {
@@ -136,7 +133,8 @@ public class PlayerController : MonoBehaviour {
 
     public void Destroy() {
         RemoveListeners();
-        OnDestroyEvent.Invoke();
+        if (Weapon != null)
+            Weapon.UnequipWeapon();
         GameObject.Destroy(gameObject);
     }
 
@@ -166,9 +164,9 @@ public class PlayerController : MonoBehaviour {
         if (scaledVector != Vector3.zero)
             transform.forward = Vector3.RotateTowards(transform.forward, scaledVector, player.stats.TurnSpeed * Mathf.Deg2Rad * Time.deltaTime, 0);
 
+        UpdateTriggers();
         distanceMoved += (transform.position - lastPosition).magnitude;
         lastPosition = transform.position;
-        UpdateTriggers();
     }
 
     // Move the player using the the controller's move input scaled by the provided speed
@@ -230,13 +228,13 @@ public class PlayerController : MonoBehaviour {
     private void UpdateTriggers() {
         if (IsMoving && IsGrounded && distanceMoved - distanceCounter >= 0.75) {
             distanceCounter = distanceMoved;
-            player.OnMove.Invoke(player);
+            player.OnMove.Invoke(lastPosition, transform.position, null);
         }
     }
 
     private void ActivateSpecialMove() {
         if (allowAttack)
-            player.specialMove.Activate();
+            player.specialMove.Activate(transform.position, transform.forward);
     }
 
     private void ReleaseSpecialMove() {
@@ -270,7 +268,7 @@ public class PlayerController : MonoBehaviour {
     // On Attack down
     private void ActivateAttack() {
         if(allowAttack)
-            Weapon.Activate();   
+            Weapon.Activate(ShootPoint.transform.position, ShootPoint.transform.forward);   
     }
 
     // On Attack up
@@ -288,13 +286,13 @@ public class PlayerController : MonoBehaviour {
         if (Weapon != null)
         {
             PreviousWeapon = this.Weapon;
-            Weapon.UnequipWeapon(this);
+            Weapon.UnequipWeapon();
         }
         Weapon = weapon;
-        Weapon.EquipWeapon(this);
+        Weapon.EquipWeapon();
 
         if (input.controllers[player.playerNumber].attack.Pressed && allowAttack) // If the attack button was held down at the time of equipting new weapon activate the new weapon
-            Weapon.Activate();
+            Weapon.Activate(ShootPoint.transform.position, ShootPoint.transform.forward);
     }
 
     public void SwitchWeapon()    {
