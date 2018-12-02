@@ -18,4 +18,6 @@ public class BlackHoleWeaponData : WeaponData<BlackHoleWeapon> {
 
 	public int numProj = 1;
 
+	public int numOfUses = 1;
+
 }

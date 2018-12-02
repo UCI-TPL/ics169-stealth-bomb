@@ -12,20 +12,34 @@ public class BlackHoleWeapon : Weapon {
 
 	private bool alreadyHit = false;
 
+	private int timesUsed;
+
 	public BlackHoleWeapon(): base() { }
 
 	public BlackHoleWeapon(WeaponData weaponData, Player player): base(weaponData, player, Type.Instant) {
 		data = (BlackHoleWeaponData) weaponData;
+		timesUsed = 0;
 	}
 
 	// Use this for initialization
 	protected override void Start () {
-		
+	}
+
+	protected void Update() {
+		if (timesUsed >= data.numOfUses) {
+			player.controller.SwitchWeapon();
+			// player.controller.PreviousWeapon = player.controller.Weapon;
+		}
 	}
 
 	protected override void OnActivate() {
-		alreadyHit = false;
-		data.projectile.Shoot(player, data.projSpeed, data.numProj, (Vector3 origin, Vector3 contactPoint, GameObject target) => { CreateBlackHole(contactPoint); });
+		if (timesUsed < data.numOfUses) {
+			alreadyHit = false;
+			data.projectile.Shoot(player, data.projSpeed, data.numProj, (Vector3 origin, Vector3 contactPoint, GameObject target) => { CreateBlackHole(contactPoint); });
+			timesUsed++;
+			player.controller.SwitchWeapon();
+			player.controller.PreviousWeapon = player.controller.Weapon;
+		}
 	}
 
 	protected override void OnHit(Vector3 origin, PlayerController targetPlayerController, object extraData) {

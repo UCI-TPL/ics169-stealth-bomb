@@ -297,7 +297,7 @@ public class PlayerController : MonoBehaviour {
             Weapon.Activate();
     }
 
-    private void SwitchWeapon()    {
+    public void SwitchWeapon()    {
         if(PreviousWeapon != null)
         {
             EquipWeapon(PreviousWeapon);
