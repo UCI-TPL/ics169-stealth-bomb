@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+// using UnityEngine.ParticleSystemModule;
 
 public class BlackHole : MonoBehaviour {
 
@@ -10,7 +11,8 @@ public class BlackHole : MonoBehaviour {
 	public int ignorePlayerIdx = -1;
 
 	private Color particleColor;
-	private ParticleSystem.MainModule module;
+	private ParticleSystem.MainModule main;
+	private ParticleSystem.TrailModule trail;
 
 	private SphereCollider collider;
 
@@ -30,6 +32,7 @@ public class BlackHole : MonoBehaviour {
 	private float z = 14.72f;
 
 	private float defaultCenterScale = 0.5f;
+	private float defaultParticleSize = 0.1f;
 
 	void Awake() {
 		// material = gameObject.GetComponent<MeshRenderer>().materials[0];
@@ -39,7 +42,8 @@ public class BlackHole : MonoBehaviour {
 		// particleColor = gameObject.GetComponent<ParticleSystemRenderer>().trailMaterial;
 		// Debug.Log("trail material: " + particleColor.name);
 		// Debug.Log("materials: " + "length = " + materials.Length + ", " + materials[0].name /*+ ", " + materials[1].name*/);
-		module = gameObject.GetComponent<ParticleSystem>().main;
+		main = gameObject.GetComponent<ParticleSystem>().main;
+		trail = gameObject.GetComponent<ParticleSystem>().trails;
 		collider = gameObject.GetComponent<SphereCollider>();
 	}
 
@@ -80,6 +84,7 @@ public class BlackHole : MonoBehaviour {
 		}
 	}
 
+	// helper method that defines how players are pulled towards the center of the black hole
 	private void PullPlayer(PlayerController player) {
 		float dirX = transform.position.x - player.gameObject.transform.position.x;
 		float dirY = transform.position.y - player.gameObject.transform.position.y;
@@ -91,10 +96,13 @@ public class BlackHole : MonoBehaviour {
 		// player.velocity = new Vector3(transform.position.x - player.position.x, transform.position.y - player.position.y, transform.position.z - player.position.z).normalized * blackHoleGravity;
 	}
 
+	// call to set parameters of black hole object
 	public void SetupBlackHole(float radius, int playerNum, float gravity, float duration, Color color) {
 		// gameObject.transform.localScale = new Vector3(radius*2, radius*2, radius*2);
 		ParticleSystem.ShapeModule shape = gameObject.GetComponent<ParticleSystem>().shape;
 		shape.radius = radius;
+		main.startSizeMultiplier = radius * defaultParticleSize * 0.5f;
+		trail.widthOverTrailMultiplier = radius;
 		collider.radius = radius;
 		center.transform.localScale = new Vector3(radius*defaultCenterScale, radius*defaultCenterScale, radius*defaultCenterScale);
 		ignorePlayerIdx = playerNum;
@@ -104,9 +112,12 @@ public class BlackHole : MonoBehaviour {
 	}
 
 	public void SetupColor(Color color) {
-		// Color HDRColor = color * 2;
+		Color HDRColor = color * 2.0f;
 		// Debug.Log("has material = " + (particleColor != null));
         // particleColor.SetColor("Color_E025656E", HDRColor);
-		module.startColor = color;
+		main.startColor = Color.red;
+		trail.colorOverTrail = Color.red;
+		// main.startColor = HDRColor;
+		// trail.colorOverLifetime = HDRColor;
 	}
 }

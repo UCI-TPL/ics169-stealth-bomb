@@ -4921,6 +4921,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputManager: {fileID: 0}
   playerJoinManager: {fileID: 0}
+  audioManager: {fileID: 0}
   mainMenuSceneName: mainMenu
   DefaultPlayerData: {fileID: 11400000, guid: a943fa26298abe5409b720607ae16d86, type: 2}
   PlayerPrefab: {fileID: 114453241457146372, guid: 1525c93e4ceebd542b02ed13a439c69e,
@@ -6909,11 +6910,6 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1115368707829486, guid: 8ef09f7d829499544acb1457f7bd23b3, type: 2}
       propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 135566471239641730, guid: 8ef09f7d829499544acb1457f7bd23b3,
-        type: 2}
-      propertyPath: m_IsTrigger
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
