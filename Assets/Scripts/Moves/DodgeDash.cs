@@ -18,7 +18,7 @@ public class DodgeDash : Weapon
 
 
     // OnActivate is called once when the move is activated
-    protected override void OnActivate() {
+    protected override void OnActivate(Vector3 start, Vector3 direction, PlayerController targetController = null) {
         player.controller.StartCoroutine(Dodge());
     }
 

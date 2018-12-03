@@ -42,8 +42,6 @@ public class Player {
 
     public Weapon specialMove; //give this to the controlelr
 
-    private Vector3 prevPosition;
-
     public bool Invincible = false;
 
     public Player(int playerNumber, PlayerData playerData) {
@@ -163,19 +161,9 @@ public class Player {
     public void AddBuff(Buff buff) {
         buffs.Add(buff); // Save to list of buffs
         buffs.Sort(CompareLowerBuffDuration); // Always sort 
-        foreach (PlayerStats.Modifier m in buff.Modifiers) // Add power-up's modifiers to stats
-            stats.AddModifier(m);
-        foreach (Buff.Trigger t in buff.Triggers) { // Add all the powerup's triggers to the respective event calls
-            t.Enable(this);
-            switch (t.condition) {
-                case Buff.Trigger.TriggerCondition.Update:
-                    OnUpdate.AddListener(t.Activate);
-                    break;
-                case Buff.Trigger.TriggerCondition.Move:
-                    OnMove.AddListener(t.Activate);
-                    break;
-            }
-        }
+
+        buff.Equip(this);
+
         if (buff.Source.GetType() == typeof(PowerupData))
             if (OnAddPowerUp != null)
                 OnAddPowerUp((PowerupData)buff.Source, buff);
@@ -188,19 +176,7 @@ public class Player {
     // Remove each modifier granted by the power-up and remove the power-up from list of power-ups
     public void RemoveBuff(Buff buff) {
         if (buffs.Remove(buff)) { // Remove powerup from list of powerups
-            foreach (PlayerStats.Modifier m in buff.Modifiers) // Remove all modifiers granted by this powerup
-                stats.RemoveModifier(m);
-            foreach (Buff.Trigger t in buff.Triggers) {// Remove all the powerup's triggers from the respective event calls
-                t.Disable();
-                switch (t.condition) {
-                    case Buff.Trigger.TriggerCondition.Update:
-                        OnUpdate.RemoveListener(t.Activate);
-                        break;
-                    case Buff.Trigger.TriggerCondition.Move:
-                        OnMove.RemoveListener(t.Activate);
-                        break;
-                }
-            }
+            buff.Unequip(this);
         }
     }
 

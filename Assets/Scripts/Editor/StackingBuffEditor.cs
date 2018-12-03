@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(BuffData), true)]
-public class BuffEditor : Editor {
+[CustomEditor(typeof(StackingBuffData))]
+public class StackingBuffEditor : Editor {
 
-    private BuffData script {
-        get { return (BuffData)target; }
+    private StackingBuffData script {
+        get { return (StackingBuffData)target; }
     }
 
     public override void OnInspectorGUI() {
@@ -27,6 +27,8 @@ public class BuffEditor : Editor {
         ModifierSettings();
 
         TriggerSettings();
+
+        script.counterName = EditorGUILayout.TextField("Counter Name: ", script.counterName);
 
         if (GUI.changed) {
             EditorUtility.SetDirty(script);

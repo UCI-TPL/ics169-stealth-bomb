@@ -2,38 +2,55 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Buff", menuName = "Buff/Buff", order = 2)]
-public class BuffData : ScriptableObject {
+public abstract class BuffData<BuffType> : BuffData where BuffType : Buff, new() {
 
     [SerializeField]
-    private Buff baseBuff;
-    public List<PlayerStats.Modifier> Modifiers { get { return baseBuff.Modifiers; } }
-    public List<Buff.Trigger> Triggers { get { return baseBuff.Triggers; } }
+    protected BuffType baseBuff;
+    public override List<PlayerStats.Modifier> Modifiers { get { return baseBuff.Modifiers; } }
+    public override List<Buff.Trigger> Triggers { get { return baseBuff.Triggers; } }
 
     private void OnEnable() {
         if (baseBuff == null) // Set powerup data to this if instance is not yet created
-            baseBuff = new Buff();
+            baseBuff = new BuffType();
     }
 
     // Add modifier to the powerup
-    public void AddModifier(string name, float value) {
+    public override void AddModifier(string name, float value) {
         baseBuff.Modifiers.Add(new PlayerStats.Modifier(name, value));
     }
 
     // Remove modifier from the powerup
-    public void RemoveModifier(int index) {
+    public override void RemoveModifier(int index) {
         baseBuff.Modifiers.RemoveAt(index);
     }
 
-    public void AddTrigger() {
+    public override void AddTrigger() {
         baseBuff.Triggers.Add(new Buff.Trigger());
     }
 
-    public void RemoveTrigger(int index) {
+    public override void RemoveTrigger(int index) {
         baseBuff.Triggers.RemoveAt(index);
     }
 
-    public Buff Instance(float duration, object source) {
-        return baseBuff.DeepCopy(duration, source);
+    public override Buff Instance(float duration, object source) {
+        return baseBuff.DeepCopy(this, duration, source);
     }
+}
+
+public abstract class BuffData : ScriptableObject {
+
+    public abstract List<PlayerStats.Modifier> Modifiers { get; }
+    public abstract List<Buff.Trigger> Triggers { get; }
+
+    // Add modifier to the powerup
+    public abstract void AddModifier(string name, float value);
+
+    // Remove modifier from the powerup
+    public abstract void RemoveModifier(int index);
+
+    public abstract void AddTrigger();
+
+    public abstract void RemoveTrigger(int index);
+
+    public abstract Buff Instance(float duration, object source);
 }

@@ -35,7 +35,7 @@ public class LaserWeapon : Weapon {
     }
 
     // OnActivate is called once when the weapon is activated
-    protected override void OnActivate() {
+    protected override void OnActivate(Vector3 start, Vector3 direction, PlayerController targetController = null) {
         CurrentBeam = laserBeamPool.Count > 0 ? laserBeamPool.Dequeue() : CreateLaserBeam();
         SetUpLaser(CurrentBeam);
         startChargeTime = Time.time;

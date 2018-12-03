@@ -82,8 +82,10 @@ public class PlayerStats {
     public void AddModifier(Modifier modifier) {
         if (stats.ContainsKey(modifier.name))
             stats[modifier.name].AddModifier(modifier);
-        else
-            Debug.LogWarning("Error adding modifier, " + "Player " + player.playerNumber + " does not contain a stat named \"" + modifier.name + "\"");
+        else {
+            stats.Add(modifier.name, new Stat(0, modifier.type == Modifier.ModifierType.Bool ? Stat.Type.Bool : Stat.Type.Numerical));
+            stats[modifier.name].AddModifier(modifier);
+        }
     }
 
     // Attempts to remove modifier from a stat, if that stat does not exist display error

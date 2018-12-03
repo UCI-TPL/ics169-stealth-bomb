@@ -4,6 +4,7 @@ using UnityEngine;
 
 [System.Serializable]
 public class Buff {
+    protected BuffData buffData;
     public readonly float startTime;
     public readonly float endTime;
     public float timeRemaining {
@@ -27,16 +28,49 @@ public class Buff {
     }
 
     // Contructor used to clone instance of powerup
-    private Buff(float duration, object source) {
+    protected Buff(float duration, object source) {
         Triggers = new List<Trigger>();
         this.Source = source;
         startTime = Time.time;
         endTime = Time.time + duration;
     }
 
+    public virtual void Equip(Player player) {
+        foreach (PlayerStats.Modifier m in Modifiers) // Add power-up's modifiers to stats
+            player.stats.AddModifier(m);
+        foreach (Trigger t in Triggers) { // Add all the powerup's triggers to the respective event calls
+            t.Enable(player);
+            switch (t.condition) {
+                case Trigger.TriggerCondition.Update:
+                    player.OnUpdate.AddListener(t.Activate);
+                    break;
+                case Trigger.TriggerCondition.Move:
+                    player.OnMove.AddListener(t.Activate);
+                    break;
+            }
+        }
+    }
+
+    public virtual void Unequip(Player player) {
+        foreach (PlayerStats.Modifier m in Modifiers) // Remove all modifiers granted by this powerup
+            player.stats.RemoveModifier(m);
+        foreach (Trigger t in Triggers) {// Remove all the powerup's triggers from the respective event calls
+            t.Disable();
+            switch (t.condition) {
+                case Trigger.TriggerCondition.Update:
+                    player.OnUpdate.RemoveListener(t.Activate);
+                    break;
+                case Trigger.TriggerCondition.Move:
+                    player.OnMove.RemoveListener(t.Activate);
+                    break;
+            }
+        }
+    }
+
     // Create a deep copy of this powerup instance. Used for when adding a new powerup to a player
-    public Buff DeepCopy(float duration, object source) {
+    public virtual Buff DeepCopy(BuffData buffData, float duration, object source) {
         Buff copy = new Buff(duration, source);
+        copy.buffData = buffData;
         copy.Modifiers = Modifiers;
         foreach (Trigger t in Triggers) {
             copy.Triggers.Add(t.DeepCopy(copy));
@@ -77,16 +111,16 @@ public class Buff {
         }
 
         // Activate weapon if off cooldown
-        public void Activate(Vector3 origin, Vector3 direction, PlayerController targetController = null) {
+        public void Activate(Vector3 start, Vector3 direction, PlayerController targetController = null) {
             if (refreshTime <= Time.time) {
-                OnActivate(origin, direction, targetController);
+                OnActivate(start, direction, targetController);
                 refreshTime = Time.time + cooldown;
             }
         }
 
         // What happens when trigger is activated
-        private void OnActivate(Vector3 origin, Vector3 direction, PlayerController targetController = null) {
-            weapon.Activate(origin, direction, targetController);
+        private void OnActivate(Vector3 start, Vector3 direction, PlayerController targetController = null) {
+            weapon.Activate(start, direction, targetController);
             weapon.Release();
         }
 

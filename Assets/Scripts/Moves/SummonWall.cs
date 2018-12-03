@@ -17,7 +17,7 @@ public class SummonWall : Weapon {
     }
 
 
-    protected override void OnActivate()
+    protected override void OnActivate(Vector3 start, Vector3 direction, PlayerController targetController = null)
     {
         if (cooldown <= Time.time)
         {

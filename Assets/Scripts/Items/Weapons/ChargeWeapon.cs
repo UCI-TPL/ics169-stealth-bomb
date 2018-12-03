@@ -21,7 +21,7 @@ public class ChargeWeapon : Weapon {
     }
 
     // OnActivate is called once when the weapon is activated
-    protected override void OnActivate() {
+    protected override void OnActivate(Vector3 start, Vector3 direction, PlayerController targetController = null) {
         startChargeTime = Time.time;
     }
 

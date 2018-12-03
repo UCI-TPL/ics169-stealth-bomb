@@ -86,8 +86,6 @@ public class PlayerController : MonoBehaviour {
     }
 
     private Vector3 lastPosition;
-    private float distanceMoved;
-    private float distanceCounter;
     public bool IsMoving {
         get { return rb.velocity.magnitude > 0.1f; }
     }
@@ -165,7 +163,6 @@ public class PlayerController : MonoBehaviour {
             transform.forward = Vector3.RotateTowards(transform.forward, scaledVector, player.stats.TurnSpeed * Mathf.Deg2Rad * Time.deltaTime, 0);
 
         UpdateTriggers();
-        distanceMoved += (transform.position - lastPosition).magnitude;
         lastPosition = transform.position;
     }
 
@@ -226,9 +223,8 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void UpdateTriggers() {
-        if (IsMoving && IsGrounded && distanceMoved - distanceCounter >= 0.75) {
-            distanceCounter = distanceMoved;
-            player.OnMove.Invoke(lastPosition, transform.position, null);
+        if (IsMoving && IsGrounded) {
+            player.OnMove.Invoke(lastPosition, transform.position - lastPosition, null);
         }
     }
 

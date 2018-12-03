@@ -79,7 +79,7 @@ public abstract class Weapon {
     protected virtual void End() { }
 
     // Activate weapon. In other words, initiate attack
-    public void Activate(Vector3 origin, Vector3 direction, PlayerController targetController = null) {
+    public void Activate(Vector3 start, Vector3 direction, PlayerController targetController = null) {
         if (!attackQueued && (!OffCooldown || AutoAttack)) { // Start queueing attacks if attack is on cooldown or AutoAttack is true
             attackQueued = true;
             player.controller.StartCoroutine(QueueingAttack(targetController));
@@ -94,7 +94,7 @@ public abstract class Weapon {
                 isCharging = true;
             }
 
-            OnActivate();
+            OnActivate(start, direction, targetController);
 
             if (overrideChargeUpdate) // Only start OnCharginUpdate coroutine if its been overriden in derived class, This is for slight optimization
                 player.controller.StartCoroutine(ChargingUpdate(numCharging));
@@ -109,7 +109,7 @@ public abstract class Weapon {
     }
 
     // OnActivate is called once when the weapon is activated
-    protected virtual void OnActivate() { }
+    protected virtual void OnActivate(Vector3 start, Vector3 direction, PlayerController targetController = null) { }
 
     // Coroutine to repetedly call OnChargingUpdate while weapon is charging
     private IEnumerator ChargingUpdate(int numCharging) {

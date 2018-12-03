@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Vector3Extensions;
 
-public class BurningGround : MonoBehaviour {
+public class GroundEffect : MonoBehaviour {
     
     [HideInInspector]
     public float HitCooldown { get; private set; }
@@ -11,7 +12,7 @@ public class BurningGround : MonoBehaviour {
     public Collider hitBox;
     private Collider IgnoreCollision;
     [SerializeField]
-    private new MeshRenderer renderer;
+    private new MeshRenderer[] renderer;
     private float endTime;
 
     [SerializeField]
@@ -21,21 +22,23 @@ public class BurningGround : MonoBehaviour {
     public HitAction OnHit;
 
     private static Transform parent;
-    private readonly static Queue<BurningGround> ObjectPool = new Queue<BurningGround>();
+    private readonly static Queue<GroundEffect> ObjectPool = new Queue<GroundEffect>();
 
     private readonly static Dictionary<object, int> ActiveSource = new Dictionary<object, int>();
     private readonly static Dictionary<object, Queue<CooldownObject>> CooldownQueue = new Dictionary<object, Queue<CooldownObject>>();
     private readonly static Dictionary<object, HashSet<GameObject>> CooldownSet = new Dictionary<object, HashSet<GameObject>>();
 
+    private readonly static Vector3 planeVector = new Vector3(1, 0, 1);
+
     // Use this for initialization
-    public void Create(HitAction onHit, Player source, Vector3 location, float duration, float hitCooldown, Collider ignoreCollision = null) {
+    public void Create(HitAction onHit, Player source, Vector3 location, float size, float duration, float hitCooldown, Collider ignoreCollision = null) {
         if (!ActiveSource.ContainsKey(source)) {
             CooldownQueue.Add(source, new Queue<CooldownObject>());
             CooldownSet.Add(source, new HashSet<GameObject>());
             ActiveSource.Add(source, 0);
         }
 
-        BurningGround newInstance;
+        GroundEffect newInstance;
         if (ObjectPool.Count > 0) {
             newInstance = ObjectPool.Dequeue();
             newInstance.gameObject.SetActive(true);
@@ -47,13 +50,14 @@ public class BurningGround : MonoBehaviour {
                 parent = new GameObject("BurningGroundObjects").transform;
                 //parent.SetParent(GameManager.instance.PersistBetweenRounds);
             }
-            newInstance = Instantiate<GameObject>(gameObject, location, Quaternion.identity, parent).GetComponent<BurningGround>();
+            newInstance = Instantiate<GameObject>(gameObject, location, Quaternion.identity, parent).GetComponent<GroundEffect>();
         }
         ++ActiveSource[source];
         newInstance.gameObject.SetActive(true);
         newInstance.hitBox.enabled = true;
-        newInstance.StartCoroutine(newInstance.StartAnimation(1, 0.25f));
-        newInstance.renderer.sharedMaterial = materialPerPlayer[source.playerNumber];
+        newInstance.StartCoroutine(newInstance.StartAnimation(size, 0.25f));
+        foreach(Renderer r in newInstance.renderer)
+            r.sharedMaterial = materialPerPlayer[source.playerNumber];
         newInstance.OnHit = onHit;
         newInstance.Source = source;
         newInstance.HitCooldown = hitCooldown;
@@ -74,17 +78,17 @@ public class BurningGround : MonoBehaviour {
     }
 
     private IEnumerator StartAnimation(float scale, float duration) {
-        Vector3 velocity = Vector3.one * scale / duration;
-        transform.localScale = Vector3.zero;
+        Vector3 velocity = planeVector * scale / duration;
+        transform.localScale = Vector3.up;
         while (transform.localScale.x < scale) {
             transform.localScale += velocity * Time.deltaTime;
             yield return null;
         }
-        transform.localScale = Vector3.one * scale;
+        transform.localScale = Vector3.up + planeVector * scale;
     }
 
     private IEnumerator DestroyAnimation(float duration) {
-        Vector3 velocity = transform.localScale / duration;
+        Vector3 velocity = (transform.localScale / duration).Scaled(planeVector);
         while (transform.localScale.x > 0) {
             transform.localScale -= velocity * Time.deltaTime;
             yield return null;

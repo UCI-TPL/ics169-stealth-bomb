@@ -26,6 +26,6 @@ MonoBehaviour:
   minWidth: 0.2
   hitCooldown: 0.1
   DecayTimePerWidth: 0.25
-  laserBuff: {fileID: 11400000, guid: 3867f4c823c2d984babb9713aad5cdef, type: 2}
+  laserBuff: {fileID: 11400000, guid: a64349e31df0c1d41883f15067fbf551, type: 2}
   LaserBeam: {fileID: 114587784883638426, guid: 2edd6be0e30c60e4e93cea76b1d52611,
     type: 2}

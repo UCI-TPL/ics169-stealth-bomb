@@ -8,7 +8,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06bba2dd5b5d30f42a7ed4b976769160, type: 3}
+  m_Script: {fileID: 11500000, guid: f0fa11922bb97044e951e878fa580b64, type: 3}
   m_Name: FireBuff
   m_EditorClassIdentifier: 
   baseBuff:
@@ -18,3 +18,4 @@ MonoBehaviour:
       condition: 1
       cooldown: 0
       triggerWeapon: {fileID: 11400000, guid: dddc2f3c56024cc4d9f109f237ba0814, type: 2}
+  counterName: FireBuffCount
