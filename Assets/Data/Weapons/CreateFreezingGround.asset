@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9449511a2ff13e947b97fa5c76f6e467, type: 3}
+  m_Name: CreateFreezingGround
+  m_EditorClassIdentifier: 
+  name: Create Freezing Ground
+  image: {fileID: 0}
+  description: Creates Freezing Ground
+  type: 2
+  autoAttack: 0
+  cooldown: 0
+  knockbackStrength: 0
+  damage: 0
+  buffs: []
+  groundEffectPrefab: {fileID: 114506184695875422, guid: a37d4d46679dec448afc7c6c3489e80c,
+    type: 2}
+  hitCooldown: 0.25
+  duration: 1
+  counterName: IceBuffCount
+  debuff: {fileID: 11400000, guid: 7433e8d694b6838499c9277b1fdc0388, type: 2}
+  debuffDuration: 0.25

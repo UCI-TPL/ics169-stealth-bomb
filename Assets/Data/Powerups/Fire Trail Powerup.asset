@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: Fire Trail Powerup
   m_EditorClassIdentifier: 
   name: Fire Trail
-  image: {fileID: 21300000, guid: b58499627988b5444ab304d1c9e1c052, type: 3}
+  image: {fileID: 21300000, guid: 2fc1f1aab3a8d834b8214541b1997b25, type: 3}
   description: Creates a fiery trail behind the player.
   type: 1
   buffData: {fileID: 11400000, guid: 3864c52f943e7b642869a0aee8add71a, type: 2}

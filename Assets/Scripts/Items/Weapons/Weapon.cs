@@ -153,7 +153,9 @@ public abstract class Weapon {
         PlayerController targetPlayerController = target.GetComponent<PlayerController>(); // Check if target is a player
         if (targetPlayerController != null) {
             OnHit(origin, targetPlayerController, extraData); // Activate OnHit effects and get damage dealt
-            targetPlayerController.player.Hurt(player, GetDamageDealt(origin, targetPlayerController, extraData)); // Hurt hit player
+            float damage = GetDamageDealt(origin, targetPlayerController, extraData);
+            if (damage > 0)
+                targetPlayerController.player.Hurt(player, damage); // Hurt hit player
             Knockback(origin, targetPlayerController, extraData); // Knockback hit player
         }
         //if (activateTriggers)

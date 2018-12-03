@@ -8,20 +8,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b64b9eb074199e94e993d67c3fa6e5af, type: 3}
-  m_Name: CreateBurningGroundData
+  m_Script: {fileID: 11500000, guid: 9449511a2ff13e947b97fa5c76f6e467, type: 3}
+  m_Name: CreateBurningGround
   m_EditorClassIdentifier: 
-  name: CreateBurningGround
-  image: {fileID: 21300000, guid: 3bedf194dee3f75428ce324b6740f7b4, type: 3}
-  description: Creates fire on the ground under the player
+  name: Create Burning Ground
+  image: {fileID: 0}
+  description: Creates Burrning Ground
   type: 2
   autoAttack: 0
   cooldown: 0
   knockbackStrength: 1
   damage: 1.5
   buffs: []
-  burningGroundPrefab: {fileID: 114506184695875422, guid: d5e26e09eb612ff4d91fbb46eff687c7,
+  groundEffectPrefab: {fileID: 114506184695875422, guid: d5e26e09eb612ff4d91fbb46eff687c7,
     type: 2}
   hitCooldown: 0.1
   duration: 1
   counterName: FireBuffCount
+  debuff: {fileID: 0}
+  debuffDuration: 0
