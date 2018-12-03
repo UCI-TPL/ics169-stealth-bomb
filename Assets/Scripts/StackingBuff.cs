@@ -24,17 +24,7 @@ public class StackingBuff : Buff {
             if (!staticTriggers[buffData].ContainsKey(player))
                 staticTriggers[buffData].Add(player, Triggers);
 
-            foreach (Trigger t in staticTriggers[buffData][player]) { // Add all the powerup's triggers to the respective event calls
-                t.Enable(player);
-                switch (t.condition) {
-                    case Trigger.TriggerCondition.Update:
-                        player.OnUpdate.AddListener(t.Activate);
-                        break;
-                    case Trigger.TriggerCondition.Move:
-                        player.OnMove.AddListener(t.Activate);
-                        break;
-                }
-            }
+            AddTriggers(player, staticTriggers[buffData][player]);
         }
     }
 
@@ -43,17 +33,7 @@ public class StackingBuff : Buff {
             player.stats.RemoveModifier(m);
         player.stats.RemoveModifier(counter);
         if (player.stats.GetStat(counterName) <= 0) {
-            foreach (Trigger t in staticTriggers[buffData][player]) {// Remove all the powerup's triggers from the respective event calls
-                t.Disable();
-                switch (t.condition) {
-                    case Trigger.TriggerCondition.Update:
-                        player.OnUpdate.RemoveListener(t.Activate);
-                        break;
-                    case Trigger.TriggerCondition.Move:
-                        player.OnMove.RemoveListener(t.Activate);
-                        break;
-                }
-            }
+            RemoveTriggers(player, staticTriggers[buffData][player]);
 
             staticTriggers[buffData].Remove(player);
         }

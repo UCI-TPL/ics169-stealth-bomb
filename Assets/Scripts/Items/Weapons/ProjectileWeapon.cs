@@ -13,7 +13,7 @@ public class ProjectileWeapon : Weapon {
     }
 
     protected override void OnActivate(Vector3 start, Vector3 direction, PlayerController targetController = null) {
-        data.projectile.Shoot(player, data.projSpeed, data.numProj, (Vector3 origin, Vector3 contactPoint, GameObject target) => { Hit(origin, target); });
+        data.projectile.Shoot(player, data.projSpeed, data.numProj, (Vector3 origin, Vector3 contactPoint, GameObject target) => { Hit(origin, contactPoint, target); });
     }
 
     // Create a deep copy of this weapon instance

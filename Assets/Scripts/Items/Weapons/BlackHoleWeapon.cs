@@ -42,7 +42,7 @@ public class BlackHoleWeapon : Weapon {
 		}
 	}
 
-	protected override void OnHit(Vector3 origin, PlayerController targetPlayerController, object extraData) {
+	protected override void OnHit(Vector3 origin, Vector3 contactPoint, PlayerController targetPlayerController, object extraData) {
 		Debug.Log("Hit");
 		if (!alreadyHit) {
 			GameObject.Instantiate(data.blackHolePrefab, (Vector3) extraData, Quaternion.identity);

@@ -19,7 +19,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4077352953351424}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Rescale
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36,7 +36,7 @@ GameObject:
   - component: {fileID: 4309566547234026}
   - component: {fileID: 33178022460470656}
   - component: {fileID: 23294115187773686}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -51,7 +51,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4455245078060272}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Effect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -66,7 +66,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4968154430805678}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Rescale
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -84,7 +84,7 @@ GameObject:
   - component: {fileID: 33436727501217158}
   - component: {fileID: 23079850350239580}
   - component: {fileID: 135760524992410788}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Front
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -101,7 +101,7 @@ GameObject:
   - component: {fileID: 4865617980648048}
   - component: {fileID: 33580519834888862}
   - component: {fileID: 23149535022787380}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: InnerBeam
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -118,7 +118,7 @@ GameObject:
   - component: {fileID: 4937457926774966}
   - component: {fileID: 114587784883638426}
   - component: {fileID: 54250272502199478}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: LaserBeam
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 4732004457596870}
   - component: {fileID: 33160443374211280}
   - component: {fileID: 23271553154795534}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Beam
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -153,7 +153,7 @@ GameObject:
   - component: {fileID: 33594664069271548}
   - component: {fileID: 23137618152850886}
   - component: {fileID: 135969341568526880}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: End
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -170,7 +170,7 @@ GameObject:
   - component: {fileID: 4277923843630326}
   - component: {fileID: 33014304070550970}
   - component: {fileID: 23026451037398414}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -187,7 +187,7 @@ GameObject:
   - component: {fileID: 4947566065137154}
   - component: {fileID: 199528702179940626}
   - component: {fileID: 198147332858552570}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: ParticleBeam
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -202,7 +202,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4303060255524444}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Rescale
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -218,7 +218,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4733609176070102}
   - component: {fileID: 64231215897991802}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}

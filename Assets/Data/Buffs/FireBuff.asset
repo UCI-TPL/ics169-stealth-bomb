@@ -18,4 +18,8 @@ MonoBehaviour:
       condition: 1
       cooldown: 0
       triggerWeapon: {fileID: 11400000, guid: e1cdd45559085cf468babb0df6c73b19, type: 2}
+    - modifiers: []
+      condition: 13
+      cooldown: 0
+      triggerWeapon: {fileID: 11400000, guid: a47447c47d3e6684390f48995677e4ca, type: 2}
   counterName: FireBuffCount

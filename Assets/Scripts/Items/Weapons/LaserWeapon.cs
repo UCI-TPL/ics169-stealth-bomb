@@ -61,7 +61,7 @@ public class LaserWeapon : Weapon {
     
     private LaserBeam CreateLaserBeam() {
         LaserBeam laserBeam = GameObject.Instantiate<GameObject>(data.LaserBeam.gameObject, player.controller.transform).GetComponent<LaserBeam>();
-        laserBeam.OnHit.AddListener((Vector3 origin, GameObject target) => { Hit(origin, target, ChargeLevel); });
+        laserBeam.OnHit.AddListener((Vector3 origin, Vector3 contactPoint, GameObject target) => { Hit(origin, contactPoint, target, ChargeLevel); });
         laserBeam.IgnoreCollision = player.controller.gameObject;
         //laserBeam.hitCooldown = data.hitCooldown;
         laserBeam.gameObject.SetActive(false);

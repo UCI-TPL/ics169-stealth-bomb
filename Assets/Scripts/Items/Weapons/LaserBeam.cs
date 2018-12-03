@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Event_Vector3_GameObject : UnityEvent<Vector3, GameObject> { }
+public class Event_Vector3_GameObject : UnityEvent<Vector3, Vector3, GameObject> { }
 
 public class LaserBeam : MonoBehaviour {
 
@@ -77,6 +77,8 @@ public class LaserBeam : MonoBehaviour {
         if (Physics.Raycast(transform.position, transform.forward, out hit, MaxLength * mainEffect.transform.lossyScale.z, CollideMask, QueryTriggerInteraction.Ignore)) {
             end.transform.position = hit.point;
             length = Vector3.Distance(front.transform.localPosition, end.transform.localPosition); // length is distance betwen beginning point(front) and end point(end)
+
+            OnHit.Invoke(transform.position, Vector3.MoveTowards(hit.point, transform.position, 0.1f), hit.collider.gameObject);
         }
         else {
             length = MaxLength;
@@ -167,7 +169,8 @@ public class LaserBeam : MonoBehaviour {
         if (other.gameObject != IgnoreCollision && !cooldownSet.Contains(other.gameObject)) {
             cooldownSet.Add(other.gameObject);
             cooldownQueue.Enqueue(new CooldownObject(other.gameObject, hitCooldown));
-            OnHit.Invoke(transform.position, other.gameObject);
+            if (other.gameObject.GetComponent<PlayerController>() != null)
+                OnHit.Invoke(transform.position, other.transform.position, other.gameObject);
         }
     }
 

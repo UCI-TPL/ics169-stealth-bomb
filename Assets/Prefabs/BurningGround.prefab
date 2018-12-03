@@ -144,7 +144,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1171033872969540}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.3, z: 0}
+  m_LocalPosition: {x: 0, y: 0.2, z: 0}
   m_LocalScale: {x: 1, y: 0.2, z: 1}
   m_Children: []
   m_Father: {fileID: 4803750726854932}
@@ -170,7 +170,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1990328633023864}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.5, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4295522944194780}
@@ -351,12 +351,14 @@ MonoBehaviour:
   - {fileID: 23842762136996748}
   - {fileID: 23196173479352410}
   - {fileID: 23684240207044572}
+  GroundMask:
+    serializedVersion: 2
+    m_Bits: 2048
   materialPerPlayer:
   - {fileID: 2100000, guid: 0e77a659a5db16e46bc8e7b4219ec745, type: 2}
   - {fileID: 2100000, guid: 54a7e125c087bdc499b585ae02220a1c, type: 2}
   - {fileID: 2100000, guid: e444a22b1a7239f42bf55cb64b52efe7, type: 2}
   - {fileID: 2100000, guid: 23c4e7c54584c324aa46a8672592db9b, type: 2}
-  counterName: FireBuffCount
 --- !u!135 &135599897179216222
 SphereCollider:
   m_ObjectHideFlags: 1

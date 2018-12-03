@@ -16,6 +16,9 @@ public class GroundEffect : MonoBehaviour {
     private float endTime;
 
     [SerializeField]
+    private LayerMask GroundMask;
+
+    [SerializeField]
     private Material[] materialPerPlayer;
 
     public delegate void HitAction(Vector3 position, GameObject target);
@@ -37,6 +40,10 @@ public class GroundEffect : MonoBehaviour {
             CooldownSet.Add(source, new HashSet<GameObject>());
             ActiveSource.Add(source, 0);
         }
+        RaycastHit hit;
+        if (!Physics.Raycast(location + Vector3.up * 0.25f, Physics.gravity, out hit, 1.25f, GroundMask, QueryTriggerInteraction.Ignore))
+            return;
+        location = hit.point;
 
         GroundEffect newInstance;
         if (ObjectPool.Count > 0) {

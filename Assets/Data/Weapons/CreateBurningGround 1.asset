@@ -9,7 +9,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9449511a2ff13e947b97fa5c76f6e467, type: 3}
-  m_Name: CreateBurningGround
+  m_Name: CreateBurningGround 1
   m_EditorClassIdentifier: 
   name: Create Burning Ground
   image: {fileID: 0}
@@ -24,7 +24,7 @@ MonoBehaviour:
     type: 2}
   hitCooldown: 0.1
   duration: 1
-  checkDistance: 1
+  checkDistance: 0
   counterName: FireBuffCount
   debuff: {fileID: 0}
   debuffDuration: 0

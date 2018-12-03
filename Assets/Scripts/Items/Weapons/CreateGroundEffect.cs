@@ -17,17 +17,20 @@ public class CreateGroundEffect : Weapon {
 
     // OnActivate is called once when the weapon is activated
     protected override void OnActivate(Vector3 start, Vector3 direction, PlayerController targetController = null) {
-        distanceMoved += direction.magnitude;
-        float size = player.stats.GetStat(data.counterName);
-        if (distanceMoved - distanceCounter >= 0.5f * size) {
-            distanceCounter = distanceMoved;
-            for (float dist = direction.magnitude; dist > 0; dist -= 0.5f * size)
-                data.groundEffectPrefab.Create((Vector3 origin, GameObject target) => { Hit(origin, target); }, player, start + direction.normalized * dist, size, data.duration, data.hitCooldown, player.controller.HitBox);
-        }
+            float size = player.stats.GetStat(data.counterName);
+        if (data.checkDistance) {
+            distanceMoved += direction.magnitude;
+            if (distanceMoved - distanceCounter >= 0.5f * size) {
+                distanceCounter = distanceMoved;
+                for (float dist = direction.magnitude; dist > 0; dist -= 0.5f * size)
+                    data.groundEffectPrefab.Create((Vector3 origin, GameObject target) => { Hit(origin, target.transform.position, target, null, false); }, player, start + direction.normalized * dist, size, data.duration, data.hitCooldown, player.controller.HitBox);
+            }
+        } else
+            data.groundEffectPrefab.Create((Vector3 origin, GameObject target) => { Hit(origin, target.transform.position, target, null, false); }, player, start + direction, size, data.duration, data.hitCooldown, player.controller.HitBox);
     }
 
-    protected override void OnHit(Vector3 origin, PlayerController targetPlayerController, object extraData) {
-        if (data.debuff != null)
+    protected override void OnHit(Vector3 origin, Vector3 contactPoint, PlayerController targetPlayerController, object extraData) {
+        if (targetPlayerController != null && data.debuff != null)
             targetPlayerController.player.AddBuff(data.debuff.Instance(data.debuffDuration, player));
     }
 

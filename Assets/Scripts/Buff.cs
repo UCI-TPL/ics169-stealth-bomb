@@ -38,7 +38,11 @@ public class Buff {
     public virtual void Equip(Player player) {
         foreach (PlayerStats.Modifier m in Modifiers) // Add power-up's modifiers to stats
             player.stats.AddModifier(m);
-        foreach (Trigger t in Triggers) { // Add all the powerup's triggers to the respective event calls
+        AddTriggers(player, Triggers);
+    }
+
+    protected static void AddTriggers(Player player, List<Trigger> triggers) {
+        foreach (Trigger t in triggers) { // Add all the powerup's triggers to the respective event calls
             t.Enable(player);
             switch (t.condition) {
                 case Trigger.TriggerCondition.Update:
@@ -47,6 +51,9 @@ public class Buff {
                 case Trigger.TriggerCondition.Move:
                     player.OnMove.AddListener(t.Activate);
                     break;
+                case Trigger.TriggerCondition.Hit:
+                    player.OnHit.AddListener(t.Activate);
+                    break;
             }
         }
     }
@@ -54,7 +61,11 @@ public class Buff {
     public virtual void Unequip(Player player) {
         foreach (PlayerStats.Modifier m in Modifiers) // Remove all modifiers granted by this powerup
             player.stats.RemoveModifier(m);
-        foreach (Trigger t in Triggers) {// Remove all the powerup's triggers from the respective event calls
+        RemoveTriggers(player, Triggers);
+    }
+
+    protected static void RemoveTriggers(Player player, List<Trigger> triggers) {
+        foreach (Trigger t in triggers) {// Remove all the powerup's triggers from the respective event calls
             t.Disable();
             switch (t.condition) {
                 case Trigger.TriggerCondition.Update:
@@ -62,6 +73,9 @@ public class Buff {
                     break;
                 case Trigger.TriggerCondition.Move:
                     player.OnMove.RemoveListener(t.Activate);
+                    break;
+                case Trigger.TriggerCondition.Hit:
+                    player.OnHit.RemoveListener(t.Activate);
                     break;
             }
         }

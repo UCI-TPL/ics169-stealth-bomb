@@ -27,6 +27,7 @@ public class Player {
     // Events
     public TriggerAction OnUpdate = new TriggerAction();
     public TriggerAction OnMove = new TriggerAction();
+    public TriggerAction OnHit = new TriggerAction();
     public delegate void onHurtDel(Player damageDealer, Player reciever, float percentDealt);
     public event onHurtDel OnHurt;
     public UnityEvent onHeal = new UnityEvent();
