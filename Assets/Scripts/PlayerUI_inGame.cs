@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,16 +14,24 @@ public class PlayerUI_inGame : MonoBehaviour {
     public UnityEngine.UI.Image playerUI_AimArrowMaskL;
     public UnityEngine.UI.Image playerUI_AimArrowMaskR;
 
+    [Header("Overhead Text Notificiation")]
+    public RectTransform playerUI_TextCanvas;
+    public UnityEngine.UI.Text playerUI_NotifText;
+    public float showForSeconds = 1.25f;
+
     // flags for rendering player UI
     private bool HP_CoroutineActive = false;
+    private bool notifTextActive = false;
     private Transform cameraTransform;
 
-    void Awake()
+    //  UNITY METHODS
+    void Start()
     {
         playerCon = gameObject.GetComponent<PlayerController>();
         // To have HP bar render all the time remove this code, as well as code in the HurtPlayer method in Player.cs
         playerUI_HPCanvas.gameObject.SetActive(false);
         cameraTransform = Camera.main.transform;
+        playerCon.player.OnAddPowerUp += powerupHandler;
     }
 
     void LateUpdate()
@@ -30,8 +39,32 @@ public class PlayerUI_inGame : MonoBehaviour {
         playerUI_HPCanvas.gameObject.SetActive(playerCon.player.health < playerCon.player.stats.maxHealth);
         playerUI_HPCanvas.rotation = Quaternion.Euler(90f, cameraTransform.rotation.eulerAngles.y, 0f);
         playerUI_healthBar.fillAmount = playerCon.player.health / playerCon.player.stats.maxHealth;
+        playerUI_TextCanvas.rotation = Quaternion.Euler(50f, cameraTransform.rotation.eulerAngles.y, 0f);
 
         // Aiming Arrow Fill Amount
         playerUI_AimArrowMaskL.fillAmount = playerUI_AimArrowMaskR.fillAmount  = playerCon.Weapon.ChargeLevel;
+    }
+
+    void OnDestroy()
+    {
+        playerCon.player.OnAddPowerUp -= powerupHandler;
+    }
+
+    //  METHODS
+    public void powerupHandler(PowerupData powerupData, Buff buff)
+    {
+        if (notifTextActive)
+            StopAllCoroutines();        // Should be fine. change if more coroutines get added.
+        StartCoroutine(notifTextRoutine(powerupData));
+    }
+
+    // COROUTINES
+    IEnumerator notifTextRoutine(PowerupData pData)
+    {
+        notifTextActive = true;
+        playerUI_NotifText.text = "Got Power-up!\n" + pData.name;
+        yield return new WaitForSeconds(showForSeconds);
+        playerUI_NotifText.text = "";
+        notifTextActive = false;
     }
 }
