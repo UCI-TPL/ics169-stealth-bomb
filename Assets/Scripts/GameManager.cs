@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour {
     public PlayerData DefaultPlayerData;
     public PlayerController PlayerPrefab;
     public PlayerController GhostPrefab;
+    //public PlayerController GhostPrefab;
     // Important Data in any non Main Menu scene.
     public Player[] players { get; private set; }
     public Player leader;
@@ -266,6 +267,8 @@ public class GameManager : MonoBehaviour {
         public int PlayersAlive { get { return activePlayersControllers.Count; } }
         private Scene roundScene;
 
+        public Vector3 ghostSpawnLocation = new Vector3(13f,6f,13f); //this will have to be different per map! Will be changed later
+
         public bool roundEnding = false;
 
         public GameRound(Player[] players) {
@@ -288,6 +291,7 @@ public class GameManager : MonoBehaviour {
         }
 
         public void StartGame() {
+
             string s = "Starting round with players: ";
             foreach (Player player in players)
                 s += player.playerNumber.ToString() + ", ";
@@ -338,7 +342,9 @@ public class GameManager : MonoBehaviour {
             foreach (GameObject g in activePlayersControllers)
                 g.GetComponent<PlayerController>().Destroy();
             foreach (GameObject g in ghostPlayerControllers)
+            {
                 g.GetComponent<PlayerController>().Destroy();
+            }
             foreach (Player player in players)
                 player.OnDeath -= Player_onDeath;
             State = GameState.Finished;
@@ -347,21 +353,27 @@ public class GameManager : MonoBehaviour {
 
         private void Player_onDeath(Player killer, Player killed) {
             activePlayersControllers.Remove(killed.controller.gameObject);
-            /*
             Vector3 deathPosition = killed.controller.transform.position;
-            if(deathPosition.y < 6.5)
-                return;
-            instance.StartCoroutine(InstantiateGhost(killed.playerNumber, killed, deathPosition));
-            */
+            if (deathPosition.y < 6.5)
+                deathPosition = ghostSpawnLocation; //will have to be changed per map
+                //return;
+            instance.StartCoroutine(InstantiateGhost(killed.playerNumber, killed, deathPosition));   
+        }
+
+        private void Ghost_onDeath(Player killer, Player killed)
+        {
+            ghostPlayerControllers.Remove(killed.controller.gameObject);
         }
 
         public IEnumerator InstantiateGhost(int killedNum, Player killed, Vector3 deathPosition)
         {
-            yield return new WaitForSeconds(0.5f);
-            players[killedNum].ResetHealth();
-            players[killedNum].SetGhost(Instantiate<GameObject>(GameManager.instance.GhostPrefab.gameObject, deathPosition, Quaternion.identity).GetComponent<PlayerController>());
-            ghostPlayerControllers.Add(players[killedNum].controller.gameObject);
-            players[killedNum].OnDeath += Player_onDeath;
+            if(activePlayersControllers.Count  > 1) //Don't spawn the last player as a ghost
+            {
+                yield return new WaitForSeconds(0.3f);
+                players[killedNum].ResetHealth();
+                players[killedNum].SetGhost(Instantiate<GameObject>(GameManager.instance.GhostPrefab.gameObject, deathPosition, Quaternion.identity).GetComponent<PlayerController>()); //SetGhost works like SetController but without weapons
+                ghostPlayerControllers.Add(players[killedNum].controller.gameObject); //to make sure it gets deleted
+            }
         }
 
         public enum GameState {

@@ -34,11 +34,14 @@ public class ChargeWeapon : Weapon {
 
     // OnChargingUpdate is called once per frame while the weapon is charging
     protected override void OnChargingUpdate() {
+
+        //charging is completely disabled since the charge bar is now in place
+        /*
         if (rend.material.color.maxColorComponent >= data.GlowLimit) //make this higher for that big crazy aura
             return;
         else if((ChargeLevel * data.chargeLevels) > 1f) //colors only change the the weapon charges higher than one, so no glow for the fast bow
             rend.material.color = rend.material.color + ((player.controller.playerColor / data.colorAddition) * Time.deltaTime);
-
+        */
         /* use this for different phases of color attacks 
         switch ((int)(ChargeLevel * data.chargeLevels)) 
         {
@@ -65,7 +68,7 @@ public class ChargeWeapon : Weapon {
         }
         else
         {
-            Debug.LogWarning("Can't find AudioManager");
+            //Debug.LogWarning("Can't find AudioManager");
         }
         /*
         GameManager gm = GameObject.FindObjectOfType<GameManager>();
