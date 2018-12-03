@@ -56,10 +56,12 @@ public class Player {
 
     public void SetGhost(PlayerController controller)
     {
+        Color prevColor = this.controller.playerColor;
         this.controller = controller;
         controller.player = this;
-        controller.playerColor = Color.white;
-        controller.EquipWeapon(weaponData.NewInstance(this));
+        controller.playerColor = prevColor; //all the cursors have the playercolor to help tell them apart
+        //controller.playerColor = Color.white;
+        //controller.EquipWeapon(weaponData.NewInstance(this));
         ghost = true;
     }
 
@@ -67,6 +69,7 @@ public class Player {
         this.controller = controller;
         controller.player = this;
         controller.EquipWeapon(weaponData.NewInstance(this));
+        ghost = false;
        
     }
 
@@ -134,7 +137,8 @@ public class Player {
     private void CheckDeath() {
         if (health <= 0) {
             controller.input.controllers[playerNumber].Vibrate(1.0f, 1f, InputManager.Controller.VibrationMode.Diminish);
-            OnDeath(lastHurtBy, this);
+            if(!ghost)
+                OnDeath(lastHurtBy, this);
             controller.Destroy();
         }
     }

@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour {
     [HideInInspector]
     public InputManager input;
 
-    private Rigidbody rb;
+    protected Rigidbody rb;
     public Renderer rend;
     public GameObject ShootPoint;
     public Collider floorCollider;
@@ -44,8 +44,8 @@ public class PlayerController : MonoBehaviour {
     public float jumpGravityMultiplier = 0.5f;
 
     // Used to scale movement to the camera's direction
-    private Vector3 forward;
-    private Vector3 right;
+    protected Vector3 forward;
+    protected Vector3 right;
 
     public Vector2 lastForwardMovement = Vector2.zero; //used to dodge forward when not moving 
     public Vector3 lastScaledVector = Vector2.zero;
@@ -60,7 +60,7 @@ public class PlayerController : MonoBehaviour {
 
     // Required variables for jumping and detecting ground collisions
     private float jumpCooldown = 0;
-    private bool jumped = false;
+    protected bool jumped = false;
     private bool jumpedReleased = true;
     public static readonly int groundLayer = 11;
     private static readonly int groundLayerMask = 1 << groundLayer;
@@ -84,8 +84,9 @@ public class PlayerController : MonoBehaviour {
             }
         }
     }
+    
+    protected Vector3 lastPosition;
 
-    private Vector3 lastPosition;
     public bool IsMoving {
         get { return rb.velocity.magnitude > 0.1f; }
     }
@@ -101,6 +102,7 @@ public class PlayerController : MonoBehaviour {
 
     // Set up controllers
     private void Start() {
+     
         forward = Camera.main.transform.forward;
         forward.Scale(new Vector3(1, 0, 1));
         forward.Normalize();
@@ -154,7 +156,8 @@ public class PlayerController : MonoBehaviour {
     private void Update() {
         player.InGameUpdate();
         transform.localScale = player == GameManager.instance.leader ? Vector3.one * 1.35f : Vector3.one;
-        crown.SetActive(player == GameManager.instance.leader);
+        if(crown != null)
+            crown.SetActive(player == GameManager.instance.leader);
 
         Vector2 horizontalVector = input.controllers[player.playerNumber].AimVector();
         //Debug.DrawRay(transform.position, transform.forward*100, Color.white);
@@ -167,7 +170,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     // Move the player using the the controller's move input scaled by the provided speed
-    private void Move(float speed) {
+    protected void Move(float speed) {
         Vector2 horizontalVector = input.controllers[player.playerNumber].MoveVector() * speed;
 
         if (dodging)
@@ -243,7 +246,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     // Attempt to perform a jump
-    private void Jump() {
+    protected void Jump() {
         if (jumpedReleased && allowMovement && IsGrounded) { //Checking if on the ground and movement is allowed
             jumpedReleased = false;
             jumped = true;
@@ -338,7 +341,7 @@ public class PlayerController : MonoBehaviour {
         allowAttack = true;
     }
 
-    private float CheckGroundDistance() {
+    protected float CheckGroundDistance() {
         RaycastHit hit; // Create a SphereCast below the player and check the distance to the ground, if none return infinity;
         return Physics.SphereCast(transform.position, floorCollider.bounds.extents.y, Vector3.down, out hit, 5f, groundLayerMask, QueryTriggerInteraction.Ignore) ? hit.distance : float.PositiveInfinity;
     }

@@ -29,3 +29,4 @@ MonoBehaviour:
   blackHoleDuration: 15
   projSpeed: 30
   numProj: 1
+  numOfUses: 1
