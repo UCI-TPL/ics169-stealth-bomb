@@ -33,7 +33,7 @@ public class BlackHoleWeapon : Weapon {
 	}
 
 	protected override void OnActivate(Vector3 start, Vector3 direction, PlayerController targetController = null) {
-		if (timesUsed < data.numOfUses) {
+		if (timesUsed < data.numOfUses || data.debugOn) {
 			alreadyHit = false;
 			data.projectile.Shoot(player, data.projSpeed, data.numProj, (Vector3 origin, Vector3 contactPoint, GameObject target) => { CreateBlackHole(contactPoint); });
 			timesUsed++;

@@ -79,9 +79,19 @@ public class BlackHole : MonoBehaviour {
 
 	void OnTriggerExit(Collider other) {
 		if (other.gameObject.tag.Equals("Player")) {
-			PlayerController pc = other.gameObject.GetComponent<PlayerController>();
-			caughtPlayers[pc.player.playerNumber] = null;
+			if (Distance(transform.position, other.gameObject.transform.position) >= collider.radius + ((SphereCollider) other).radius) {
+				PlayerController pc = other.gameObject.GetComponent<PlayerController>();
+				caughtPlayers[pc.player.playerNumber] = null;
+			}
 		}
+	}
+
+	private float Distance(Vector3 p1, Vector3 p2) {
+		return Mathf.Sqrt(Squared(p2.x - p1.x) + Squared(p2.y - p1.y) + Squared(p2.z - p1.z));
+	}
+
+	private float Squared(float value) {
+		return value * value;
 	}
 
 	// helper method that defines how players are pulled towards the center of the black hole
@@ -99,16 +109,20 @@ public class BlackHole : MonoBehaviour {
 	// call to set parameters of black hole object
 	public void SetupBlackHole(float radius, int playerNum, float gravity, float duration, Color color) {
 		// gameObject.transform.localScale = new Vector3(radius*2, radius*2, radius*2);
+		// Apply radius to all concerned components and children of black hole: particle system, black hole (main) collider, and black hole center
 		ParticleSystem.ShapeModule shape = gameObject.GetComponent<ParticleSystem>().shape;
 		shape.radius = radius;
 		main.startSizeMultiplier = radius * defaultParticleSize * 0.5f;
 		trail.widthOverTrailMultiplier = radius;
 		collider.radius = radius;
 		center.transform.localScale = new Vector3(radius*defaultCenterScale, radius*defaultCenterScale, radius*defaultCenterScale);
+
+		// assign the other parameters to black hole: player to ignore (player that spawned the black hole), gravity, duration, and color
 		ignorePlayerIdx = playerNum;
 		blackHoleGravity = gravity;
 		blackHoleDuration = duration;
 		SetupColor(color);
+		transform.Translate(0, center.transform.lossyScale.y / 4.0f, 0, Space.World);
 	}
 
 	public void SetupColor(Color color) {
@@ -120,4 +134,6 @@ public class BlackHole : MonoBehaviour {
 		// main.startColor = HDRColor;
 		// trail.colorOverLifetime = HDRColor;
 	}
+
+	// public void RevertToPrefab()
 }
