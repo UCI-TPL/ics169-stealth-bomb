@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dbd4135e9a119e4ab0bbc845e37c1db, type: 3}
+  m_Name: Burning Powerup
+  m_EditorClassIdentifier: 
+  name: Burning
+  image: {fileID: 21300000, guid: b58499627988b5444ab304d1c9e1c052, type: 3}
+  description: Add fire damage on player's weapon.
+  type: 1
+  buffData: {fileID: 11400000, guid: 76fa747d37dfe7f439d342e82945f672, type: 2}
