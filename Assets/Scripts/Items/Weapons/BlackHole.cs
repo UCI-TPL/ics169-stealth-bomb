@@ -58,9 +58,22 @@ public class BlackHole : MonoBehaviour {
 	void Update () {
 		Debug.Log("caught players: " + (caughtPlayers[0] != null) + ", " + (caughtPlayers[1] != null) + ", " + (caughtPlayers[2] != null) + ", " + (caughtPlayers[3] != null));
 		if (time >= blackHoleDuration)
-			Destroy(gameObject);
+			StartCoroutine(DestroyDelayed(3));
 		time += 1.0f * Time.deltaTime;
 	}
+
+    IEnumerator DestroyDelayed(float duration) {
+        ParticleSystem p = gameObject.GetComponent<ParticleSystem>();
+        ParticleSystem.EmissionModule e = p.emission;
+        e.enabled = false;
+        Vector3 baseScale = center.transform.localScale/duration;
+        while (p.particleCount > 0) {
+            if (center.transform.localScale.x > 0)
+                center.transform.localScale = Vector3.MoveTowards(center.transform.localScale, Vector3.zero, baseScale.x * Time.deltaTime);
+            yield return null;
+        }
+        Destroy(gameObject);
+    }
 
 	void FixedUpdate() {
 		// Debug.Log("time: " + time);
@@ -130,7 +143,7 @@ public class BlackHole : MonoBehaviour {
 		// Debug.Log("has material = " + (particleColor != null));
         // particleColor.SetColor("Color_E025656E", HDRColor);
 		main.startColor = Color.red;
-		trail.colorOverTrail = Color.red;
+		// trail.colorOverTrail = Color.red;
 		// main.startColor = HDRColor;
 		// trail.colorOverLifetime = HDRColor;
 	}
