@@ -3,38 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GhostController : PlayerController {
-
-    //this inherits from PlayerController so the movement remains the same 
-
-    /*
-	// Use this for initialization
-	void Start () {
-
-        Debug.Log("A ghost controller was born, long live the ghooost");
-		
-	}
-	
-	// Update is called once per frame
-
-	void Update () {
-		
-	}
-    */
+public class GhostController : PlayerController {   //this inherits from PlayerController so the movement remains the same 
 
 
     Image CursorImage;
 
-    protected float CheckGroundDistance() 
-    {
-        Debug.Log("Does this not ovverite?");
-        return Mathf.Infinity;
-    }
+    public GameObject GhostPrefab; //the ghost that hangs out on the curve on the side of the map
+
+    [HideInInspector]
+    public GameObject GhostBody;
+
+    public ParabolaController ParabolaController;
+    public GameObject ParabolaRoot;
 
     private void Start()
-    {
-        
-        //Debug.Log("Starting on the terms of the GHOST and ignoring all the input silliness");
+    {   
         forward = Camera.main.transform.forward;
         forward.Scale(new Vector3(1, 0, 1));
         forward.Normalize();
@@ -46,26 +29,23 @@ public class GhostController : PlayerController {
         //rend.material.color = playerColor; //setting the player color based on playeNum 
         lastPosition = transform.position;
 
+
+        //Vector3 ghostLocation = new Vector3(transform.position.x - 13f, transform.position.y, transform.position.z + 6f);
+        Vector3 ghostLocation = new Vector3(1f, 8f, 20f);
+
+        GhostBody = Instantiate(GhostPrefab, ghostLocation, transform.rotation);
+        GhostBody.GetComponentsInChildren<Renderer>()[1].material.color = playerColor;
+        GhostBody.GetComponent<ParabolaController>().Begin(GameObject.FindGameObjectWithTag("ghost-curve").gameObject); //this is like a  constructor used to attach the parabola root (which is pre-existing in the map)
+        GhostBody.GetComponent<ParabolaController>().ParabolaRoot = GameObject.FindGameObjectWithTag("ghost-curve"); //The GhostBody is created and placed upon the paraboloa
+        //GhostBody.GetComponent<ParabolaController>().UpdatePosition(transform.position.z);
+
     }
 
 
     private void FixedUpdate()
     {
         Move(player.stats.moveSpeed);
-        /*
-        if (!dodging && !rolling)
-            Move(IsGrounded ? player.stats.moveSpeed : player.stats.airSpeed);
-        else
-            Move(dodgeSpeed); //hopefully this allows air dodges
-        if (input.controllers[player.playerNumber].jump.Pressed)
-        {
-            Jump();
-            if (jumped && rb.velocity.y > 0)
-            {
-                rb.AddForce(Physics.gravity * jumpGravityMultiplier - Physics.gravity, ForceMode.Acceleration);
-            }
-        }
-        */
+        GhostBody.GetComponent<ParabolaController>().UpdatePosition((transform.position.z + transform.position.x)/2);
     }
 
 
