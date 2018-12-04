@@ -20,4 +20,6 @@ public class BlackHoleWeaponData : WeaponData<BlackHoleWeapon> {
 
 	public int numOfUses = 1;
 
+	public bool debugOn;
+
 }
