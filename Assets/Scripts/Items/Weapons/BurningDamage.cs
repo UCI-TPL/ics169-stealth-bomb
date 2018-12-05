@@ -19,10 +19,6 @@ public class BurningDamage : Weapon {
 		GameObject.Instantiate(data.burningPrefab, 	start + direction, Quaternion.identity);
 	}
 
-	protected override void OnHit(Vector3 origin, Vector3 contactPoint, PlayerController targetPlayerController, object extrData) 
-	{
-	}
-
 	public override Weapon DeepCopy(WeaponData weaponData, Player player)
 	{
 		BurningDamage copy = new BurningDamage(weaponData, player);

@@ -15,14 +15,7 @@ public class Burning : MonoBehaviour {
 	}
 
 	private void Update () {
-		// stickOnTarget();
-
-		if (target != null)
-		{
-			Transform playerPos = target.gameObject.transform;
-			Vector3 newPos = new Vector3(playerPos.position.x, playerPos.position.y+.5f, playerPos.position.z);
-			this.transform.position = newPos;
-		}
+		stickOnTarget();
 		timer -= 1.0f * Time.deltaTime;
 		if (timer <= 0f)
 		{
@@ -31,6 +24,16 @@ public class Burning : MonoBehaviour {
 	}
 
 	private void stickOnTarget()
+	{
+		if (target != null)
+		{
+			Transform playerPos = target.gameObject.transform;
+			Vector3 newPos = new Vector3(playerPos.position.x, playerPos.position.y+.5f, playerPos.position.z);
+			this.transform.position = newPos;
+		}
+	}
+
+	private void burning()
 	{
 		
 	}
