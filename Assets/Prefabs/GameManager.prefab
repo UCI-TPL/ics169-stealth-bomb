@@ -119,7 +119,8 @@ MonoBehaviour:
   DefaultPlayerData: {fileID: 11400000, guid: a943fa26298abe5409b720607ae16d86, type: 2}
   PlayerPrefab: {fileID: 114453241457146372, guid: 1525c93e4ceebd542b02ed13a439c69e,
     type: 2}
-  GhostPrefab: {fileID: 0}
+  GhostPrefab: {fileID: 114002095781716024, guid: 350496cd6c510734e956c88d99aeec0e,
+    type: 2}
   maxRank: 10
   ExpGainPerDamage: 0.5
   ExpGainOnKill: 0.25

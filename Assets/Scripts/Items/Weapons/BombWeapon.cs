@@ -30,13 +30,14 @@ public class BombWeapon : Weapon {
             {
                 if (player.controller.PreviousWeapon == null)           // Workaround for when a player holds onto a Bomb into a new round.
                 {
-                    player.controller.EquipWeapon(player.playerData.defaultWeapon.NewInstance(player));
+                    player.ResetWeapon();
                     player.controller.PreviousWeapon = player.controller.Weapon;
                 }
                 else
                 { 
                     player.controller.SwitchWeapon();
-                    player.controller.PreviousWeapon = player.controller.Weapon;
+                    player.ResetWeapon();
+                    player.controller.SwitchWeapon();
                 }
             }
         }

@@ -24,6 +24,6 @@ MonoBehaviour:
   projNum: 1
   projSpeed: 25
   bombPrefab: {fileID: 1422597313017000, guid: 0aa8a899bbb43694ba93e449c3a308ba, type: 2}
-  explosionSize: 3
-  growthRate: 0.12
+  explosionSize: 6
+  growthRate: 0.08
   numberOfUses: 5
