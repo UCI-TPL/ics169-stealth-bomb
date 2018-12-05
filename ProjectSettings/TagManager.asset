@@ -11,6 +11,7 @@ TagManager:
   - stationary-player-ui
   - player-ui-masks
   - countdown
+  - ghost-curve
   layers:
   - Default
   - TransparentFX
