@@ -18,7 +18,7 @@ MonoBehaviour:
   autoAttack: 0
   cooldown: 0
   knockbackStrength: 0
-  damage: 10
+  damage: 0.01
   buffs: []
   burningPrefab: {fileID: 1260608230806470, guid: 168bb55f3f84320449688719161bf1b0,
     type: 2}

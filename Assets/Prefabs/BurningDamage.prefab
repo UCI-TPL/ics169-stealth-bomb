@@ -26,7 +26,7 @@ GameObject:
   - component: {fileID: 54158155531679456}
   m_Layer: 0
   m_Name: BurningDamage
-  m_TagString: Untagged
+  m_TagString: burning
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -112,7 +112,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd0eadc19d8f26e478005aaf2e8b7d37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  burningDuration: 100
+  burningDuration: 5
   timer: 0
 --- !u!135 &135235082190471046
 SphereCollider:

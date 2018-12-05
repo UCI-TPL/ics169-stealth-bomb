@@ -22,6 +22,10 @@ public class Burning : MonoBehaviour {
 		{
 			Destroy(gameObject);
 		}
+	}
+
+	private void FixedUpdate()
+	{
 		burning();
 	}
 
