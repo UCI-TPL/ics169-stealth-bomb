@@ -5020,7 +5020,7 @@ MonoBehaviour:
   ExpGainOnKill: 0.25
   ExpPenaltyPerLvl: 0.75
   ExpBonusPerLvl: 0.25
-  TimeBeforeCrumble: 300
+  TimeBeforeCrumble: 30
   TimeDecreasePerPlayer: 10
   countdown: 3
   countdownText: {fileID: 0}

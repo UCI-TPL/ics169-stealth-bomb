@@ -40,6 +40,7 @@ public class ItemListEditor : Editor {
         GUIStyle labelStyle = new GUIStyle(GUI.skin.label);
         labelStyle.normal.textColor = Color.red;
         EditorGUILayout.LabelField(errorString, labelStyle);
+        Repaint();
     }
 
     private void HorizontalBox(Color color, float width) {
