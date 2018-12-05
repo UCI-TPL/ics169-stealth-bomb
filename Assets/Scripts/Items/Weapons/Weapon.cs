@@ -10,7 +10,9 @@ public abstract class Weapon {
     public Type type;
 
     protected Player player; // Player that this weapon is attached to
-    public float ChargeLevel { get { return isCharging ? Mathf.Clamp(GetChargeLevel(), 0, 1) : 0; } }
+    // Having the type check in the ChargeLevel allows us to have a hacky solution
+    // for checking how much ammo the bomb weapons have as long as they define a GetChargeLevel method.
+    public float ChargeLevel { get { return (isCharging || type.Equals(Type.Instant)) ? Mathf.Clamp(GetChargeLevel(), 0, 1) : 0; } }    
     protected virtual float GetChargeLevel() {
         return 0;
     }

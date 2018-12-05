@@ -13,6 +13,8 @@ public class PlayerUI_inGame : MonoBehaviour {
     [Header("Aiming Arrow")]
     public UnityEngine.UI.Image playerUI_AimArrowMaskL;
     public UnityEngine.UI.Image playerUI_AimArrowMaskR;
+    public UnityEngine.UI.Image playerUI_AimArrowL;
+    public UnityEngine.UI.Image playerUI_AimArrowR;
 
     [Header("Overhead Text Notificiation")]
     public RectTransform playerUI_TextCanvas;
@@ -41,7 +43,15 @@ public class PlayerUI_inGame : MonoBehaviour {
         playerUI_healthBar.fillAmount = playerCon.player.health / playerCon.player.stats.maxHealth;
         playerUI_TextCanvas.rotation = Quaternion.Euler(50f, cameraTransform.rotation.eulerAngles.y, 0f);
 
-        // Aiming Arrow Fill Amount
+        if (playerCon.Weapon.type.Equals(Weapon.Type.Instant))
+        {
+            playerUI_AimArrowL.color = playerUI_AimArrowR.color = Color.cyan;       //#87c8e1
+        }
+        else if (!playerCon.Weapon.type.Equals(Weapon.Type.Instant))
+        {
+            playerUI_AimArrowL.color = playerUI_AimArrowR.color = Color.white;
+        }
+
         playerUI_AimArrowMaskL.fillAmount = playerUI_AimArrowMaskR.fillAmount  = playerCon.Weapon.ChargeLevel;
     }
 

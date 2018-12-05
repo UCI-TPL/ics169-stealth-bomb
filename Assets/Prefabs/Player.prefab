@@ -418,7 +418,7 @@ GameObject:
   - component: {fileID: 222847051320770866}
   - component: {fileID: 114660660425680170}
   m_Layer: 9
-  m_Name: Image
+  m_Name: AimArrowR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -482,7 +482,7 @@ GameObject:
   - component: {fileID: 222716686302104558}
   - component: {fileID: 114336492705101154}
   m_Layer: 9
-  m_Name: Image
+  m_Name: AimArrowL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -777,7 +777,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1889070153941650}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10.835848, y: 13.066988, z: 13.313913}
+  m_LocalPosition: {x: 6.8791137, y: 1.178134, z: 10.195534}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4290687003326676}
@@ -1748,6 +1748,8 @@ MonoBehaviour:
   playerUI_healthBar: {fileID: 114165276666518492}
   playerUI_AimArrowMaskL: {fileID: 114484350781344532}
   playerUI_AimArrowMaskR: {fileID: 114628621565915504}
+  playerUI_AimArrowL: {fileID: 114336492705101154}
+  playerUI_AimArrowR: {fileID: 114660660425680170}
   playerUI_TextCanvas: {fileID: 224471225429177368}
   playerUI_NotifText: {fileID: 114328961400308002}
   showForSeconds: 1.25

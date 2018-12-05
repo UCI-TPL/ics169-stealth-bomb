@@ -25,7 +25,13 @@ public class BlackHoleWeapon : Weapon {
 	protected override void Start () {
 	}
 
-	protected void Update() {
+    // i added this in for some consistency reasons (player should know when they have a special type of weapon (i.e. bomb and black hole.)) - Diego
+    protected override float GetChargeLevel()       // override GetChargeLevel to get the amount of ammo left.
+    {
+        return 1f - ((float)timesUsed / (float)data.numOfUses);
+    }
+
+    protected void Update() {
 		if (timesUsed >= data.numOfUses) {
 			player.controller.SwitchWeapon();
 			// player.controller.PreviousWeapon = player.controller.Weapon;

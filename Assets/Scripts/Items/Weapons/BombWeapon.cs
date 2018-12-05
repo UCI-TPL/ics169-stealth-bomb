@@ -11,12 +11,18 @@ public class BombWeapon : Weapon {
 
     public BombWeapon() : base() { }
     public BombWeapon(WeaponData weaponData, Player player) : base(weaponData, player, Type.Instant) {
+        base.isCharging = true;
         data = (BombWeaponData)weaponData;
         timesUsed = 0;
     }
 
     protected override void Start() {
         maxUses = data.numberOfUses;
+    }
+
+    protected override float GetChargeLevel()       // override GetChargeLevel to get the amount of ammo left.
+    {
+        return 1f - ((float)timesUsed / (float)maxUses);
     }
 
     protected override void OnActivate(Vector3 start, Vector3 direction, PlayerController targetController = null)
