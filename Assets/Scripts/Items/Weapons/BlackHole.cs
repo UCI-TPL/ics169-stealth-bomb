@@ -49,7 +49,7 @@ public class BlackHole : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		time = 0.0f;
+        time = 0.0f;
 		caughtPlayers = new PlayerController[4];
 		// material = gameObject.GetComponent<MeshRenderer>().m;
 	}
@@ -76,11 +76,13 @@ public class BlackHole : MonoBehaviour {
     }
 
 	void FixedUpdate() {
-		// Debug.Log("time: " + time);
-		for (int i = 0; i < caughtPlayers.Length; i++) {
-			if (caughtPlayers[i] != null && i != ignorePlayerIdx) 
-				PullPlayer(caughtPlayers[i]); 
-		}
+        // Debug.Log("time: " + time);
+        if (time < blackHoleDuration) {
+            for (int i = 0; i < caughtPlayers.Length; i++) {
+                if (caughtPlayers[i] != null && i != ignorePlayerIdx)
+                    PullPlayer(caughtPlayers[i]);
+            }
+        }
 	}
 
 	void OnTriggerEnter(Collider other) {
