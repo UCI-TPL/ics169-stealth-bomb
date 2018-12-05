@@ -9,6 +9,7 @@ public class Burning : MonoBehaviour {
 	
 	private GameObject target;
 	private bool foundTarget = false;
+	public Event_Vector3_GameObject OnHit = new Event_Vector3_GameObject();
 
 	private void Start() {
 		timer = burningDuration;
@@ -21,6 +22,7 @@ public class Burning : MonoBehaviour {
 		{
 			Destroy(gameObject);
 		}
+		burning();
 	}
 
 	private void stickOnTarget()
@@ -35,7 +37,11 @@ public class Burning : MonoBehaviour {
 
 	private void burning()
 	{
-		
+		if (foundTarget && target != null)
+		{
+			Vector3 newPos = new Vector3(transform.position.x+2f, transform.position.y-.5f, transform.position.z);
+			OnHit.Invoke(newPos, target.gameObject.transform.position, target.gameObject);
+		}
 	}
 
 	private void OnTriggerEnter(Collider other)
