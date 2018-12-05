@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour {
 
     protected Rigidbody rb;
     public Renderer rend;
+    public Transform PlayerHitbox;
     public GameObject ShootPoint;
     public Collider floorCollider;
     public Collider HitBox;
@@ -155,7 +156,7 @@ public class PlayerController : MonoBehaviour {
     // Rotate the player's facing direction
     private void Update() {
         player.InGameUpdate();
-        transform.localScale = player == GameManager.instance.leader ? Vector3.one * 1.35f : Vector3.one;
+        PlayerHitbox.localScale = player == GameManager.instance.leader ? Vector3.one * 1.35f : Vector3.one;
         if(crown != null)
             crown.SetActive(player == GameManager.instance.leader);
 

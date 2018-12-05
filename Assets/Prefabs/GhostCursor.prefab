@@ -79,6 +79,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   input: {fileID: 0}
   rend: {fileID: 0}
+  PlayerHitbox: {fileID: 224254074465702002}
   ShootPoint: {fileID: 0}
   floorCollider: {fileID: 0}
   HitBox: {fileID: 0}
