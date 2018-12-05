@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 222002661200564922}
   - component: {fileID: 114175176917831712}
   - component: {fileID: 114715834920531786}
+  - component: {fileID: 114620947518834220}
   m_Layer: 0
   m_Name: GhostCursor
   m_TagString: Untagged
@@ -98,6 +99,11 @@ MonoBehaviour:
   rolling: 0
   braking: 0
   dodgeSpeed: 0
+  GhostPrefab: {fileID: 1898897230688304, guid: 87ded8867057d76408927d062b0a927f,
+    type: 2}
+  GhostBody: {fileID: 0}
+  ParabolaController: {fileID: 0}
+  ParabolaRoot: {fileID: 0}
 --- !u!114 &114175176917831712
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -120,6 +126,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca5174493f73b7542806033a20810aae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114620947518834220
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1363944635466104}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 394fa1bbb5f559a4599ed8f1403d34c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Speed: 1
+  ParabolaRoot: {fileID: 0}
+  Autostart: 0
+  Animation: 1
 --- !u!114 &114715834920531786
 MonoBehaviour:
   m_ObjectHideFlags: 1
