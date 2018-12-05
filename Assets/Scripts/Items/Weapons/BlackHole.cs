@@ -144,7 +144,7 @@ public class BlackHole : MonoBehaviour {
 		Color HDRColor = color * 2.0f;
 		// Debug.Log("has material = " + (particleColor != null));
         // particleColor.SetColor("Color_E025656E", HDRColor);
-		main.startColor = Color.red;
+		main.startColor = color;
 		// trail.colorOverTrail = Color.red;
 		// main.startColor = HDRColor;
 		// trail.colorOverLifetime = HDRColor;

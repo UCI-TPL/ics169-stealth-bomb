@@ -26,7 +26,7 @@ MonoBehaviour:
     type: 2}
   blackHoleGravity: 2.5
   blackHoleRadius: 3
-  blackHoleDuration: 15
+  blackHoleDuration: 8
   projSpeed: 30
   numProj: 1
   numOfUses: 1
