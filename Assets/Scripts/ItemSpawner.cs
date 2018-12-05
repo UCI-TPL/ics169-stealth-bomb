@@ -15,7 +15,11 @@ public class ItemSpawner : MonoBehaviour {
             return instance;
         }
     }
-    
+
+    public ItemSpawnIndicator itemIndicator;
+    public ItemSpawnIndicator powerupIndicator;
+    public ItemSpawnIndicator weaponIndicator;
+
     public ItemList itemList;
     public float spawnRateMin;
     public float spawnRateMax;
@@ -44,13 +48,34 @@ public class ItemSpawner : MonoBehaviour {
             for (int tier = itemList.RandomTier(); tier >= 0; --tier) {
                 List<ItemTile> availableTiles = GetAvailableItemTiles(tier);
                 if (availableTiles.Count > 0) {
-                    availableTiles[Random.Range(0, availableTiles.Count)].SpawnItem(itemList.RandomItem(tier));
+                    ItemTile tile = availableTiles[Random.Range(0, availableTiles.Count)];
+                    SpawnItem(tile.transform.position, itemList.RandomItem(tier));
+                    tile.AddCooldown(2.5f); // Add cooldown to tile to offset Spawn Indicator time
                     break;
                 }
             }
             ResetCooldown();
         }
 	}
+
+    
+    // Spawn the provided item with the correct Item Indicator
+    public void SpawnItem(Vector3 position, ItemData data) {
+        GameObject indicator;
+        switch (data.type) {
+            case ItemData.Type.Powerup:
+                indicator = powerupIndicator.gameObject;
+                break;
+            case ItemData.Type.Weapon:
+                indicator = weaponIndicator.gameObject;
+                break;
+            default:
+                indicator = itemIndicator.gameObject;
+                break;
+        }
+        GameObject g = Instantiate(indicator, position, Quaternion.identity);
+        g.GetComponent<ItemSpawnIndicator>().StartTimer(data);
+    }
 
     private List<ItemTile> GetAvailableItemTiles(int tier) {
         List<ItemTile> resultList = new List<ItemTile>();

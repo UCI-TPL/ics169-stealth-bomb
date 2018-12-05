@@ -51,6 +51,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edc9129454b27394ba009b2505e037a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemIndicator: {fileID: 114730876700832294, guid: 9cad55fad2a4e1344b35afc941f5ce87,
+    type: 2}
+  powerupIndicator: {fileID: 114636431265360722, guid: df4ebf4f843f50c49a38797964c240c5,
+    type: 2}
+  weaponIndicator: {fileID: 114659650856750254, guid: b16b2261f102f614c954ed2530b7b7eb,
+    type: 2}
   itemList: {fileID: 11400000, guid: 6dd4dc727b43ccd42a8c085cd363fb9a, type: 2}
   spawnRateMin: 0.5
   spawnRateMax: 2

@@ -33,27 +33,14 @@ public class ItemTile : Tile {
         StartCoroutine(CheckOverlap(updateRate));
     }
 
-    // Spawn the provided item with the correct Item Container
-    public void SpawnItem(ItemData data) {
-        GameObject container;
-        switch (data.type) {
-            case ItemData.Type.Powerup:
-                container = powerupContainer;
-                break;
-            case ItemData.Type.Weapon:
-                container = weaponContainer;
-                break;
-            default:
-                container = itemContainer;
-                break;
-        }
-        GameObject g = Instantiate(container, transform.position, Quaternion.identity);
-        g.GetComponent<ItemContainer>().SetItemData(data);
-    }
-
     // Reset the cooldown by setting required variables
     private void ResetCooldown() {
         cooldownStartTime = Time.time;
+        Available = false;
+    }
+
+    public void AddCooldown(float duration) {
+        cooldownStartTime = Time.time - cooldown + duration;
         Available = false;
     }
 
