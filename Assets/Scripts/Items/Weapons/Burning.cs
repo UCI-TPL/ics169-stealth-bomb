@@ -6,8 +6,10 @@ public class Burning : MonoBehaviour {
 
 	public float burningDuration = 100f;
 	public float timer;
+
+	private static PlayerController[] caughtPlayers = new PlayerController[4];
 	
-	private GameObject target;
+	private GameObject target = null;
 	private bool foundTarget = false;
 	public Event_Vector3_GameObject OnHit = new Event_Vector3_GameObject();
 
@@ -16,49 +18,66 @@ public class Burning : MonoBehaviour {
 	}
 
 	private void Update () {
-		stickOnTarget();
+		// Debug.Log("caught players: " + (caughtPlayers[0] != null) + ", " + (caughtPlayers[1] != null) + ", " + (caughtPlayers[2] != null) + ", " + (caughtPlayers[3] != null));
 		timer -= 1.0f * Time.deltaTime;
-		if (timer <= 0f)
-		{
-			Destroy(gameObject);
-		}
+		burning();
+		extinguish();
 	}
 
 	private void FixedUpdate()
 	{
-		burning();
+
+		
 	}
 
-	private void stickOnTarget()
+	private void burning()
 	{
 		if (target != null)
 		{
 			Transform playerPos = target.gameObject.transform;
 			Vector3 newPos = new Vector3(playerPos.position.x, playerPos.position.y+.5f, playerPos.position.z);
 			this.transform.position = newPos;
+			OnHit.Invoke(this.transform.position, target.gameObject.transform.position, target.gameObject);
 		}
 	}
 
-	private void burning()
+	private void extinguish()
 	{
-		if (foundTarget && target != null)
+		if (timer <= 0f)
 		{
-			Vector3 newPos = new Vector3(transform.position.x+2f, transform.position.y-.5f, transform.position.z);
-			OnHit.Invoke(newPos, target.gameObject.transform.position, target.gameObject);
+			if (target != null)
+			{
+				PlayerController pc = target.gameObject.GetComponent<PlayerController>();
+				caughtPlayers[pc.player.playerNumber] = null;
+				target = null;
+			}
+			Destroy(gameObject);
 		}
 	}
 
 	private void OnTriggerEnter(Collider other)
 	{
-		if (!foundTarget && other.gameObject.tag == "Player")
-		{
+		if (target == null && other.gameObject.tag == "Player")
+		{	
 			target = other.gameObject;
-			foundTarget = true;
-		}
-		//not found target but hit non-player object --> self-destruction
-		else if (!foundTarget && other.gameObject.tag != "Player")
-		{
-			Destroy(gameObject);
+			PlayerController pc = other.gameObject.GetComponent<PlayerController>();
+			if (caughtPlayers[pc.player.playerNumber] == null)
+			{
+				caughtPlayers[pc.player.playerNumber] = pc;
+			}
+			else
+			{
+				Destroy(gameObject);
+			}
 		}
 	}
+
+	private void OnTriggerExit(Collider other)
+	{
+		if (other.gameObject.tag == "Player")
+		{
+			extinguish();
+		}
+	}
+
 }

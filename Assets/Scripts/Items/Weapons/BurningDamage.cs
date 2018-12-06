@@ -12,17 +12,26 @@ public class BurningDamage : Weapon {
         data = (BurningDamageData) weaponData;
     }
 
+	private int[] burningPlayers;
+
 	protected override void Start() {}
 
 	protected override void OnActivate(Vector3 start, Vector3 direction, PlayerController targetController = null)
 	{
-		Burning b = GameObject.Instantiate(data.burningPrefab, 	start + direction, Quaternion.identity).GetComponent<Burning>();
-		b.OnHit.AddListener((Vector3 origin, Vector3 contactPoint, GameObject target) => { Hit(origin, contactPoint, target, null, false); });
+		if (targetController != null)
+		{
+			// if (targetController.player)
+			// Debug.Log(start+direction);
+			// Debug.Log(targetController.gameObject.transform.position);
+			Burning b = GameObject.Instantiate(data.burningPrefab, targetController.gameObject.transform.position, Quaternion.identity).GetComponent<Burning>();
+			b.OnHit.AddListener((Vector3 origin, Vector3 contactPoint, GameObject target) => { Hit(origin, contactPoint, target, null, false); });
+		}
 	}
 
-	protected override void OnHit(Vector3 origin, Vector3 contactPoint, PlayerController targetPlayerController, object extraData)
-	{
-	}
+	// protected override void OnHit(Vector3 origin, Vector3 contactPoint, PlayerController targetPlayerController, object extraData)
+	// {
+	// 	Debug.Log("hit in OnHit");
+	// }
 
 	public override Weapon DeepCopy(WeaponData weaponData, Player player)
 	{
