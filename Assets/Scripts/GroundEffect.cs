@@ -131,6 +131,7 @@ public class GroundEffect : MonoBehaviour {
         }
     }
 
+    // Reset pool of objects when round resets, prevents null pointers
     private void OnDestroy() {
         if (ObjectPool.Count > 0)
             ObjectPool.Clear();

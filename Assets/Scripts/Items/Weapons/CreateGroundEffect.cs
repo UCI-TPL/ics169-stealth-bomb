@@ -9,6 +9,12 @@ public class CreateGroundEffect : Weapon {
     private float distanceMoved;
     private float distanceCounter;
 
+    // Limit how quickly ground effects can be spammed
+    private static readonly float minDistance = 0.33f;
+    private static readonly float minTime = 0.5f;
+    private Vector3 lastPlaceLocation = Vector3.zero;
+    private float lastPlaceTime = 0;
+
     public CreateGroundEffect() : base() { }
 
     public CreateGroundEffect(WeaponData weaponData, Player player) : base(weaponData, player, Type.Charge) {
@@ -25,8 +31,15 @@ public class CreateGroundEffect : Weapon {
                 for (float dist = direction.magnitude; dist > 0; dist -= 0.5f * size)
                     data.groundEffectPrefab.Create((Vector3 origin, GameObject target) => { Hit(origin, target.transform.position, target, null, false); }, player, start + direction.normalized * dist, size, data.duration, data.hitCooldown, player.controller.HitBox);
             }
-        } else
-            data.groundEffectPrefab.Create((Vector3 origin, GameObject target) => { Hit(origin, target.transform.position, target, null, false); }, player, start + direction, size, data.duration, data.hitCooldown, player.controller.HitBox);
+        }
+        else {
+            Vector3 location = start + direction; // Check to see if ground effect is being placed in a different location, or if enough time has passed
+            if (Vector3.Distance(lastPlaceLocation, location) > minDistance || lastPlaceTime + minTime <= Time.time) {
+                lastPlaceLocation = location;
+                lastPlaceTime = Time.time;
+                data.groundEffectPrefab.Create((Vector3 origin, GameObject target) => { Hit(origin, target.transform.position, target, null, false); }, player, start + direction, size, data.duration, data.hitCooldown, player.controller.HitBox);
+            }
+        }
     }
 
     protected override void OnHit(Vector3 origin, Vector3 contactPoint, PlayerController targetPlayerController, object extraData) {
