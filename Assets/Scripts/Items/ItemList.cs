@@ -101,7 +101,6 @@ public class ItemList : ScriptableObject {
             float roll = Random.Range(0, totalWeight);
             int result = 0;
 
-
             for (int itemIndex = 0; itemIndex < items.Length; ++itemIndex) {
                 if ((roll -= itemWeights[itemIndex]) <= 0) {
                     result = itemIndex;
@@ -114,12 +113,12 @@ public class ItemList : ScriptableObject {
             foreach (int spawnCount in itemSpawns) // Count the total number of items spawned so far
                 total += spawnCount;
             for (int i = 0; i < itemSpawns.Length; ++i) { // Rebalance item weights depending on how much the item has already spawned
-                itemWeights[i] = Mathf.Max(0, (1 + (1 / items.Length * total - itemSpawns[i])));
+                itemWeights[i] = Mathf.Max(0, (1 + (1f / items.Length * total - itemSpawns[i])));
             }
 
             totalWeight = 0;
-            foreach(int i in itemWeights)
-                totalWeight += i;
+            foreach(float f in itemWeights)
+                totalWeight += f;
             for (int i = 0; i < items.Length; ++i) // Rescale the weights to total to amount of items
                 itemWeights[i] = itemWeights[i] / totalWeight * items.Length;
 
