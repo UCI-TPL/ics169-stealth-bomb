@@ -15,4 +15,4 @@ MonoBehaviour:
   image: {fileID: 21300000, guid: 9b8e84ae045477942a39155b9321807a, type: 3}
   description: Heals the player
   type: 0
-  amount: 20
+  amount: 25

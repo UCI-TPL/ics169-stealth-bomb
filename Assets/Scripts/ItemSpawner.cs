@@ -30,6 +30,7 @@ public class ItemSpawner : MonoBehaviour {
 
     void Start() {
         ResetCooldown();
+        itemList.ResetWeights();
     }
 
     public void UpdateSpawnPoints(TileMap tileMap) {

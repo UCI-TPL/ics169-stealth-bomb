@@ -34,7 +34,6 @@ public class ItemList : ScriptableObject {
         float totalWeight = TotalWeight();
         float roll = Random.Range(0, totalWeight);
         int result = -1;
-        //float changePercent = 0;
         for (int tierIndex = 0; tierIndex < tiers.Length; ++tierIndex) {
             if ((roll -= tiers[tierIndex].Weight) <= 0) {
                 result = tierIndex;
@@ -64,6 +63,8 @@ public class ItemList : ScriptableObject {
         [System.NonSerialized]
         private float[] itemWeights;
         [System.NonSerialized]
+        private int[] itemSpawns;
+        [System.NonSerialized]
         private float addedWeight = 0;
         public float Weight { get { return baseWeight + addedWeight; } }
 
@@ -76,6 +77,7 @@ public class ItemList : ScriptableObject {
             itemWeights = new float[items.Length];
             for (int i = 0; i < itemWeights.Length; ++i)
                 itemWeights[i] = 1;
+            itemSpawns = new int[items.Length];
         }
 
         public void SetWeight(float weight) {
@@ -98,22 +100,29 @@ public class ItemList : ScriptableObject {
             float totalWeight = items.Length;
             float roll = Random.Range(0, totalWeight);
             int result = 0;
-            float changePercent = 0;
-            for (int itemIndex = 0; itemIndex < itemWeights.Length; ++itemIndex) {
+
+
+            for (int itemIndex = 0; itemIndex < items.Length; ++itemIndex) {
                 if ((roll -= itemWeights[itemIndex]) <= 0) {
                     result = itemIndex;
-
-                    // calculate the change in weight required to balance out all tiers
-                    itemWeights[itemIndex] -= 1f;
-                    changePercent = 1f / (itemWeights.Length-1); // Decrease wight of tier if picked and save amount changed
+                    ++itemSpawns[itemIndex];
                     break;
                 }
             }
-            for (int itemIndex = 0; itemIndex < itemWeights.Length; ++itemIndex) {
-                if (itemIndex == result)
-                    continue;
-                itemWeights[itemIndex] += (1f * changePercent); // Increase the weight of all tiers proportionate to tier just picked
+
+            int total = 0;
+            foreach (int spawnCount in itemSpawns) // Count the total number of items spawned so far
+                total += spawnCount;
+            for (int i = 0; i < itemSpawns.Length; ++i) { // Rebalance item weights depending on how much the item has already spawned
+                itemWeights[i] = Mathf.Max(0, (1 + (1 / items.Length * total - itemSpawns[i])));
             }
+
+            totalWeight = 0;
+            foreach(int i in itemWeights)
+                totalWeight += i;
+            for (int i = 0; i < items.Length; ++i) // Rescale the weights to total to amount of items
+                itemWeights[i] = itemWeights[i] / totalWeight * items.Length;
+
             return items[result];
         }
     }
