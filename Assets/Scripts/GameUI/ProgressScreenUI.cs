@@ -164,6 +164,7 @@ public class ProgressScreenUI : MonoBehaviour {
         float distance = Time.timeScale - minTimeScale;
         while (endTime > Time.unscaledTime) {
             Time.timeScale = minTimeScale + distance * Mathf.Pow((endTime - Time.unscaledTime) / transitionDuration, 3f);
+            Time.fixedDeltaTime = 0.02f * Time.timeScale;
             yield return null;
         }
         Time.timeScale = minTimeScale;

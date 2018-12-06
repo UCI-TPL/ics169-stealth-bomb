@@ -94,6 +94,8 @@ public class GameManager : MonoBehaviour {
 
     public static void ReturnMenu() {
         instance.inGame = false;
+        Time.timeScale = 1;
+        Time.fixedDeltaTime = 0.02f;
         foreach (GameRound round in instance.rounds)
             round.EndGame();
         SceneManager.LoadScene(instance.mainMenuSceneName);

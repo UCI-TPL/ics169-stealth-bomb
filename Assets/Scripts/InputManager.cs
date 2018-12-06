@@ -138,7 +138,8 @@ public class InputManager : MonoBehaviour {
 
     private void OnDisable() {
         for (int i = 0; i < 4; ++i)
-            controllers[i].OnApplicationQuit();
+            if (controllers[i] != null)
+                controllers[i].OnApplicationQuit();
     }
 
     #region mapping interface for UI
