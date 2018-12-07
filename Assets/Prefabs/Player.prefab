@@ -1832,7 +1832,7 @@ MonoBehaviour:
   HitBox: {fileID: 135886423390436444}
   crown: {fileID: 1673957208925718}
   friction: 20
-  airResistance: 10
+  airResistance: 20
   terminalVelocity: 10
   acceleration: 10
   Colors:

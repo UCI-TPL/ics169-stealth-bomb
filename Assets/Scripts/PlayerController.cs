@@ -85,6 +85,9 @@ public class PlayerController : MonoBehaviour {
             }
         }
     }
+
+    // Used for detecting when a player has been knocked back, for vertical dampening
+    private bool isKnockedBack = false;
     
     protected Vector3 lastPosition;
 
@@ -190,14 +193,19 @@ public class PlayerController : MonoBehaviour {
         }
 
         Vector3 frictionVector;
-        if (IsGrounded) // If grounded apply friction
+        if (IsGrounded) {// If grounded apply friction
+            isKnockedBack = false;
             frictionVector = -friction * rb.velocity; // Friction is a negative percentage of current velocity
-        else  { // In air apply Air Resistance
+        }
+        else { // In air apply Air Resistance
             Vector3 upVector = Vector3.Project(rb.velocity, Physics.gravity); // get upwardVelocity with respect to gravity, if for some reason gravity is not straight down this will still work
             Vector3 terminalVector = -Physics.gravity.normalized * terminalVelocity;
             Vector3 scaledVelocity = rb.velocity;
-            if (Vector3.Distance(upVector, terminalVector) < Vector3.Distance(upVector, -terminalVector) && upVector.magnitude > terminalVelocity)
-                scaledVelocity -= terminalVector; // Calculate y velocity greater than terminal velocity
+
+            if (Vector3.Distance(upVector, terminalVector) < Vector3.Distance(upVector, -terminalVector) && (upVector.magnitude > terminalVelocity || isKnockedBack)) {
+                //scaledVelocity -= terminalVector; // Calculate y velocity greater than terminal velocity
+                isKnockedBack = true; // Vertical velocity over threshold
+            }
             else
                 scaledVelocity -= upVector; // Ignore y velocity if falling or not over terminal velocity
             frictionVector = -airResistance * scaledVelocity; // Friction is a negative percentage of current velocity
