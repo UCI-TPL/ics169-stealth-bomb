@@ -326,35 +326,35 @@ public class InputManager : MonoBehaviour {
             AttackTest.Down(delegate { attack.OnDown.Invoke(); });
             AttackTest.Up(delegate { attack.OnUp.Invoke(); });
             bool testAll = false;
-            foreach (TestEvent del in AttackTest.Pressed.GetInvocationList())
+            foreach (TestEvent del in AttackTest.Pressed)
                 testAll = testAll || del();
             attack.Pressed = testAll;
 
             JumpTest.Down(delegate { jump.OnDown.Invoke(); });
             JumpTest.Up(delegate { jump.OnUp.Invoke(); });
             testAll = false;
-            foreach (TestEvent del in JumpTest.Pressed.GetInvocationList())
+            foreach (TestEvent del in JumpTest.Pressed)
                 testAll = testAll || del();
             jump.Pressed = testAll;
 
             DodgeTest.Down(delegate { dodge.OnDown.Invoke(); });
             DodgeTest.Up(delegate { dodge.OnUp.Invoke(); });
             testAll = false;
-            foreach (TestEvent del in DodgeTest.Pressed.GetInvocationList())
+            foreach (TestEvent del in DodgeTest.Pressed)
                 testAll = testAll || del();
             dodge.Pressed = testAll;
 
             StartTest.Down(delegate { start.OnDown.Invoke(); });
             StartTest.Up(delegate { start.OnUp.Invoke(); });
             testAll = false;
-            foreach (TestEvent del in StartTest.Pressed.GetInvocationList())
+            foreach (TestEvent del in StartTest.Pressed)
                 testAll = testAll || del();
             start.Pressed = testAll;
 
             SwitchTest.Down(delegate { Switch.OnDown.Invoke(); });
             SwitchTest.Up(delegate { start.OnUp.Invoke(); });
             testAll = false;
-            foreach (TestEvent del in StartTest.Pressed.GetInvocationList())
+            foreach (TestEvent del in StartTest.Pressed)
                 testAll = testAll || del();
             Switch.Pressed = testAll;
 
@@ -817,7 +817,7 @@ public class InputManager : MonoBehaviour {
         private class ButtonTest {
             public EventCall Down;
             public EventCall Up;
-            public TestEvent Pressed;
+            public HashSet<TestEvent> Pressed = new HashSet<TestEvent>();
             public ButtonTest() {
                 Clear();
             }
@@ -825,45 +825,45 @@ public class InputManager : MonoBehaviour {
             public ButtonTest(EventCall Down, EventCall Up, TestEvent Pressed) {
                 this.Down = Down;
                 this.Up = Up;
-                this.Pressed = Pressed;
+                this.Pressed.Add(Pressed);
             }
 
             // Clear all tests
             public void Clear() {
                 Down = delegate { };
                 Up = delegate { };
-                Pressed = delegate { return false; };
+                Pressed.Clear();
             }
 
             public void AddTest(ButtonTest other) {
                 Down += other.Down;
                 Up += other.Up;
-                Pressed += other.Pressed;
+                Pressed.UnionWith(other.Pressed);
             }
 
             public void RemoveTest(ButtonTest other) {
                 Down -= other.Down;
                 Up -= other.Up;
-                Pressed -= other.Pressed;
+                Pressed.ExceptWith(other.Pressed);
             }
 
-            // Add a button map
-            public static ButtonTest operator +(ButtonTest l, ButtonTest r) {
-                ButtonTest b = new ButtonTest(l.Down, l.Up, l.Pressed);
-                b.Down += r.Down;
-                b.Up += r.Up;
-                b.Pressed += r.Pressed;
-                return b;
-            }
+            //// Add a button map
+            //public static ButtonTest operator +(ButtonTest l, ButtonTest r) {
+            //    ButtonTest b = new ButtonTest(l.Down, l.Up, l.Pressed);
+            //    b.Down += r.Down;
+            //    b.Up += r.Up;
+            //    b.Pressed += r.Pressed;
+            //    return b;
+            //}
 
-            // Remove a button map
-            public static ButtonTest operator -(ButtonTest l, ButtonTest r) {
-                ButtonTest b = new ButtonTest(l.Down, l.Up, l.Pressed);
-                b.Down -= r.Down;
-                b.Up -= r.Up;
-                b.Pressed -= r.Pressed;
-                return b;
-            }
+            //// Remove a button map
+            //public static ButtonTest operator -(ButtonTest l, ButtonTest r) {
+            //    ButtonTest b = new ButtonTest(l.Down, l.Up, l.Pressed);
+            //    b.Down -= r.Down;
+            //    b.Up -= r.Up;
+            //    b.Pressed -= r.Pressed;
+            //    return b;
+            //}
         }
     }    // Controller object for Mouse and Keyboard, This is not implemented yet
     public class TouchScreenController : Controller {

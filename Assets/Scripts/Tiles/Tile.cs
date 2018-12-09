@@ -8,7 +8,6 @@ public class Tile : MonoBehaviour {
     public static Vector3 TileOffset = new Vector3(0.5f, 0.5f, 0.5f);
     private bool destroying = false;
     public Type type { get; protected set; }
-    private float destroyTimer;
 
     // Set tile Type
     private void Awake() {
@@ -20,20 +19,19 @@ public class Tile : MonoBehaviour {
         get { return transform.localPosition - TileOffset; }
     }
 
-    private void Update() {
-        if (destroying && destroyTimer < Time.time) {
-            StopAllCoroutines();
-            DestroyEffect();
-            destroying = false;
-        }
-    }
-
     public void Destroy(float timer = 0) {
         if (!destroying) {
             destroying = true;
             BreakingEffect(timer);
-            destroyTimer = Time.time + timer;
+            StartCoroutine(DelayDestroy(timer));
         }
+    }
+
+    private IEnumerator DelayDestroy(float timer) {
+        float destroyTimer = Time.time + timer;
+        while (destroyTimer > Time.time)
+            yield return null;
+        DestroyEffect();
     }
 
     /// <summary>Called once when the block begins breaking</summary>
