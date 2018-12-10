@@ -69,6 +69,7 @@ public class ProgressScreenUI : MonoBehaviour {
             StopAllCoroutines(); // Ensure all coroutines and invokes are reset
             CancelInvoke();
             Time.timeScale = 1;
+            Time.fixedDeltaTime = 0.02f;
             action.Invoke();
             ProgressScreenRect.gameObject.SetActive(false);
         }));

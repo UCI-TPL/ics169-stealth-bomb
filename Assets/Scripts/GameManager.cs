@@ -290,6 +290,7 @@ public class GameManager : MonoBehaviour {
         public void LoadLevel() {
             State = GameState.Loading;
             TileManager.tileManager.LoadLevel("LoadLevel", (Scene loadedScene) => { State = GameState.Ready; roundScene = loadedScene; });
+            Resources.UnloadUnusedAssets();
         }
 
         public void StartGame() {
