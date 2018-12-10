@@ -39,6 +39,26 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
         GhostBody.GetComponent<ParabolaController>().ParabolaRoot = GameObject.FindGameObjectWithTag("ghost-curve"); //The GhostBody is created and placed upon the paraboloa
         //GhostBody.GetComponent<ParabolaController>().UpdatePosition(transform.position.z);
 
+        input.controllers[player.playerNumber].attack.OnDown.AddListener(Activate);
+
+    }
+
+
+    public void Activate()
+    {
+        int layerMask = 1 << 11; //this makes sure that it can only detect the Ground layer
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, Mathf.Infinity, layerMask))
+        {
+            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
+            //Debug.Log("Did Hit something for sure yuuuup at "+hit.transform.position);
+            Tile temp = hit.transform.GetComponent<Tile>();
+            if(temp)
+            {
+                //Debug.Log("Hit a tile at : " + temp.position);
+                TileManager.tileManager.DestroyTiles(temp.position);
+            }
+        }
     }
 
 

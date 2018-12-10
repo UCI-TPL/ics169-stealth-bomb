@@ -271,6 +271,8 @@ public class GameManager : MonoBehaviour {
 
         public Vector3 ghostSpawnLocation = new Vector3(13f,6f,13f); //this will have to be different per map! Will be changed later
 
+        FollowTargetsCamera moveCamera; 
+
         public bool roundEnding = false;
 
         public GameRound(Player[] players) {
@@ -306,7 +308,8 @@ public class GameManager : MonoBehaviour {
 
             ItemSpawner.Instance.UpdateSpawnPoints(TileManager.tileManager.tileMap);
             Queue<SpawnTile> spawnPoints = new Queue<SpawnTile>(TileManager.tileManager.tileMap.SpawnTiles);
-            FollowTargetsCamera moveCamera = Camera.main.GetComponentInParent<FollowTargetsCamera>();
+            //FollowTargetsCamera moveCamera = Camera.main.GetComponentInParent<FollowTargetsCamera>();
+            moveCamera = Camera.main.GetComponentInParent<FollowTargetsCamera>();
             foreach (Player player in players) {
                 player.ResetForRound();
                 SpawnTile spawnTile = spawnPoints.Dequeue();
@@ -376,6 +379,7 @@ public class GameManager : MonoBehaviour {
                 players[killedNum].ResetHealth();
                 players[killedNum].SetGhost(Instantiate<GameObject>(GameManager.instance.GhostPrefab.gameObject, deathPosition, Quaternion.identity).GetComponent<PlayerController>()); //SetGhost works like SetController but without weapons
                 ghostPlayerControllers.Add(players[killedNum].controller.gameObject); //to make sure it gets deleted
+                moveCamera.targets.Add(players[killedNum].controller.gameObject);
             }
         }
 
