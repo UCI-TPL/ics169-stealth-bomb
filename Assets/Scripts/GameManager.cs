@@ -205,28 +205,30 @@ public class GameManager : MonoBehaviour {
     }
 
     /// <summary>
-    /// Update who the current highest ranking player is.
+    /// Update who the current highest experiance player is.
     /// </summary>
-    private void UpdateRank() {
-        float highestRank = 0;
+    public void UpdateRank() {
+        float highestEXP = 0;
         foreach (Player player in GetActivePlayers(players)) {
-            if (player.rank > highestRank) {
-                highestRank = player.rank;
+            if (player.experiance > highestEXP) {
+                highestEXP = player.experiance;
                 leader = player;
             }
-            else if (player.rank == highestRank)
+            else if (player.experiance == highestEXP)
                 leader = null;
         }
     }
 
     public void ExpOnHurt(Player damageDealer, Player reciever, float percentDealt) {
         if (damageDealer != null)
-            StartCoroutine(ExperianceOverTime(damageDealer, ScaleExpGain(damageDealer.rank, reciever.rank, percentDealt * ExpGainPerDamage)));
+            damageDealer.AddExperiance(ScaleExpGain(damageDealer.rank, reciever.rank, percentDealt * ExpGainPerDamage));
+            //StartCoroutine(ExperianceOverTime(damageDealer, ScaleExpGain(damageDealer.rank, reciever.rank, percentDealt * ExpGainPerDamage)));
     }
 
     public void ExpOnKill(Player killer, Player killed) {
         if (killer != null)
-            StartCoroutine(ExperianceOverTime(killer, ScaleExpGain(killer.rank, killed.rank, ExpGainOnKill)));
+            killer.AddExperiance(ScaleExpGain(killer.rank, killed.rank, ExpGainOnKill));
+            //StartCoroutine(ExperianceOverTime(killer, ScaleExpGain(killer.rank, killed.rank, ExpGainOnKill)));
     }
 
     private float ScaleExpGain(int dealerRank, int recieverRank, float amount) {
@@ -249,7 +251,7 @@ public class GameManager : MonoBehaviour {
             float add = remaining - amount * Mathf.Pow(Mathf.Max(endTime - Time.time, 0) / duration, 2f);
             player.AddExperiance(add);
             remaining -= add;
-            UpdateRank(); // Update Ranking after granting experiance to a player
+            //UpdateRank(); // Update Ranking after granting experiance to a player
             yield return null;
         }
     }
@@ -294,7 +296,7 @@ public class GameManager : MonoBehaviour {
         }
 
         public void StartGame() {
-
+            GameManager.instance.UpdateRank();
             string s = "Starting round with players: ";
             foreach (Player player in players)
                 s += player.playerNumber.ToString() + ", ";

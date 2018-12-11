@@ -49,6 +49,8 @@ public class ProgressScreenUI : MonoBehaviour {
     private void Update() {
         // Fix ruler layout
         RulerTextLayoutElement.minWidth = RulerTextLayoutElement.preferredWidth = PlayerIconsRect.rect.width;
+
+        UpdateCrown();
     }
 
     /// <summary>
@@ -93,6 +95,25 @@ public class ProgressScreenUI : MonoBehaviour {
             yield return null;
         }
         expSlider.value = target;
+    }
+
+    /// <summary>
+    /// Update which player has the crown.
+    /// </summary>
+    public void UpdateCrown() {
+        float highestEXP = 0;
+        PlayerProgressObject leader = null;
+        foreach (PlayerProgressObject player in PlayerUIs) {
+            player.expBar.IsLeader = false;
+            if (player.Experiance > highestEXP) {
+                highestEXP = player.Experiance;
+                leader = player;
+            }
+            else if (player.Experiance == highestEXP)
+                leader = null;
+        }
+        if (leader != null)
+            leader.expBar.IsLeader = true;
     }
 
     /// <summary>
@@ -186,11 +207,14 @@ public class ProgressScreenUI : MonoBehaviour {
         public readonly GameObject GO_icon;
         public readonly GameObject GO_progressBar;
         public readonly Slider ExperianceSlider;
+        public float Experiance { get { return ExperianceSlider.value; } }
+        public ProgressScreen_EXPBar expBar;
 
         public PlayerProgressObject(GameObject icon, GameObject progressBar) {
             GO_icon = icon;
             GO_progressBar = progressBar;
             ExperianceSlider = progressBar.GetComponentInChildren<Slider>();
+            expBar = progressBar.GetComponent<ProgressScreen_EXPBar>();
         }
     }
 }
