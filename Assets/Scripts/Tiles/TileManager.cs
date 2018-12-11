@@ -222,8 +222,15 @@ public class TileManager : MonoBehaviour {
         return result;
     }
 
+
+    public void DestroyTiles(Vector3 tilePos) //called by the ghostCursor to destory tiles. Currently kills a whole pillar, might just kill a tile next time
+    {
+        StartCoroutine(DestroyPillar((int)tilePos.x, (int)tilePos.z));
+    }
+
+
     // Destroys all tiles in that z and x position
-    private IEnumerator DestroyPillar(int col, int row) {
+    public IEnumerator DestroyPillar(int col, int row) {
         foreach (Tile t in tileMap.GetPillar(col, row)) {
             if (t != null)
                 t.Destroy(warningTimer); // Destroy tile after warning time
