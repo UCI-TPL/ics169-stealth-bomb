@@ -23,8 +23,8 @@ public class CrumbleTile : Tile {
     public bool crumbling = false;
 
     private void Awake() {
-        meshFilter = GetComponent<MeshFilter>();
-        meshRenderer = GetComponent<MeshRenderer>();
+        meshFilter = GetComponentInChildren<MeshFilter>();
+        meshRenderer = GetComponentInChildren<MeshRenderer>();
         meshRenderer.enabled = false;
         BaseMaterial = meshRenderer.sharedMaterial;
         if (ParticlePoolParent == null) {
@@ -37,7 +37,7 @@ public class CrumbleTile : Tile {
             g.SetActive(false);
             ParticlePool.Enqueue(g.GetComponent<ParticleSystem>());
         }
-        crumbleMaterial = GetComponent<Renderer>().material;
+        crumbleMaterial = meshRenderer.material;
         if (crumbleMaterial.shader.name != "Crumble")
             Debug.Log(name + " has incorrect shader, Crumble shader required.");
         crumbleMaterial.SetFloat("Vector1_674F81FE", Random.Range(0, 100f)); // Set shader dissolve level
@@ -83,7 +83,7 @@ public class CrumbleTile : Tile {
     }
 
     private IEnumerator DisolveEffect(float duration) {
-        GetComponent<Collider>().enabled = false;
+        GetComponentInChildren<Collider>().enabled = false;
         float startTime = Time.time;
         float endTime = Time.time + duration;
         Vector3 offset = Vector3.zero;

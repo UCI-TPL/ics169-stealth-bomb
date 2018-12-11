@@ -103,7 +103,7 @@ public class TileManager : MonoBehaviour {
                 CombineInstance combineInstance = new CombineInstance {
                     subMeshIndex = 0,
                     mesh = ct.meshFilter.sharedMesh,
-                    transform = ct.transform.localToWorldMatrix
+                    transform = ct.meshFilter.transform.localToWorldMatrix
                 };
                 if (materialKey.ContainsKey(ct.BaseMaterial))
                     subMeshCombineInstances[materialKey[ct.BaseMaterial]].Add(ct, combineInstance);
