@@ -161,7 +161,20 @@ public class ProgressScreenUI : MonoBehaviour {
             playerProgressObject.GO_icon.GetComponent<Image>().color = players[i].Color;
             playerProgressObject.ExperianceSlider.maxValue = GameManager.instance.maxRank;
             playerProgressObject.ExperianceSlider.value = round.initialExperiance[players[i]];
+
+            // players should only be able to reach rank 10 once per game before being forced to head back to main menu.
+            // if (players[i].rank >= GameManager.instance.maxRank) {
+            //     playerProgressObject.ExperianceSlider.GetComponentInChildren<Outline>().enabled = true;
+            //     gameWon = true;
+            //     numOfMaxRankPlayers++;
+            // }
+            // if (gameWon && players[i].rank < GameManager.instance.maxRank) {
+            //     playerProgressObject.GO_progressBar.GetComponent<ProgressBarAlphaController>().FadeOutProgressBar();
+            // }
         }
+        // players should only be able to reach rank 10 once per game before being forced to head back to main menu.
+        RunEndgameChecksAndSetup();
+        // if (numOfMaxRankPlayers > )
         rankRulerUI.SetRange(0, GameManager.instance.maxRank); // Setup ruler to display number of ranks
     }
 
@@ -203,6 +216,28 @@ public class ProgressScreenUI : MonoBehaviour {
         call.Invoke();
     }
 
+    private void RunEndgameChecksAndSetup() {
+        bool gameWon = false;
+        int numOfMaxRankPlayers = 0;
+        for (int i = 0; i < players.Length; i++) {
+            if (players[i].rank >= GameManager.instance.maxRank) {
+                gameWon = true;
+                numOfMaxRankPlayers++;
+                PlayerUIs[i].ExperianceSlider.GetComponentInChildren<Outline>().enabled = true;
+            }
+        }
+
+        if (gameWon) {
+            Debug.Log("game won");
+            for (int i = 0; i < players.Length; i++) {
+                if (players[i].rank < GameManager.instance.maxRank) {
+                    Debug.Log("Player " + i + " should be faded out");
+                    PlayerUIs[i].GO_progressBar.GetComponent<ProgressBarAlphaController>().FadeOutProgressBar();
+                }
+            }
+        }
+    }
+
     private class PlayerProgressObject {
         public readonly GameObject GO_icon;
         public readonly GameObject GO_progressBar;
@@ -215,6 +250,7 @@ public class ProgressScreenUI : MonoBehaviour {
             GO_progressBar = progressBar;
             ExperianceSlider = progressBar.GetComponentInChildren<Slider>();
             expBar = progressBar.GetComponent<ProgressScreen_EXPBar>();
+            ExperianceSlider.gameObject.GetComponentInChildren<Outline>().enabled = false;
         }
     }
 }

@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 224400344245708868}
   - component: {fileID: 222274556890497528}
   - component: {fileID: 114188870227874384}
+  - component: {fileID: 114067197411325530}
   m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
@@ -104,6 +105,7 @@ GameObject:
   - component: {fileID: 224843057427554892}
   - component: {fileID: 114778775364210556}
   - component: {fileID: 114982648724087808}
+  - component: {fileID: 114589089012474020}
   m_Layer: 5
   m_Name: ProgressScreen_ProgressBar
   m_TagString: Untagged
@@ -124,6 +126,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AspectMode: 2
   m_AspectRatio: 1
+--- !u!114 &114067197411325530
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1032379146600390}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -900027084, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 1, g: 0.9654912, b: 0, a: 0.5}
+  m_EffectDistance: {x: 3, y: -3}
+  m_UseGraphicAlpha: 1
 --- !u!114 &114188870227874384
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -226,6 +242,20 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Slider+SliderEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &114589089012474020
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1974014458176348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41fb771596d19514d982cbb7291862ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  background: {fileID: 114188870227874384}
+  fill: {fileID: 114416286135381470}
+  alphafadeOutValue: 0.5
 --- !u!114 &114778775364210556
 MonoBehaviour:
   m_ObjectHideFlags: 1
