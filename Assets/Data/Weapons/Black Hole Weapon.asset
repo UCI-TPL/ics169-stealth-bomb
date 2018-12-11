@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: Black Hole Weapon
   m_EditorClassIdentifier: 
   name: Black Hole
-  image: {fileID: 21300000, guid: e48cb50dec187c948b0f81a85ae78627, type: 3}
+  image: {fileID: 21300000, guid: 2de4fa121d3da0f4b87861e8e9ee6ad1, type: 3}
   description: Fires an arrow that, upon impact, creates a black hole which pulls
     players towards center
   type: 2

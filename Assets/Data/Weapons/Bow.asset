@@ -29,4 +29,4 @@ MonoBehaviour:
   chargeTime: 0.1
   chargeLevels: 3
   numProj: 1
-  projSpeed: 10
+  projSpeed: 17.5
