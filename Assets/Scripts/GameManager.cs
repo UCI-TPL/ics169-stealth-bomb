@@ -61,6 +61,10 @@ public class GameManager : MonoBehaviour {
     public Transform PersistBetweenRounds { get; private set; }
     public readonly UnityEvent RoundReset = new UnityEvent();
 
+    // keeps track of winners
+    [HideInInspector]
+    public List<Player> Winners = new List<Player>();
+
     public void StartGame(bool[] playersReady) {
         string s = "Players Recieved from Main Menu: ";
         for (int i = 0; i < playersReady.Length; ++i) {
@@ -94,6 +98,7 @@ public class GameManager : MonoBehaviour {
 
     public static void ReturnMenu() {
         instance.inGame = false;
+        instance.Winners.Clear();
         Time.timeScale = 1;
         Time.fixedDeltaTime = 0.02f;
         foreach (GameRound round in instance.rounds)
@@ -170,7 +175,13 @@ public class GameManager : MonoBehaviour {
                 rounds.Add(newRound);
                 newRound.LoadLevel();
                 StartCoroutine(StartGameAfterLoad(newRound));
+                CheckForWinner();
+
+                if (Winners.Count != 0) {
+                    ReturnMenu();
+                }
             }
+            // ReturnMenu();
             yield return null;
         }
     }
@@ -254,6 +265,17 @@ public class GameManager : MonoBehaviour {
             //UpdateRank(); // Update Ranking after granting experiance to a player
             yield return null;
         }
+    }
+
+    // helper method to check for winner
+    private void CheckForWinner() {
+        // ties are currently possible
+        for (int i = 0; i < players.Length; i++) {
+            if (players[i].rank >= maxRank && !Winners.Contains(players[i])) {
+                Winners.Add(players[i]);
+            }
+        }
+        Debug.Log("number of winners in game manager = " + Winners.Count);
     }
 
     public class GameRound {
@@ -343,6 +365,15 @@ public class GameManager : MonoBehaviour {
 
         private void GameOver() {
             State = GameState.ProgressScreen;
+            // bool gameWon = false;
+            // // check to see if any players won the game
+            // for (int i = 0; i < players.Length; i++) {
+            //     if (players[i].rank >= GameManager.instance.maxRank) {
+            //         gameWon = true;
+            //         break;
+            //     }
+            // }
+
             ProgressScreenUI.Instance.StartProgressScreen(this, Reset);
         }
 

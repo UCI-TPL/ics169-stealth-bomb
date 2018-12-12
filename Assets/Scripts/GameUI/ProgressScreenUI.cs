@@ -41,9 +41,13 @@ public class ProgressScreenUI : MonoBehaviour {
     private List<PlayerProgressObject> PlayerUIs = new List<PlayerProgressObject>();
     private Player[] players;
 
+    [HideInInspector]
+    public bool GameWon { get; private set; }
+
     // Use this for initialization
     void Awake () {
         canvas = GetComponent<Canvas>();
+        GameWon = false;
     }
 
     private void Update() {
@@ -161,17 +165,8 @@ public class ProgressScreenUI : MonoBehaviour {
             playerProgressObject.GO_icon.GetComponent<Image>().color = players[i].Color;
             playerProgressObject.ExperianceSlider.maxValue = GameManager.instance.maxRank;
             playerProgressObject.ExperianceSlider.value = round.initialExperiance[players[i]];
-
-            // players should only be able to reach rank 10 once per game before being forced to head back to main menu.
-            // if (players[i].rank >= GameManager.instance.maxRank) {
-            //     playerProgressObject.ExperianceSlider.GetComponentInChildren<Outline>().enabled = true;
-            //     gameWon = true;
-            //     numOfMaxRankPlayers++;
-            // }
-            // if (gameWon && players[i].rank < GameManager.instance.maxRank) {
-            //     playerProgressObject.GO_progressBar.GetComponent<ProgressBarAlphaController>().FadeOutProgressBar();
-            // }
         }
+
         // players should only be able to reach rank 10 once per game before being forced to head back to main menu.
         RunEndgameChecksAndSetup();
         // if (numOfMaxRankPlayers > )
@@ -216,14 +211,15 @@ public class ProgressScreenUI : MonoBehaviour {
         call.Invoke();
     }
 
+    // helper method that checks and sets up winning conditions for progress screen UI.
     private void RunEndgameChecksAndSetup() {
-        bool gameWon = false;
+        // bool gameWon = false;
         int numOfMaxRankPlayers = 0;
         for (int i = 0; i < players.Length; i++) {
             if (!PlayerUIs[i].winTextController.alreadySetUp)
                 PlayerUIs[i].winTextController.SetupWinText(players[i]);
             if (players[i].rank >= GameManager.instance.maxRank) {
-                gameWon = true;
+                GameWon = true;
                 numOfMaxRankPlayers++;
                 PlayerUIs[i].GO_progressBar.GetComponent<ProgressBarAlphaController>().FadeInProgressBar();
                 PlayerUIs[i].ExperianceSlider.GetComponentInChildren<Outline>().enabled = true;
@@ -235,7 +231,7 @@ public class ProgressScreenUI : MonoBehaviour {
             }
         }
 
-        if (gameWon) {
+        if (GameWon) {
             Debug.Log("game won");
             for (int i = 0; i < players.Length; i++) {
                 if (players[i].rank < GameManager.instance.maxRank) {
