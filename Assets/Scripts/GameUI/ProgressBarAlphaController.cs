@@ -11,8 +11,7 @@ public class ProgressBarAlphaController : MonoBehaviour {
 	public float alphafadeOutValue = 0.5f;
 
 	void Awake() {
-		background.color = new Color(background.color.r, background.color.g, background.color.b, 1.0f);
-		fill.color = new Color(fill.color.r, fill.color.g, fill.color.b, 1.0f);
+		FadeInProgressBar();
 	}
 
 	// Use this for initialization
@@ -24,5 +23,10 @@ public class ProgressBarAlphaController : MonoBehaviour {
 	public void FadeOutProgressBar() {
 		background.color = new Color(background.color.r, background.color.g, background.color.b, alphafadeOutValue);
 		fill.color = new Color(fill.color.r, fill.color.g, fill.color.b, alphafadeOutValue);
+	}
+
+	public void FadeInProgressBar() {
+		background.color = new Color(background.color.r, background.color.g, background.color.b, 1.0f);
+		fill.color = new Color(fill.color.r, fill.color.g, fill.color.b, 1.0f);
 	}
 }
