@@ -121,6 +121,7 @@ MonoBehaviour:
   ParabolaController: {fileID: 0}
   ParabolaRoot: {fileID: 0}
   Point: {fileID: 1597169029232234}
+  cooldown: 0.2
 --- !u!114 &114175176917831712
 MonoBehaviour:
   m_ObjectHideFlags: 1

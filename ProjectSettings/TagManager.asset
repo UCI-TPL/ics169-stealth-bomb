@@ -12,6 +12,7 @@ TagManager:
   - player-ui-masks
   - countdown
   - ghost-curve
+  - Black Hole
   layers:
   - Default
   - TransparentFX

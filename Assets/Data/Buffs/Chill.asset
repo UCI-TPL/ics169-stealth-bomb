@@ -8,15 +8,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 788bfdd9dc85f904bbd0f916058b312c, type: 3}
+  m_Script: {fileID: 11500000, guid: f0fa11922bb97044e951e878fa580b64, type: 3}
   m_Name: Chill
   m_EditorClassIdentifier: 
   baseBuff:
     Modifiers:
     - name: move_speed
-      value: -0.5
+      value: -0.25
       type: 2
     - name: turn_speed
-      value: -0.5
+      value: -0.25
       type: 2
     Triggers: []
+  counterName: 

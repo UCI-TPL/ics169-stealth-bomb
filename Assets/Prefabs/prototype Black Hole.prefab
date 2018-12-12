@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33007310158629990}
   - component: {fileID: 23154331372092982}
   - component: {fileID: 135566471239641730}
-  m_Layer: 16
+  m_Layer: 12
   m_Name: Center
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,9 +44,9 @@ GameObject:
   - component: {fileID: 54930627214112246}
   - component: {fileID: 198608120501964950}
   - component: {fileID: 199891556697259492}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: prototype Black Hole
-  m_TagString: Untagged
+  m_TagString: Black Hole
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
