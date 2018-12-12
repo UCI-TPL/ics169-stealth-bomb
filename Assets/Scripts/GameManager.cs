@@ -66,6 +66,7 @@ public class GameManager : MonoBehaviour {
     public List<Player> Winners = new List<Player>();
 
     public void StartGame(bool[] playersReady) {
+        // StopAllCoroutines();
         string s = "Players Recieved from Main Menu: ";
         for (int i = 0; i < playersReady.Length; ++i) {
           s += "player " + i.ToString() + ": " + playersReady[i].ToString() + "  ";
@@ -171,15 +172,16 @@ public class GameManager : MonoBehaviour {
         PersistBetweenRounds = new GameObject("PersistBetweenRounds").transform;
         while (inGame) {
             if (rounds.Count <= 0 || !rounds[rounds.Count - 1].isActive) {
+                CheckForWinner();
+                if (Winners.Count != 0) {
+                    ReturnMenu();
+                    break;
+                }
+
                 GameRound newRound = new GameRound(GetActivePlayers(players));
                 rounds.Add(newRound);
                 newRound.LoadLevel();
                 StartCoroutine(StartGameAfterLoad(newRound));
-                CheckForWinner();
-
-                if (Winners.Count != 0) {
-                    ReturnMenu();
-                }
             }
             // ReturnMenu();
             yield return null;
@@ -270,8 +272,9 @@ public class GameManager : MonoBehaviour {
     // helper method to check for winner
     private void CheckForWinner() {
         // ties are currently possible
+        Debug.Log("players null: " + (players == null));
         for (int i = 0; i < players.Length; i++) {
-            if (players[i].rank >= maxRank && !Winners.Contains(players[i])) {
+            if (players[i] != null && players[i].rank >= maxRank && !Winners.Contains(players[i])) {
                 Winners.Add(players[i]);
             }
         }

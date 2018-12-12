@@ -320,7 +320,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   background: {fileID: 114188870227874384}
   fill: {fileID: 114416286135381470}
-  alphafadeOutValue: 0.1
+  alphafadeOutValue: 0.5
 --- !u!114 &114613921004774060
 MonoBehaviour:
   m_ObjectHideFlags: 1
