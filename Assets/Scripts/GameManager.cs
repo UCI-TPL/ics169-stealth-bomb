@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
+using System;
 
 // Require an inputManager
 [RequireComponent(typeof(AudioManager))]
@@ -164,12 +165,14 @@ public class GameManager : MonoBehaviour {
     {
         inGame = true;
         PersistBetweenRounds = new GameObject("PersistBetweenRounds").transform;
+
+        // Game update
         while (inGame) {
-            if (rounds.Count <= 0 || !rounds[rounds.Count - 1].isActive) {
-                GameRound newRound = new GameRound(GetActivePlayers(players));
+            if (rounds.Count <= 0 || !rounds[rounds.Count - 1].isActive) { // Check if there are no rounds or if the last round is not active
+                GameRound newRound = new GameRound(GetActivePlayers(players)); // Create a new round
                 rounds.Add(newRound);
-                newRound.LoadLevel();
-                StartCoroutine(StartGameAfterLoad(newRound));
+                newRound.LoadLevel(); // Set up round
+                StartCoroutine(StartGameAfterLoad(newRound)); // Start round once setup is complete
             }
             yield return null;
         }
@@ -180,8 +183,6 @@ public class GameManager : MonoBehaviour {
         for (int i = 0; i < readyPlayers.Length; ++i) {
             if (readyPlayers[i]) {
                 players[i] = new Player(i, DefaultPlayerData);
-                players[i].OnHurt += ExpOnHurt;
-                players[i].OnDeath += ExpOnKill;
             }
         }
     }
@@ -219,16 +220,18 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    public void ExpOnHurt(Player damageDealer, Player reciever, float percentDealt) {
+    public float ExpOnHurt(Player damageDealer, Player reciever, float percentDealt) {
         if (damageDealer != null)
-            damageDealer.AddExperiance(ScaleExpGain(damageDealer.rank, reciever.rank, percentDealt * ExpGainPerDamage));
+            return damageDealer.AddExperiance(ScaleExpGain(damageDealer.rank, reciever.rank, percentDealt * ExpGainPerDamage));
             //StartCoroutine(ExperianceOverTime(damageDealer, ScaleExpGain(damageDealer.rank, reciever.rank, percentDealt * ExpGainPerDamage)));
+        return 0;
     }
 
-    public void ExpOnKill(Player killer, Player killed) {
+    public float ExpOnKill(Player killer, Player killed) {
         if (killer != null)
-            killer.AddExperiance(ScaleExpGain(killer.rank, killed.rank, ExpGainOnKill));
+            return killer.AddExperiance(ScaleExpGain(killer.rank, killed.rank, ExpGainOnKill));
             //StartCoroutine(ExperianceOverTime(killer, ScaleExpGain(killer.rank, killed.rank, ExpGainOnKill)));
+        return 0;
     }
 
     private float ScaleExpGain(int dealerRank, int recieverRank, float amount) {
@@ -318,12 +321,12 @@ public class GameManager : MonoBehaviour {
                 player.SetController(Instantiate<GameObject>(GameManager.instance.PlayerPrefab.gameObject, spawnTile.transform.position, Quaternion.identity).GetComponent<PlayerController>());
                 moveCamera.targets.Add(player.controller.gameObject);
                 activePlayersControllers.Add(player.controller.gameObject);
+                player.OnHurt += Player_onHurt;
                 player.OnDeath += Player_onDeath;
             }
             State = GameState.Battle;
             GameManager.instance.StartCoroutine(Update());
         }
-
 
         public IEnumerator Update() {
             while (State == GameState.Battle || State == GameState.HurryUp) {
@@ -353,13 +356,21 @@ public class GameManager : MonoBehaviour {
             {
                 g.GetComponent<PlayerController>().Destroy();
             }
-            foreach (Player player in players)
+            foreach (Player player in players) {
+                player.OnHurt -= Player_onHurt;
                 player.OnDeath -= Player_onDeath;
+            }
             State = GameState.Finished;
             GameManager.instance.RoundReset.Invoke();
         }
 
+        private void Player_onHurt(Player damageDealer, Player reciever, float percentDealt) {
+            GameManager.instance.ExpOnHurt(damageDealer, reciever, percentDealt);
+        }
+
         private void Player_onDeath(Player killer, Player killed) {
+            GameManager.instance.ExpOnKill(killer, killed);
+
             activePlayersControllers.Remove(killed.controller.gameObject);
             Vector3 deathPosition = killed.controller.transform.position;
             if (deathPosition.y < 6.5)
@@ -382,6 +393,24 @@ public class GameManager : MonoBehaviour {
                 players[killedNum].SetGhost(Instantiate<GameObject>(GameManager.instance.GhostPrefab.gameObject, deathPosition, Quaternion.identity).GetComponent<PlayerController>()); //SetGhost works like SetController but without weapons
                 ghostPlayerControllers.Add(players[killedNum].controller.gameObject); //to make sure it gets deleted
                 moveCamera.targets.Add(players[killedNum].controller.gameObject);
+            }
+        }
+
+        /// <summary>
+        /// Instance of experiance gained during a round, Specifies how to display a set of experiance gained
+        /// </summary>
+        public class BonusExperiance {
+            public virtual string Name { get; private set; }
+            public readonly Color Color;
+            public float Experiance { get; private set; }
+
+            public BonusExperiance(string name, Color color) {
+                Name = name;
+                Color = color;
+            }
+
+            public float AddExperiance(float amount) {
+                return Experiance += amount;
             }
         }
 

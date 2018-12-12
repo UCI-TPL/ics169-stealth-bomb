@@ -81,8 +81,9 @@ public class Player {
         lastHurtBy = null;
     }
 
-    public void AddExperiance(float amount) {
+    public float AddExperiance(float amount) {
         experiance += amount;
+        return amount;
     }
 
     public void DisablePlayer(float duration) { //this exists for GameController to access PlayerController

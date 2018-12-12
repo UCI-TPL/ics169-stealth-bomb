@@ -150,9 +150,12 @@ public class PlayerController : MonoBehaviour {
             Move(dodgeSpeed); //hopefully this allows air dodges
         if (input.controllers[player.playerNumber].jump.Pressed) {
             Jump();
-            if (jumped && rb.velocity.y > 0) {
-                rb.AddForce(Physics.gravity * jumpGravityMultiplier - Physics.gravity, ForceMode.Acceleration);
-            }
+            //if (jumped && rb.velocity.y > 0) {
+            //    rb.AddForce(Physics.gravity * jumpGravityMultiplier - Physics.gravity, ForceMode.Acceleration);
+            //}
+        }
+        if (jumped && rb.velocity.y > 0) {
+            rb.AddForce(Physics.gravity * jumpGravityMultiplier - Physics.gravity, ForceMode.Acceleration);
         }
     }
 
@@ -267,10 +270,10 @@ public class PlayerController : MonoBehaviour {
 
     private void ReleaseJump() {
             jumpedReleased = true;
-        if (jumped && rb.velocity.y > 0) {
-            rb.velocity -= Vector3.Project(rb.velocity, Physics.gravity);
-            jumped = false;
-        }
+        //if (jumped && rb.velocity.y > 0) {
+        //    rb.velocity -= Vector3.Project(rb.velocity, Physics.gravity);
+        //    jumped = false;
+        //}
     }
 
     // On Attack down
