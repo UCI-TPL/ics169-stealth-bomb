@@ -355,10 +355,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2048
   materialPerPlayer:
-  - {fileID: 2100000, guid: 2ca8587a2a74de043bda799e1192d2ce, type: 2}
-  - {fileID: 2100000, guid: 2ca8587a2a74de043bda799e1192d2ce, type: 2}
-  - {fileID: 2100000, guid: 2ca8587a2a74de043bda799e1192d2ce, type: 2}
-  - {fileID: 2100000, guid: 2ca8587a2a74de043bda799e1192d2ce, type: 2}
+  - {fileID: 2100000, guid: c95b99cef516fe84590ba1d18a1c34fe, type: 2}
+  - {fileID: 2100000, guid: 9af2901c2df357a4ca8c1bcc61498595, type: 2}
+  - {fileID: 2100000, guid: d5506c4ae4525e94580e75563566e1a8, type: 2}
+  - {fileID: 2100000, guid: 63e0611d2762c7c46a0f2a14dd40cc70, type: 2}
 --- !u!135 &135599897179216222
 SphereCollider:
   m_ObjectHideFlags: 1
