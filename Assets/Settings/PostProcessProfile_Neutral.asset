@@ -9,7 +9,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8e6292b2c06870d4495f009f912b9600, type: 3}
-  m_Name: PostProcessProfile
+  m_Name: PostProcessProfile_Neutral
   m_EditorClassIdentifier: 
   settings:
   - {fileID: 114375464177707528}
@@ -85,7 +85,7 @@ MonoBehaviour:
     defaultState: 1
   tonemapper:
     overrideState: 1
-    value: 3
+    value: 1
   toneCurveToeStrength:
     overrideState: 0
     value: 0
@@ -112,8 +112,8 @@ MonoBehaviour:
     overrideState: 0
     value: 1
   temperature:
-    overrideState: 0
-    value: 0
+    overrideState: 1
+    value: 1.45
   tint:
     overrideState: 0
     value: 0
@@ -125,16 +125,16 @@ MonoBehaviour:
     value: 0
   saturation:
     overrideState: 1
-    value: 1.65
+    value: 2.73
   brightness:
     overrideState: 0
     value: 0
   postExposure:
-    overrideState: 0
-    value: 0.35
+    overrideState: 1
+    value: 0.64
   contrast:
     overrideState: 1
-    value: 2.02
+    value: 1.96
   mixerRedOutRedIn:
     overrideState: 0
     value: 100
@@ -1405,7 +1405,7 @@ MonoBehaviour:
     overrideState: 1
     value: 0
   rounded:
-    overrideState: 0
+    overrideState: 1
     value: 0
   mask:
     overrideState: 0

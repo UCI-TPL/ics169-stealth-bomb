@@ -218,7 +218,7 @@ public class PlayerController : MonoBehaviour {
 
         // Remove friction in the desired move direction if moving slower than max speed in that direction
         Vector3 velocityInDirection = Vector3.Project(rb.velocity, scaledVector); // Get velocity in the desired move direction
-        if (Vector3.Distance(velocityInDirection, scaledVector) < Vector3.Distance(velocityInDirection, -scaledVector) && velocityInDirection.magnitude < scaledVector.magnitude * speed) // Check if we are moving slower than our maximum speed
+        if (Vector3.Distance(velocityInDirection, scaledVector) < Vector3.Distance(velocityInDirection, -scaledVector) && velocityInDirection.magnitude < input.controllers[player.playerNumber].MoveVector().magnitude * speed) // Check if we are moving slower than our maximum speed
             frictionVector -= Vector3.Project(frictionVector, scaledVector); // Scale friction to remove the forward direction, so friction doesnt slow player in moving direction
         // Debug.DrawRay(floorCollider.transform.position + Vector3.down * floorCollider.bounds.extents.y, frictionVector, Color.red);
         

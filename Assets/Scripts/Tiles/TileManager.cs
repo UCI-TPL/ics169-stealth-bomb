@@ -78,11 +78,11 @@ public class TileManager : MonoBehaviour {
         meshFilter = GetComponent<MeshFilter>();
         if (meshFilter == null)
             meshFilter = gameObject.AddComponent<MeshFilter>();
-        InitializeMeshCombiner();
-        UpdateMesh();
+        //InitializeMeshCombiner();
+        //UpdateMesh();
 
-        StopAllCoroutines();
-        StartCoroutine(UpdateMeshRepeat(warningTimer));
+        //StopAllCoroutines();
+        //StartCoroutine(UpdateMeshRepeat(warningTimer));
     }
 
     private IEnumerator UpdateMeshRepeat(float updateRate) {
