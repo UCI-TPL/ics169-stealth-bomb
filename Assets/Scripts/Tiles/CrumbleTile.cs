@@ -25,7 +25,7 @@ public class CrumbleTile : Tile {
     private void Awake() {
         meshFilter = GetComponentInChildren<MeshFilter>();
         meshRenderer = GetComponentInChildren<MeshRenderer>();
-        //meshRenderer.enabled = false;
+        meshRenderer.enabled = false;
         BaseMaterial = meshRenderer.sharedMaterial;
         if (ParticlePoolParent == null) {
             ParticlePoolParent = new GameObject("CrumbleParticlePool").transform;
@@ -43,7 +43,6 @@ public class CrumbleTile : Tile {
         crumbleMaterial = meshRenderer.material;
         if (crumbleMaterial.shader.name != "Crumble")
             Debug.Log(name + " has incorrect shader, Crumble shader required.");
-        crumbleMaterial.SetFloat("Vector1_674F81FE", Random.Range(0, 100f)); // Set shader dissolve level
         meshRenderer.enabled = crumbling = true;
         StartCoroutine(CrumbleEffect(duration));
         // Pull out the first particle system from the queue and reinsert it at the end
