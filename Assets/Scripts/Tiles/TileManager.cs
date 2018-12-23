@@ -259,6 +259,7 @@ public class TileManager : MonoBehaviour {
 
     // Loads scene and starts game once finished
     private IEnumerator LoadLevelAsync(string name, LoadSceneAction OnFinishLoad) {
+        Application.backgroundLoadingPriority = ThreadPriority.Low;
         AsyncOperation asyncLoadLevel = SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
         while (!asyncLoadLevel.isDone) {
             yield return null;

@@ -16,12 +16,17 @@ public class FollowTargetsCamera : MonoBehaviour {
     void LateUpdate () {
         if (targets.Count > 0) {
             Vector3 averagePos = Vector3.zero;
-            Bounds screenSpaceBounds = new Bounds(ScaleToCamera(targets[0].transform.position, targetCamera), Vector3.zero);
+            bool exist = false;
+            Bounds screenSpaceBounds = new Bounds();
             for (int i = targets.Count - 1; i >= 0; --i) {
                 if (targets[i] == null)
                     targets.RemoveAt(i);
                 else {
                     averagePos += targets[i].transform.position;
+                    if (!exist) {
+                        screenSpaceBounds = new Bounds(ScaleToCamera(targets[0].transform.position, targetCamera), Vector3.zero);
+                        exist = true;
+                    }
                     screenSpaceBounds.Encapsulate(ScaleToCamera(targets[i].transform.position, targetCamera));
                 }
             }

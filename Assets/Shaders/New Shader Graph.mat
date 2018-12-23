@@ -5,7 +5,8 @@ Material:
   serializedVersion: 6
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_Name: New Shader Graph
   m_Shader: {fileID: 4800000, guid: 7c52c7ce9fbb8ab44992da37c0d6e0e1, type: 3}
   m_ShaderKeywords: 

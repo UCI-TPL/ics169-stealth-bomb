@@ -4,7 +4,8 @@
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -15,11 +16,13 @@ MonoBehaviour:
   - {fileID: 114375464177707528}
   - {fileID: 114252324386167986}
   - {fileID: 114519825960210478}
+  - {fileID: 114274595236546648}
 --- !u!114 &114252324386167986
 MonoBehaviour:
   m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -61,11 +64,74 @@ MonoBehaviour:
   dirtIntensity:
     overrideState: 0
     value: 0
+--- !u!114 &114274595236546648
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9746f408d6f1e994fa5e88f4f770670f, type: 3}
+  m_Name: Recolor
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  edgeColor:
+    overrideState: 1
+    value: {r: 0.3962264, g: 0.3962264, b: 0.3962264, a: 0.34901962}
+  edgeSource:
+    overrideState: 1
+    value: 1
+  edgeThreshold:
+    overrideState: 1
+    value: 1
+  edgeContrast:
+    overrideState: 1
+    value: 0
+  fillGradient:
+    overrideState: 0
+    value:
+      serializedVersion: 2
+      key0: {r: 0, g: 0, b: 1, a: 1}
+      key1: {r: 1, g: 0, b: 0, a: 1}
+      key2: {r: 0, g: 0, b: 0, a: 0}
+      key3: {r: 0, g: 0, b: 0, a: 0}
+      key4: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 65535
+      ctime2: 0
+      ctime3: 0
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_NumColorKeys: 2
+      m_NumAlphaKeys: 2
+  fillOpacity:
+    overrideState: 0
+    value: 0
 --- !u!114 &114375464177707528
 MonoBehaviour:
   m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -87,10 +153,10 @@ MonoBehaviour:
     overrideState: 1
     value: 3
   toneCurveToeStrength:
-    overrideState: 0
-    value: 0
+    overrideState: 1
+    value: 0.15
   toneCurveToeLength:
-    overrideState: 0
+    overrideState: 1
     value: 0.5
   toneCurveShoulderStrength:
     overrideState: 1
@@ -125,16 +191,16 @@ MonoBehaviour:
     value: 0
   saturation:
     overrideState: 1
-    value: 1.65
+    value: 2
   brightness:
     overrideState: 0
     value: 0
   postExposure:
-    overrideState: 0
-    value: 0.35
+    overrideState: 1
+    value: 0.3
   contrast:
     overrideState: 1
-    value: 2.02
+    value: 4
   mixerRedOutRedIn:
     overrideState: 0
     value: 100
@@ -1375,7 +1441,8 @@ MonoBehaviour:
 MonoBehaviour:
   m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -1414,3 +1481,22 @@ MonoBehaviour:
   opacity:
     overrideState: 0
     value: 1
+--- !u!114 &114981867012683446
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 981847c4ec924b14bb19cc25e81e2d69, type: 3}
+  m_Name: Sharpen
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  strength:
+    overrideState: 0
+    value: 0
