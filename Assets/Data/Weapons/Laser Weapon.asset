@@ -4,7 +4,8 @@
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -17,7 +18,7 @@ MonoBehaviour:
   type: 2
   autoAttack: 0
   cooldown: 0.25
-  knockbackStrength: 3
+  knockbackStrength: 2
   damage: 3
   buffs: []
   maxChargeTime: 1
@@ -28,4 +29,4 @@ MonoBehaviour:
   DecayTimePerWidth: 0.25
   laserBuff: {fileID: 11400000, guid: a64349e31df0c1d41883f15067fbf551, type: 2}
   LaserBeam: {fileID: 114587784883638426, guid: 2edd6be0e30c60e4e93cea76b1d52611,
-    type: 2}
+    type: 3}

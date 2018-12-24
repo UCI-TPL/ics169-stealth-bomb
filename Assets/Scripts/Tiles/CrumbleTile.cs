@@ -58,7 +58,7 @@ public class CrumbleTile : Tile {
     }
 
     private IEnumerator CrumbleEffect(float duration) {
-        crumbleMaterial.SetFloat("_CrumbleStartTime", Time.time); // Set shader crumble start time
+        crumbleMaterial.SetFloat("_CrumbleStartTime", Time.timeSinceLevelLoad); // Set shader crumble start time
         crumbleMaterial.SetFloat("_CrumbleDuration", duration); // Set shader crumble duration
         float startTime = Time.time;
         float endTime = Time.time + duration;
@@ -84,7 +84,7 @@ public class CrumbleTile : Tile {
     }
 
     private IEnumerator DisolveEffect(float duration) {
-        crumbleMaterial.SetFloat("_DestroyStartTime", Time.time); // Set shader destroy start time
+        crumbleMaterial.SetFloat("_DestroyStartTime", Time.timeSinceLevelLoad); // Set shader destroy start time
         crumbleMaterial.SetFloat("_DestroyDuration", duration); // Set shader destroy duration
         GetComponentInChildren<Collider>().enabled = false;
         float startTime = Time.time;
