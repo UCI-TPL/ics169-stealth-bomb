@@ -32,6 +32,10 @@ public class Projectile : MonoBehaviour {
     private void OnCollisionEnter(Collision other) {
         if (OnHit != null)
             OnHit.Invoke(origin, other.contacts[0].point, other.gameObject);
-        Destroy(gameObject);
+        foreach (Collider c in GetComponentsInChildren<Collider>())
+            c.enabled = false;
+        GetComponent<MeshRenderer>().enabled = false;
+        GetComponent<Rigidbody>().velocity = Vector3.zero;
+        Destroy(gameObject, 3);
     }
 }

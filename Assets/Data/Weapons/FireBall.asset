@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3832f005ef720b645856b75289a4346f, type: 3}
-  m_Name: SlingShot
+  m_Name: FireBall
   m_EditorClassIdentifier: 
-  name: Sling Shot
-  image: {fileID: 21300000, guid: 3a65d680b08180147bdc7628aef83eb5, type: 3}
-  description: fast but weak projectile attack
+  name: FireBall
+  image: {fileID: 21300000, guid: b58499627988b5444ab304d1c9e1c052, type: 3}
+  description: Shoots a large Fireball
   type: 2
   autoAttack: 1
-  cooldown: 0.2
-  knockbackStrength: 8
-  damage: 10
+  cooldown: 1
+  knockbackStrength: 30
+  damage: 15
   buffs: []
-  projectile: {fileID: 11400000, guid: cc2f39c9384a2b84ab1b8e1b7c359c8e, type: 2}
-  numProj: 1
-  projSpeed: 50
+  projectile: {fileID: 11400000, guid: 968059c505a7e1f47bf5b431b3630dc1, type: 2}
+  numProj: 3
+  projSpeed: 10

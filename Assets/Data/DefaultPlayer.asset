@@ -4,14 +4,15 @@
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f129241ccb8f48447832194804c158db, type: 3}
   m_Name: DefaultPlayer
   m_EditorClassIdentifier: 
-  defaultWeapon: {fileID: 11400000, guid: bbf933dd4d37d784ab26bf44cb2ab321, type: 2}
+  defaultWeapon: {fileID: 11400000, guid: b8d4716ec130c83418c04a9d1bfe9b8d, type: 2}
   defaultSpecialMove: {fileID: 11400000, guid: 8f845288885848b41a628736545cc5a7, type: 2}
   Colors:
   - {r: 1, g: 0.23266676, b: 0.2216981, a: 1}
