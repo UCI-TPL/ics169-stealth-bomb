@@ -45,6 +45,10 @@ public class TileManager : MonoBehaviour {
     [Tooltip("Delay between destruction of tiles in a column")]
     public float pillarDestroyDelay = 0.05f;
 
+    [Header("Material Settings(Do Not Change)")]
+    [SerializeField]
+    private Material basicMaterial;
+
     public delegate void LoadSceneAction(Scene loadedScene);
 
     private Queue<TileDestroyCalc> TileDestroyQueue;
@@ -109,7 +113,13 @@ public class TileManager : MonoBehaviour {
                     subMeshCombineInstances[materialKey[ct.BaseMaterial]].Add(ct, combineInstance);
                 else {
                     materialKey.Add(ct.BaseMaterial, subMeshCombineInstances.Count);
-                    subMeshMaterials.Add(ct.BaseMaterial);
+                    Material mat = new Material(basicMaterial.shader);
+                    mat.CopyPropertiesFromMaterial(basicMaterial);
+                    mat.mainTexture = ct.BaseMaterial.mainTexture;
+                    mat.color = ct.BaseMaterial.color;
+                    mat.SetFloat("_Metallic", ct.BaseMaterial.GetFloat("_Metallic"));
+                    mat.SetFloat("_Glossiness", ct.BaseMaterial.GetFloat("_Glossiness"));
+                    subMeshMaterials.Add(mat);
                     subMeshCombineInstances.Add(new TileCombineInstances());
                     subMeshCombineInstances[subMeshCombineInstances.Count - 1].Add(ct, combineInstance);
                 }
