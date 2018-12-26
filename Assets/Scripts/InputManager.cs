@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -10,6 +11,8 @@ public class InputManager : MonoBehaviour {
     // Returns the current inputManager
     private static InputManager _inputManager;
     private bool keyboardEnabled;
+    Thread UpdateXInputStateThread = null;
+
 
     public static InputManager inputManager {
         get {
@@ -78,8 +81,10 @@ public class InputManager : MonoBehaviour {
 
     // Set up controllers
     private void Awake() {
-        if (inputManager != this)
+        if (inputManager != this) {
             Destroy(this);
+            return;
+        }
         // only temporary, need to make going from keyboard to controller more formal and streamlined!!!!!!!!!!
         // controllers[0] = new MouseKeyboard(0);
         keyboardEnabled = false;
@@ -91,6 +96,23 @@ public class InputManager : MonoBehaviour {
         Debug.Log("Mobile Device Detected");
         ChangeControllerType(0, Controller.Type.TouchScreen);
 #endif
+
+        UpdateXInputStateThread = new Thread(UpdateXInputStateThreadLoop);
+        UpdateXInputStateThread.Start();
+    }
+
+    private void UpdateXInputStateThreadLoop() {
+        while (true) {
+            foreach (Controller controller in controllers) {
+                if (controller.type == Controller.Type.Xbox) {
+                    if (((XboxController)controller).stateUpdated) {
+                        ((XboxController)controller).stateUpdated = false;
+                        ((XboxController)controller).UpdateState(GamePad.GetState(((XboxController)controller).playerIndex));
+                    }
+                }
+            }
+            Thread.Sleep(10);
+        }
     }
 
     // Update every controller every frame
@@ -223,9 +245,10 @@ public class InputManager : MonoBehaviour {
     
     // Controller object for Xbox controllers
     public class XboxController : Controller {
-        private PlayerIndex playerIndex;
+        public PlayerIndex playerIndex;
         private GamePadState state;
         private GamePadState prevState;
+        public bool stateUpdated = true;
         public bool isActive {
             get { return state.IsConnected && prevState.IsConnected; }
         }
@@ -780,12 +803,15 @@ public class InputManager : MonoBehaviour {
 
         // Update This controller's events
         public override void UpdateController() {
-#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
-            prevState = state;
-            state = GamePad.GetState(playerIndex);
+            // State is updated in a different thread
             if (isActive)
                 UpdateEvents();
-#endif
+            stateUpdated = true;
+        }
+
+        public void UpdateState(GamePadState state) {
+            prevState = this.state;
+            this.state = state;
         }
 
         // Compare ButtonStates and return whether the button had just been pressed
