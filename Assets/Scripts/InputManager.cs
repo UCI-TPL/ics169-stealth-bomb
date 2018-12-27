@@ -41,7 +41,7 @@ public class InputManager : MonoBehaviour {
                 controllers[playerIndex] = new MouseKeyboard(playerIndex);
                 break;
             case Controller.Type.TouchScreen:
-                controllers[playerIndex] = new TouchScreenController();
+                controllers[playerIndex] = new TouchScreenController(playerIndex);
                 break;
         }
     }
@@ -95,12 +95,16 @@ public class InputManager : MonoBehaviour {
 #if UNITY_ANDROID || UNITY_IOS
         Debug.Log("Mobile Device Detected");
         ChangeControllerType(0, Controller.Type.TouchScreen);
+        ChangeControllerType(1, Controller.Type.TouchScreen);
 #endif
 
+#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
         UpdateXInputStateThread = new Thread(UpdateXInputStateThreadLoop);
         UpdateXInputStateThread.Start();
+#endif
     }
 
+#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
     private void UpdateXInputStateThreadLoop() {
         while (true) {
             foreach (Controller controller in controllers) {
@@ -114,6 +118,7 @@ public class InputManager : MonoBehaviour {
             Thread.Sleep(10);
         }
     }
+#endif
 
     // Update every controller every frame
     private void Update() {
@@ -272,11 +277,19 @@ public class InputManager : MonoBehaviour {
         public JoyStickCode aimJoyStick { get; private set; }
 
         public override Vector2 MoveVector() {
+#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
             return (JoyStickMap[moveJoyStick]() * inputManager.cameraScale).normalized * JoyStickMap[moveJoyStick]().magnitude;
+#else
+            return Vector3.zero;
+#endif
         }
 
         public override Vector2 AimVector() {
+#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
             return (JoyStickMap[aimJoyStick]() * inputManager.cameraScale).normalized;
+#else
+            return Vector3.zero;
+#endif
         }
 
         // Add a button mapping to the specified action
@@ -387,6 +400,7 @@ public class InputManager : MonoBehaviour {
         public XboxController(int playerIndex) {
             type = Type.Xbox;
             this.playerIndex = (PlayerIndex)playerIndex;
+#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
             GamePad.GetState(this.playerIndex, GamePadDeadZone.None);
 #region Button Defenitions
             ButtonMap.Add(ButtonCode.A, new ButtonTest(ADown, AUp, APressed));
@@ -417,9 +431,10 @@ public class InputManager : MonoBehaviour {
             ButtonMaps.Add(ActionCode.Start, new HashSet<ButtonCode>());
             ButtonMaps.Add(ActionCode.Switch, new HashSet<ButtonCode>());
             SetDefaultMapping();
+#endif
         }
 
-        
+
 
         /*
         - Kyle
@@ -893,7 +908,7 @@ public class InputManager : MonoBehaviour {
         }
     }    // Controller object for Mouse and Keyboard, This is not implemented yet
     public class TouchScreenController : Controller {
-
+        private int playerNumber;
         private TouchControlsUI touchControlsUI;
         private TouchControlsUI TouchControlsUI {
             get {
@@ -932,11 +947,21 @@ public class InputManager : MonoBehaviour {
 
             if (RightTouchStart.x < 0) {
                 foreach (Touch touch in Input.touches) {
-                    if (touch.phase == TouchPhase.Began && touch.position.x < Camera.main.pixelWidth / 2) {
-                        RightTouchID = touch.fingerId;
-                        RightTouchStart = touch.position;
-                        TouchControlsUI.SetRightJoystickPosition(RightTouchStart / Camera.main.pixelRect.size);
-                        break;
+                    if (playerNumber == 0) {
+                        if (touch.phase == TouchPhase.Began && touch.position.x < Camera.main.pixelWidth / 2 && touch.position.y > Camera.main.pixelHeight / 2) {
+                            RightTouchID = touch.fingerId;
+                            RightTouchStart = touch.position;
+                            TouchControlsUI.SetRightJoystickPosition(RightTouchStart / Camera.main.pixelRect.size, playerNumber);
+                            break;
+                        }
+                    }
+                    else if (playerNumber == 1) {
+                        if (touch.phase == TouchPhase.Began && touch.position.x > Camera.main.pixelWidth / 2 && touch.position.y < Camera.main.pixelHeight / 2) {
+                            RightTouchID = touch.fingerId;
+                            RightTouchStart = touch.position;
+                            TouchControlsUI.SetRightJoystickPosition(RightTouchStart / Camera.main.pixelRect.size, playerNumber);
+                            break;
+                        }
                     }
                 }
             }
@@ -944,23 +969,34 @@ public class InputManager : MonoBehaviour {
                 if (touch.fingerId == RightTouchID) {
                     if (touch.phase == TouchPhase.Ended) {
                         RightTouchStart = -Vector2.one;
-                        TouchControlsUI.HideRightJoystick();
+                        TouchControlsUI.HideRightJoystick(playerNumber);
                         break;
                     }
                     RightTouchEnd = touch.position;
-                    TouchControlsUI.SetRightJoystickDirection(MoveVector());
+                    TouchControlsUI.SetRightJoystickDirection(MoveVector(), playerNumber);
                     break;
                 }
             }
 
             if (LeftTouchStart.x < 0) {
                 foreach (Touch touch in Input.touches) {
-                    if (touch.phase == TouchPhase.Began && touch.position.x > Camera.main.pixelWidth / 2) {
-                        LeftTouchID = touch.fingerId;
-                        LeftTouchStart = touch.position;
-                        TouchControlsUI.SetLeftJoystickPosition(LeftTouchStart / Camera.main.pixelRect.size);
-                        attack.OnDown.Invoke();
-                        break;
+                    if (playerNumber == 0) {
+                        if (touch.phase == TouchPhase.Began && touch.position.x < Camera.main.pixelWidth / 2 && touch.position.y < Camera.main.pixelHeight / 2) {
+                            LeftTouchID = touch.fingerId;
+                            LeftTouchStart = touch.position;
+                            TouchControlsUI.SetLeftJoystickPosition(LeftTouchStart / Camera.main.pixelRect.size, playerNumber);
+                            attack.OnDown.Invoke();
+                            break;
+                        }
+                    }
+                    else if (playerNumber == 1) {
+                        if (touch.phase == TouchPhase.Began && touch.position.x > Camera.main.pixelWidth / 2 && touch.position.y > Camera.main.pixelHeight / 2) {
+                            LeftTouchID = touch.fingerId;
+                            LeftTouchStart = touch.position;
+                            TouchControlsUI.SetLeftJoystickPosition(LeftTouchStart / Camera.main.pixelRect.size, playerNumber);
+                            attack.OnDown.Invoke();
+                            break;
+                        }
                     }
                 }
             }
@@ -968,12 +1004,12 @@ public class InputManager : MonoBehaviour {
                 if (touch.fingerId == LeftTouchID) {
                     if (touch.phase == TouchPhase.Ended) {
                         LeftTouchStart = -Vector2.one;
-                        TouchControlsUI.HideLeftJoystick();
+                        TouchControlsUI.HideLeftJoystick(playerNumber);
                         attack.OnUp.Invoke();
                         break;
                     }
                     LeftTouchEnd = touch.position;
-                    TouchControlsUI.SetLeftJoystickDirection(AimVector());
+                    TouchControlsUI.SetLeftJoystickDirection(AimVector(), playerNumber);
                     break;
                 }
             }
@@ -981,8 +1017,9 @@ public class InputManager : MonoBehaviour {
             attack.Pressed = AimVector() != Vector2.zero;
         }
 
-        public TouchScreenController() {
+        public TouchScreenController(int playerNumber) {
             type = Type.TouchScreen;
+            this.playerNumber = playerNumber;
         }
     }
 
