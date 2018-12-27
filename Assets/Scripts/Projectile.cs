@@ -14,6 +14,9 @@ public class Projectile : MonoBehaviour {
     public delegate void HitAction(Vector3 origin, Vector3 contactPoint, GameObject target);
     public HitAction OnHit;
 
+    [HideInInspector]
+    public GameObject hitEffect;
+
     void Start () {
         origin = transform.position;
         if (player.controller.HitBox != null)
@@ -32,6 +35,8 @@ public class Projectile : MonoBehaviour {
     private void OnCollisionEnter(Collision other) {
         if (OnHit != null)
             OnHit.Invoke(origin, other.contacts[0].point, other.gameObject);
+        if (hitEffect != null)
+            Instantiate(hitEffect, transform.position, Quaternion.identity);
         GetComponent<MeshRenderer>().enabled = false;
         Rigidbody rb = GetComponent<Rigidbody>();
         rb.detectCollisions = false;

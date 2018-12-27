@@ -6,7 +6,8 @@ using UnityEngine;
 public class ProjectileData : ScriptableObject {
 
     public Projectile projectile;
-    
+    public GameObject hitEffect;
+
     public float lifetime = 3f;
     public float spreadAngle = 10;
 
@@ -19,6 +20,7 @@ public class ProjectileData : ScriptableObject {
         Projectile proj = GameObject.Instantiate(projectile.gameObject, origin, direction).GetComponent<Projectile>(); //this instantiates the arrow as an attack
         proj.OnHit = Onhit;
         proj.player = player;
+        proj.hitEffect = hitEffect;
         proj.GetComponent<Rigidbody>().velocity = proj.transform.forward * speed;
         Destroy(proj.gameObject, lifetime);
     }
