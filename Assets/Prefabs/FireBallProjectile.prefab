@@ -55,8 +55,8 @@ GameObject:
   - component: {fileID: 4805648756126296}
   - component: {fileID: 33512463241481392}
   - component: {fileID: 23049894658325784}
-  - component: {fileID: 65851718138537896}
   - component: {fileID: 114721991009535130}
+  - component: {fileID: 7290916895149847450}
   - component: {fileID: 54612792617523452}
   - component: {fileID: 96182481458528356}
   m_Layer: 12
@@ -75,7 +75,7 @@ Transform:
   m_GameObject: {fileID: 1944683509401604}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 4010282649745680}
   - {fileID: 1277114618255849959}
@@ -127,19 +127,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &65851718138537896
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1944683509401604}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &114721991009535130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -153,8 +140,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trail: {fileID: 96182481458528356}
-  collider: {fileID: 65851718138537896}
+  collider: {fileID: 7290916895149847450}
   hitEffect: {fileID: 0}
+--- !u!135 &7290916895149847450
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1944683509401604}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &54612792617523452
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -341,6 +341,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6624415524150827984, guid: 3b7caaad65f08284a8ecb664ec5972d2,
+        type: 3}
+      propertyPath: EmissionModule.rateOverDistance.scalar
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3b7caaad65f08284a8ecb664ec5972d2, type: 3}
