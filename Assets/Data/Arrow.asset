@@ -4,16 +4,17 @@
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b710d28ec94f3e344a5a88f4144051a0, type: 3}
   m_Name: Arrow
   m_EditorClassIdentifier: 
-  projectile: {fileID: 114721991009535130, guid: 111ada6a1cfa3e64abadaf4254cad72b,
-    type: 2}
-  damage: 25
+  projectile: {fileID: 7743166598750051238, guid: b48238f4166a4ec4284f494699b21791,
+    type: 3}
+  hitEffect: {fileID: 0}
   lifetime: 0.35
   spreadAngle: 10
-  knockbackForce: 15
+  rotate90: 1
