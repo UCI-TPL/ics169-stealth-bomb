@@ -109,9 +109,11 @@ public class InputManager : MonoBehaviour {
         while (true) {
             foreach (Controller controller in controllers) {
                 if (controller.type == Controller.Type.Xbox) {
-                    if (((XboxController)controller).stateUpdated) {
-                        ((XboxController)controller).stateUpdated = false;
-                        ((XboxController)controller).UpdateState(GamePad.GetState(((XboxController)controller).playerIndex));
+                    XboxController c = (XboxController)controller;
+                    if (c.stateUpdated && !c.gettingState) {
+                        c.gettingState = true;
+                        c.stateUpdated = false;
+                        c.UpdateState(GamePad.GetState(c.playerIndex));
                     }
                 }
             }
@@ -254,6 +256,7 @@ public class InputManager : MonoBehaviour {
         private GamePadState state;
         private GamePadState prevState;
         public bool stateUpdated = true;
+        public bool gettingState = false;
         public bool isActive {
             get { return state.IsConnected && prevState.IsConnected; }
         }
@@ -819,6 +822,8 @@ public class InputManager : MonoBehaviour {
         // Update This controller's events
         public override void UpdateController() {
             // State is updated in a different thread
+            if (stateUpdated)
+                UpdateState(state);
             if (isActive)
                 UpdateEvents();
             stateUpdated = true;
@@ -827,6 +832,7 @@ public class InputManager : MonoBehaviour {
         public void UpdateState(GamePadState state) {
             prevState = this.state;
             this.state = state;
+            gettingState = false;
         }
 
         // Compare ButtonStates and return whether the button had just been pressed
