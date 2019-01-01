@@ -7,12 +7,7 @@ public class Tile : MonoBehaviour {
     
     public static Vector3 TileOffset = new Vector3(0.5f, 0.5f, 0.5f);
     private bool destroying = false;
-    public Type type { get; protected set; }
-
-    // Set tile Type
-    private void Awake() {
-        type = Type.Tile;
-    }
+    public virtual TileType Type { get { return TileType.Tile; } }
     
     /// <summary>Position of the tile snaped to the grid (nearest Int)</summary>
     public Vector3 position {
@@ -76,7 +71,7 @@ public class Tile : MonoBehaviour {
         return Create(prefab, pos, Quaternion.identity, parent);
     }
 
-    public enum Type {
+    public enum TileType {
         Tile, Item, SpawnPoint
     }
 }

@@ -9,11 +9,7 @@ public class SpawnTile : Tile {
 
     /// <summary>This determins which spawn point lower ranked players spawn. A higher priority means lower ranked players will spawn there.</summary>
     public float priority = 0;
-
-    // Set tile Type
-    private void Awake() {
-        type = Type.SpawnPoint;
-    }
+    public override TileType Type { get { return TileType.SpawnPoint; } }
 
     // Destroy the Spawner as soon as the ground under it is decaying
     protected override void BreakingEffect(float duration) {

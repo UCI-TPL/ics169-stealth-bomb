@@ -24,10 +24,7 @@ public class ItemTile : Tile {
     [SerializeField]
     private float updateRate = 0.25f;
 
-    // Set tile Type
-    private void Awake() {
-        type = Type.Item;
-    }
+    public override TileType Type { get { return TileType.Item; } }
 
     private void Start() {
         StartCoroutine(CheckOverlap(updateRate));

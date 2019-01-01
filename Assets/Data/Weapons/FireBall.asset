@@ -22,5 +22,5 @@ MonoBehaviour:
   damage: 15
   buffs: []
   projectile: {fileID: 11400000, guid: 968059c505a7e1f47bf5b431b3630dc1, type: 2}
-  numProj: 3
+  numProj: 30
   projSpeed: 15

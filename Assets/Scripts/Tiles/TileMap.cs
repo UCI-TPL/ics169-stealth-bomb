@@ -33,11 +33,11 @@ public class TileMap {
             if (tile != null) {
                 Vector3Int pos = tile.position.Round() - offset;
                 tiles[pos.x, pos.y, pos.z] = tile;
-                switch(tile.type) {
-                    case Tile.Type.SpawnPoint:
+                switch(tile.Type) {
+                    case Tile.TileType.SpawnPoint:
                         SpawnTiles.Add((SpawnTile)tile);
                         break;
-                    case Tile.Type.Item:
+                    case Tile.TileType.Item:
                         ItemTiles.Add((ItemTile)tile);
                         break;
                 }

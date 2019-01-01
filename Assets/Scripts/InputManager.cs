@@ -110,7 +110,7 @@ public class InputManager : MonoBehaviour {
             foreach (Controller controller in controllers) {
                 if (controller.type == Controller.Type.Xbox) {
                     XboxController c = (XboxController)controller;
-                    if (c.stateUpdated && !c.gettingState) {
+                    if (c.stateUpdated) {
                         c.gettingState = true;
                         c.stateUpdated = false;
                         c.UpdateState(GamePad.GetState(c.playerIndex));
@@ -832,7 +832,6 @@ public class InputManager : MonoBehaviour {
         public void UpdateState(GamePadState state) {
             prevState = this.state;
             this.state = state;
-            gettingState = false;
         }
 
         // Compare ButtonStates and return whether the button had just been pressed
