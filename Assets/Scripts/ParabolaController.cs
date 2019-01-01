@@ -13,7 +13,7 @@ public class ParabolaController : MonoBehaviour
     /// <summary>
     /// Start of Parabola
     /// </summary>
-    public GameObject ParabolaRoot;
+    public GameObject ParabolaRoot; //the map can have either 1 or 2 Parabolas 
 
     /// <summary>
     /// Autostart Animation
@@ -37,7 +37,7 @@ public class ParabolaController : MonoBehaviour
     //draw
     protected ParabolaFly parabolaFly;
 
- 
+
 
     void OnDrawGizmos()
     {
@@ -69,14 +69,13 @@ public class ParabolaController : MonoBehaviour
 
     int max = 24;
     int min = 6;
+
     public void Begin( GameObject root) //z being the z position
     {
         ParabolaRoot = root;
         parabolaFly = new ParabolaFly(ParabolaRoot.transform, max, min);
         RefreshTransforms(Speed);
     }
-
-
 
     // Update is called once per frame
     void Update()
@@ -106,19 +105,16 @@ public class ParabolaController : MonoBehaviour
 
     }
 
-    public void UpdatePosition(float z)
+    public Vector3 UpdatePosition(float avg)
     {
-        //Debug.Log("Receiving  " + z);
-        if (z < min)
-            z = min;
-        if (z > max)
-            z = max;
-        if(parabolaFly != null)
-        {
-            Vector3 pos = parabolaFly.GetPositionAtZ(z);
-            transform.position = pos;
-        }
-
+        if (avg < min)
+            avg = min;
+        if (avg > max)
+            avg = max;
+        if (parabolaFly != null)
+            return parabolaFly.GetPositionAtZ(avg);
+        else
+            return Vector3.zero;
     }
 
     public void FollowParabola()
