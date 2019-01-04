@@ -61,7 +61,8 @@ public class ChargeWeapon : Weapon {
     // OnRelease is called once when the weapon is released
     protected override void OnRelease() {
 
-        AudioManager.audioManager.Play("Bow");
+        GameManager.instance.audioManager.Play("Bow");
+        //AudioManager.audioManager.Play("Bow");
 
         rend.material.color = player.controller.playerColor;
         //Debug.Log("Releasing with a chargeTime of " + chargeLevel);

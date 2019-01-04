@@ -9,6 +9,8 @@ using UnityEngine.SceneManagement;
 public class AudioManager : MonoBehaviour {
 
 
+    /*
+
     // Returns the current inputManager
     private static AudioManager _audioManager;
 
@@ -28,17 +30,18 @@ public class AudioManager : MonoBehaviour {
             return _audioManager;
         }
     }
-
+    */
     public Sound[] sounds; //all the sounds in the game
 
 	// Use this for initialization
 	void Awake () {
         
+        /*
         if (audioManager != this)
             Destroy(this);
-            
+          */  
 
-        foreach(Sound s in audioManager.sounds)  //initializes the array of Sounds
+        foreach(Sound s in sounds)  //initializes the array of Sounds
         {
             s.source = gameObject.AddComponent<AudioSource>();
             s.source.clip = s.clip;
@@ -74,7 +77,7 @@ public class AudioManager : MonoBehaviour {
 
 //place this anywhere in the game to play a noises 
 
-//AudioManager.audioManager.Play("Bow");
+//GameManager.instance.audioManager.Play("Bow");
 
 //for all sound effects + audio
 [System.Serializable]

@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour {
     public InputManager inputManager;
     public PlayerJoinManager playerJoinManager;
     public AudioManager audioManager;
+    public GameObject audioManagerPrefab; 
 
     [Header("Important Scene Names")]
     public string mainMenuSceneName;
@@ -163,6 +164,11 @@ public class GameManager : MonoBehaviour {
             }
             if (countdownText == null)
                 countdownText = GameObject.FindGameObjectWithTag("countdown");
+            if (audioManager == null)
+            {
+                audioManager = Instantiate(audioManagerPrefab).GetComponent<AudioManager>();
+                DontDestroyOnLoad(audioManager);
+            }
         }
     }
 
@@ -294,7 +300,7 @@ public class GameManager : MonoBehaviour {
         public GameState State { get; private set; }
         public float StartTime { get; private set; }
         public float ElapsedTime { get { return Time.time - StartTime; } }
-        public float RoundEndTime = 0.75f; //time for the camera to focus on the surviving player before the round starts
+        public float RoundEndTime = 0.5f; //time for the camera to focus on the surviving player before the round starts
         public List<GameObject> activePlayersControllers = new List<GameObject>();
         public List<GameObject> ghostPlayerControllers = new List<GameObject>();
         public int PlayersAlive { get { return activePlayersControllers.Count; } }
@@ -360,7 +366,13 @@ public class GameManager : MonoBehaviour {
             while (State == GameState.Battle || State == GameState.HurryUp) {
                 if (activePlayersControllers.Count < 2)
                 {
+                    foreach (GameObject g in ghostPlayerControllers)
+                    {
+                        Debug.Log("Removing something from camera");
+                        moveCamera.targets.Remove(g.GetComponent<PlayerController>().gameObject);
+                    }
                     yield return new WaitForSeconds(RoundEndTime);
+                    
                     GameOver();
                 }
                 switch (State) {
@@ -438,6 +450,7 @@ public class GameManager : MonoBehaviour {
                 moveCamera.targets.Add(players[killedNum].controller.gameObject);
             }
         }
+
 
         /// <summary>
         /// Instance of experiance gained during a round, Specifies how to display a set of experiance gained
