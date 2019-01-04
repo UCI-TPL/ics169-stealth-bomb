@@ -60,23 +60,9 @@ public class ChargeWeapon : Weapon {
 
     // OnRelease is called once when the weapon is released
     protected override void OnRelease() {
-        AudioManager am = GameObject.FindObjectOfType<AudioManager>();
-        if(am != null)
-        {
-            Debug.Log("Audio Manager Exists nicely");
-            am.Play("Bow");
-        }
-        else
-        {
-            //Debug.LogWarning("Can't find AudioManager");
-        }
-        /*
-        GameManager gm = GameObject.FindObjectOfType<GameManager>();
-        if (gm.audioManager != null)
-            gm.audioManager.Play("Bow");
-        else
-            Debug.LogWarning("Can't find AudioManager");
-            */
+
+        AudioManager.audioManager.Play("Bow");
+
         rend.material.color = player.controller.playerColor;
         //Debug.Log("Releasing with a chargeTime of " + chargeLevel);
         //if (chargeLevel >= 1) { }

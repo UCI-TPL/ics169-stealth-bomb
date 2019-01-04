@@ -31,10 +31,8 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
         right.Normalize();
         CursorImage = GetComponent<Image>(); //used to change to player color
         CursorImage.color = playerColor;
-        //Vector3 ghostLocation = new Vector3(transform.position.x - 13f, transform.position.y, transform.position.z + 6f);
-        Vector3 ghostLocation = new Vector3(1f, 8f, 20f); //currently hardcoded, will have to be set by map later on I suppose 
 
-        GhostBody = Instantiate(GhostPrefab, ghostLocation, transform.rotation);
+        GhostBody = Instantiate(GhostPrefab, transform.position, transform.rotation);
         GhostBody.GetComponentsInChildren<Renderer>()[1].material.color = playerColor;
 
         GhostParabola1 = new ParabolaController();

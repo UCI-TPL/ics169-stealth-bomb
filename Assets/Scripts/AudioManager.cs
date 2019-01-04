@@ -38,7 +38,7 @@ public class AudioManager : MonoBehaviour {
             Destroy(this);
             
 
-        foreach(Sound s in sounds)  //initializes the array of Sounds
+        foreach(Sound s in audioManager.sounds)  //initializes the array of Sounds
         {
             s.source = gameObject.AddComponent<AudioSource>();
             s.source.clip = s.clip;
@@ -50,33 +50,34 @@ public class AudioManager : MonoBehaviour {
 	
     public void Play(string name) //plays a sound if it is found
     {
-        Debug.Log("Going to play : " + name);
-        Sound s = Array.Find(sounds, sound => sound.name == name); //this is kinda cool 
-        if (s == null) //error checking, only play a sound if you can find it
+        //Debug.Log("Going to play : " + name);
+        try
         {
-            Debug.LogError("Sounds " + name + " could not be found");
-            return;
+            Sound s = Array.Find(sounds, sound => sound.name == name); //this is kinda cool 
+            if (s == null) //error checking, only play a sound if you can find it
+            {
+                Debug.LogError("Sounds " + name + " could not be found");
+                return;
+            }
+            s.source.Play();
         }
-        s.source.Play();
-        Debug.Log(name + " wwas okated rught? On a volume of " + s.source.volume);
+        catch
+        {
+            Debug.Log("Something was caught it saeems");
+        }
+
+       // Debug.Log(name + " wwas okated rught? On a volume of " + s.source.volume);
 
         
     }
 }
 
-//add this wherever you want to play audio
-//FindObjectOfType<AudioManager>().Play("NameOfSound");
+//place this anywhere in the game to play a noises 
 
-//even better
-/*
-AudioManager am = GameObject.FindObjectOfType<AudioManager>();
-        if (am != null)
-            am.Play("Bow");
-        else
-            Debug.LogWarning("Can't find AudioManager");
-  */
-        //for all sound effects + audio
-    [System.Serializable]
+//AudioManager.audioManager.Play("Bow");
+
+//for all sound effects + audio
+[System.Serializable]
 public class Sound
 {
 

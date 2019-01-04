@@ -294,12 +294,15 @@ public class GameManager : MonoBehaviour {
         public GameState State { get; private set; }
         public float StartTime { get; private set; }
         public float ElapsedTime { get { return Time.time - StartTime; } }
+        public float RoundEndTime = 0.75f; //time for the camera to focus on the surviving player before the round starts
         public List<GameObject> activePlayersControllers = new List<GameObject>();
         public List<GameObject> ghostPlayerControllers = new List<GameObject>();
         public int PlayersAlive { get { return activePlayersControllers.Count; } }
         private Scene roundScene;
 
-        public Vector3 ghostSpawnLocation = new Vector3(13f,6f,13f); //this will have to be different per map! Will be changed later
+
+
+       public Vector3 ghostSpawnLocation = new Vector3(13f,6f,13f); //this will have to be different per map! Will be changed later
 
         FollowTargetsCamera moveCamera; 
 
@@ -356,7 +359,10 @@ public class GameManager : MonoBehaviour {
         public IEnumerator Update() {
             while (State == GameState.Battle || State == GameState.HurryUp) {
                 if (activePlayersControllers.Count < 2)
+                {
+                    yield return new WaitForSeconds(RoundEndTime);
                     GameOver();
+                }
                 switch (State) {
                     case GameState.Battle:
                         if (ElapsedTime > GameManager.instance.TimeBeforeCrumble - (GameManager.instance.TimeDecreasePerPlayer * (players.Length - PlayersAlive))) {
@@ -379,7 +385,7 @@ public class GameManager : MonoBehaviour {
             //         break;
             //     }
             // }
-
+        
             ProgressScreenUI.Instance.StartProgressScreen(this, Reset);
         }
 
@@ -407,9 +413,12 @@ public class GameManager : MonoBehaviour {
 
             activePlayersControllers.Remove(killed.controller.gameObject);
             Vector3 deathPosition = killed.controller.transform.position;
-            if (deathPosition.y < 6.5)
-                deathPosition = ghostSpawnLocation; //will have to be changed per map
+            if (deathPosition.y < 0)
+                deathPosition = new Vector3(deathPosition.x, 6f, deathPosition.z);
+           //     deathPosition = ghostSpawnLocation; //will have to be changed per map
                 //return;
+
+            //deathPosition = TileManager.tileManager.MapCenter;
             instance.StartCoroutine(InstantiateGhost(killed.playerNumber, killed, deathPosition));   
         }
 
