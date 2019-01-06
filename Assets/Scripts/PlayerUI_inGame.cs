@@ -21,6 +21,9 @@ public class PlayerUI_inGame : MonoBehaviour {
     public UnityEngine.UI.Text playerUI_NotifText;
     public float showForSeconds = 1.25f;
 
+    [Header("Player Position Marker")]
+    [SerializeField] private PositionMarker positionMarker;
+
     // flags for rendering player UI
     private bool HP_CoroutineActive = false;
     private bool notifTextActive = false;
@@ -34,6 +37,8 @@ public class PlayerUI_inGame : MonoBehaviour {
         playerUI_HPCanvas.gameObject.SetActive(false);
         cameraTransform = Camera.main.transform;
         playerCon.player.OnAddPowerUp += powerupHandler;
+
+        positionMarker.color = playerCon.player.Color;
     }
 
     void LateUpdate()
