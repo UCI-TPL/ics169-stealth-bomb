@@ -67,6 +67,10 @@ public class GameManager : MonoBehaviour {
     [HideInInspector]
     public List<Player> Winners = new List<Player>();
 
+    [HideInInspector]
+    public Vector3 GhostOffset = Vector3.zero; //when the map shrinks the ghosts will move closer 
+    public float GhostOffsetLimit; //how far the ghosts are adjusted inwards 
+
     public void StartGame(bool[] playersReady) {
         // StopAllCoroutines();
         string s = "Players Recieved from Main Menu: ";
@@ -378,6 +382,8 @@ public class GameManager : MonoBehaviour {
                 switch (State) {
                     case GameState.Battle:
                         if (ElapsedTime > GameManager.instance.TimeBeforeCrumble - (GameManager.instance.TimeDecreasePerPlayer * (players.Length - PlayersAlive))) {
+                            Debug.Log("This runs when");
+                            //GameManager.instance.GhostOffset = new Vector3(5f,0f,-5f);
                             TileManager.tileManager.StartCountdown();
                             State = GameState.HurryUp;
                         }

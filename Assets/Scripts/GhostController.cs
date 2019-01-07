@@ -77,22 +77,22 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
         Move(player.stats.moveSpeed);
 
         Vector3 pos;
-        if(MultipleParabolas != true)
+        if(MultipleParabolas != true) //if there is only one Parabola, be go to the first one and face right
         {
-            pos = GhostParabola1.UpdatePosition((transform.position.z + transform.position.x) / 2);
+            pos = GhostParabola1.UpdatePosition((transform.position.z + transform.position.x) / 2) + GameManager.instance.GhostOffset;
             GhostBody.transform.rotation = Quaternion.Euler(0f, 135f, 0f);
             GhostBody.transform.position = pos;
             return;
         }
 
-        if (transform.position.z <= transform.position.x)
+        if (transform.position.z <= transform.position.x) //depending on the position, go to either the first or second parabola and rotate accordingly
         {
-            pos = GhostParabola1.UpdatePosition((transform.position.z + transform.position.x) / 2);
+            pos = GhostParabola1.UpdatePosition((transform.position.z + transform.position.x) / 2) - GameManager.instance.GhostOffset;
             GhostBody.transform.rotation = Quaternion.Euler(0f, 315f, 0f);
         }
         else
         {
-            pos = GhostParabola2.UpdatePosition((transform.position.z + transform.position.x) / 2);
+            pos = GhostParabola2.UpdatePosition((transform.position.z + transform.position.x) / 2) + GameManager.instance.GhostOffset;
             GhostBody.transform.rotation = Quaternion.Euler(0f, 135f, 0f);
         }
         if (pos != Vector3.zero)

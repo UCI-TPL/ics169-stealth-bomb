@@ -159,6 +159,7 @@ public class TileManager : MonoBehaviour {
         float endTimer = Time.time;
         do {
             float ratio = 1 - (Time.time - endTimer) / timer; // ratio to shrink stage based on timer
+            GameManager.instance.GhostOffset = new Vector3( (1 - ratio) * GameManager.instance.GhostOffsetLimit, 0f,(1- ratio ) * -GameManager.instance.GhostOffsetLimit);
             newRadius = radius * ratio;
             while (TileDestroyQueue.Peek().destroyDistance > newRadius.x) {
                 Vector2Int v = TileDestroyQueue.Dequeue().tilePos;
