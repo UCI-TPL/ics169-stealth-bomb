@@ -7,6 +7,8 @@ public class Projectile : MonoBehaviour {
     public TrailRenderer trail;
 
     public new Collider collider;
+    [SerializeField]
+    private GameObject projectileRenderer;
     [HideInInspector]
     public Player player;
     protected Vector3 origin;
@@ -37,7 +39,9 @@ public class Projectile : MonoBehaviour {
             OnHit.Invoke(origin, other.contacts[0].point, other.gameObject);
         if (hitEffect != null)
             Instantiate(hitEffect, transform.position, Quaternion.identity);
-        GetComponent<MeshRenderer>().enabled = false;
+        //GetComponent<MeshRenderer>().enabled = false;
+        if (projectileRenderer != null)
+            projectileRenderer.SetActive(false);
         Rigidbody rb = GetComponent<Rigidbody>();
         rb.detectCollisions = false;
         rb.collisionDetectionMode = CollisionDetectionMode.Discrete;

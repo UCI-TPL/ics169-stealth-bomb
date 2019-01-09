@@ -23,4 +23,4 @@ MonoBehaviour:
   buffs: []
   projectile: {fileID: 11400000, guid: 33422fbc30a08f742b85e7ddd382a116, type: 2}
   numProj: 1
-  projSpeed: 20
+  projSpeed: 60
