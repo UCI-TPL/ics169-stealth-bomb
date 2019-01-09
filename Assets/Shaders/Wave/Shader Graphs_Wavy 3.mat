@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Shader Graphs_Wavy 3
+  m_Shader: {fileID: 4800000, guid: 2538b4c927c3d47439aa9de941287a26, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Floats:
+    - Vector1_2B9FCF1B: 0.25
+    - Vector1_31EE4A7C: 0.3
+    - Vector1_5535BE34: 0.5
+    - Vector1_A0EED1E7: 0.1
+    - Vector1_C4AE9EE4: 0.7
+    - Vector1_FE59858A: 0.75
+    - _Speed: 20
+    - _Tiling: 8
+    m_Colors:
+    - Color_46A135DF: {r: 0.01938236, g: 0.6239606, b: 1, a: 1}
+    - _Color_864D9044: {r: 0.4125427, g: 0.8713673, b: 1, a: 1}
