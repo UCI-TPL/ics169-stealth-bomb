@@ -4518,12 +4518,12 @@ MonoBehaviour:
   ExpGainOnKill: 0.25
   ExpPenaltyPerLvl: 0.75
   ExpBonusPerLvl: 0.25
-  TimeBeforeCrumble: 5
+  TimeBeforeCrumble: 30
   TimeDecreasePerPlayer: 0
-  countdown: 3
-  countdownText: {fileID: 0}
   GhostOffset: {x: 0, y: 0, z: 0}
   GhostOffsetLimit: 8
+  countdown: 3
+  countdownText: {fileID: 0}
 --- !u!1 &1489958361
 GameObject:
   m_ObjectHideFlags: 0

@@ -37,6 +37,7 @@ public class Player {
     public event powerupDel OnAddPowerUp;
 
     public bool ghost = false;
+    public bool alive = true;
 
     // Currently stored weapon
     public WeaponData weaponData;
@@ -70,7 +71,8 @@ public class Player {
         this.controller = controller;
         controller.player = this;
         controller.EquipWeapon(weaponData.NewInstance(this));
-        ghost = false;
+        ghost = false; //this variable is true when the ghost spawns
+        alive = true; //this variable is false when the player dies (which is before the ghost is spawned)
        
     }
 
@@ -139,9 +141,14 @@ public class Player {
     private void CheckDeath() {
         if (health <= 0) {
             controller.input.controllers[playerNumber].Vibrate(1.0f, 1f, InputManager.Controller.VibrationMode.Diminish);
-            if(!ghost)
+            if (!ghost && alive)
+            {
+                //Debug.Log("DEATH WAS RECORDED");
+                alive = false; //to make sure that EXP is only awarded once 
                 OnDeath(lastHurtBy, this);
+            }
             controller.Destroy();
+            
         }
     }
 

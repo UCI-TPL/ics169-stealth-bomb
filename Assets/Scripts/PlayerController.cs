@@ -95,6 +95,8 @@ public class PlayerController : MonoBehaviour {
         get { return rb.velocity.magnitude > 0.1f; }
     }
 
+    private float DeathAnimationTime = 0f;
+
     // Initialize referances
     private void Awake() {
         input = InputManager.inputManager;
@@ -139,7 +141,16 @@ public class PlayerController : MonoBehaviour {
         RemoveListeners();
         if (Weapon != null)
             Weapon.UnequipWeapon();
-        GameObject.Destroy(gameObject);
+        //if(this)
+            //GameObject.Destroy(gameObject);
+        StartCoroutine(DeathAnimation());
+    }
+
+    public IEnumerator DeathAnimation()
+    {
+        yield return new WaitForSeconds(DeathAnimationTime); //in this time an animation or something can happen
+        if(this)
+            GameManager.Destroy(gameObject);
     }
 
     // Perform movement every physics update

@@ -51,7 +51,12 @@ public class GameManager : MonoBehaviour {
     [Header("In-Game: 'Timer' Related")]
     public float TimeBeforeCrumble = 30f;
     public float TimeDecreasePerPlayer = 10f;
-    
+
+    [HideInInspector]
+    public Vector3 GhostOffset = Vector3.zero; //when the map shrinks the ghosts will move closer 
+    public float GhostOffsetLimit; //how far the ghosts are adjusted inwards 
+
+
     //public int PlayersKilled = 0;
 
     [Header("In-Game: Starting Countdown")]
@@ -67,9 +72,6 @@ public class GameManager : MonoBehaviour {
     [HideInInspector]
     public List<Player> Winners = new List<Player>();
 
-    [HideInInspector]
-    public Vector3 GhostOffset = Vector3.zero; //when the map shrinks the ghosts will move closer 
-    public float GhostOffsetLimit; //how far the ghosts are adjusted inwards 
 
     public void StartGame(bool[] playersReady) {
         // StopAllCoroutines();
@@ -373,7 +375,8 @@ public class GameManager : MonoBehaviour {
                     foreach (GameObject g in ghostPlayerControllers)
                     {
                         Debug.Log("Removing something from camera");
-                        moveCamera.targets.Remove(g.GetComponent<PlayerController>().gameObject);
+                        if(g.GetComponent<PlayerController>().gameObject)
+                            moveCamera.targets.Remove(g.GetComponent<PlayerController>().gameObject);
                     }
                     yield return new WaitForSeconds(RoundEndTime);
                     
@@ -449,11 +452,15 @@ public class GameManager : MonoBehaviour {
         {
             if(activePlayersControllers.Count  > 1) //Don't spawn the last player as a ghost
             {
+                
                 yield return new WaitForSeconds(0.3f);
-                players[killedNum].ResetHealth();
-                players[killedNum].SetGhost(Instantiate<GameObject>(GameManager.instance.GhostPrefab.gameObject, deathPosition, Quaternion.identity).GetComponent<PlayerController>()); //SetGhost works like SetController but without weapons
-                ghostPlayerControllers.Add(players[killedNum].controller.gameObject); //to make sure it gets deleted
-                moveCamera.targets.Add(players[killedNum].controller.gameObject);
+                if (!killed.ghost) //this means that the killed player has already been made into a ghost 
+                { 
+                    players[killedNum].ResetHealth();
+                    players[killedNum].SetGhost(Instantiate<GameObject>(GameManager.instance.GhostPrefab.gameObject, deathPosition, Quaternion.identity).GetComponent<PlayerController>()); //SetGhost works like SetController but without weapons
+                    ghostPlayerControllers.Add(players[killedNum].controller.gameObject); //to make sure it gets deleted
+                    moveCamera.targets.Add(players[killedNum].controller.gameObject);
+                }
             }
         }
 
