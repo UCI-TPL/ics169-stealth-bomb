@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs_Water
-  m_Shader: {fileID: 4800000, guid: 9a2d332464ea3fb44a1831a5ce34952d, type: 3}
+  m_Name: Shield
+  m_Shader: {fileID: 4800000, guid: a3d4bb388412d9b418ea0f80797c5832, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -20,7 +20,8 @@ Material:
     serializedVersion: 3
     m_TexEnvs: []
     m_Floats:
-    - Vector1_9D75ED3F: 1
+    - Vector1_9D75ED3F: 0.5
+    - Vector1_CA392C36: 1.5
     m_Colors:
-    - Color_2C42FCDA: {r: 0.051886775, g: 0.84056896, b: 1, a: 0.6}
-    - Color_6EE03AD3: {r: 1, g: 1, b: 1, a: 1}
+    - Color_2C42FCDA: {r: 1, g: 0.9136649, b: 0.28773582, a: 0.2509804}
+    - Color_6EE03AD3: {r: 1.1892071, g: 1.1892071, b: 1.1892071, a: 1}
