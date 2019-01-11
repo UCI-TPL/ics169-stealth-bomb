@@ -5,14 +5,15 @@ Material:
   serializedVersion: 6
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_Name: Fire2
   m_Shader: {fileID: 4800000, guid: 5c241efcb846fd948a937a4da389b49a, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 2998
   stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
@@ -62,6 +63,8 @@ Material:
     - Vector1_36D58797: 0.35
     - Vector1_74196B0B: 0
     - Vector1_7444447D: 0.25
+    - Vector1_89482EFE: 0.5
+    - Vector1_A51F2DC6: 4
     - Vector1_ABBD2186: 1.5
     - Vector1_BBB8920B: 2
     - Vector1_BD36917E: 0.8
