@@ -453,7 +453,7 @@ public class GameManager : MonoBehaviour {
             if(activePlayersControllers.Count  > 1) //Don't spawn the last player as a ghost
             {
                 
-                yield return new WaitForSeconds(0.3f);
+                yield return new WaitForSeconds(1.3f);
                 if (!killed.ghost) //this means that the killed player has already been made into a ghost 
                 { 
                     players[killedNum].ResetHealth();

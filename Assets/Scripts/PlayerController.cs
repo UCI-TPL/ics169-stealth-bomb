@@ -95,7 +95,7 @@ public class PlayerController : MonoBehaviour {
         get { return rb.velocity.magnitude > 0.1f; }
     }
 
-    private float DeathAnimationTime = 0f;
+    private float DeathAnimationTime = 1f;
 
     // Initialize referances
     private void Awake() {
@@ -116,7 +116,10 @@ public class PlayerController : MonoBehaviour {
         right = Camera.main.transform.right;
         right.Scale(new Vector3(1, 0, 1));
         right.Normalize();
-        rend.material.color = playerColor; //setting the player color based on playeNum 
+
+        // rend.material.color = playerColor; //setting the player color based on playeNum 
+        rend.material.SetColor("Color_91A455EE", playerColor); //this is how shader properties are changed 
+
         lastPosition = transform.position;
 
         input.controllers[player.playerNumber].attack.OnDown.AddListener(ActivateAttack);
@@ -141,16 +144,23 @@ public class PlayerController : MonoBehaviour {
         RemoveListeners();
         if (Weapon != null)
             Weapon.UnequipWeapon();
-        //if(this)
-            //GameObject.Destroy(gameObject);
         StartCoroutine(DeathAnimation());
     }
 
-    public IEnumerator DeathAnimation()
-    {
-        yield return new WaitForSeconds(DeathAnimationTime); //in this time an animation or something can happen
+    public IEnumerator DeathAnimation() //after the player dies, change a shader property in a while loop to make the player dissovle 
+    {        
+        float _deathTime = Time.time + DeathAnimationTime;
+        float count = Time.time;
+        while(Time.time <= _deathTime)
+        {
+            float dissolveValue = Time.time - count - 0.75f; //-1 is not dissolved, 1 is fully disolved
+            rend.material.SetFloat("Vector1_F96347CF", dissolveValue);
+            yield return null; //the game crashes super hard if you remove this
+        }
+        //yield return new WaitForSeconds(DeathAnimationTime); //in this time an animation or something can happen 
         if(this)
             GameManager.Destroy(gameObject);
+        yield return null;
     }
 
     // Perform movement every physics update
@@ -338,9 +348,11 @@ public class PlayerController : MonoBehaviour {
 
     IEnumerator HurtIndicator() //show the player that it is hurt 
     {
-        rend.material.color = Color.white;
-        yield return new WaitForSeconds(0.025f); //the player flashes white 
-        rend.material.color = playerColor;
+        //rend.material.color = Color.white;
+        rend.material.SetColor("Color_91A455EE", Color.white);
+        yield return new WaitForSeconds(0.04f); //the player flashes white 
+        //rend.material.color = playerColor;
+        rend.material.SetColor("Color_91A455EE", playerColor);
     }
 
     // Restrict the player's movement for a duration
