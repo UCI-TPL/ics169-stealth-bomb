@@ -107,7 +107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trail: {fileID: 96182481458528356}
   collider: {fileID: 65851718138537896}
-  projectileRenderer: {fileID: 0}
+  projectileRenderer: {fileID: 2534344081692438838}
   hitEffect: {fileID: 0}
 --- !u!54 &54612792617523452
 Rigidbody:

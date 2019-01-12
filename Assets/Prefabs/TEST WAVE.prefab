@@ -414,8 +414,8 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.8
-      minScalar: 0.3
+      scalar: 0.4
+      minScalar: 0.2
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -1045,7 +1045,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 0.2
+      value: 0.5
       mode: 0
       spread: 0
       speed:
@@ -2368,12 +2368,12 @@ ParticleSystem:
         m_RotationOrder: 4
     inWorldSpace: 0
   InheritVelocityModule:
-    enabled: 0
+    enabled: 1
     m_Mode: 0
     m_Curve:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0
+      scalar: 1
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -2757,7 +2757,7 @@ ParticleSystem:
         m_RotationOrder: 4
     magnitude:
       serializedVersion: 2
-      minMaxState: 1
+      minMaxState: 2
       scalar: 1
       minScalar: 1
       maxCurve:
@@ -2766,20 +2766,20 @@ ParticleSystem:
         - serializedVersion: 3
           time: 0
           value: 1
-          inSlope: -2
-          outSlope: -2
+          inSlope: -0.719697
+          outSlope: -0.719697
           tangentMode: 0
           weightedMode: 0
           inWeight: 0.33333334
-          outWeight: 0.33333334
+          outWeight: 1
         - serializedVersion: 3
           time: 1
-          value: 0
-          inSlope: 0
-          outSlope: 0
+          value: 0.27272797
+          inSlope: -0.7219883
+          outSlope: -0.7219883
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0.33333334
+          inWeight: 0.9968254
           outWeight: 0.33333334
         m_PreInfinity: 2
         m_PostInfinity: 2
@@ -2790,20 +2790,20 @@ ParticleSystem:
         - serializedVersion: 3
           time: 0
           value: 1
-          inSlope: 0
-          outSlope: 0
+          inSlope: -0.19121504
+          outSlope: -0.19121504
           tangentMode: 0
           weightedMode: 0
           inWeight: 0.33333334
-          outWeight: 0.33333334
+          outWeight: 0.9904762
         - serializedVersion: 3
           time: 1
-          value: 1
-          inSlope: 0
-          outSlope: 0
+          value: 0.80303
+          inSlope: -0.20261605
+          outSlope: -0.20261605
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0.33333334
+          inWeight: 1
           outWeight: 0.33333334
         m_PreInfinity: 2
         m_PostInfinity: 2
@@ -2812,7 +2812,7 @@ ParticleSystem:
     inWorldSpace: 0
     multiplyDragByParticleSize: 1
     multiplyDragByParticleVelocity: 1
-    dampen: 1
+    dampen: 0.75
     drag:
       serializedVersion: 2
       minMaxState: 0
@@ -5066,7 +5066,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 0.4
+  m_Time: 0.2
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 0.8
@@ -5089,10 +5089,10 @@ TrailRenderer:
       serializedVersion: 2
       key0: {r: 0.6745283, g: 0.9396302, b: 1, a: 0}
       key1: {r: 0.1462264, g: 0.8129777, b: 1, a: 1}
-      key2: {r: 0, g: 0, b: 0, a: 0.909685}
-      key3: {r: 0, g: 0, b: 0, a: 0.36471212}
-      key4: {r: 0, g: 0, b: 0, a: 0.12903452}
-      key5: {r: 0, g: 0, b: 0, a: 0.023529412}
+      key2: {r: 0, g: 0, b: 0, a: 0.19607843}
+      key3: {r: 0, g: 0, b: 0, a: 0.023529412}
+      key4: {r: 0, g: 0, b: 0, a: 0.011764706}
+      key5: {r: 0, g: 0, b: 0, a: 0}
       key6: {r: 0, g: 0, b: 0, a: 0.011764706}
       key7: {r: 0, g: 0, b: 0, a: 0}
       ctime0: 0
@@ -5104,16 +5104,16 @@ TrailRenderer:
       ctime6: 0
       ctime7: 0
       atime0: 0
-      atime1: 5590
-      atime2: 18311
-      atime3: 28334
-      atime4: 40670
-      atime5: 52621
+      atime1: 5397
+      atime2: 11372
+      atime3: 23516
+      atime4: 40092
+      atime5: 65535
       atime6: 61295
       atime7: 65535
       m_Mode: 0
       m_NumColorKeys: 2
-      m_NumAlphaKeys: 8
+      m_NumAlphaKeys: 6
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0
