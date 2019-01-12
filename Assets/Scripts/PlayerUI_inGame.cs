@@ -43,6 +43,8 @@ public class PlayerUI_inGame : MonoBehaviour {
 
     void LateUpdate()
     {
+        if (!playerUI_HPCanvas)
+            Debug.Log("uoo");
         playerUI_HPCanvas.gameObject.SetActive(playerCon.player.health < playerCon.player.stats.maxHealth);
         playerUI_HPCanvas.rotation = Quaternion.Euler(90f, cameraTransform.rotation.eulerAngles.y, 0f);
         playerUI_healthBar.fillAmount = playerCon.player.health / playerCon.player.stats.maxHealth;

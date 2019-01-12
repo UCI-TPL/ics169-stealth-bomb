@@ -67,11 +67,13 @@ public class ParabolaController : MonoBehaviour
         }
     }
 
-    int max = 24;
-    int min = 6;
+    int max;
+    int min;
 
-    public void Begin( GameObject root) //z being the z position
+    public void Begin( GameObject root, int maxx, int minn) //z being the z position
     {
+        max = maxx;
+        min = minn;
         ParabolaRoot = root;
         parabolaFly = new ParabolaFly(ParabolaRoot.transform, max, min);
         RefreshTransforms(Speed);

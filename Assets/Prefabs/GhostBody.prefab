@@ -2352,7 +2352,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4157454913922082}
   - component: {fileID: 135875898023688622}
-  - component: {fileID: 114524356845570504}
   m_Layer: 9
   m_Name: GhostBody
   m_TagString: Player
@@ -2393,22 +2392,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &114524356845570504
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1898897230688304}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 394fa1bbb5f559a4599ed8f1403d34c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Speed: 40
-  ParabolaRoot: {fileID: 0}
-  Autostart: 0
-  Animation: 0
 --- !u!1 &1909700128219210
 GameObject:
   m_ObjectHideFlags: 0

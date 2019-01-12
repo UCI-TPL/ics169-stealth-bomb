@@ -35,19 +35,31 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
         GhostBody = Instantiate(GhostPrefab, transform.position, transform.rotation);
         GhostBody.GetComponentsInChildren<Renderer>()[1].material.color = playerColor;
 
-        GhostParabola1 = new ParabolaController();
-        GhostParabola2 = new ParabolaController();
+
+
+        //GhostParabola1 = new ParabolaController();
+        //GhostParabola2 = new ParabolaController();
         GameObject[] curves = GameObject.FindGameObjectsWithTag("ghost-curve");
-        if(curves.Length > 1) //start the game with 3 Parabolas if 2 are found, otherwsie start with just one
+
+   
+        int max = GameManager.instance.GetComponentInChildren<CreateRandomTerrain>().GhostMax;
+        int min = GameManager.instance.GetComponentInChildren<CreateRandomTerrain>().GhostMin;
+
+
+        if (curves.Length > 1) //start the game with 3 Parabolas if 2 are found, otherwsie start with just one
         {
             MultipleParabolas = true;
-            GhostParabola1.Begin(curves[0].gameObject);
-            GhostParabola2.Begin(curves[1].gameObject);
+            GhostParabola1 = curves[0].GetComponent<ParabolaController>();
+            GhostParabola2 = curves[1].GetComponent<ParabolaController>();
+            
+            GhostParabola1.Begin(curves[0].gameObject,max,min);
+            GhostParabola2.Begin(curves[1].gameObject,max,min);
         }
         else
         {
             MultipleParabolas = false;
-            GhostParabola1.Begin(curves[0]);
+            GhostParabola1 = curves[0].GetComponent<ParabolaController>();
+            GhostParabola1.Begin(curves[0],max,min);
         }
 
         input.controllers[player.playerNumber].attack.OnDown.AddListener(Activate);

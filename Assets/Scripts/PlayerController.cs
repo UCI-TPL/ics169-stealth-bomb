@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour {
     public float friction = 1f;
     public float airResistance = 1f;
     public float terminalVelocity = 1f;
+    public float DeathAnimationTime = 0.75f;
     [Tooltip("time it takes to go from 0 to max speed is 1 second / acceleration")]
     public float acceleration = 10f;
 
@@ -95,7 +96,7 @@ public class PlayerController : MonoBehaviour {
         get { return rb.velocity.magnitude > 0.1f; }
     }
 
-    private float DeathAnimationTime = 1f;
+
 
     // Initialize referances
     private void Awake() {
@@ -128,6 +129,8 @@ public class PlayerController : MonoBehaviour {
         input.controllers[player.playerNumber].dodge.OnDown.AddListener(ActivateSpecialMove);
         input.controllers[player.playerNumber].dodge.OnUp.AddListener(ReleaseSpecialMove);
         input.controllers[player.playerNumber].Switch.OnDown.AddListener(SwitchWeapon);
+
+        StartCoroutine(StartAnimation());
     }
 
     private void AddListeners() {
@@ -145,6 +148,28 @@ public class PlayerController : MonoBehaviour {
         if (Weapon != null)
             Weapon.UnequipWeapon();
         StartCoroutine(DeathAnimation());
+    }
+
+    public void CheckHeight() //if the player is falling remove them from the Camera 
+    {
+        if(transform.position.y <= 1) //if the player is falling, remove them from the camera because they will die =(
+        {
+            Debug.Log("Clearly falling");
+            Camera.main.GetComponentInParent<FollowTargetsCamera>().targets.Remove(gameObject); //perhaps not the most efficent 
+        }
+    }
+
+    public IEnumerator StartAnimation() //basically the death animation in reverse
+    {
+        float _startTime = Time.time + DeathAnimationTime;
+        float count = Time.time;
+        while (Time.time <= _startTime)
+        {
+            float dissolveValue = 1 - (Time.time - count) * 1.75f; //-1 is not dissolved, 1 is fully disolved
+            rend.material.SetFloat("Vector1_F96347CF", dissolveValue);
+            yield return null; //the game crashes super hard if you remove this
+        }
+        yield return null;
     }
 
     public IEnumerator DeathAnimation() //after the player dies, change a shader property in a while loop to make the player dissovle 
@@ -194,6 +219,7 @@ public class PlayerController : MonoBehaviour {
             transform.forward = Vector3.RotateTowards(transform.forward, scaledVector, player.stats.TurnSpeed * Mathf.Deg2Rad * Time.deltaTime, 0);
 
         UpdateTriggers();
+        CheckHeight();
         lastPosition = transform.position;
     }
 
@@ -348,10 +374,8 @@ public class PlayerController : MonoBehaviour {
 
     IEnumerator HurtIndicator() //show the player that it is hurt 
     {
-        //rend.material.color = Color.white;
         rend.material.SetColor("Color_91A455EE", Color.white);
         yield return new WaitForSeconds(0.04f); //the player flashes white 
-        //rend.material.color = playerColor;
         rend.material.SetColor("Color_91A455EE", playerColor);
     }
 
@@ -374,6 +398,11 @@ public class PlayerController : MonoBehaviour {
         allowAttack = false;
         yield return new WaitForSeconds(duration);
         allowAttack = true;
+    }
+
+    public void DisableUI() //when the player dies and the death animation is going on
+    {
+        transform.Find("PlayerUI").gameObject.SetActive(false); // deleted the UI 
     }
 
     protected float CheckGroundDistance() {

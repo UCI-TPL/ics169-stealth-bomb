@@ -374,7 +374,7 @@ public class GameManager : MonoBehaviour {
                 {
                     foreach (GameObject g in ghostPlayerControllers)
                     {
-                        Debug.Log("Removing something from camera");
+                        //Debug.Log("Removing something from camera");
                         if(g.GetComponent<PlayerController>().gameObject)
                             moveCamera.targets.Remove(g.GetComponent<PlayerController>().gameObject);
                     }
@@ -385,8 +385,6 @@ public class GameManager : MonoBehaviour {
                 switch (State) {
                     case GameState.Battle:
                         if (ElapsedTime > GameManager.instance.TimeBeforeCrumble - (GameManager.instance.TimeDecreasePerPlayer * (players.Length - PlayersAlive))) {
-                            Debug.Log("This runs when");
-                            //GameManager.instance.GhostOffset = new Vector3(5f,0f,-5f);
                             TileManager.tileManager.StartCountdown();
                             State = GameState.HurryUp;
                         }
@@ -431,7 +429,8 @@ public class GameManager : MonoBehaviour {
 
         private void Player_onDeath(Player killer, Player killed) {
             GameManager.instance.ExpOnKill(killer, killed);
-
+            moveCamera.targets.Remove(players[killed.playerNumber].controller.gameObject);
+           
             activePlayersControllers.Remove(killed.controller.gameObject);
             Vector3 deathPosition = killed.controller.transform.position;
             if (deathPosition.y < 0)
@@ -440,7 +439,17 @@ public class GameManager : MonoBehaviour {
                 //return;
 
             //deathPosition = TileManager.tileManager.MapCenter;
-            instance.StartCoroutine(InstantiateGhost(killed.playerNumber, killed, deathPosition));   
+
+            /*
+            if(!killed.ghost)
+            {
+                ghostPlayerControllers.Add(players[killed.playerNumber].controller.gameObject);
+            }
+            */
+
+            instance.StartCoroutine(InstantiateGhost(killed.playerNumber, killed, deathPosition));
+
+            killed.controller.DisableUI();
         }
 
         private void Ghost_onDeath(Player killer, Player killed)
@@ -452,8 +461,8 @@ public class GameManager : MonoBehaviour {
         {
             if(activePlayersControllers.Count  > 1) //Don't spawn the last player as a ghost
             {
-                
                 yield return new WaitForSeconds(1.3f);
+
                 if (!killed.ghost) //this means that the killed player has already been made into a ghost 
                 { 
                     players[killedNum].ResetHealth();
@@ -461,6 +470,7 @@ public class GameManager : MonoBehaviour {
                     ghostPlayerControllers.Add(players[killedNum].controller.gameObject); //to make sure it gets deleted
                     moveCamera.targets.Add(players[killedNum].controller.gameObject);
                 }
+           
             }
         }
 

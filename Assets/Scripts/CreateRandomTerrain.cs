@@ -8,6 +8,9 @@ public class CreateRandomTerrain : MonoBehaviour {
     public GameObject wallTile;
     [Header("Map Size")]
     public Vector3Int size;
+    [Header("Limits for Ghost Players")]
+    public int GhostMax; 
+    public int GhostMin;
     void OnValidate() {
         size.y = Mathf.Max(size.y, 1);
     }

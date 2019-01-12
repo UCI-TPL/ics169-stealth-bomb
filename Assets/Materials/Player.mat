@@ -63,7 +63,7 @@ Material:
     - Vector1_72BCB12C: 0.1
     - Vector1_74059029: 20
     - Vector1_CD7CB9A5: 1
-    - Vector1_F96347CF: -1
+    - Vector1_F96347CF: 1
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
