@@ -239,7 +239,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &357578050033900565
 Transform:
   m_ObjectHideFlags: 0
@@ -279,7 +279,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 2ca8587a2a74de043bda799e1192d2ce, type: 2}
+  - {fileID: 2100000, guid: 3b3f25fac2691a145a3ddefe853f5226, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5087,11 +5087,11 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0.6745283, g: 0.9396302, b: 1, a: 0}
-      key1: {r: 0.1462264, g: 0.8129777, b: 1, a: 1}
-      key2: {r: 0, g: 0, b: 0, a: 0.19607843}
-      key3: {r: 0, g: 0, b: 0, a: 0.023529412}
-      key4: {r: 0, g: 0, b: 0, a: 0.011764706}
+      key0: {r: 0.6745283, g: 0.9396302, b: 1, a: 1}
+      key1: {r: 0.1462264, g: 0.8129777, b: 1, a: 0.19607843}
+      key2: {r: 0, g: 0, b: 0, a: 0.023529412}
+      key3: {r: 0, g: 0, b: 0, a: 0.011764706}
+      key4: {r: 0, g: 0, b: 0, a: 0}
       key5: {r: 0, g: 0, b: 0, a: 0}
       key6: {r: 0, g: 0, b: 0, a: 0.011764706}
       key7: {r: 0, g: 0, b: 0, a: 0}
@@ -5103,17 +5103,17 @@ TrailRenderer:
       ctime5: 0
       ctime6: 0
       ctime7: 0
-      atime0: 0
-      atime1: 5397
-      atime2: 11372
-      atime3: 23516
-      atime4: 40092
+      atime0: 5397
+      atime1: 14649
+      atime2: 24865
+      atime3: 40092
+      atime4: 65535
       atime5: 65535
       atime6: 61295
       atime7: 65535
       m_Mode: 0
       m_NumColorKeys: 2
-      m_NumAlphaKeys: 6
+      m_NumAlphaKeys: 5
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0
