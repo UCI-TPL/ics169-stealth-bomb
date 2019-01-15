@@ -154,19 +154,19 @@ public class PlayerController : MonoBehaviour {
     {
         if(transform.position.y <= 1) //if the player is falling, remove them from the camera because they will die =(
         {
-            Debug.Log("Clearly falling");
             Camera.main.GetComponentInParent<FollowTargetsCamera>().targets.Remove(gameObject); //perhaps not the most efficent 
         }
     }
 
     public IEnumerator StartAnimation() //basically the death animation in reverse
     {
-        float _startTime = Time.time + DeathAnimationTime;
+        float _startTime = Time.time + DeathAnimationTime + 0.2f;
         float count = Time.time;
         while (Time.time <= _startTime)
         {
-            float dissolveValue = 1 - (Time.time - count) * 1.75f; //-1 is not dissolved, 1 is fully disolved
-            rend.material.SetFloat("Vector1_F96347CF", dissolveValue);
+            float dissolveValue = 1 - (Time.time - count) * 2.3f; //-1 is not dissolved, 1 is fully disolved
+            if(rend)
+                rend.material.SetFloat("Vector1_F96347CF", dissolveValue);
             yield return null; //the game crashes super hard if you remove this
         }
         yield return null;
@@ -179,7 +179,8 @@ public class PlayerController : MonoBehaviour {
         while(Time.time <= _deathTime)
         {
             float dissolveValue = Time.time - count - 0.75f; //-1 is not dissolved, 1 is fully disolved
-            rend.material.SetFloat("Vector1_F96347CF", dissolveValue);
+            if(rend)
+                rend.material.SetFloat("Vector1_F96347CF", dissolveValue);
             yield return null; //the game crashes super hard if you remove this
         }
         //yield return new WaitForSeconds(DeathAnimationTime); //in this time an animation or something can happen 

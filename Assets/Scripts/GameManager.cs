@@ -341,6 +341,7 @@ public class GameManager : MonoBehaviour {
         }
 
         public void StartGame() {
+            GameManager.instance.GhostOffset = Vector3.zero; 
             GameManager.instance.UpdateRank();
             string s = "Starting round with players: ";
             foreach (Player player in players)
