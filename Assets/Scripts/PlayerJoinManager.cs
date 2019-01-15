@@ -13,6 +13,7 @@ public class PlayerJoinManager : MonoBehaviour {
 
 	public bool debugMode = false;
 	public bool playerUsingMouseAndKeyboard = false;
+	public float cooldown = 10.0f;
 
 	// NOTE: these 2 variables are now obsolete!
 	[Tooltip("Turn this on if you want to load the next scene with the string of its name instead. If you turn this variable on, make sure that the variable nextLevel is filled out in the inspector!")]
@@ -48,6 +49,7 @@ public class PlayerJoinManager : MonoBehaviour {
 	PlayerIndex[] players;
 	GamePadState[] currentStates;
 	GamePadState[] prevStates;
+	float[] playerTimers;
 
 	private int numOfPlayersReady;
 	private int playerUsingKeyboardIdx;
@@ -89,10 +91,12 @@ public class PlayerJoinManager : MonoBehaviour {
 		players = new PlayerIndex[4];
 		currentStates = new GamePadState[4];
 		prevStates = new GamePadState[4];
+		playerTimers = new float[4];
 		playersReady = new bool[4];
 		for (int i = 0; i < playersReady.Length; i++) {
 			players[i] = (PlayerIndex) i;
 			playersReady[i] = false;
+			playerTimers[i] = 0.0f;
 		}
 
 		// player1Ready = false;
@@ -174,7 +178,8 @@ public class PlayerJoinManager : MonoBehaviour {
 
 			// This loop checks to see which players have A to confirm they are ready.
 			for (int i = 0; i < 4; i++) {
-				if (currentStates[i].IsConnected) {
+				Debug.Log("Player " + (i + 1) + " Timer = " + playerTimers[i]);
+				if (currentStates[i].IsConnected && playerTimers[i] >= cooldown) {
 					if (currentStates[i].Buttons.A == ButtonState.Pressed && playersReady[i] == false) {
 						// Display the UI element showing the player has confirmed he/she is ready to play.
 						playersReady[i] = true;
@@ -183,8 +188,16 @@ public class PlayerJoinManager : MonoBehaviour {
 						//calling UI -Kyle
 						selectionOP.playerIs(i);
 						selectionOP.playerIsReady();
+						ResetTimer(i);
 					}
-					if ((currentStates[i].Buttons.B == ButtonState.Pressed && playersReady[i] == true) || playersReady[i] == false) {
+					if (currentStates[i].Buttons.B == ButtonState.Pressed && playersReady[i] == false) {
+						ResetTimer(i);
+						currentMenu.setMenu(1);
+					}
+					else if ((currentStates[i].Buttons.B == ButtonState.Pressed && playersReady[i] == true) || playersReady[i] == false) {
+						if (currentStates[i].Buttons.B == ButtonState.Pressed) 
+							ResetTimer(i);
+						
 						playersReady[i] = false;
 						// Debug.Log("Player " + players[i] + " is NOT ready to play!");
 
@@ -192,8 +205,13 @@ public class PlayerJoinManager : MonoBehaviour {
 						selectionOP.playerIs(i);
 						//selectionOP.playerIsNotReady();
 						selectionOP.playerConnected();
-
 					}
+
+					// playerTimers[i] = 0.0f;
+					playerTimers[i] += 1.0f * Time.deltaTime;
+				}
+				else {
+					playerTimers[i] += 1.0f * Time.deltaTime;
 				}
 			}
 
@@ -323,40 +341,44 @@ public class PlayerJoinManager : MonoBehaviour {
 
 	void RunGameReadyChecks(int newNumOfPlayersReady, int minNumOfPlayers) {
 		// Checks if enough players have confirmed they are ready.
-				if (newNumOfPlayersReady >= minNumOfPlayers) {
-					// Display the UI element showing that the game is ready to start.
-					// Debug.Log("Game is Ready to start!");
-					//calling UI -Kyle
-					selectionOP.gameIsReady();
-				}
-				else if (newNumOfPlayersReady < minNumOfPlayers /*&& numOfPlayersReady >= 2*/) {
-					// Turn off the UI element showing that the game is ready to start.
-					// Debug.Log("There are not enough players for the game to start!");
-					//calling UI -Kyle
-					selectionOP.gameIsNotReady();
-				}
+		if (newNumOfPlayersReady >= minNumOfPlayers) {
+			// Display the UI element showing that the game is ready to start.
+			// Debug.Log("Game is Ready to start!");
+			//calling UI -Kyle
+			selectionOP.gameIsReady();
+		}
+		else if (newNumOfPlayersReady < minNumOfPlayers /*&& numOfPlayersReady >= 2*/) {
+			// Turn off the UI element showing that the game is ready to start.
+			// Debug.Log("There are not enough players for the game to start!");
+			//calling UI -Kyle
+			selectionOP.gameIsNotReady();
+		}
 
-				// if conditions met, start the match
-				if (numOfPlayersReady >= minNumOfPlayers) {
-					// if conditions met, start the match
-					for (int i = 0; i < playersReady.Length; i++) {
-						if (i == playerUsingKeyboardIdx && playerUsingMouseAndKeyboard) {
-							if (Input.GetKeyDown(KeyCode.Return)) {
-								GameManager.instance.StartGame(GetPLayerReadyStatusList());
-							}
-						}
-						else {
-							if (playersReady[i] == true) {
-								// If the right conditions are met, this is where the protocol for starting the game happens.
-								// NOTE: implementation is subject to change for now.
-								if (currentStates[i].Buttons.Start == ButtonState.Pressed && prevStates[i].Buttons.Start == ButtonState.Released) {
-									// playerManager.SetPlayersStatus(GetPLayerReadyStatusList());
-									GameManager.instance.StartGame(GetPLayerReadyStatusList());
-								}
-							}
+		// if conditions met, start the match
+		if (numOfPlayersReady >= minNumOfPlayers) {
+			// if conditions met, start the match
+			for (int i = 0; i < playersReady.Length; i++) {
+				if (i == playerUsingKeyboardIdx && playerUsingMouseAndKeyboard) {
+					if (Input.GetKeyDown(KeyCode.Return)) {
+						GameManager.instance.StartGame(GetPLayerReadyStatusList());
+					}
+				}
+				else {
+					if (playersReady[i] == true) {
+						// If the right conditions are met, this is where the protocol for starting the game happens.
+						// NOTE: implementation is subject to change for now.
+						if (currentStates[i].Buttons.Start == ButtonState.Pressed && prevStates[i].Buttons.Start == ButtonState.Released) {
+							// playerManager.SetPlayersStatus(GetPLayerReadyStatusList());
+							GameManager.instance.StartGame(GetPLayerReadyStatusList());
 						}
 					}
 				}
+			}
+		}
+	}
+
+	void ResetTimer(int playerIdx) {
+		playerTimers[playerIdx] = 0.0f;
 	}
 
 
