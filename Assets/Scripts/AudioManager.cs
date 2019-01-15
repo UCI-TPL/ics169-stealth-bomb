@@ -31,6 +31,7 @@ public class AudioManager : MonoBehaviour {
         }
     }
     */
+
     public Sound[] sounds; //all the sounds in the game
 
 	// Use this for initialization
@@ -53,9 +54,8 @@ public class AudioManager : MonoBehaviour {
 	
     public void Play(string name) //plays a sound if it is found
     {
-        //Debug.Log("Going to play : " + name);
-        try
-        {
+      //  try
+      //  {
             Sound s = Array.Find(sounds, sound => sound.name == name); //this is kinda cool 
             if (s == null) //error checking, only play a sound if you can find it
             {
@@ -63,17 +63,28 @@ public class AudioManager : MonoBehaviour {
                 return;
             }
             s.source.Play();
-        }
-        catch
-        {
-            Debug.Log("Something was caught it saeems");
-        }
-
-       // Debug.Log(name + " wwas okated rught? On a volume of " + s.source.volume);
-
-        
+     //   }
+     //   catch
+     //   {
+     //       Debug.Log("Something was caught it saeems");
+     //   }
+       
     }
+
+    public void Stop(string name)
+    {
+        Sound s = Array.Find(sounds, sound => sound.name == name); //this is kinda cool 
+        if (s == null) //error checking, only play a sound if you can find it
+        {
+            Debug.LogError("Sounds " + name + " could not be found");
+            return;
+        }
+        s.source.Stop();
+    }
+    
 }
+
+
 
 //place this anywhere in the game to play a noises 
 

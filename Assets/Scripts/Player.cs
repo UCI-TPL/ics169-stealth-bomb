@@ -140,10 +140,10 @@ public class Player {
     
     private void CheckDeath() {
         if (health <= 0) {
-            controller.input.controllers[playerNumber].Vibrate(1.0f, 1f, InputManager.Controller.VibrationMode.Diminish);
+            
             if (!ghost && alive)
             {
-                //Debug.Log("DEATH WAS RECORDED");
+                controller.input.controllers[playerNumber].Vibrate(1.0f, 1f, InputManager.Controller.VibrationMode.Diminish);
                 alive = false; //to make sure that EXP is only awarded once 
                 OnDeath(lastHurtBy, this);
             }

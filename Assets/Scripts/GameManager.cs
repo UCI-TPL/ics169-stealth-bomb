@@ -173,7 +173,10 @@ public class GameManager : MonoBehaviour {
             if (audioManager == null)
             {
                 audioManager = Instantiate(audioManagerPrefab).GetComponent<AudioManager>();
+                audioManager.gameObject.name = "AudioManager"; //I don't like it being named "Clone"
                 DontDestroyOnLoad(audioManager);
+                if (scene.name == mainMenuSceneName)
+                    GameManager.instance.audioManager.Play("Main Menu");
             }
         }
     }
@@ -343,6 +346,8 @@ public class GameManager : MonoBehaviour {
         public void StartGame() {
             GameManager.instance.GhostOffset = Vector3.zero; 
             GameManager.instance.UpdateRank();
+            GameManager.instance.audioManager.Stop("Fanfare");
+            GameManager.instance.audioManager.Play("Battle");
             string s = "Starting round with players: ";
             foreach (Player player in players)
                 s += player.playerNumber.ToString() + ", ";
@@ -396,6 +401,9 @@ public class GameManager : MonoBehaviour {
         }
 
         private void GameOver() {
+
+            GameManager.instance.audioManager.Stop("Battle");
+            GameManager.instance.audioManager.Play("Fanfare");
             State = GameState.ProgressScreen;
             // bool gameWon = false;
             // // check to see if any players won the game

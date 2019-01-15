@@ -14,8 +14,14 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
     [HideInInspector]
     public GameObject GhostBody;
 
-    public ParabolaController GhostParabola1; //maps can have either 1 or 2 parabolas    
-    public ParabolaController GhostParabola2;
+    [HideInInspector]
+    public GameObject GhostParabola1; //maps can have either 1 or 2 parabolas    
+    [HideInInspector]
+    public GameObject GhostParabola2;
+    [HideInInspector]
+    public ParabolaController GhostParCont1;  //these are variable so there is not need to use GetComponent or Find multiple times 
+    [HideInInspector]
+    public ParabolaController GhostParCont2;
 
     bool MultipleParabolas = false;
 
@@ -39,13 +45,24 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
 
         //GhostParabola1 = new ParabolaController();
         //GhostParabola2 = new ParabolaController();
-        GameObject[] curves = GameObject.FindGameObjectsWithTag("ghost-curve");
+        //GameObject[] curves = GameObject.FindGameObjectsWithTag("ghost-curve");
 
-   
+        GameObject Curves = GameObject.FindGameObjectWithTag("ghost-curve");
+
+        GhostParabola1 = Curves.transform.Find("Curve 1").gameObject; //this looks kinda complex but I heard transform.Find is the best way to find children
+        GhostParCont1 = GhostParabola1.GetComponent<ParabolaController>();//and keeping all the curves under one parent seemed better
+
+        GhostParabola2 = Curves.transform.Find("Curve 2").gameObject;
+        GhostParCont2 = GhostParabola2.GetComponent<ParabolaController>();
+
+
         int max = GameManager.instance.GetComponentInChildren<CreateRandomTerrain>().GhostMax;
         int min = GameManager.instance.GetComponentInChildren<CreateRandomTerrain>().GhostMin;
 
 
+        GhostParabola1.GetComponent<ParabolaController>().Begin(GhostParabola1, max, min);
+        GhostParabola2.GetComponent<ParabolaController>().Begin(GhostParabola2, max, min);
+        /* no need to check, just make sure each map has two curves somewhere I guess
         if (curves.Length > 1) //start the game with 3 Parabolas if 2 are found, otherwsie start with just one
         {
             MultipleParabolas = true;
@@ -61,6 +78,7 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
             GhostParabola1 = curves[0].GetComponent<ParabolaController>();
             GhostParabola1.Begin(curves[0],max,min);
         }
+        */
 
         input.controllers[player.playerNumber].attack.OnDown.AddListener(Activate);
 
@@ -89,6 +107,8 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
         Move(player.stats.moveSpeed);
 
         Vector3 pos;
+
+        /*
         if(MultipleParabolas != true) //if there is only one Parabola, be go to the first one and face right
         {
             pos = GhostParabola1.UpdatePosition((transform.position.z + transform.position.x) / 2) + GameManager.instance.GhostOffset;
@@ -96,17 +116,18 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
             GhostBody.transform.position = pos;
             return;
         }
-
-        if (transform.position.z <= transform.position.x) //depending on the position, go to either the first or second parabola and rotate accordingly
+        */
+        if (transform.position.z >= transform.position.x) //depending on the position, go to either the first or second parabola and rotate accordingly
         {
-            pos = GhostParabola1.UpdatePosition((transform.position.z + transform.position.x) / 2) - GameManager.instance.GhostOffset;
-            GhostBody.transform.rotation = Quaternion.Euler(0f, 315f, 0f);
+            pos = GhostParCont1.UpdatePosition((transform.position.z + transform.position.x) / 2) - GameManager.instance.GhostOffset;
+            GhostBody.transform.rotation = Quaternion.Euler(0f, 135, 0f);
         }
         else
         {
-            pos = GhostParabola2.UpdatePosition((transform.position.z + transform.position.x) / 2) + GameManager.instance.GhostOffset;
-            GhostBody.transform.rotation = Quaternion.Euler(0f, 135f, 0f);
+            pos = GhostParCont2.UpdatePosition((transform.position.z + transform.position.x) / 2) + GameManager.instance.GhostOffset;
+            GhostBody.transform.rotation = Quaternion.Euler(0f, 315, 0f);
         }
+        
         if (pos != Vector3.zero)
             GhostBody.transform.position = pos;
        
