@@ -571,6 +571,7 @@ MonoBehaviour:
   customMappingPanels: {fileID: 1888511360}
   xboxControllerDisplay: {fileID: 0}
   pcControllerDisplay: {fileID: 0}
+  newVersion: 1
   cooldown: 0.25
 --- !u!114 &78071787
 MonoBehaviour:
@@ -2056,6 +2057,7 @@ MonoBehaviour:
   PlayerJoinScreenActive: 1
   debugMode: 0
   playerUsingMouseAndKeyboard: 0
+  cooldown: 0.5
   loadNextLevelByName: 0
   nextLevel: 
   playersObject: {fileID: 1757633926}
@@ -13397,7 +13399,8 @@ MonoBehaviour:
   customMappingPanels: {fileID: 1888511360}
   xboxControllerDisplay: {fileID: 1572713504}
   pcControllerDisplay: {fileID: 1608842546}
-  cooldown: 10
+  newVersion: 1
+  cooldown: 80
 --- !u!4 &1668276872
 Transform:
   m_ObjectHideFlags: 0
