@@ -9,30 +9,10 @@ using UnityEngine.SceneManagement;
 public class AudioManager : MonoBehaviour {
 
 
-    /*
-
-    // Returns the current inputManager
-    private static AudioManager _audioManager;
-
-    public static AudioManager audioManager
-    {
-        get {
-            if (_audioManager != null)
-                return _audioManager;
-            _audioManager = FindObjectOfType<AudioManager>();
-            if (_audioManager == null)
-            {
-                Debug.LogWarning("Audio Manager not found, Created new Audio Manager.");
-                _audioManager = new GameObject("Audio Manager").AddComponent<AudioManager>();
-                GameObject g = GameObject.Find("Managers");
-                _audioManager.transform.SetParent(g != null ? g.transform : new GameObject("Managers").transform);
-            }
-            return _audioManager;
-        }
-    }
-    */
 
     public Sound[] sounds; //all the sounds in the game
+
+    public AudioMixer audioMixer; //global audio settings
 
 	// Use this for initialization
 	void Awake () {
@@ -81,6 +61,12 @@ public class AudioManager : MonoBehaviour {
         }
         s.source.Stop();
     }
+
+    public void SetVolume(float volume)
+    {
+        //audioMixer.SetFloat("MasterVolume", volume); //this does nothing, but later if an AudioMixer is used we can have more control over tihngs
+        AudioListener.volume = volume;
+    }
     
 }
 
@@ -116,3 +102,26 @@ public class Sound
 //Source info 
 
 //Bow sound effect from https://www.zapsplat.com/music/bow-and-arrow-bow-release-pluck-1/
+
+/*
+
+// Returns the current inputManager
+private static AudioManager _audioManager;
+
+public static AudioManager audioManager
+{
+get {
+    if (_audioManager != null)
+        return _audioManager;
+    _audioManager = FindObjectOfType<AudioManager>();
+    if (_audioManager == null)
+    {
+        Debug.LogWarning("Audio Manager not found, Created new Audio Manager.");
+        _audioManager = new GameObject("Audio Manager").AddComponent<AudioManager>();
+        GameObject g = GameObject.Find("Managers");
+        _audioManager.transform.SetParent(g != null ? g.transform : new GameObject("Managers").transform);
+    }
+    return _audioManager;
+}
+}
+*/

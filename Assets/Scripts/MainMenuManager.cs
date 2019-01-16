@@ -20,6 +20,7 @@ public class MainMenuManager : MonoBehaviour {
 	public GameObject mainMenuPanel;
 	public GameObject selectionMenuPanel;
 	public GameObject settingMenuPanel;
+    public GameObject AudioPanel;
 	public GameObject customMappingPanels;
 
 	public GameObject xboxControllerDisplay;
@@ -279,6 +280,8 @@ public class MainMenuManager : MonoBehaviour {
 				selectionMenuPanel.SetActive(false);
 				settingMenuPanel.SetActive(false);
 				customMappingPanels.SetActive(false);
+                if(AudioPanel)
+                    AudioPanel.SetActive(false);
 				mainMenuButtons(1);
 				currentMainMenuButton = 1;
 				break;
@@ -312,6 +315,19 @@ public class MainMenuManager : MonoBehaviour {
 				
 		}
 	}
+
+    public void OpenAudioPanel() //things would be easier to read as seperate functions
+    {
+        mainMenuPanel.SetActive(false);
+        AudioPanel.SetActive(true);
+        selectionMenuPanel.SetActive(false);
+        settingMenuPanel.SetActive(false);
+    }
+
+    public void SetVolume()
+    {
+
+    }
 
 	public void SelectControllerDisplay(int i) {
 		if (selectionMenuPanel.activeSelf == true) {

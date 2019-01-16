@@ -74,3 +74,4 @@ MonoBehaviour:
     pitch: 1
     loop: 0
     source: {fileID: 0}
+  audioMixer: {fileID: 24100000, guid: 8fb7316e453bb03438b7782f518b5c48, type: 2}

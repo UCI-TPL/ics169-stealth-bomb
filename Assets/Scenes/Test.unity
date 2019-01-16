@@ -496,9 +496,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 1
-  ParabolaRoot: {fileID: 0}
+  ParabolaRoot: {fileID: 105593420}
   Autostart: 1
   Animation: 1
+  max: 24
+  min: 6
 --- !u!4 &105593422
 Transform:
   m_ObjectHideFlags: 0
@@ -1546,9 +1548,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 1
-  ParabolaRoot: {fileID: 0}
+  ParabolaRoot: {fileID: 461467013}
   Autostart: 1
   Animation: 1
+  max: 24
+  min: 6
 --- !u!4 &461467015
 Transform:
   m_ObjectHideFlags: 0
@@ -4528,6 +4532,7 @@ MonoBehaviour:
   TimeDecreasePerPlayer: 10
   GhostOffset: {x: 0, y: 0, z: 0}
   GhostOffsetLimit: 8
+  GlobalVolume: 0
   countdown: 3
   countdownText: {fileID: 0}
 --- !u!1 &1489958361
@@ -6090,8 +6095,6 @@ MonoBehaviour:
   floorTile: {fileID: 1965115019997768, guid: 648c98a46cfb98b4498a3a003bd98913, type: 3}
   wallTile: {fileID: 1743838175089580, guid: eb831fde644fcb04ab28eda82a20ba83, type: 3}
   size: {x: 15, y: 3, z: 15}
-  GhostMax: 24
-  GhostMin: 6
   wallProb: 0.1
 --- !u!4 &1738452244 stripped
 Transform:

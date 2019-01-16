@@ -54,7 +54,10 @@ public class GameManager : MonoBehaviour {
 
     [HideInInspector]
     public Vector3 GhostOffset = Vector3.zero; //when the map shrinks the ghosts will move closer 
+    [HideInInspector]
     public float GhostOffsetLimit; //how far the ghosts are adjusted inwards 
+    [HideInInspector]
+    public float GlobalVolume; 
 
 
     //public int PlayersKilled = 0;
@@ -115,6 +118,12 @@ public class GameManager : MonoBehaviour {
         SceneManager.LoadScene(instance.mainMenuSceneName);
     }
 
+    public void  SetVolume(float volume) //made so the UI can call this instead of AudioManager
+    {
+        instance.audioManager.SetVolume(volume); // calling a function on audiomanager
+        GlobalVolume = volume;
+    }
+
     // Use this for initialization
     void Awake () {
         if (instance == null)
@@ -125,6 +134,7 @@ public class GameManager : MonoBehaviour {
         else if (instance != this)
             Destroy(gameObject);
         UnityEngine.SceneManagement.SceneManager.sceneLoaded += onSceneLoaded;
+        instance.GlobalVolume = 1f; //
     }
 
     IEnumerator Countdown()
@@ -175,6 +185,7 @@ public class GameManager : MonoBehaviour {
                 audioManager = Instantiate(audioManagerPrefab).GetComponent<AudioManager>();
                 audioManager.gameObject.name = "AudioManager"; //I don't like it being named "Clone"
                 DontDestroyOnLoad(audioManager);
+                AudioListener.volume = GlobalVolume; //makes sure that adjustments to volume go from scene to scene
                 if (scene.name == mainMenuSceneName)
                     GameManager.instance.audioManager.Play("Main Menu");
             }
@@ -347,6 +358,7 @@ public class GameManager : MonoBehaviour {
             GameManager.instance.GhostOffset = Vector3.zero; 
             GameManager.instance.UpdateRank();
             GameManager.instance.audioManager.Stop("Fanfare");
+            GameManager.instance.audioManager.Stop("Main Menu");
             GameManager.instance.audioManager.Play("Battle");
             string s = "Starting round with players: ";
             foreach (Player player in players)

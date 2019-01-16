@@ -37,7 +37,8 @@ public class ParabolaController : MonoBehaviour
     //draw
     protected ParabolaFly parabolaFly;
 
-
+    public int max;
+    public int min;
 
     void OnDrawGizmos()
     {
@@ -67,14 +68,10 @@ public class ParabolaController : MonoBehaviour
         }
     }
 
-    int max;
-    int min;
 
-    public void Begin( GameObject root, int maxx, int minn) //z being the z position
+
+    void Start() 
     {
-        max = maxx;
-        min = minn;
-        ParabolaRoot = root;
         parabolaFly = new ParabolaFly(ParabolaRoot.transform, max, min);
         RefreshTransforms(Speed);
     }
