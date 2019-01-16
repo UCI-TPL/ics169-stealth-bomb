@@ -104,6 +104,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46cd9f9f5f631f44ea3ad19d5ed0031e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHealth: 5
   shakeCooldown: 0.02
   destroyEffDuration: 0.85
   destroyEffSpeed: 5
@@ -111,3 +112,4 @@ MonoBehaviour:
   BaseMaterial: {fileID: 2100000, guid: 8c460df70ef1fcd42810a0b38a3f23ca, type: 2}
   meshFilter: {fileID: 0}
   crumbling: 0
+  basicMaterial: {fileID: 2100000, guid: f3af3f7531050e942aea97ae0a59f29f, type: 2}

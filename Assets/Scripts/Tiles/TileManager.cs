@@ -109,16 +109,16 @@ public class TileManager : MonoBehaviour {
                     mesh = ct.meshFilter.sharedMesh,
                     transform = ct.meshFilter.transform.localToWorldMatrix
                 };
-                if (materialKey.ContainsKey(ct.BaseMaterial))
-                    subMeshCombineInstances[materialKey[ct.BaseMaterial]].Add(ct, combineInstance);
+                if (materialKey.ContainsKey(ct.meshRenderer.sharedMaterial))
+                    subMeshCombineInstances[materialKey[ct.meshRenderer.sharedMaterial]].Add(ct, combineInstance);
                 else {
-                    materialKey.Add(ct.BaseMaterial, subMeshCombineInstances.Count);
+                    materialKey.Add(ct.meshRenderer.sharedMaterial, subMeshCombineInstances.Count);
                     Material mat = new Material(basicMaterial.shader);
                     mat.CopyPropertiesFromMaterial(basicMaterial);
-                    mat.mainTexture = ct.BaseMaterial.mainTexture;
-                    mat.color = ct.BaseMaterial.color;
-                    mat.SetFloat("_Metallic", ct.BaseMaterial.GetFloat("_Metallic"));
-                    mat.SetFloat("_Glossiness", ct.BaseMaterial.GetFloat("_Glossiness"));
+                    mat.mainTexture = ct.meshRenderer.sharedMaterial.mainTexture;
+                    mat.color = ct.meshRenderer.sharedMaterial.color;
+                    mat.SetFloat("_Metallic", ct.meshRenderer.sharedMaterial.GetFloat("_Metallic"));
+                    mat.SetFloat("_Glossiness", ct.meshRenderer.sharedMaterial.GetFloat("_Glossiness"));
                     subMeshMaterials.Add(mat);
                     subMeshCombineInstances.Add(new TileCombineInstances());
                     subMeshCombineInstances[subMeshCombineInstances.Count - 1].Add(ct, combineInstance);

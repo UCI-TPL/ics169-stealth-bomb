@@ -8,25 +8,34 @@ public class CrumbleTile : Tile {
     private readonly static Queue<ParticleSystem> ParticlePool = new Queue<ParticleSystem>();
     private static Transform ParticlePoolParent;
 
-    private Material crumbleMaterial;
+    [Header("Destruction Properties")]
+    [SerializeField]
+    private float maxHealth;
+    public float HealthPercent { get { return Health / maxHealth; } }
+    public float Health { get; private set; }
+
+    [Header("Material Properties")]
     public float shakeCooldown = 0.02f;
     public float destroyEffDuration = 0.5f;
     public float destroyEffSpeed = 5f;
+    private Material crumbleMaterial;
     public GameObject particles;
 
     [HideInInspector]
     public Material BaseMaterial;
+    private static readonly Dictionary<Material, Material[]> DamagedMaterials;
     [HideInInspector]
     public MeshFilter meshFilter;
-    private MeshRenderer meshRenderer;
+    [HideInInspector]
+    public MeshRenderer meshRenderer;
     [HideInInspector]
     public bool crumbling = false;
 
     private void Awake() {
         meshFilter = GetComponentInChildren<MeshFilter>();
         meshRenderer = GetComponentInChildren<MeshRenderer>();
-        meshRenderer.enabled = false;
         BaseMaterial = meshRenderer.sharedMaterial;
+        meshRenderer.enabled = false;
         if (ParticlePoolParent == null) {
             ParticlePoolParent = new GameObject("CrumbleParticlePool").transform;
             ParticlePoolParent.SetParent(GameManager.instance.PersistBetweenRounds);
@@ -37,14 +46,24 @@ public class CrumbleTile : Tile {
             g.SetActive(false);
             ParticlePool.Enqueue(g.GetComponent<ParticleSystem>());
         }
+
+        // Instantiate health as max;
+        ResetHealth();
+    }
+
+    /// <summary>
+    /// Resets this tile's health to max health
+    /// </summary>
+    private void ResetHealth() {
+        Health = maxHealth;
     }
 
     protected override void BreakingEffect(float duration) {
         crumbleMaterial = meshRenderer.material;
-        //if (crumbleMaterial.shader.name != "Crumble")
-        //    Debug.Log(name + " has incorrect shader, Crumble shader required.");
+        if (crumbleMaterial.shader.name != "Crumble")
+            Debug.Log(name + " has incorrect shader, Crumble shader required.", this);
         meshRenderer.enabled = crumbling = true;
-        StartCoroutine(CrumbleEffect(duration));
+        CrumbleEffect(duration);
         // Pull out the first particle system from the queue and reinsert it at the end
         ParticleSystem p = ParticlePool.Dequeue();
         ParticlePool.Enqueue(p);
@@ -57,45 +76,15 @@ public class CrumbleTile : Tile {
         }
     }
 
-    private IEnumerator CrumbleEffect(float duration) {
+    private void CrumbleEffect(float duration) {
         crumbleMaterial.SetFloat("_CrumbleStartTime", Time.timeSinceLevelLoad); // Set shader crumble start time
         crumbleMaterial.SetFloat("_CrumbleDuration", duration); // Set shader crumble duration
-        float startTime = Time.time;
-        float endTime = Time.time + duration;
-        float shakeTimer = Time.time;
-        float targetScale = 1;
-        float currentScale = 1;
-        float scaleVelocity = 0;
-        while (endTime >= Time.time) {
-            if (shakeTimer <= Time.time) {
-                targetScale = Random.Range(1.01f, 1.2f);
-                shakeTimer = Mathf.Max(Time.time, shakeTimer + shakeCooldown);
-            }
-            currentScale = Mathf.SmoothDamp(currentScale, targetScale, ref scaleVelocity, shakeCooldown);
-            //crumbleMaterial.SetVector("Vector3_B38DBA48", Vector3.one * currentScale); // Set object scale with shader vertex offset
-            //crumbleMaterial.SetFloat("Vector1_B581EF45", (Time.time - startTime)/duration); // Set shader crumble level
-            yield return null;
-        }
-        //crumbleMaterial.SetFloat("Vector1_B581EF45", 1); // Set shader crumble level
     }
 
     protected override void DestroyEffect() {
-        StartCoroutine(DisolveEffect(destroyEffDuration));
-    }
-
-    private IEnumerator DisolveEffect(float duration) {
         crumbleMaterial.SetFloat("_DestroyStartTime", Time.timeSinceLevelLoad); // Set shader destroy start time
-        crumbleMaterial.SetFloat("_DestroyDuration", duration); // Set shader destroy duration
+        crumbleMaterial.SetFloat("_DestroyDuration", destroyEffDuration); // Set shader destroy duration
         GetComponentInChildren<Collider>().enabled = false;
-        float startTime = Time.time;
-        float endTime = Time.time + duration;
-        Vector3 offset = Vector3.zero;
-        while (endTime >= Time.time) {
-            //crumbleMaterial.SetFloat("Vector1_C76A37C5", (Time.time - startTime) / duration); // Set shader dissolve level
-            //crumbleMaterial.SetVector("Vector3_5B57DCD6", (offset += Vector3.down * destroyEffSpeed * Time.deltaTime) * -offset.y); // Set object offset with shader vertex offset
-            yield return null;
-        }
-        //crumbleMaterial.SetFloat("Vector1_C76A37C5", 1); // Set shader dissolve level
-        Destroy(gameObject);
+        Destroy(gameObject, destroyEffDuration);
     }
 }

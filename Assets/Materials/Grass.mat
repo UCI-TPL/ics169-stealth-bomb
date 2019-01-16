@@ -11,7 +11,7 @@ Material:
   m_Shader: {fileID: 4800000, guid: e9e203d736cd6af42a2f8a7b5188cf75, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
+  m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
@@ -66,10 +66,13 @@ Material:
     m_Floats:
     - Vector1_17215642: 20
     - Vector1_21BC1C32: 1.5
+    - Vector1_2350B4EE: 1.5
     - Vector1_674F81FE: 0
     - Vector1_7C693275: 0
     - Vector1_86268C42: 0
     - Vector1_8D60783: 2
+    - Vector1_94691CC1: 2
+    - Vector1_A769E776: 20
     - Vector1_B581EF45: 0
     - Vector1_C76A37C5: 0
     - _AlphaClip: 0
@@ -79,7 +82,7 @@ Material:
     - _CrumbleStartTime: 9999999
     - _Cull: 2
     - _Cutoff: 0.5
-    - _DestroyDuration: 0
+    - _DestroyDuration: 0.5
     - _DestroyStartTime: 9999999
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
@@ -104,6 +107,7 @@ Material:
     - Color_8CF2BBA4: {r: 0.06679419, g: 0.745283, b: 0.20013878, a: 1}
     - Vector3_5B57DCD6: {r: 0, g: 0, b: 0, a: 0}
     - Vector3_60FEC1D6: {r: 0, g: -20, b: 0, a: 0}
+    - Vector3_6A9372F2: {r: 0, g: -9.8, b: 0, a: 0}
     - Vector3_B38DBA48: {r: 1, g: 1, b: 1, a: 0}
     - _Color: {r: 0.06679422, g: 0.745283, b: 0.20013882, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
