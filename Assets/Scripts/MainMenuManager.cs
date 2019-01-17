@@ -12,16 +12,16 @@ public class MainMenuManager : MonoBehaviour {
 	int menu represents the current menu
 	0 - quit								1 - main menu
 	2 - character selection menu			3 - setting menu
-	4 - settiong : player button mapping	
+	4 - setting : player button mapping	
 	 */
 	private static int menu = 0;
 	
 	//GameObject reference to menu panels
 	public GameObject mainMenuPanel;
 	public GameObject selectionMenuPanel;
-	public GameObject settingMenuPanel;
+	public GameObject remappingMenuPanel;
     public GameObject AudioPanel;
-	public GameObject customMappingPanels;
+	public GameObject customMappingPanel;
 
 	public GameObject xboxControllerDisplay;
 
@@ -42,11 +42,15 @@ public class MainMenuManager : MonoBehaviour {
 	PlayerIndex[] players;
 	private int currentMainMenuButton;
 	private int currentSelectionMenuButton;
-	private int currentSettingsMenuButton;
+	private int currentRemappingMenuButton;
+	private int currentCustomMappingButton;
 
+	// xbox controller variables
+	public float controllerStickDeadZone = 0.5f; // keep this between 0 and 1.
 	public float cooldown = 10.0f;
 	private float timer;
 	private bool hasMoved;
+	private bool hasClicked;
 
 	public int getCurrentPanel()
 	{ return menu; }
@@ -57,7 +61,7 @@ public class MainMenuManager : MonoBehaviour {
 		playerSet = false;
 		currentMainMenuButton = 1;
 		currentSelectionMenuButton = 2;
-		currentSettingsMenuButton = 2;
+		currentRemappingMenuButton = 1;
 		timer = cooldown;   // 7.5f
 		hasMoved = false;
 		InputManager.inputManager.UseMouseAndKeyboardForFirstDisconnectedPlayer(false);
@@ -71,94 +75,30 @@ public class MainMenuManager : MonoBehaviour {
 	}
 
 	void Update() {
-		// code modified from 3rd party script: XInputTestCS.cs
-		// if (!playerSet || !prevState.IsConnected) {
-		// 	for (int i = 0; i < 4; i++) {
-		// 		PlayerIndex testPlayer = (PlayerIndex) i;
-		// 		//player = (PlayerIndex) i;
-		// 		GamePadState testState = GamePad.GetState(testPlayer);
-		// 		if (testState.IsConnected) {
-		// 			playerSet = true;
-		// 			player1 = testPlayer;
-		// 		}
-		// 	}
-		// }
-		// prevState = currentState;
-		// currentState = GamePad.GetState(player1);
-		// end of borrowed/modified code
-
 		// Debug.Log("cooldown = " + cooldown);
 
 		if (newVersion)
 			ControllerNavigationNewVersion();
 		else
 			ControllerNavigationOldVersion();
-		
-		// prevState = currentState;
-		// currentState = GamePad.GetState(player1);
-
-		// if (Input.GetAxis("Mouse X") == 0 || Input.GetAxis("Mouse Y") == 0) {
-		// // for now, only player 1 should be able to control the main menu.
-		// 	if (currentState.IsConnected && timer >= cooldown) {
-		// 		if (mainMenuPanel.activeSelf == true) {
-		// 			if (currentState.ThumbSticks.Left.Y > 0.0f /*&& prevState.ThumbSticks.Left.Y <= 0.0f*/) {
-		// 				currentMainMenuButton--;
-		// 				if (currentMainMenuButton < 1) {
-		// 					currentMainMenuButton = mainMenuPanel.transform.childCount - 1;
-		// 				}
-		// 				mainMenuButtons(currentMainMenuButton);
-		// 				hasMoved = true;
-		// 			}
-		// 			else if (currentState.ThumbSticks.Left.Y < 0.0f /*&& prevState.ThumbSticks.Left.Y >= 0.0f*/) {
-		// 				currentMainMenuButton++;
-		// 				if (currentMainMenuButton >= mainMenuPanel.transform.childCount) {
-		// 					currentMainMenuButton = 1;
-		// 				}
-		// 				mainMenuButtons(currentMainMenuButton);
-		// 				hasMoved = true;
-		// 			}
-		// 		}
-
-		// 		if (selectionMenuPanel.activeSelf == true) {
-		// 			if (currentState.ThumbSticks.Left.X > 0) {
-		// 				currentSelectionMenuButton++;
-		// 				if (currentSelectionMenuButton > 3) {
-		// 					currentSelectionMenuButton = 2;
-		// 				}
-		// 				selectionMenuButtons(currentSelectionMenuButton);
-		// 				hasMoved = true;
-		// 			}
-		// 		}
-		// 		if (hasMoved) 
-		// 		{
-		// 			timer = 0.0f;
-		// 			timer += 1.0f * Time.deltaTime;
-		// 		}
-		// 	}
-		// 	else {
-		// 		timer += 1.0f * Time.deltaTime;
-		// 	}
-
-		// 	// NOTE: this button may have to change later. Most likely will conflict with PlayerJoinManager.cs controls!!!
-		// 	if (currentState.Buttons.A == ButtonState.Pressed /* && prevState.Buttons.A == ButtonState.Released */ && getCurrentPanel() != 2) {
-		// 		b.onClick.Invoke();
-		// 	}
-		// 	// Debug.Log("current main menu button: " + currentMainMenuButton);
-		// }
 	}
 
+	// rough version of being able to navigate main menu with more than 1 controller
+	// NOTE: might be modified/replaced later to make it more clean (if menu controls are integrated with input manager)
 	private void ControllerNavigationNewVersion() {
+		// loops through all player indexes (input)
 		for (int i = 0; i < players.Length; i++) {
 			prevStates[i] = currentStates[i];
 			currentStates[i] = GamePad.GetState(players[i]);
 
 			if (Input.GetAxis("Mouse X") == 0 || Input.GetAxis("Mouse Y") == 0) {
-			// for now, only player 1 should be able to control the main menu.
+			// assuming cooldown is finished, allow input from controller
 				if (timer >= cooldown) {
 					hasMoved = false;
+					// makes sure controller is connected and there is no other input since cooldown finished
 					if (currentStates[i].IsConnected && !hasMoved) {
 						if (mainMenuPanel.activeSelf == true) {
-							if (currentStates[i].ThumbSticks.Left.Y > 0.0f /*&& prevState.ThumbSticks.Left.Y <= 0.0f*/) {
+							if (currentStates[i].ThumbSticks.Left.Y > controllerStickDeadZone /*&& prevState.ThumbSticks.Left.Y <= 0.0f*/) {
 								currentMainMenuButton--;
 								if (currentMainMenuButton < 1) {
 									currentMainMenuButton = mainMenuPanel.transform.childCount - 1;
@@ -166,7 +106,7 @@ public class MainMenuManager : MonoBehaviour {
 								mainMenuButtons(currentMainMenuButton);
 								hasMoved = true;
 							}
-							else if (currentStates[i].ThumbSticks.Left.Y < 0.0f /*&& prevState.ThumbSticks.Left.Y >= 0.0f*/) {
+							else if (currentStates[i].ThumbSticks.Left.Y < -controllerStickDeadZone /*&& prevState.ThumbSticks.Left.Y >= 0.0f*/) {
 								currentMainMenuButton++;
 								if (currentMainMenuButton >= mainMenuPanel.transform.childCount) {
 									currentMainMenuButton = 1;
@@ -186,6 +126,36 @@ public class MainMenuManager : MonoBehaviour {
 								hasMoved = true;
 							}
 						}
+
+						if (remappingMenuPanel.activeSelf == true)
+						{
+
+							// update button pos
+							if (currentStates[i].ThumbSticks.Left.Y < 0.0f)
+							{
+								currentRemappingMenuButton++;
+								hasMoved = true;
+							}
+							else if (currentStates[i].ThumbSticks.Left.Y > 0f)
+							{
+								currentRemappingMenuButton--;
+								hasMoved = true;
+							}
+							
+							// fix outbound pos
+							if (currentRemappingMenuButton > 5)
+							{
+								currentRemappingMenuButton = 1;
+							}
+							else if (currentRemappingMenuButton < 1)
+							{
+								currentRemappingMenuButton = 5;
+							}
+							
+							remappingMenuButtons(currentRemappingMenuButton);
+							
+						}
+
 						if (hasMoved) 
 						{
 							timer = 0.0f;
@@ -194,8 +164,10 @@ public class MainMenuManager : MonoBehaviour {
 					}
 				}
 
-				// NOTE: this button may have to change later. Most likely will conflict with PlayerJoinManager.cs controls!!!
-				if (currentStates[i].Buttons.A == ButtonState.Pressed /* && prevState.Buttons.A == ButtonState.Released */ && getCurrentPanel() != 2) {
+				// NOTE: this button may have to change later. Most likely will conflict with PlayerJoinManager.cs controls!!
+				// getCurrentPanel() (or menu) needs to be <= 1, indicating that we are currently in the main menu, or we pressed quit while in the Unity editor.
+				if (currentStates[i].Buttons.A == ButtonState.Pressed /* && prevState.Buttons.A == ButtonState.Released */ && getCurrentPanel() <= 1) {
+					Debug.Log("clicking");
 					b.onClick.Invoke();
 				}
 				// Debug.Log("current main menu button: " + currentMainMenuButton);
@@ -214,7 +186,7 @@ public class MainMenuManager : MonoBehaviour {
 		// for now, only player 1 should be able to control the main menu.
 			if (currentState.IsConnected && timer >= cooldown) {
 				if (mainMenuPanel.activeSelf == true) {
-					if (currentState.ThumbSticks.Left.Y > 0.0f /*&& prevState.ThumbSticks.Left.Y <= 0.0f*/) {
+					if (currentState.ThumbSticks.Left.Y > controllerStickDeadZone /*&& prevState.ThumbSticks.Left.Y <= 0.0f*/) {
 						currentMainMenuButton--;
 						if (currentMainMenuButton < 1) {
 							currentMainMenuButton = mainMenuPanel.transform.childCount - 1;
@@ -222,7 +194,7 @@ public class MainMenuManager : MonoBehaviour {
 						mainMenuButtons(currentMainMenuButton);
 						hasMoved = true;
 					}
-					else if (currentState.ThumbSticks.Left.Y < 0.0f /*&& prevState.ThumbSticks.Left.Y >= 0.0f*/) {
+					else if (currentState.ThumbSticks.Left.Y < -controllerStickDeadZone /*&& prevState.ThumbSticks.Left.Y >= 0.0f*/) {
 						currentMainMenuButton++;
 						if (currentMainMenuButton >= mainMenuPanel.transform.childCount) {
 							currentMainMenuButton = 1;
@@ -276,41 +248,51 @@ public class MainMenuManager : MonoBehaviour {
 
 			//Main menu
 			case 1:
+				// Debug.Log("to main menu");
 				mainMenuPanel.SetActive(true);
 				selectionMenuPanel.SetActive(false);
-				settingMenuPanel.SetActive(false);
-				customMappingPanels.SetActive(false);
+				remappingMenuPanel.SetActive(false);
+				customMappingPanel.SetActive(false);
                 if(AudioPanel)
                     AudioPanel.SetActive(false);
 				mainMenuButtons(1);
 				currentMainMenuButton = 1;
+				// Debug.Log("exiting main menu display");
 				break;
 			
 			//Character Selection
 			case 2:
+				// Debug.Log("to selection");
 				mainMenuPanel.SetActive(false);
 				selectionMenuPanel.SetActive(true);
-				settingMenuPanel.SetActive(false);
-				customMappingPanels.SetActive(false);
+				remappingMenuPanel.SetActive(false);
+				customMappingPanel.SetActive(false);
 				selectionMenuButtons(2);
 				currentSelectionMenuButton = 2;
 				InputManager.inputManager.UseMouseAndKeyboardForFirstDisconnectedPlayer(false);
 				break;
 
-			//Setting Menu
+			//remapBtn Menu (select which player)
 			case 3:
+				// Debug.Log("to remap menu");
 				mainMenuPanel.SetActive(false);
 				selectionMenuPanel.SetActive(false);
-				settingMenuPanel.SetActive(true);
-				customMappingPanels.SetActive(false);
-				settingMenuButtons(3);
-				currentSettingsMenuButton = 3;
+				remappingMenuPanel.SetActive(true);
+				customMappingPanel.SetActive(false);
+				remappingMenuButtons(1);
+				currentRemappingMenuButton = 1;
+				// Debug.Log("exiting remapBtn menu display");
 				break;
-			case 4: //players mapping
+
+			//custom mapping Menu
+			case 4: 
+				// Debug.Log("to remapp");
 				mainMenuPanel.SetActive(false);
 				selectionMenuPanel.SetActive(false);
-				settingMenuPanel.SetActive(false);
-				customMappingPanels.SetActive(true);
+				remappingMenuPanel.SetActive(false);
+				customMappingPanel.SetActive(true);
+				customMappingButtons(0);
+				currentCustomMappingButton = 0;
 				break;
 				
 		}
@@ -321,7 +303,7 @@ public class MainMenuManager : MonoBehaviour {
         mainMenuPanel.SetActive(false);
         AudioPanel.SetActive(true);
         selectionMenuPanel.SetActive(false);
-        settingMenuPanel.SetActive(false);
+        remappingMenuPanel.SetActive(false);
     }
 
     public void SetVolume()
@@ -351,7 +333,7 @@ public class MainMenuManager : MonoBehaviour {
 
 
 	/*
-	the three functions below will be called when the corsponding panel is active
+	functions below will be called when the corsponding panel is active
 	to enable the button highlight for controller
 	 */
 	private void mainMenuButtons( int i )
@@ -366,9 +348,15 @@ public class MainMenuManager : MonoBehaviour {
 		_buttonSelect();
 	}
 
-	private void settingMenuButtons( int i )
+	private void remappingMenuButtons( int i )
 	{
-		btn = settingMenuPanel.transform.GetChild(i).gameObject;
+		btn = remappingMenuPanel.transform.GetChild(i).gameObject;
+		_buttonSelect();
+	}
+
+	private void customMappingButtons( int i )
+	{
+		btn = customMappingPanel.transform.GetChild(i).gameObject;
 		_buttonSelect();
 	}
 
@@ -377,5 +365,83 @@ public class MainMenuManager : MonoBehaviour {
 		b = btn.GetComponent<Button>();
 		b.Select();
 	}
+
+	// // old, unclean version of Update, still works, but keeping it just in case
+	// void Update() {
+	// 	// code modified from 3rd party script: XInputTestCS.cs
+	// 	// if (!playerSet || !prevState.IsConnected) {
+	// 	// 	for (int i = 0; i < 4; i++) {
+	// 	// 		PlayerIndex testPlayer = (PlayerIndex) i;
+	// 	// 		//player = (PlayerIndex) i;
+	// 	// 		GamePadState testState = GamePad.GetState(testPlayer);
+	// 	// 		if (testState.IsConnected) {
+	// 	// 			playerSet = true;
+	// 	// 			player1 = testPlayer;
+	// 	// 		}
+	// 	// 	}
+	// 	// }
+	// 	// prevState = currentState;
+	// 	// currentState = GamePad.GetState(player1);
+	// 	// end of borrowed/modified code
+
+	// 	// Debug.Log("cooldown = " + cooldown);
+
+	// 	if (newVersion)
+	// 		ControllerNavigationNewVersion();
+	// 	else
+	// 		ControllerNavigationOldVersion();
+		
+	// 	// prevState = currentState;
+	// 	// currentState = GamePad.GetState(player1);
+
+	// 	// if (Input.GetAxis("Mouse X") == 0 || Input.GetAxis("Mouse Y") == 0) {
+	// 	// // for now, only player 1 should be able to control the main menu.
+	// 	// 	if (currentState.IsConnected && timer >= cooldown) {
+	// 	// 		if (mainMenuPanel.activeSelf == true) {
+	// 	// 			if (currentState.ThumbSticks.Left.Y > 0.0f /*&& prevState.ThumbSticks.Left.Y <= 0.0f*/) {
+	// 	// 				currentMainMenuButton--;
+	// 	// 				if (currentMainMenuButton < 1) {
+	// 	// 					currentMainMenuButton = mainMenuPanel.transform.childCount - 1;
+	// 	// 				}
+	// 	// 				mainMenuButtons(currentMainMenuButton);
+	// 	// 				hasMoved = true;
+	// 	// 			}
+	// 	// 			else if (currentState.ThumbSticks.Left.Y < 0.0f /*&& prevState.ThumbSticks.Left.Y >= 0.0f*/) {
+	// 	// 				currentMainMenuButton++;
+	// 	// 				if (currentMainMenuButton >= mainMenuPanel.transform.childCount) {
+	// 	// 					currentMainMenuButton = 1;
+	// 	// 				}
+	// 	// 				mainMenuButtons(currentMainMenuButton);
+	// 	// 				hasMoved = true;
+	// 	// 			}
+	// 	// 		}
+
+	// 	// 		if (selectionMenuPanel.activeSelf == true) {
+	// 	// 			if (currentState.ThumbSticks.Left.X > 0) {
+	// 	// 				currentSelectionMenuButton++;
+	// 	// 				if (currentSelectionMenuButton > 3) {
+	// 	// 					currentSelectionMenuButton = 2;
+	// 	// 				}
+	// 	// 				selectionMenuButtons(currentSelectionMenuButton);
+	// 	// 				hasMoved = true;
+	// 	// 			}
+	// 	// 		}
+	// 	// 		if (hasMoved) 
+	// 	// 		{
+	// 	// 			timer = 0.0f;
+	// 	// 			timer += 1.0f * Time.deltaTime;
+	// 	// 		}
+	// 	// 	}
+	// 	// 	else {
+	// 	// 		timer += 1.0f * Time.deltaTime;
+	// 	// 	}
+
+	// 	// 	// NOTE: this button may have to change later. Most likely will conflict with PlayerJoinManager.cs controls!!!
+	// 	// 	if (currentState.Buttons.A == ButtonState.Pressed /* && prevState.Buttons.A == ButtonState.Released */ && getCurrentPanel() != 2) {
+	// 	// 		b.onClick.Invoke();
+	// 	// 	}
+	// 	// 	// Debug.Log("current main menu button: " + currentMainMenuButton);
+	// 	// }
+	// }
 
 }

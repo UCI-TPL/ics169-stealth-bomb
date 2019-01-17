@@ -3008,8 +3008,8 @@ MonoBehaviour:
   - {fileID: 603492927}
   smoothTime: 1
   minZoom: 5
-  maxZoom: 12
-  maxZoomDistance: 14
+  maxZoom: 18
+  maxZoomDistance: 20
 --- !u!1 &783223424
 GameObject:
   m_ObjectHideFlags: 0

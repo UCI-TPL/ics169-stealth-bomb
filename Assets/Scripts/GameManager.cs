@@ -326,13 +326,25 @@ public class GameManager : MonoBehaviour {
         public int PlayersAlive { get { return activePlayersControllers.Count; } }
         private Scene roundScene;
 
-
-
-       public Vector3 ghostSpawnLocation = new Vector3(13f,6f,13f); //this will have to be different per map! Will be changed later
-
-        FollowTargetsCamera moveCamera; 
+        public Vector3 ghostSpawnLocation = new Vector3(13f,6f,13f); //this will have to be different per map! Will be changed later
+        FollowTargetsCamera moveCamera;
 
         public bool roundEnding = false;
+
+        // A jagged array which will store the scene names of the maps as strings. 
+        // This will allow us to make a different number of maps for each group.
+        // MAKE SURE THE LEVELS HERE ARE IN THE BUILD SETTINGS
+        private string[][] levelNames =
+        {
+            new string[] { "Map1_TownMarket", "LoadLevel" },
+            new string[] { "LoadLevel" },
+            new string[] { "Map1_TownMarket" },
+            new string[] { "LoadLevel" },
+            new string[] { "MAP" }
+        };
+        // A random number generator, used to pick a stage from an array in levelNames.
+        System.Random rng = new System.Random();
+
 
         public GameRound(Player[] players) {
             this.players = players;
@@ -348,10 +360,53 @@ public class GameManager : MonoBehaviour {
                 Reset();
         }
 
+        // Make sure that the levels that are made have only the tile maps before being uploaded.
         public void LoadLevel() {
             State = GameState.Loading;
-            TileManager.tileManager.LoadLevel("LoadLevel", (Scene loadedScene) => { State = GameState.Ready; roundScene = loadedScene; });
+            //TileManager.tileManager.LoadLevel("LoadLevel", (Scene loadedScene) => { State = GameState.Ready; roundScene = loadedScene; });
+
+            int i = PickLevelGroup();
+            TileManager.tileManager.LoadLevel(levelNames[i][rng.Next(0, levelNames[i].Length)], (Scene loadedScene) => { State = GameState.Ready; roundScene = loadedScene; });
+            //Debug.Log("[GameManager, line 367] Checking if we get the right index for the level check. " + i);
+
+
             Resources.UnloadUnusedAssets();
+        }
+
+        // This returns an integer that corresponds to a level group that LoadLevel will load a level
+        // from. 0 = level group 1, 1 = level group 2, and so on.
+        private int PickLevelGroup() {
+            // counters for the number of players who's ranks fall within a particular level group.
+            int pr_G1 = 0;
+            int pr_G2 = 0;
+            int pr_G3 = 0;
+            int pr_G4 = 0;
+
+            // increment the counters based on the player ranks.
+            foreach (Player p in players)
+            {
+                if (p.rank <= 2)
+                    pr_G1++;
+                else if (p.rank >= 3 || p.rank <= 5)
+                    pr_G2++;
+                else if (p.rank >= 6 || p.rank <= 8)
+                    pr_G3++;
+                else
+                    pr_G4++;
+            }
+
+            // I would do returns in a ternary conditional operator, but that would get too long.
+            // compare the counters and return the int for the appropriate level group
+            if ((pr_G1 > pr_G2) && (pr_G1 > pr_G3) && (pr_G1 > pr_G4))          // if group 1 counter is greater than the rest.
+                return 0;
+            else if ((pr_G2 > pr_G1) && (pr_G2 > pr_G3) && (pr_G2 > pr_G4))     // if group 2 counter is greater than the rest.
+                return 1;
+            else if ((pr_G3 > pr_G1) && (pr_G3 > pr_G2) && (pr_G3 > pr_G4))     // if group 3 counter is greater than the rest.
+                return 2;
+            else if ((pr_G4 > pr_G1) && (pr_G4 > pr_G2) && (pr_G4 > pr_G3))     // if group 4 counter is greater than the rest.
+                return 3;
+            else                                                                // if no counter is greater than any other, load secret level?
+                return 4;
         }
 
         public void StartGame() {
