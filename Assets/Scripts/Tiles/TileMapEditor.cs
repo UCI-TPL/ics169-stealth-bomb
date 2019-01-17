@@ -29,7 +29,7 @@ public class TileMapEditor : MonoBehaviour {
     public void CreateTile(Vector3 pos) {
         GameObject g = Tile.PrefabCreate(tileList.tiles[selectTile].gameObject, pos, Quaternion.identity, terrainParrent.transform);
         Undo.RegisterCreatedObjectUndo(g, "Undo Create Tile");
-        mapBounds.Encapsulate(g.GetComponent<Tile>().position.Round());
+        mapBounds.Encapsulate(g.GetComponent<Tile>().position);
     }
 
     public void DeleteTile(Tile tile) {
@@ -45,13 +45,19 @@ public class TileMapEditor : MonoBehaviour {
             if (terrainParrent.transform.GetChild(i).GetComponent<Tile>() != null)
                 Undo.DestroyObjectImmediate(terrainParrent.transform.GetChild(i).gameObject);
     }
+    
+    [UnityEditor.MenuItem("TileMapEditor/ResetCrumble")]
+    private static void ResetCrumble() {
+        Shader.SetGlobalTexture(Shader.PropertyToID("_TileDamageMap"), Texture2D.blackTexture);
+        Shader.SetGlobalVector(Shader.PropertyToID("_TileMapSize"), Vector3.one);
+    }
 
     public void RecalculateBounds() {
         mapBounds = new Bounds();
         foreach (Transform t in terrainParrent.transform) {
             Tile tile = t.GetComponent<Tile>();
             if (tile != null)
-                mapBounds.Encapsulate(tile.position.Round());
+                mapBounds.Encapsulate(tile.position);
         }
     }
 #endif //Editor only tag

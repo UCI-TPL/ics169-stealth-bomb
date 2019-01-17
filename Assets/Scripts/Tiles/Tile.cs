@@ -10,8 +10,8 @@ public class Tile : MonoBehaviour {
     public virtual TileType Type { get { return TileType.Tile; } }
     
     /// <summary>Position of the tile snaped to the grid (nearest Int)</summary>
-    public Vector3 position {
-        get { return transform.localPosition - TileOffset; }
+    public Vector3Int position {
+        get { return (transform.localPosition - TileOffset).Round(); }
     }
 
     public void Destroy(float timer = 0) {

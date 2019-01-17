@@ -59,6 +59,8 @@ public class TileManager : MonoBehaviour {
     private MeshRenderer meshRenderer;
     private MeshFilter meshFilter;
 
+    private Texture2D tileDamageMap;
+
     public void StartGame() {
         tileMap = ReadTileMap(); // Read Tile Map currently in scene into memory
         if (tileMap == null || tileMap.Tiles.Length == 0) { // If no map, create a random map
@@ -76,48 +78,40 @@ public class TileManager : MonoBehaviour {
 
         TileDestroyQueue = CreateTileMapDestroyCalc(tileMap.Tiles, center, collapseBuffer);
 
-        meshRenderer = GetComponent<MeshRenderer>();
-        if (meshRenderer == null)
-            meshRenderer = gameObject.AddComponent<MeshRenderer>();
-        meshFilter = GetComponent<MeshFilter>();
-        if (meshFilter == null)
-            meshFilter = gameObject.AddComponent<MeshFilter>();
-        InitializeMeshCombiner();
-        UpdateMesh();
+        //meshRenderer = GetComponent<MeshRenderer>();
+        //if (meshRenderer == null)
+        //    meshRenderer = gameObject.AddComponent<MeshRenderer>();
+        //meshFilter = GetComponent<MeshFilter>();
+        //if (meshFilter == null)
+        //    meshFilter = gameObject.AddComponent<MeshFilter>();
+        //InitializeMeshCombiner();
+        //UpdateMesh();
 
         StopAllCoroutines(); // Stop updates from previous round
-        StartCoroutine(UpdateMeshRepeat(warningTimer));
+        //StartCoroutine(UpdateMeshRepeat(warningTimer));
 
-        texture = CreateTexture3D(tileMap.Size.x, tileMap.Size.y, tileMap.Size.z);
-        Shader.SetGlobalTexture(Shader.PropertyToID("_TileDamageMap"), texture);
+        tileDamageMap = CreateTexture3D(tileMap.Size.x, tileMap.Size.y, tileMap.Size.z, Color.black);
+        Shader.SetGlobalTexture(Shader.PropertyToID("_TileDamageMap"), tileDamageMap);
         Shader.SetGlobalVector(Shader.PropertyToID("_TileMapSize"), (Vector3)tileMap.Size);
-        print(Shader.GetGlobalVector(Shader.PropertyToID("_TileMapSize")));
     }
 
     private void Update() {
-        texture = CreateTexture3D(tileMap.Size.x, tileMap.Size.y, tileMap.Size.z);
-        Shader.SetGlobalTexture(Shader.PropertyToID("_TileDamageMap"), texture);
+        tileDamageMap.Apply();
+        Shader.SetGlobalTexture(Shader.PropertyToID("_TileDamageMap"), tileDamageMap);
     }
 
-    public Texture2D texture;
-
-    Texture2D CreateTexture3D(int xSize, int ySize, int zSize) {
+    Texture2D CreateTexture3D(int xSize, int ySize, int zSize, Color color) {
         Color[] colorArray = new Color[xSize * ySize * zSize];
-        texture = new Texture2D(xSize, ySize * zSize, TextureFormat.RGBA32, true);
-        float r = 1.0f / (xSize - 1.0f);
-        float g = 1.0f / (ySize - 1.0f);
-        float b = 1.0f / (zSize - 1.0f);
-        for (int x = 0; x < xSize; x++) {
-            for (int y = 0; y < ySize; y++) {
-                for (int z = 0; z < zSize; z++) {
-                    Color c = new Color(UnityEngine.Random.Range(0,1f), UnityEngine.Random.Range(0, 1f), UnityEngine.Random.Range(0, 1f), 1.0f);
-                    colorArray[x + (y * xSize) + (z * xSize * ySize)] = c;
-                }
-            }
-        }
-        texture.SetPixels(colorArray);
-        texture.Apply();
-        return texture;
+        for (int i = 0; i < colorArray.Length; ++i)
+            colorArray[i] = color;
+        Texture2D t = new Texture2D(xSize, ySize * zSize, TextureFormat.RGBA32, false);
+        t.SetPixels(colorArray);
+        t.Apply();
+        return t;
+    }
+
+    public void SetTileDamage(Vector3Int position, float crumbleValue, float disolveValue, float damageValue) {
+        tileDamageMap.SetPixel(position.x, position.y + (position.z * tileMap.Size.y), new Color(crumbleValue, disolveValue, damageValue, 1));
     }
 
     private IEnumerator UpdateMeshRepeat(float updateRate) {
@@ -263,14 +257,12 @@ public class TileManager : MonoBehaviour {
             result.Enqueue(t);
         return result;
     }
-
-
+    
     public void DestroyTiles(Vector3 tilePos) //called by the ghostCursor to destory tiles. Currently kills a whole pillar, might just kill a tile next time
     {
         StartCoroutine(DestroyPillar((int)tilePos.x, (int)tilePos.z));
     }
-
-
+    
     // Destroys all tiles in that z and x position
     public IEnumerator DestroyPillar(int col, int row) {
         foreach (Tile t in tileMap.GetPillar(col, row)) {

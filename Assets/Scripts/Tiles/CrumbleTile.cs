@@ -36,7 +36,7 @@ public class CrumbleTile : Tile {
         meshFilter = GetComponentInChildren<MeshFilter>();
         meshRenderer = GetComponentInChildren<MeshRenderer>();
         BaseMaterial = meshRenderer.sharedMaterial;
-        meshRenderer.enabled = false;
+        //meshRenderer.enabled = false;
         if (ParticlePoolParent == null) {
             ParticlePoolParent = new GameObject("CrumbleParticlePool").transform;
             ParticlePoolParent.SetParent(GameManager.instance.PersistBetweenRounds);
@@ -76,11 +76,9 @@ public class CrumbleTile : Tile {
     }
 
     protected override void BreakingEffect(float duration) {
-        crumbleMaterial = meshRenderer.material;
-        if (crumbleMaterial.shader.name != "Crumble")
-            Debug.Log(name + " has incorrect shader, Crumble shader required.", this);
-        meshRenderer.enabled = crumbling = true;
-        CrumbleEffect(duration);
+        //crumbleMaterial = meshRenderer.material;
+        //meshRenderer.enabled = crumbling = true;
+        StartCoroutine(CrumbleEffect(duration));
         // Pull out the first particle system from the queue and reinsert it at the end
         ParticleSystem p = ParticlePool.Dequeue();
         ParticlePool.Enqueue(p);
@@ -93,15 +91,30 @@ public class CrumbleTile : Tile {
         }
     }
 
-    private void CrumbleEffect(float duration) {
-        crumbleMaterial.SetFloat("_CrumbleStartTime", Time.timeSinceLevelLoad); // Set shader crumble start time
-        crumbleMaterial.SetFloat("_CrumbleDuration", duration); // Set shader crumble duration
+    private IEnumerator CrumbleEffect(float duration) {
+        float startTime = Time.time;
+        float endTime = Time.time + duration;
+        float shakeTimer = Time.time;
+        while (endTime >= Time.time) {
+            TileManager.tileManager.SetTileDamage(position, (Time.time - startTime) / duration, 0, HealthPercent); // Set shader crumble level
+            yield return null;
+        }
+        TileManager.tileManager.SetTileDamage(position, 1, 0, HealthPercent); // Set shader crumble level
     }
 
     protected override void DestroyEffect() {
-        crumbleMaterial.SetFloat("_DestroyStartTime", Time.timeSinceLevelLoad); // Set shader destroy start time
-        crumbleMaterial.SetFloat("_DestroyDuration", destroyEffDuration); // Set shader destroy duration
+        StartCoroutine(DisolveEffect(destroyEffDuration));
+    }
+
+    private IEnumerator DisolveEffect(float duration) {
         GetComponentInChildren<Collider>().enabled = false;
-        Destroy(gameObject, destroyEffDuration);
+        float startTime = Time.time;
+        float endTime = Time.time + duration;
+        while (endTime >= Time.time) {
+            TileManager.tileManager.SetTileDamage(position, 1, (Time.time - startTime) / duration, HealthPercent); // Set shader dissolve level
+            yield return null;
+        }
+        TileManager.tileManager.SetTileDamage(position, 1, 1, HealthPercent); // Set shader dissolve level
+        Destroy(gameObject);
     }
 }

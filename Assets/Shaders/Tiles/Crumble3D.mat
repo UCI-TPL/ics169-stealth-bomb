@@ -7,11 +7,11 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs_Test3DTexture
+  m_Name: Crumble3D
   m_Shader: {fileID: 4800000, guid: 3ac9ef1dac3fc514bb8a1b6f3b1d903f, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
+  m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
@@ -23,5 +23,21 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    m_Floats: []
-    m_Colors: []
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TileDamageMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _Cutoffs: 2
+    - _Glossiness: 0
+    - _Intensity: 1.5
+    - _Metallic: 0
+    - _ShakeSpeed: 20
+    m_Colors:
+    - _Color: {r: 0.8113207, g: 0.8113207, b: 0.8113207, a: 0}
+    - _Gravity: {r: 0, g: -9.8, b: 0, a: 0}
+    - _TileMapSize: {r: 0, g: 0, b: 0, a: 0}

@@ -24,7 +24,7 @@ public class TileMap {
         foreach (Transform t in parentContainer) {
             Tile tile = t.GetComponent<Tile>();
             if (tile != null)
-                mapBounds.Encapsulate(tile.position.Round());
+                mapBounds.Encapsulate(tile.position);
         }
         Size = mapBounds.size.Round() + Vector3Int.one;
         Vector3Int offset = mapBounds.min.Round();
@@ -32,7 +32,7 @@ public class TileMap {
         foreach (Transform t in parentContainer) {
             Tile tile = t.GetComponent<Tile>();
             if (tile != null) {
-                Vector3Int pos = tile.position.Round() - offset;
+                Vector3Int pos = tile.position - offset;
                 tiles[pos.x, pos.y, pos.z] = tile;
                 switch(tile.Type) {
                     case Tile.TileType.SpawnPoint:
