@@ -9,6 +9,7 @@ public class TileMap {
     public Tile[,,] Tiles { get; private set; }
     public List<SpawnTile> SpawnTiles { get; private set; }
     public List<ItemTile> ItemTiles { get; private set; }
+    public Vector3Int Size { get; private set; }
 
     public TileMap(Transform parentContainer) {
         SpawnTiles = new List<SpawnTile>();
@@ -18,16 +19,16 @@ public class TileMap {
     }
 
     public Tile[,,] ReadMap(Transform parentContainer) {
-        Vector3Int mapSize = Vector3Int.one * -1;
+        Size = Vector3Int.one * -1;
         Bounds mapBounds = new Bounds();
         foreach (Transform t in parentContainer) {
             Tile tile = t.GetComponent<Tile>();
             if (tile != null)
                 mapBounds.Encapsulate(tile.position.Round());
         }
-        mapSize = mapBounds.size.Round() + Vector3Int.one;
+        Size = mapBounds.size.Round() + Vector3Int.one;
         Vector3Int offset = mapBounds.min.Round();
-        Tile[,,] tiles = new Tile[mapSize.x, mapSize.y, mapSize.z];
+        Tile[,,] tiles = new Tile[Size.x, Size.y, Size.z];
         foreach (Transform t in parentContainer) {
             Tile tile = t.GetComponent<Tile>();
             if (tile != null) {

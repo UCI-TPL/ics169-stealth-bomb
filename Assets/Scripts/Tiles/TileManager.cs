@@ -87,6 +87,37 @@ public class TileManager : MonoBehaviour {
 
         StopAllCoroutines(); // Stop updates from previous round
         StartCoroutine(UpdateMeshRepeat(warningTimer));
+
+        texture = CreateTexture3D(tileMap.Size.x, tileMap.Size.y, tileMap.Size.z);
+        Shader.SetGlobalTexture(Shader.PropertyToID("_TileDamageMap"), texture);
+        Shader.SetGlobalVector(Shader.PropertyToID("_TileMapSize"), (Vector3)tileMap.Size);
+        print(Shader.GetGlobalVector(Shader.PropertyToID("_TileMapSize")));
+    }
+
+    private void Update() {
+        texture = CreateTexture3D(tileMap.Size.x, tileMap.Size.y, tileMap.Size.z);
+        Shader.SetGlobalTexture(Shader.PropertyToID("_TileDamageMap"), texture);
+    }
+
+    public Texture2D texture;
+
+    Texture2D CreateTexture3D(int xSize, int ySize, int zSize) {
+        Color[] colorArray = new Color[xSize * ySize * zSize];
+        texture = new Texture2D(xSize, ySize * zSize, TextureFormat.RGBA32, true);
+        float r = 1.0f / (xSize - 1.0f);
+        float g = 1.0f / (ySize - 1.0f);
+        float b = 1.0f / (zSize - 1.0f);
+        for (int x = 0; x < xSize; x++) {
+            for (int y = 0; y < ySize; y++) {
+                for (int z = 0; z < zSize; z++) {
+                    Color c = new Color(UnityEngine.Random.Range(0,1f), UnityEngine.Random.Range(0, 1f), UnityEngine.Random.Range(0, 1f), 1.0f);
+                    colorArray[x + (y * xSize) + (z * xSize * ySize)] = c;
+                }
+            }
+        }
+        texture.SetPixels(colorArray);
+        texture.Apply();
+        return texture;
     }
 
     private IEnumerator UpdateMeshRepeat(float updateRate) {

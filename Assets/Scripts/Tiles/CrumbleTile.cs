@@ -13,6 +13,7 @@ public class CrumbleTile : Tile {
     private float maxHealth;
     public float HealthPercent { get { return Health / maxHealth; } }
     public float Health { get; private set; }
+    public Texture[] DamagedTextures;
 
     [Header("Material Properties")]
     public float shakeCooldown = 0.02f;
@@ -56,6 +57,22 @@ public class CrumbleTile : Tile {
     /// </summary>
     private void ResetHealth() {
         Health = maxHealth;
+    }
+
+    /// <summary>
+    /// Inflicts damage on this tile equal to the specified amount. Destroys the tile if health reaches 0.
+    /// </summary>
+    /// <param name="amount"> Amount of damage taken </param>
+    public void Hurt(float amount) {
+        Health = Mathf.Max(0, Health - amount);
+    }
+
+    private void UpdateDamage() {
+        //DamagedMaterials[1f / DamagedTextures.Length];
+    }
+
+    private void SwitchDamageMaterial(int index) {
+
     }
 
     protected override void BreakingEffect(float duration) {
