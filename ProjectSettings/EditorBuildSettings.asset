@@ -23,4 +23,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MAP.unity
     guid: 1c4d290c598dc6c4591d289ac9ef71dd
+  - enabled: 1
+    path: Assets/Scenes/Map1_TownMarket.unity
+    guid: 3eff34e80fcde6145be144e83f88222d
   m_configObjects: {}

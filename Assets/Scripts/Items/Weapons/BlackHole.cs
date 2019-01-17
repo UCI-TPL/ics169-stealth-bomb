@@ -56,7 +56,7 @@ public class BlackHole : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		Debug.Log("caught players: " + (caughtPlayers[0] != null) + ", " + (caughtPlayers[1] != null) + ", " + (caughtPlayers[2] != null) + ", " + (caughtPlayers[3] != null));
+		//Debug.Log("caught players: " + (caughtPlayers[0] != null) + ", " + (caughtPlayers[1] != null) + ", " + (caughtPlayers[2] != null) + ", " + (caughtPlayers[3] != null));
 		if (time >= blackHoleDuration)
 			StartCoroutine(DestroyDelayed(3));
 		time += 1.0f * Time.deltaTime;
