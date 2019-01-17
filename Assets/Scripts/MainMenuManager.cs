@@ -164,9 +164,9 @@ public class MainMenuManager : MonoBehaviour {
 					}
 				}
 
-				// NOTE: this button may have to change later. Most likely will conflict with PlayerJoinManager.cs controls!!!
-
-				if (currentStates[i].Buttons.A == ButtonState.Pressed /* && prevState.Buttons.A == ButtonState.Released */ && getCurrentPanel() == 1) {
+				// NOTE: this button may have to change later. Most likely will conflict with PlayerJoinManager.cs controls!!
+				// getCurrentPanel() (or menu) needs to be <= 1, indicating that we are currently in the main menu, or we pressed quit while in the Unity editor.
+				if (currentStates[i].Buttons.A == ButtonState.Pressed /* && prevState.Buttons.A == ButtonState.Released */ && getCurrentPanel() <= 1) {
 					Debug.Log("clicking");
 					b.onClick.Invoke();
 				}
