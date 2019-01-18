@@ -13,6 +13,7 @@ TagManager:
   - countdown
   - ghost-curve
   - Black Hole
+  - Tile
   layers:
   - Default
   - TransparentFX

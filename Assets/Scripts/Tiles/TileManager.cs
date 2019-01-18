@@ -90,7 +90,7 @@ public class TileManager : MonoBehaviour {
         Color[] colorArray = new Color[xSize * ySize * zSize];
         for (int i = 0; i < colorArray.Length; ++i)
             colorArray[i] = color;
-        Texture2D t = new Texture2D(xSize, ySize * zSize, TextureFormat.RGBA32, false);
+        Texture2D t = new Texture2D(xSize, ySize * zSize, TextureFormat.RGBA32, false, false);
         t.SetPixels(colorArray);
         t.Apply();
         return t;
@@ -98,6 +98,24 @@ public class TileManager : MonoBehaviour {
 
     public void SetTileDamage(Vector3Int position, float crumbleValue, float disolveValue, float damageValue) {
         tileDamageMap.SetPixel(position.x, position.y + (position.z * tileMap.Size.y), new Color(crumbleValue, disolveValue, damageValue, 1));
+    }
+
+    /// <summary>
+    /// Damage a column of tiles starting from the given y position up
+    /// </summary>
+    /// <param name="position"> position of the bottom of the pillar </param>
+    /// <param name="damageAmount"> amount of damage dealt to each tile </param>
+    public void DamagePillar(Vector3Int position, float damageAmount) {
+        StartCoroutine(DamagePillarCoroutine(0.02f));
+
+        IEnumerator DamagePillarCoroutine(float delay) {
+            // Get all tiles in a column above the given point
+            foreach (Tile t in tileMap.GetPillar(position.x, position.z, position.y)) {
+                if (t != null)
+                    t.ApplyDamage(damageAmount); // Deal damage to each tile
+                yield return new WaitForSeconds(delay);
+            }
+        }
     }
 
     // Begin shrinking the terrain

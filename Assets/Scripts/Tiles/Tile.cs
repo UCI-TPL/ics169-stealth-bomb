@@ -13,6 +13,18 @@ public class Tile : MonoBehaviour {
     public Vector3Int position {
         get { return (transform.localPosition - TileOffset).Round(); }
     }
+    
+    /// <summary>
+     /// Inflicts damage to this and all tiles above equal to the specified amount. Destroys the tile if health reaches 0.
+     /// </summary>
+     /// <param name="amount"> Amount of damage taken </param>
+    public virtual void Hurt(float amount) { }
+
+    /// <summary>
+    /// Applys damage to this tile
+    /// </summary>
+    /// <param name="amount"> Amount of damage taken</param>
+    public virtual void ApplyDamage(float amount) { }
 
     public void Destroy(float timer = 0) {
         if (!destroying) {

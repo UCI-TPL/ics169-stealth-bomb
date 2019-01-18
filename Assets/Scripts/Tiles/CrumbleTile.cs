@@ -17,25 +17,13 @@ public class CrumbleTile : Tile {
 
     [Header("Material Properties")]
     public float shakeCooldown = 0.02f;
-    public float destroyEffDuration = 0.5f;
-    private Material crumbleMaterial;
+    public float destroyEffDuration = 0.85f;
     public GameObject particles;
-
-    [HideInInspector]
-    public Material BaseMaterial;
-    private static readonly Dictionary<Material, Material[]> DamagedMaterials;
-    [HideInInspector]
-    public MeshFilter meshFilter;
-    [HideInInspector]
-    public MeshRenderer meshRenderer;
+    
     [HideInInspector]
     public bool crumbling = false;
 
     private void Awake() {
-        meshFilter = GetComponentInChildren<MeshFilter>();
-        meshRenderer = GetComponentInChildren<MeshRenderer>();
-        BaseMaterial = meshRenderer.sharedMaterial;
-        //meshRenderer.enabled = false;
         if (ParticlePoolParent == null) {
             ParticlePoolParent = new GameObject("CrumbleParticlePool").transform;
             ParticlePoolParent.SetParent(GameManager.instance.PersistBetweenRounds);
@@ -59,19 +47,26 @@ public class CrumbleTile : Tile {
     }
 
     /// <summary>
-    /// Inflicts damage on this tile equal to the specified amount. Destroys the tile if health reaches 0.
+    /// Inflicts damage to this and all tiles above equal to the specified amount. Destroys the tile if health reaches 0.
     /// </summary>
     /// <param name="amount"> Amount of damage taken </param>
-    public void Hurt(float amount) {
+    public override void Hurt(float amount) {
+        if (crumbling) // If a block is already crumbling it cannot be hurt
+            return;
+        TileManager.tileManager.DamagePillar(position, amount);
+    }
+
+    /// <summary>
+    /// (To be used only by TileManager) Applys damage to this tile
+    /// </summary>
+    /// <param name="amount"> Amount of damage taken</param>
+    public override void ApplyDamage(float amount) {
+        if (crumbling) // If a block is already crumbling it cannot be hurt
+            return;
         Health = Mathf.Max(0, Health - amount);
-    }
-
-    private void UpdateDamage() {
-        //DamagedMaterials[1f / DamagedTextures.Length];
-    }
-
-    private void SwitchDamageMaterial(int index) {
-
+        TileManager.tileManager.SetTileDamage(position, 0, 0, 1 - HealthPercent);
+        if (Health <= 0)
+            DestroyEffect();
     }
 
     protected override void BreakingEffect(float duration) {
@@ -95,10 +90,10 @@ public class CrumbleTile : Tile {
         float endTime = Time.time + duration;
         float shakeTimer = Time.time;
         while (endTime >= Time.time) {
-            TileManager.tileManager.SetTileDamage(position, (Time.time - startTime) / duration, 0, HealthPercent); // Set shader crumble level
+            TileManager.tileManager.SetTileDamage(position, (Time.time - startTime) / duration, 0, 1-HealthPercent); // Set shader crumble level
             yield return null;
         }
-        TileManager.tileManager.SetTileDamage(position, 1, 0, HealthPercent); // Set shader crumble level
+        TileManager.tileManager.SetTileDamage(position, 1, 0, 1-HealthPercent); // Set shader crumble level
     }
 
     protected override void DestroyEffect() {
@@ -110,10 +105,10 @@ public class CrumbleTile : Tile {
         float startTime = Time.time;
         float endTime = Time.time + duration;
         while (endTime >= Time.time) {
-            TileManager.tileManager.SetTileDamage(position, 1, (Time.time - startTime) / duration, HealthPercent); // Set shader dissolve level
+            TileManager.tileManager.SetTileDamage(position, 1, (Time.time - startTime) / duration, 1-HealthPercent); // Set shader dissolve level
             yield return null;
         }
-        TileManager.tileManager.SetTileDamage(position, 1, 1, HealthPercent); // Set shader dissolve level
+        TileManager.tileManager.SetTileDamage(position, 1, 1, 1-HealthPercent); // Set shader dissolve level
         Destroy(gameObject);
     }
 }

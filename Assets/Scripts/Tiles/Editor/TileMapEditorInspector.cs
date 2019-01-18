@@ -178,7 +178,7 @@ public class TileMapEditorInspector : Editor {
     
     private static void UpdateTileHealth(float crumbleValue, float dissolveValue, float damageValue) {
         Color[] colorArray = new Color[] {new Color(crumbleValue, dissolveValue, damageValue, 1)};
-        Texture2D t = new Texture2D(1, 1, TextureFormat.RGBA32, false);
+        Texture2D t = new Texture2D(1, 1, TextureFormat.RGBA32, false, true);
         t.SetPixels(colorArray);
         t.Apply();
         Shader.SetGlobalTexture(Shader.PropertyToID("_TileDamageMap"), t);
