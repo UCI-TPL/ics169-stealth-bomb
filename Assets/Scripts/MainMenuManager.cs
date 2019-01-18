@@ -60,6 +60,8 @@ public class MainMenuManager : MonoBehaviour {
 		setMenu(1);
 		playerSet = false;
 		currentMainMenuButton = 1;
+		CheckForAndSkipDeactivatedButtons(false);
+		mainMenuButtons(currentMainMenuButton);
 		currentSelectionMenuButton = 2;
 		currentRemappingMenuButton = 1;
 		timer = cooldown;   // 7.5f
@@ -100,17 +102,15 @@ public class MainMenuManager : MonoBehaviour {
 						if (mainMenuPanel.activeSelf == true) {
 							if (currentStates[i].ThumbSticks.Left.Y > controllerStickDeadZone /*&& prevState.ThumbSticks.Left.Y <= 0.0f*/) {
 								currentMainMenuButton--;
-								if (currentMainMenuButton < 1) {
-									currentMainMenuButton = mainMenuPanel.transform.childCount - 1;
-								}
+								CheckAndMoveCursorToBottom();
+								CheckForAndSkipDeactivatedButtons(true);
 								mainMenuButtons(currentMainMenuButton);
 								hasMoved = true;
 							}
 							else if (currentStates[i].ThumbSticks.Left.Y < -controllerStickDeadZone /*&& prevState.ThumbSticks.Left.Y >= 0.0f*/) {
 								currentMainMenuButton++;
-								if (currentMainMenuButton >= mainMenuPanel.transform.childCount) {
-									currentMainMenuButton = 1;
-								}
+								CheckAndMoveCursorToTop();
+								CheckForAndSkipDeactivatedButtons(false);
 								mainMenuButtons(currentMainMenuButton);
 								hasMoved = true;
 							}
@@ -166,7 +166,7 @@ public class MainMenuManager : MonoBehaviour {
 
 				// NOTE: this button may have to change later. Most likely will conflict with PlayerJoinManager.cs controls!!
 				// getCurrentPanel() (or menu) needs to be <= 1, indicating that we are currently in the main menu, or we pressed quit while in the Unity editor.
-				if (currentStates[i].Buttons.A == ButtonState.Pressed /* && prevState.Buttons.A == ButtonState.Released */ && getCurrentPanel() <= 1) {
+				if (currentStates[i].Buttons.A == ButtonState.Pressed /* && prevState.Buttons.A == ButtonState.Released */ && getCurrentPanel() == 1) {
 					Debug.Log("clicking");
 					b.onClick.Invoke();
 				}
@@ -329,6 +329,50 @@ public class MainMenuManager : MonoBehaviour {
 	public void ResetControllerDisplay(bool doesNothing) {
 		xboxControllerDisplay.SetActive(true);
 		pcControllerDisplay.SetActive(false);
+	}
+
+
+	// helper method to check if the controller cursor/highlighter has gone too high in the buttons index and needs to be needs moved to the bottom of the menu.
+	private void CheckAndMoveCursorToBottom() {
+		if (currentMainMenuButton < 1) {
+			currentMainMenuButton = mainMenuPanel.transform.childCount - 1;
+		}
+	}
+
+	// helper method to check if the controller cursor/highlighter has gone too low in the buttons index and needs to be moved to the top of the menu.
+	private void CheckAndMoveCursorToTop() {
+		if (currentMainMenuButton >= mainMenuPanel.transform.childCount) {
+			currentMainMenuButton = 1;
+		}
+	}
+
+	// helper method to skip past any buttons that are disabled.
+	private void CheckForAndSkipDeactivatedButtons(bool movedUp) {
+		CheckForAndSkipDeactivatedButtonsRecursive(currentMainMenuButton, movedUp, 0);
+	}
+
+	// helper recursive method to skip past any buttons that are disabled.
+	private void CheckForAndSkipDeactivatedButtonsRecursive(int idx, bool movedUp, int numOfButtonsSkipped) {
+		if (idx != currentMainMenuButton) Debug.Log("parameter idx is not equal to currentMainMenuButton!");
+
+		if (numOfButtonsSkipped < (mainMenuPanel.transform.childCount - 1) && !mainMenuPanel.transform.GetChild(idx).gameObject.activeSelf) {
+			// player moved the thumbstick up to select a button visually above the current one in the main menu.
+			if (movedUp) {
+				--currentMainMenuButton;
+				CheckAndMoveCursorToBottom();
+			}
+			// player moved the thumbstick down to select a button visually below the current one in the main menu.
+			else {
+				++currentMainMenuButton;
+				CheckAndMoveCursorToTop();
+			}
+
+			CheckForAndSkipDeactivatedButtonsRecursive(currentMainMenuButton, movedUp, numOfButtonsSkipped + 1);
+		}
+
+		// safe condition to stop potential infinite loop.
+		if (numOfButtonsSkipped >= (mainMenuPanel.transform.childCount - 1))
+			Debug.Log("All main menu buttons are disabled!");
 	}
 
 
