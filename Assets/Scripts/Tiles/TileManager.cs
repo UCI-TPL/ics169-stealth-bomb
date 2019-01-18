@@ -53,12 +53,6 @@ public class TileManager : MonoBehaviour {
 
     private Queue<TileDestroyCalc> TileDestroyQueue;
 
-    // List of mesh data for all tiles still in play, Used by MeshCombiner to optimize performance
-    private List<Material> subMeshMaterials;
-    private List<TileCombineInstances> subMeshCombineInstances;
-    private MeshRenderer meshRenderer;
-    private MeshFilter meshFilter;
-
     private Texture2D tileDamageMap;
 
     public void StartGame() {
@@ -78,17 +72,7 @@ public class TileManager : MonoBehaviour {
 
         TileDestroyQueue = CreateTileMapDestroyCalc(tileMap.Tiles, center, collapseBuffer);
 
-        //meshRenderer = GetComponent<MeshRenderer>();
-        //if (meshRenderer == null)
-        //    meshRenderer = gameObject.AddComponent<MeshRenderer>();
-        //meshFilter = GetComponent<MeshFilter>();
-        //if (meshFilter == null)
-        //    meshFilter = gameObject.AddComponent<MeshFilter>();
-        //InitializeMeshCombiner();
-        //UpdateMesh();
-
         StopAllCoroutines(); // Stop updates from previous round
-        //StartCoroutine(UpdateMeshRepeat(warningTimer));
 
         tileDamageMap = CreateTexture3D(tileMap.Size.x, tileMap.Size.y, tileMap.Size.z, Color.black);
         Shader.SetGlobalTexture(Shader.PropertyToID("_TileDamageMap"), tileDamageMap);
@@ -96,8 +80,10 @@ public class TileManager : MonoBehaviour {
     }
 
     private void Update() {
-        tileDamageMap.Apply();
-        Shader.SetGlobalTexture(Shader.PropertyToID("_TileDamageMap"), tileDamageMap);
+        if (tileDamageMap != null) {
+            tileDamageMap.Apply();
+            Shader.SetGlobalTexture(Shader.PropertyToID("_TileDamageMap"), tileDamageMap);
+        }
     }
 
     Texture2D CreateTexture3D(int xSize, int ySize, int zSize, Color color) {
@@ -112,65 +98,6 @@ public class TileManager : MonoBehaviour {
 
     public void SetTileDamage(Vector3Int position, float crumbleValue, float disolveValue, float damageValue) {
         tileDamageMap.SetPixel(position.x, position.y + (position.z * tileMap.Size.y), new Color(crumbleValue, disolveValue, damageValue, 1));
-    }
-
-    private IEnumerator UpdateMeshRepeat(float updateRate) {
-        while (newRadius.x > 0) {
-            UpdateMesh();
-            yield return new WaitForSeconds(updateRate);
-        }
-    }
-
-    private void InitializeMeshCombiner() {
-        Dictionary<Material, int> materialKey = new Dictionary<Material, int>();
-        subMeshMaterials = new List<Material>();
-        subMeshCombineInstances = new List<TileCombineInstances>();
-
-        foreach (Tile t in tileMap.Tiles) {
-            if (t != null && t.GetType() == typeof(CrumbleTile)) {
-                CrumbleTile ct = (CrumbleTile)t;
-                CombineInstance combineInstance = new CombineInstance {
-                    subMeshIndex = 0,
-                    mesh = ct.meshFilter.sharedMesh,
-                    transform = ct.meshFilter.transform.localToWorldMatrix
-                };
-                if (materialKey.ContainsKey(ct.meshRenderer.sharedMaterial))
-                    subMeshCombineInstances[materialKey[ct.meshRenderer.sharedMaterial]].Add(ct, combineInstance);
-                else {
-                    materialKey.Add(ct.meshRenderer.sharedMaterial, subMeshCombineInstances.Count);
-                    Material mat = new Material(basicMaterial.shader);
-                    mat.CopyPropertiesFromMaterial(basicMaterial);
-                    mat.mainTexture = ct.meshRenderer.sharedMaterial.mainTexture;
-                    mat.color = ct.meshRenderer.sharedMaterial.color;
-                    mat.SetFloat("_Metallic", ct.meshRenderer.sharedMaterial.GetFloat("_Metallic"));
-                    mat.SetFloat("_Glossiness", ct.meshRenderer.sharedMaterial.GetFloat("_Glossiness"));
-                    subMeshMaterials.Add(mat);
-                    subMeshCombineInstances.Add(new TileCombineInstances());
-                    subMeshCombineInstances[subMeshCombineInstances.Count - 1].Add(ct, combineInstance);
-                }
-            }
-        }
-        meshRenderer.sharedMaterials = subMeshMaterials.ToArray();
-    }
-
-    private void UpdateMesh() {
-        CombineInstance[] subMeshes = new CombineInstance[subMeshCombineInstances.Count];
-        for (int i = subMeshCombineInstances.Count-1; i >= 0; --i) {
-            subMeshCombineInstances[i].RemoveExpired();
-            if (subMeshCombineInstances[i].combineInstances.Count > 0) {
-                Mesh subMesh = new Mesh();
-                subMesh.CombineMeshes(subMeshCombineInstances[i].combineInstances.ToArray(), true);
-                subMeshes[i] = new CombineInstance { subMeshIndex = 0, mesh = subMesh, transform = Matrix4x4.identity };
-            } else {
-                subMeshCombineInstances.RemoveAt(i);
-                subMeshMaterials.RemoveAt(i);
-                meshRenderer.sharedMaterials = subMeshMaterials.ToArray();
-            }
-        }
-
-        Mesh combinedMesh = new Mesh();
-        combinedMesh.CombineMeshes(subMeshes, false);
-        meshFilter.sharedMesh = combinedMesh;
     }
 
     // Begin shrinking the terrain
@@ -325,24 +252,6 @@ public class TileManager : MonoBehaviour {
                 return other.destroyDistance.CompareTo(destroyDistance);
             else
                 throw new ArgumentException("Object is not a TileDestroyCalc");
-        }
-    }
-
-    private class TileCombineInstances {
-        public List<CrumbleTile> tiles = new List<CrumbleTile>();
-        public List<CombineInstance> combineInstances = new List<CombineInstance>();
-
-        public void Add(CrumbleTile tile, CombineInstance combineInstance) {
-            tiles.Add(tile);
-            combineInstances.Add(combineInstance);
-        }
-
-        public void RemoveExpired() {
-            for (int i = tiles.Count - 1; i >= 0; --i)
-                if (tiles[i] == null || tiles[i].crumbling) {
-                    tiles.RemoveAt(i);
-                    combineInstances.RemoveAt(i);
-                }
         }
     }
 }

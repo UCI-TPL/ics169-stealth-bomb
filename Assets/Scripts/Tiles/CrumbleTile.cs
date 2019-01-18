@@ -18,7 +18,6 @@ public class CrumbleTile : Tile {
     [Header("Material Properties")]
     public float shakeCooldown = 0.02f;
     public float destroyEffDuration = 0.5f;
-    public float destroyEffSpeed = 5f;
     private Material crumbleMaterial;
     public GameObject particles;
 

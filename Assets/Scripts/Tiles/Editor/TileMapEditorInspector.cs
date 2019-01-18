@@ -125,6 +125,10 @@ public class TileMapEditorInspector : Editor {
         if (GUILayout.Button("clear tiles")) {
             script.ClearTiles();
         }
+
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
+        TileDamageGUI();
     }
 
     Vector2 hSbarValue;
@@ -153,6 +157,32 @@ public class TileMapEditorInspector : Editor {
                 UpdateTileSelection();
             }
         }
+    }
+
+    private float crumbleValue = 0, dissolveValue = 0, damageValue = 0;
+
+    private void TileDamageGUI() {
+        GUIStyle title = new GUIStyle(GUI.skin.label); // Text style for title
+        title.fontSize = 12;
+        title.fontStyle = FontStyle.Bold;
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Tile Health Visualizer", title);
+        if (GUILayout.Button("Reset Tile Health"))
+            crumbleValue = dissolveValue = damageValue = 0;
+        GUILayout.EndHorizontal();
+        crumbleValue = EditorGUILayout.Slider("Crumble:", crumbleValue, 0, 1);
+        dissolveValue = EditorGUILayout.Slider("Dissolve:", dissolveValue, 0, 1);
+        damageValue = EditorGUILayout.Slider("Damage:", damageValue, 0, 1);
+        UpdateTileHealth(crumbleValue, dissolveValue, damageValue);
+    }
+    
+    private static void UpdateTileHealth(float crumbleValue, float dissolveValue, float damageValue) {
+        Color[] colorArray = new Color[] {new Color(crumbleValue, dissolveValue, damageValue, 1)};
+        Texture2D t = new Texture2D(1, 1, TextureFormat.RGBA32, false);
+        t.SetPixels(colorArray);
+        t.Apply();
+        Shader.SetGlobalTexture(Shader.PropertyToID("_TileDamageMap"), t);
+        Shader.SetGlobalVector(Shader.PropertyToID("_TileMapSize"), Vector3.one);
     }
 
     private void UpdateTileSelection() {

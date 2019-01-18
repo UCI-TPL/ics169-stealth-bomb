@@ -45,12 +45,6 @@ public class TileMapEditor : MonoBehaviour {
             if (terrainParrent.transform.GetChild(i).GetComponent<Tile>() != null)
                 Undo.DestroyObjectImmediate(terrainParrent.transform.GetChild(i).gameObject);
     }
-    
-    [UnityEditor.MenuItem("TileMapEditor/ResetCrumble")]
-    private static void ResetCrumble() {
-        Shader.SetGlobalTexture(Shader.PropertyToID("_TileDamageMap"), Texture2D.blackTexture);
-        Shader.SetGlobalVector(Shader.PropertyToID("_TileMapSize"), Vector3.one);
-    }
 
     public void RecalculateBounds() {
         mapBounds = new Bounds();
