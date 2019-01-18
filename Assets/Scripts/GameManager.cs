@@ -56,9 +56,6 @@ public class GameManager : MonoBehaviour {
     public Vector3 GhostOffset = Vector3.zero; //when the map shrinks the ghosts will move closer 
     [HideInInspector]
     public float GhostOffsetLimit; //how far the ghosts are adjusted inwards 
-    [HideInInspector]
-    public float GlobalVolume; 
-
 
     //public int PlayersKilled = 0;
 
@@ -118,10 +115,42 @@ public class GameManager : MonoBehaviour {
         SceneManager.LoadScene(instance.mainMenuSceneName);
     }
 
-    public void  SetVolume(float volume) //made so the UI can call this instead of AudioManager
+    //These are called by the Sliders in the UI
+
+        /*
+   public void Mute()
     {
-        instance.audioManager.SetVolume(volume); // calling a function on audiomanager
-        GlobalVolume = volume;
+        instance.audioManager.SetMasterVolume(-80); //-80 is minimum value
+        instance.audioManager.SetMusicVolume(-80);
+        instance.audioManager.SetSoundEffectVolume(-80);
+    }
+
+    public void UnMute()
+    {
+        instance.audioManager.SetMasterVolume(0); //0 is minimum value
+        instance.audioManager.SetMusicVolume(0);
+        instance.audioManager.SetSoundEffectVolume(0);
+    }
+
+        */
+
+    public void Mute()
+    {
+        instance.audioManager.Mute();
+    }
+    public void SetMasterVolume(float volume)
+    {
+        instance.audioManager.SetMasterVolume(volume); // calling a function on audiomanager
+    }
+
+    public void SetMusicVolume(float volume)
+    {
+        instance.audioManager.SetMusicVolume(volume);
+    }
+
+    public void SetSoundEffectVolume(float volume)
+    {
+        instance.audioManager.SetSoundEffectVolume(volume);
     }
 
     // Use this for initialization
@@ -134,7 +163,6 @@ public class GameManager : MonoBehaviour {
         else if (instance != this)
             Destroy(gameObject);
         UnityEngine.SceneManagement.SceneManager.sceneLoaded += onSceneLoaded;
-        instance.GlobalVolume = 1f; //
     }
 
     IEnumerator Countdown()
@@ -185,7 +213,6 @@ public class GameManager : MonoBehaviour {
                 audioManager = Instantiate(audioManagerPrefab).GetComponent<AudioManager>();
                 audioManager.gameObject.name = "AudioManager"; //I don't like it being named "Clone"
                 DontDestroyOnLoad(audioManager);
-                AudioListener.volume = GlobalVolume; //makes sure that adjustments to volume go from scene to scene
                 if (scene.name == mainMenuSceneName)
                     GameManager.instance.audioManager.Play("Main Menu");
             }

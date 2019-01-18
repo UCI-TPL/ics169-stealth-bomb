@@ -50,28 +50,33 @@ MonoBehaviour:
     pitch: 1
     loop: 0
     source: {fileID: 0}
+    output: {fileID: 243314870721836108, guid: 8fb7316e453bb03438b7782f518b5c48, type: 2}
   - clip: {fileID: 8300000, guid: 3dc0a2c7e75dc9446ac6aa9873e9c02a, type: 3}
     name: Main Menu
     volume: 0.3
     pitch: 1
     loop: 1
     source: {fileID: 0}
+    output: {fileID: 243211916268380884, guid: 8fb7316e453bb03438b7782f518b5c48, type: 2}
   - clip: {fileID: 8300000, guid: 4aea0f2aefb4033408ed040dd8c80f3c, type: 3}
     name: Character Select
     volume: 0.3
     pitch: 1
     loop: 1
     source: {fileID: 0}
+    output: {fileID: 243211916268380884, guid: 8fb7316e453bb03438b7782f518b5c48, type: 2}
   - clip: {fileID: 8300000, guid: e5d5b3c289f73b6499ee98798fde334e, type: 3}
     name: Battle
     volume: 0.3
     pitch: 1
     loop: 1
     source: {fileID: 0}
+    output: {fileID: 243211916268380884, guid: 8fb7316e453bb03438b7782f518b5c48, type: 2}
   - clip: {fileID: 8300000, guid: 1f136d0db6f54f74da69f01fb95736d2, type: 3}
     name: Fanfare
     volume: 0.3
     pitch: 1
     loop: 0
     source: {fileID: 0}
+    output: {fileID: 243211916268380884, guid: 8fb7316e453bb03438b7782f518b5c48, type: 2}
   audioMixer: {fileID: 24100000, guid: 8fb7316e453bb03438b7782f518b5c48, type: 2}

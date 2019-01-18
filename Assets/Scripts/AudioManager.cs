@@ -14,14 +14,10 @@ public class AudioManager : MonoBehaviour {
 
     public AudioMixer audioMixer; //global audio settings
 
+    public bool muted = false;
+
 	// Use this for initialization
 	void Awake () {
-        
-        /*
-        if (audioManager != this)
-            Destroy(this);
-          */  
-
         foreach(Sound s in sounds)  //initializes the array of Sounds
         {
             s.source = gameObject.AddComponent<AudioSource>();
@@ -29,13 +25,12 @@ public class AudioManager : MonoBehaviour {
             s.source.volume = s.volume;
             s.source.pitch = s.pitch;
             s.source.loop = s.loop;
+            s.source.outputAudioMixerGroup = s.output;
         }
 	}
 	
     public void Play(string name) //plays a sound if it is found
     {
-      //  try
-      //  {
             Sound s = Array.Find(sounds, sound => sound.name == name); //this is kinda cool 
             if (s == null) //error checking, only play a sound if you can find it
             {
@@ -43,12 +38,6 @@ public class AudioManager : MonoBehaviour {
                 return;
             }
             s.source.Play();
-     //   }
-     //   catch
-     //   {
-     //       Debug.Log("Something was caught it saeems");
-     //   }
-       
     }
 
     public void Stop(string name)
@@ -62,12 +51,36 @@ public class AudioManager : MonoBehaviour {
         s.source.Stop();
     }
 
-    public void SetVolume(float volume)
+    public void Mute()
     {
-        //audioMixer.SetFloat("MasterVolume", volume); //this does nothing, but later if an AudioMixer is used we can have more control over tihngs
-        AudioListener.volume = volume;
+        float volume;
+        if (!muted)
+            volume = -80; //min volume
+        else
+            volume = 0; //max volume
+        muted = !muted; //flip it
+
+        audioMixer.SetFloat("MasterVolume", volume);
+        audioMixer.SetFloat("MusicVolume", volume);
+        audioMixer.SetFloat("SoundEffectsVolume", volume);
+
     }
-    
+
+    public void SetMasterVolume(float volume)
+    {
+        audioMixer.SetFloat("MasterVolume", volume);
+    }
+
+    public void SetMusicVolume(float volume)
+    {
+        audioMixer.SetFloat("MusicVolume", volume);
+    }
+
+    public void SetSoundEffectVolume(float volume)
+    {
+        audioMixer.SetFloat("SoundEffectsVolume", volume);
+    }
+
 }
 
 
@@ -95,6 +108,8 @@ public class Sound
     [HideInInspector]
     public AudioSource source;
 
+
+    public AudioMixerGroup output;
 
 }
 
