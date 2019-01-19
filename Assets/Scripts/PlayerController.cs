@@ -227,18 +227,20 @@ public class PlayerController : MonoBehaviour {
     // Move the player using the the controller's move input scaled by the provided speed
     protected void Move(float speed) {
         Vector2 horizontalVector = input.controllers[player.playerNumber].MoveVector() * speed;
-
         if (dodging)
         {
+            Debug.Log("------------------------------- moving with a speed of "+speed);
             if (horizontalVector == Vector2.zero)
                 horizontalVector = lastForwardMovement * speed; //if the user is not entering any input
             else
                 horizontalVector = horizontalVector.normalized * speed; //in the case the magnitude is below 1
+
+          //  Debug.Log("Now horizontal vecotr is " + horizontalVector + " and mag is " + horizontalVector.magnitude);
         }
         else if (rolling)
             horizontalVector = lastForwardMovement * speed;
         Vector3 scaledVector = (horizontalVector.y * forward) + (horizontalVector.x * right);
-        if (!dodging && !rolling && horizontalVector != Vector2.zero) {
+        if (!dodging && !rolling && horizontalVector != Vector2.zero) { //if not dodging, remember the movement and scaled vector so the can player can dodge even when standing still
             lastForwardMovement = horizontalVector.normalized;
             lastScaledVector = scaledVector.normalized;
         }
@@ -271,18 +273,27 @@ public class PlayerController : MonoBehaviour {
         // Debug.DrawRay(floorCollider.transform.position + Vector3.down * floorCollider.bounds.extents.y, frictionVector, Color.red);
         
         rb.velocity += frictionVector * Time.fixedDeltaTime; // Add friction to velocity
-
         if (allowMovement) {
             Vector3 oldVelocity = rb.velocity.Scaled(new Vector3(1, 0, 1));
+
             Vector3 newVelocity = rb.velocity + scaledVector * Time.fixedDeltaTime * acceleration; // Clamp velocity to either max speed or current speed(if player was launched)
-            if(!dodging && !rolling) //don't clamp while dodging
+            if (dodging) //don't take the old velocity into account at all when dodging
+            {
+                newVelocity = scaledVector * Time.fixedDeltaTime * acceleration; //scaled Vector is the direction of movement
+            }     
+            if (!dodging && !rolling) //don't clamp while dodging
                 newVelocity = Vector3.ClampMagnitude(new Vector3(newVelocity.x, 0, newVelocity.z), Mathf.Max(oldVelocity.magnitude, speed * input.controllers[player.playerNumber].MoveVector().magnitude + 0.1f) - 0.1f);
+
             if (braking)
                 rb.velocity = new Vector3(0f, newVelocity.y, 0f);
             else
+            {
                 rb.velocity = new Vector3(newVelocity.x, rb.velocity.y, newVelocity.z);
+            }
+            
         }
-
+        if (rb.velocity != Vector3.zero && dodging)
+            Debug.Log("Velocity is " + rb.velocity+" and more importantly "+rb.velocity.magnitude); 
     }
 
     private void UpdateTriggers() {
@@ -298,6 +309,11 @@ public class PlayerController : MonoBehaviour {
 
     private void ReleaseSpecialMove() {
         player.specialMove.Release();
+    }
+
+    public void DashVelocity() //make sure the player starts the dash at full velocity and then slows down
+    {
+
     }
 
     public void ResetVelocity()

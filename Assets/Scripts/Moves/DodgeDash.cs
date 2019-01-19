@@ -26,10 +26,24 @@ public class DodgeDash : Weapon
     {
         player.controller.dodging = true;
         // player.controller.ResetCharge();
-        player.controller.dodgeSpeed = player.controller.player.stats.moveSpeed * data.SpeedMultiplier;//data.SpeedMultiplier;
-        // player.controller.DisableAttack(data.moveDuration);
-        yield return new WaitForSeconds(data.moveDuration);
 
+
+        if(data.NewDodge)
+        {
+            float target = player.stats.moveSpeed * data.SpeedMultiplier;
+            player.controller.dodgeSpeed = target; //to start with
+            for (int i = 0; i < 10; i++)
+            {
+                yield return new WaitForSeconds(data.moveDuration / 10);
+                player.controller.dodgeSpeed -= (target - player.stats.moveSpeed) * 0.1f;
+            }
+        }
+        else
+        {
+            player.controller.dodgeSpeed = player.controller.player.stats.moveSpeed * data.SpeedMultiplier;
+            // player.controller.DisableAttack(data.moveDuration);
+            yield return new WaitForSeconds(data.moveDuration);
+        }
 
         player.controller.ResetVelocity();
         player.controller.dodgeSpeed = 0f; //the speed is set to 0 to decelarate the player at the end of the dodge

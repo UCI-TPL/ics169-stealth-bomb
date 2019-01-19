@@ -14,6 +14,9 @@ public class DodgeData : SpecialMoveData    //should be named DodgeDashData
     [Tooltip("How long the player decelerates")]
     public float StopTime;
 
+    [Tooltip("Should this use the new or old system")]
+    public bool NewDodge;
+
     
     public override Weapon NewInstance(Player player)
     {
