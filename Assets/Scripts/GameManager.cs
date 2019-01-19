@@ -393,7 +393,7 @@ public class GameManager : MonoBehaviour {
             //TileManager.tileManager.LoadLevel("LoadLevel", (Scene loadedScene) => { State = GameState.Ready; roundScene = loadedScene; });
 
             int i = PickLevelGroup();
-            TileManager.tileManager.LoadLevel(levelNames[i][rng.Next(0, levelNames[i].Length)], (Scene loadedScene) => { State = GameState.Ready; roundScene = loadedScene; });
+            TileManager.tileManager.LoadLevel("LoadLevel", (Scene loadedScene) => { State = GameState.Ready; roundScene = loadedScene; });
             //Debug.Log("[GameManager, line 367] Checking if we get the right index for the level check. " + i);
 
 
