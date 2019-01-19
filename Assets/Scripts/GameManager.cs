@@ -16,7 +16,9 @@ public class GameManager : MonoBehaviour {
     public InputManager inputManager;
     public PlayerJoinManager playerJoinManager;
     public AudioManager audioManager;
-    public GameObject audioManagerPrefab; 
+    public GameObject audioManagerPrefab;
+
+    public CurveManager curveManager; //used to reset the curves when a new round begins
 
     [Header("Important Scene Names")]
     public string mainMenuSceneName;
@@ -115,25 +117,8 @@ public class GameManager : MonoBehaviour {
         SceneManager.LoadScene(instance.mainMenuSceneName);
     }
 
+    #region Audio
     //These are called by the Sliders in the UI
-
-        /*
-   public void Mute()
-    {
-        instance.audioManager.SetMasterVolume(-80); //-80 is minimum value
-        instance.audioManager.SetMusicVolume(-80);
-        instance.audioManager.SetSoundEffectVolume(-80);
-    }
-
-    public void UnMute()
-    {
-        instance.audioManager.SetMasterVolume(0); //0 is minimum value
-        instance.audioManager.SetMusicVolume(0);
-        instance.audioManager.SetSoundEffectVolume(0);
-    }
-
-        */
-
     public void Mute()
     {
         instance.audioManager.Mute();
@@ -153,6 +138,7 @@ public class GameManager : MonoBehaviour {
         instance.audioManager.SetSoundEffectVolume(volume);
     }
 
+    #endregion
     // Use this for initialization
     void Awake () {
         if (instance == null)
@@ -216,6 +202,11 @@ public class GameManager : MonoBehaviour {
                 if (scene.name == mainMenuSceneName)
                     GameManager.instance.audioManager.Play("Main Menu");
             }
+            if(curveManager == null && scene.name != mainMenuSceneName)
+            {
+                curveManager = GameObject.FindGameObjectWithTag("ghost-curve").GetComponent<CurveManager>();
+                //This will be destroyed on load because a different scene might have a different curve manager
+            }
         }
     }
 
@@ -252,6 +243,8 @@ public class GameManager : MonoBehaviour {
             }
         }
     }
+
+    
 
     private IEnumerator StartGameAfterLoad(GameRound round) {
         while (round.State != GameRound.GameState.Ready)
@@ -328,13 +321,13 @@ public class GameManager : MonoBehaviour {
     // helper method to check for winner
     private void CheckForWinner() {
         // ties are currently possible
-        Debug.Log("players null: " + (players == null));
+        //Debug.Log("players null: " + (players == null));
         for (int i = 0; i < players.Length; i++) {
             if (players[i] != null && players[i].rank >= maxRank && !Winners.Contains(players[i])) {
                 Winners.Add(players[i]);
             }
         }
-        Debug.Log("number of winners in game manager = " + Winners.Count);
+        //Debug.Log("number of winners in game manager = " + Winners.Count);
     }
 
     public class GameRound {
@@ -436,16 +429,26 @@ public class GameManager : MonoBehaviour {
                 return 4;
         }
 
+        public void ResetCurves() //must happen every round just in case the map changes 
+        {
+            MapInfo newMap = GameObject.FindGameObjectWithTag("TileMap").GetComponent<MapInfo>(); //this has the info for the Ghost Curve for each map 
+            GameManager.instance.curveManager.ResetCurve1(newMap.LeftCurve);
+            GameManager.instance.curveManager.ResetCurve2(newMap.RightCurve);
+        }
+
         public void StartGame() {
             GameManager.instance.GhostOffset = Vector3.zero; 
             GameManager.instance.UpdateRank();
             GameManager.instance.audioManager.Stop("Fanfare");
             GameManager.instance.audioManager.Stop("Main Menu");
             GameManager.instance.audioManager.Play("Battle");
+
+            ResetCurves();
+
             string s = "Starting round with players: ";
             foreach (Player player in players)
                 s += player.playerNumber.ToString() + ", ";
-            Debug.Log(s);
+            //Debug.Log(s);
 
             SceneManager.SetActiveScene(roundScene);
             StartTime = Time.time;
@@ -453,7 +456,6 @@ public class GameManager : MonoBehaviour {
 
             ItemSpawner.Instance.UpdateSpawnPoints(TileManager.tileManager.tileMap);
             Queue<SpawnTile> spawnPoints = new Queue<SpawnTile>(TileManager.tileManager.tileMap.SpawnTiles);
-            //FollowTargetsCamera moveCamera = Camera.main.GetComponentInParent<FollowTargetsCamera>();
             moveCamera = Camera.main.GetComponentInParent<FollowTargetsCamera>();
             foreach (Player player in players) {
                 player.ResetForRound();
@@ -474,7 +476,6 @@ public class GameManager : MonoBehaviour {
                 {
                     foreach (GameObject g in ghostPlayerControllers)
                     {
-                        //Debug.Log("Removing something from camera");
                         if(g.GetComponent<PlayerController>().gameObject)
                             moveCamera.targets.Remove(g.GetComponent<PlayerController>().gameObject);
                     }
@@ -538,20 +539,7 @@ public class GameManager : MonoBehaviour {
             Vector3 deathPosition = killed.controller.transform.position;
             if (deathPosition.y < 0)
                 deathPosition = new Vector3(deathPosition.x, 6f, deathPosition.z);
-           //     deathPosition = ghostSpawnLocation; //will have to be changed per map
-                //return;
-
-            //deathPosition = TileManager.tileManager.MapCenter;
-
-            /*
-            if(!killed.ghost)
-            {
-                ghostPlayerControllers.Add(players[killed.playerNumber].controller.gameObject);
-            }
-            */
-
             instance.StartCoroutine(InstantiateGhost(killed.playerNumber, killed, deathPosition));
-
             killed.controller.DisableUI();
         }
 
@@ -573,7 +561,6 @@ public class GameManager : MonoBehaviour {
                     ghostPlayerControllers.Add(players[killedNum].controller.gameObject); //to make sure it gets deleted
                     moveCamera.targets.Add(players[killedNum].controller.gameObject);
                 }
-           
             }
         }
 
