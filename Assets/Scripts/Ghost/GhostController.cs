@@ -35,7 +35,9 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
         CursorImage.color = playerColor;
 
         GhostBody = Instantiate(GhostPrefab, transform.position, transform.rotation);
-        GhostBody.GetComponentsInChildren<Renderer>()[1].material.color = playerColor;
+        //rend.material.SetColor("Color_91A455EE", playerColor);
+        //GhostBody.GetComponentsInChildren<Renderer>()[1].material.color = playerColor;
+        GhostBody.GetComponentsInChildren<Renderer>()[1].material.SetColor("Color_998F7755", playerColor);
 
 
         GameObject Curves = GameObject.FindGameObjectWithTag("ghost-curve");
@@ -73,12 +75,12 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
 
         if (transform.position.z >= transform.position.x) //depending on the position, go to either the first or second parabola and rotate accordingly
         {
-            pos = GhostParabola1.UpdatePosition((transform.position.z + transform.position.x) / 2) - GameManager.instance.GhostOffset;
+            pos = GhostParabola1.UpdatePosition((transform.position.z + transform.position.x) / 2) + GameManager.instance.GhostOffset;
             GhostBody.transform.rotation = Quaternion.Euler(0f, 135, 0f);
         }
         else
         {
-            pos = GhostParabola2.UpdatePosition((transform.position.z + transform.position.x) / 2) + GameManager.instance.GhostOffset;
+            pos = GhostParabola2.UpdatePosition((transform.position.z + transform.position.x) / 2) - GameManager.instance.GhostOffset;
             GhostBody.transform.rotation = Quaternion.Euler(0f, 315, 0f);
         }
         

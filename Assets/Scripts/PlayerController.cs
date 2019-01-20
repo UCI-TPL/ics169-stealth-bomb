@@ -160,15 +160,18 @@ public class PlayerController : MonoBehaviour {
 
     public IEnumerator StartAnimation() //basically the death animation in reverse
     {
-        float _startTime = Time.time + DeathAnimationTime + 0.2f;
+        float _startTime = Time.time + DeathAnimationTime + 0.275f;
         float count = Time.time;
         while (Time.time <= _startTime)
         {
-            float dissolveValue = 1 - (Time.time - count) * 2.3f; //-1 is not dissolved, 1 is fully disolved
+            float dissolveValue = 1 - (Time.time - (count *Time.deltaTime))*1.5f; //-1 is not dissolved, 1 is fully disolved
             if(rend)
                 rend.material.SetFloat("Vector1_F96347CF", dissolveValue);
             yield return null; //the game crashes super hard if you remove this
         }
+
+        if(rend)
+            rend.material.SetFloat("Vector1_F96347CF", -1f);
         yield return null;
     }
 
@@ -229,7 +232,7 @@ public class PlayerController : MonoBehaviour {
         Vector2 horizontalVector = input.controllers[player.playerNumber].MoveVector() * speed;
         if (dodging)
         {
-            Debug.Log("------------------------------- moving with a speed of "+speed);
+            //Debug.Log("------------------------------- moving with a speed of "+speed);
             if (horizontalVector == Vector2.zero)
                 horizontalVector = lastForwardMovement * speed; //if the user is not entering any input
             else
@@ -292,8 +295,8 @@ public class PlayerController : MonoBehaviour {
             }
             
         }
-        if (rb.velocity != Vector3.zero && dodging)
-            Debug.Log("Velocity is " + rb.velocity+" and more importantly "+rb.velocity.magnitude); 
+       // if (rb.velocity != Vector3.zero && dodging)
+       //     Debug.Log("Velocity is " + rb.velocity+" and more importantly "+rb.velocity.magnitude); 
     }
 
     private void UpdateTriggers() {
