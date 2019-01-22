@@ -75,6 +75,7 @@ public class characterSelection : MonoBehaviour {
 
 	public void gameIsReady()
 	{
+		// readyText.text = "Game is ready! Press <quad material=1 size=20 x=0.1 y=0.1 width=0.5 height=0.5/>";
 		readyText.text = "Game is ready! Press Start";
 	}
 
