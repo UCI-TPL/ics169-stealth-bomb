@@ -7,7 +7,9 @@ public class characterSelection : MonoBehaviour {
 
 	public GameObject players;
 	public List<Text> playerOpList;
+	public List<Image> playerOpAList;
 	public Text readyText;
+	public Image readyImage;
 
 	private int player = 0;
 
@@ -21,6 +23,8 @@ public class characterSelection : MonoBehaviour {
 		{
 			Transform t = players.transform.GetChild(i).transform.GetChild(1);
 			playerOpList.Add(t.GetComponent<Text>());
+			playerOpAList.Add(t.GetChild(0).GetComponent<Image>());
+			playerOpAList[i].enabled = false;
 		}
 		// playerIs(0);
 		// playerConnected();
@@ -56,16 +60,19 @@ public class characterSelection : MonoBehaviour {
 	public void playerDisconnected()
 	{
 		playerOpList[player].text = "Disconnected";
+		playerOpAList[player].enabled = false;
 	}
 
 	public void playerConnected()
 	{
-		playerOpList[player].text = "Press A to join";
+		playerOpList[player].text = "Press    to join";
+		playerOpAList[player].enabled = true;
 	}
 
 	public void playerIsReady()
 	{
 		playerOpList[player].text = "Ready";
+		playerOpAList[player].enabled = false;
 	}
 
 	public void playerIsNotReady()
@@ -76,12 +83,14 @@ public class characterSelection : MonoBehaviour {
 	public void gameIsReady()
 	{
 		// readyText.text = "Game is ready! Press <quad material=1 size=20 x=0.1 y=0.1 width=0.5 height=0.5/>";
-		readyText.text = "Game is ready! Press Start";
+		readyText.text = "Game is ready! Press ";
+		readyImage.enabled = true;
 	}
 
 	public void gameIsNotReady()
 	{
 		readyText.text = "Not Enough Players";
+		readyImage.enabled = false;
 	}
 
 }
