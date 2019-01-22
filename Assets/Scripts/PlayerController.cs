@@ -53,10 +53,10 @@ public class PlayerController : MonoBehaviour, IHurtable {
     // For disabling movement while performing a dodge or potentially while stunned
     private bool allowMovement = true;
     private bool allowAttack = true; //used to disable movement during the countdown
-    public bool dodging;
-    public bool rolling;
-    public bool braking; 
-    public float dodgeSpeed  = 0f;
+    public bool dodging = false;
+    public bool rolling = false;
+    public bool braking;
+    public float dodgeSpeed = 0f;
 
     // Required variables for jumping and detecting ground collisions
     private float jumpCooldown = 0;
@@ -87,7 +87,7 @@ public class PlayerController : MonoBehaviour, IHurtable {
 
     // Used for detecting when a player has been knocked back, for vertical dampening
     private bool isKnockedBack = false;
-    
+
     protected Vector3 lastPosition;
 
     public bool IsMoving {
@@ -107,7 +107,7 @@ public class PlayerController : MonoBehaviour, IHurtable {
 
     // Set up controllers
     private void Start() {
-     
+
         forward = Camera.main.transform.forward;
         forward.Scale(new Vector3(1, 0, 1));
         forward.Normalize();
@@ -139,7 +139,7 @@ public class PlayerController : MonoBehaviour, IHurtable {
 
     public void CheckHeight() //if the player is falling remove them from the Camera 
     {
-        if(transform.position.y <= 1) //if the player is falling, remove them from the camera because they will die =(
+        if (transform.position.y <= 1) //if the player is falling, remove them from the camera because they will die =(
         {
             Camera.main.GetComponentInParent<FollowTargetsCamera>().targets.Remove(gameObject); //perhaps not the most efficent 
         }
@@ -151,30 +151,30 @@ public class PlayerController : MonoBehaviour, IHurtable {
         float count = Time.time;
         while (Time.time <= _startTime)
         {
-            float dissolveValue = 1 - (Time.time - (count *Time.deltaTime))*1.5f; //-1 is not dissolved, 1 is fully disolved
-            if(rend)
+            float dissolveValue = 1 - (Time.time - (count * Time.deltaTime)) * 1.5f; //-1 is not dissolved, 1 is fully disolved
+            if (rend)
                 rend.material.SetFloat("Vector1_F96347CF", dissolveValue);
             yield return null; //the game crashes super hard if you remove this
         }
 
-        if(rend)
+        if (rend)
             rend.material.SetFloat("Vector1_F96347CF", -1f);
         yield return null;
     }
 
     public IEnumerator DeathAnimation() //after the player dies, change a shader property in a while loop to make the player dissovle 
-    {        
+    {
         float _deathTime = Time.time + DeathAnimationTime;
         float count = Time.time;
-        while(Time.time <= _deathTime)
+        while (Time.time <= _deathTime)
         {
             float dissolveValue = Time.time - count - 0.75f; //-1 is not dissolved, 1 is fully disolved
-            if(rend)
+            if (rend)
                 rend.material.SetFloat("Vector1_F96347CF", dissolveValue);
             yield return null; //the game crashes super hard if you remove this
         }
         //yield return new WaitForSeconds(DeathAnimationTime); //in this time an animation or something can happen 
-        if(this)
+        if (this)
             GameManager.Destroy(gameObject);
         yield return null;
     }
@@ -184,7 +184,10 @@ public class PlayerController : MonoBehaviour, IHurtable {
         if (!dodging && !rolling)
             Move(IsGrounded ? player.stats.moveSpeed : player.stats.airSpeed);
         else
+        {
+            Debug.Log("What's happening");
             Move(dodgeSpeed); //hopefully this allows air dodges
+        }
         if (input.controllers[player.playerNumber].jump.Pressed) {
             Jump();
             //if (jumped && rb.velocity.y > 0) {
@@ -200,12 +203,15 @@ public class PlayerController : MonoBehaviour, IHurtable {
     private void Update() {
         player.InGameUpdate();
         PlayerHitbox.localScale = player == GameManager.instance.leader ? Vector3.one * 1.35f : Vector3.one;
-        if(crown != null)
+        if (crown != null)
             crown.SetActive(player == GameManager.instance.leader);
 
+
         Vector2 horizontalVector = input.controllers[player.playerNumber].AimVector();
+
         //Debug.DrawRay(transform.position, transform.forward*100, Color.white);
         Vector3 scaledVector = (horizontalVector.y * forward) + (horizontalVector.x * right);
+
         if (scaledVector != Vector3.zero)
             transform.forward = Vector3.RotateTowards(transform.forward, scaledVector, player.stats.TurnSpeed * Mathf.Deg2Rad * Time.deltaTime, 0);
 
@@ -219,18 +225,18 @@ public class PlayerController : MonoBehaviour, IHurtable {
         Vector2 horizontalVector = input.controllers[player.playerNumber].MoveVector() * speed;
         if (dodging)
         {
-            //Debug.Log("------------------------------- moving with a speed of "+speed);
             if (horizontalVector == Vector2.zero)
                 horizontalVector = lastForwardMovement * speed; //if the user is not entering any input
             else
                 horizontalVector = horizontalVector.normalized * speed; //in the case the magnitude is below 1
 
-          //  Debug.Log("Now horizontal vecotr is " + horizontalVector + " and mag is " + horizontalVector.magnitude);
+            if (rolling)
+                horizontalVector = lastForwardMovement * speed;
         }
-        else if (rolling)
-            horizontalVector = lastForwardMovement * speed;
+
         Vector3 scaledVector = (horizontalVector.y * forward) + (horizontalVector.x * right);
-        if (!dodging && !rolling && horizontalVector != Vector2.zero) { //if not dodging, remember the movement and scaled vector so the can player can dodge even when standing still
+
+        if (!dodging && horizontalVector != Vector2.zero) { //if not dodging, remember the movement and scaled vector so the can player can dodge even when standing still
             lastForwardMovement = horizontalVector.normalized;
             lastScaledVector = scaledVector.normalized;
         }
@@ -265,25 +271,19 @@ public class PlayerController : MonoBehaviour, IHurtable {
         rb.velocity += frictionVector * Time.fixedDeltaTime; // Add friction to velocity
         if (allowMovement) {
             Vector3 oldVelocity = rb.velocity.Scaled(new Vector3(1, 0, 1));
-
             Vector3 newVelocity = rb.velocity + scaledVector * Time.fixedDeltaTime * acceleration; // Clamp velocity to either max speed or current speed(if player was launched)
             if (dodging) //don't take the old velocity into account at all when dodging
-            {
-                newVelocity = scaledVector * Time.fixedDeltaTime * acceleration; //scaled Vector is the direction of movement
-            }     
-            if (!dodging && !rolling) //don't clamp while dodging
+                newVelocity = scaledVector * Time.deltaTime * acceleration; //scaled Vector is the direction of movement
+            if (!dodging) //don't clamp while dodging
                 newVelocity = Vector3.ClampMagnitude(new Vector3(newVelocity.x, 0, newVelocity.z), Mathf.Max(oldVelocity.magnitude, speed * input.controllers[player.playerNumber].MoveVector().magnitude + 0.1f) - 0.1f);
-
             if (braking)
                 rb.velocity = new Vector3(0f, newVelocity.y, 0f);
             else
-            {
                 rb.velocity = new Vector3(newVelocity.x, rb.velocity.y, newVelocity.z);
-            }
             
         }
-       // if (rb.velocity != Vector3.zero && dodging)
-       //     Debug.Log("Velocity is " + rb.velocity+" and more importantly "+rb.velocity.magnitude); 
+        //if (rb.velocity != Vector3.zero && dodging)
+        //  Debug.Log("Velocity is " + rb.velocity+" and more importantly "+rb.velocity.magnitude); 
     }
 
     private void UpdateTriggers() {

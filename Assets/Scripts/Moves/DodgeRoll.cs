@@ -6,7 +6,7 @@ using UnityEngine;
 [System.Serializable]
 public class DodgeRoll : Weapon
 {
-
+    //This is kind of abandoned don't look at this anymore we're kinda going to stick to DodgeDash 
     private DodgeData data;
 
     float cooldown = 0.0f;
@@ -31,7 +31,7 @@ public class DodgeRoll : Weapon
 
     public IEnumerator Dodge()
     {
-
+        player.controller.dodging = true;
         player.controller.rolling = true;
         player.controller.dodgeSpeed = player.controller.player.stats.moveSpeed * data.SpeedMultiplier; //the dodge begins by changing the playerspeed  
  
@@ -40,10 +40,12 @@ public class DodgeRoll : Weapon
 
         yield return new WaitForSeconds(data.moveDuration);
         player.controller.dodgeSpeed = 0f; //the speed is set to 0 to decelarate the player at the end of the dodge
-        yield return new WaitForSeconds(data.StopTime);
+        //yield return new WaitForSeconds(data.StopTime);
+        player.controller.ResetVelocity();
 
         player.controller.dodgeSpeed = player.controller.player.stats.moveSpeed;
         player.controller.rolling = false;
+        player.controller.dodging = false;
 
     }
 
