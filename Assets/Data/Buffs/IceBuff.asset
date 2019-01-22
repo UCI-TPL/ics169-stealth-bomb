@@ -4,7 +4,8 @@
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -15,11 +16,11 @@ MonoBehaviour:
     Modifiers: []
     Triggers:
     - modifiers: []
-      condition: 1
+      condition: 2
       cooldown: 0
       triggerWeapon: {fileID: 11400000, guid: 2c7672cb7169e7a419897a329902f6fd, type: 2}
     - modifiers: []
-      condition: 13
+      condition: 14
       cooldown: 0
       triggerWeapon: {fileID: 11400000, guid: eeadcc7ed561cda459945fe64508c30a, type: 2}
   counterName: IceBuffCount

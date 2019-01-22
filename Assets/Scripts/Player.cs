@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 public class TriggerAction : UnityEvent<Vector3, Vector3, PlayerController> { }
 
-public class Player {
+public class Player : IHurtable {
     
     public PlayerStats stats { get; private set; }
     public PlayerController controller { get; private set; }

@@ -10,7 +10,7 @@ public class GroundEffect : MonoBehaviour {
     [HideInInspector]
     public object Source { get; private set; }
     public Collider hitBox;
-    private Collider IgnoreCollision;
+    private List<Collider> IgnoreCollision;
     [SerializeField]
     private new MeshRenderer[] renderer;
     private float endTime;
@@ -34,7 +34,7 @@ public class GroundEffect : MonoBehaviour {
     private readonly static Vector3 planeVector = new Vector3(1, 0, 1);
 
     // Use this for initialization
-    public void Create(HitAction onHit, Player source, Vector3 location, float size, float duration, float hitCooldown, Collider ignoreCollision = null) {
+    public void Create(HitAction onHit, Player source, Vector3 location, float size, float duration, float hitCooldown, List<Collider> ignoreCollision = null) {
         if (!ActiveSource.ContainsKey(source)) {
             CooldownQueue.Add(source, new Queue<CooldownObject>());
             CooldownSet.Add(source, new HashSet<GameObject>());
@@ -69,8 +69,10 @@ public class GroundEffect : MonoBehaviour {
         newInstance.Source = source;
         newInstance.HitCooldown = hitCooldown;
         newInstance.IgnoreCollision = ignoreCollision;
-        if (ignoreCollision != null)
-            Physics.IgnoreCollision(ignoreCollision, newInstance.hitBox);
+        if (ignoreCollision != null) {
+            foreach (Collider c in ignoreCollision)
+                Physics.IgnoreCollision(c, newInstance.hitBox);
+        }
 
         newInstance.endTime = Time.time + duration;
     }
@@ -79,7 +81,9 @@ public class GroundEffect : MonoBehaviour {
         endTime = 0;
         StopAllCoroutines();
         if (IgnoreCollision != null)
-            Physics.IgnoreCollision(IgnoreCollision, hitBox, false);
+            foreach (Collider c in IgnoreCollision)
+                if (c != null)
+                    Physics.IgnoreCollision(c, hitBox, false);
         hitBox.enabled = false;
         StartCoroutine(DestroyAnimation(0.25f));
     }

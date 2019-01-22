@@ -16,13 +16,16 @@ public class Projectile : MonoBehaviour {
     public delegate void HitAction(Vector3 origin, Vector3 contactPoint, GameObject target);
     public HitAction OnHit;
 
+    private bool hasHit = false;
+
     [HideInInspector]
     public GameObject hitEffect;
 
     void Start () {
         origin = transform.position;
         if (player.controller.HitBox != null)
-            Physics.IgnoreCollision(player.controller.HitBox, collider);
+            foreach (Collider c in player.controller.HitBox)
+                Physics.IgnoreCollision(c, collider);
         trail.material.color = player.controller.playerColor;
     }
 
@@ -35,6 +38,9 @@ public class Projectile : MonoBehaviour {
     //}
 
     private void OnCollisionEnter(Collision other) {
+        if (hasHit)
+            return;
+        hasHit = true;
         if (OnHit != null)
             OnHit.Invoke(origin, other.contacts[0].point, other.gameObject);
         if (hitEffect != null)

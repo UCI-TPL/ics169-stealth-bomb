@@ -5,7 +5,7 @@ using UnityEngine.Events;
 using Vector3Extensions;
 
 [RequireComponent(typeof(Rigidbody))]
-public class PlayerController : MonoBehaviour {
+public class PlayerController : MonoBehaviour, IHurtable {
 
     public Weapon specialMove;
     // public SpecialMove specialMove; // Dodge, Ice Wall, etc. 
@@ -16,9 +16,7 @@ public class PlayerController : MonoBehaviour {
     public Player player {
         get { return _player; }
         set {
-            RemoveListeners();
             _player = value;
-            AddListeners();
         }
     }
 
@@ -30,7 +28,7 @@ public class PlayerController : MonoBehaviour {
     public Transform PlayerHitbox;
     public GameObject ShootPoint;
     public Collider floorCollider;
-    public Collider HitBox;
+    public List<Collider> HitBox;
     public GameObject crown;
 
     public float friction = 1f;
@@ -133,18 +131,7 @@ public class PlayerController : MonoBehaviour {
         StartCoroutine(StartAnimation());
     }
 
-    private void AddListeners() {
-        player.OnHurt += Hurt;
-    }
-
-    private void RemoveListeners() {
-        if (player != null) {
-            player.OnHurt -= Hurt;
-        }
-    }
-
     public void Destroy() {
-        RemoveListeners();
         if (Weapon != null)
             Weapon.UnequipWeapon();
         StartCoroutine(DeathAnimation());
@@ -384,12 +371,10 @@ public class PlayerController : MonoBehaviour {
         rb.AddForce(direction, ForceMode.VelocityChange); //move back in the direction of the projectile 
     }
 
-    private void Hurt(Player damageDealer, Player reciever, float percentDealt) {
+    public float Hurt(Player damageDealer, float amount) {
         input.controllers[player.playerNumber].Vibrate(1.0f, 0.1f);
         StartCoroutine("HurtIndicator");
-
-        // Remove this code to render HP bars all the time, as well as code in the Awake method in PlayerController.cs
-
+        return player.Hurt(damageDealer, amount);
     }
 
     IEnumerator HurtIndicator() //show the player that it is hurt 

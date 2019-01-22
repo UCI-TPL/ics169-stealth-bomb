@@ -15,6 +15,7 @@ TagManager:
   - Black Hole
   - Tile
   - TileMap
+  - burning
   layers:
   - Default
   - TransparentFX
@@ -34,7 +35,7 @@ TagManager:
   - Item
   - Black Hole Center
   - AttackGroundCollider
-  - 
+  - Shields
   - 
   - 
   - 

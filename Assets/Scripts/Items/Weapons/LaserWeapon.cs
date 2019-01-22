@@ -76,7 +76,7 @@ public class LaserWeapon : Weapon {
         laserBeam.EnableParticles();
     }
 
-    protected override float GetDamageDealt(Vector3 origin, PlayerController targetPlayerController, object extraData) {
+    protected override float GetDamageDealt(Vector3 origin, object extraData) {
         return data.damage * player.stats.Damage * (float)extraData;
     }
 

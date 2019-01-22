@@ -152,23 +152,25 @@ public abstract class Weapon {
     /// <param name="target"> Object hit </param>
     /// <param name="extraData"> Extra data to be passed on to other supporting functions </param>
     protected void Hit(Vector3 origin, Vector3 contactPoint, GameObject target, object extraData = null, bool activateTriggers = true) {
-        if (target.CompareTag("Player")) {
-            PlayerController targetPlayerController = target.GetComponent<PlayerController>(); // Check if target is a player
-            OnHit(origin, contactPoint, targetPlayerController, extraData); // Activate OnHit effects and get damage dealt
+        IHurtable hurtable = (IHurtable)target.GetComponentInParent(typeof(IHurtable)); // Check if target is a player
+        if (hurtable != null) {
+            float damage = GetDamageDealt(origin, extraData);
+            if (target.CompareTag("Player")) {
+                PlayerController targetPlayerController = target.GetComponent<PlayerController>(); // Check if target is a player
+                OnHit(origin, contactPoint, targetPlayerController, extraData); // Activate OnHit effects and get damage dealt
 
-            float damage = GetDamageDealt(origin, targetPlayerController, extraData);
-            if (damage > 0)
-                targetPlayerController.player.Hurt(player, damage); // Hurt hit player
-            Knockback(origin, targetPlayerController, extraData); // Knockback hit player
+                if (damage > 0)
+                    targetPlayerController.Hurt(player, damage); // Hurt hit player
+                Knockback(origin, targetPlayerController, extraData); // Knockback hit player
 
-            if (activateTriggers)
-                player.OnHit.Invoke(origin, contactPoint - origin, targetPlayerController);
+                if (activateTriggers)
+                    player.OnHit.Invoke(origin, contactPoint - origin, targetPlayerController);
+            }
+            else
+                hurtable.Hurt(player, damage);
         }
-        else if (target.CompareTag("Tile")) {
-            float damage = weaponData.damage * player.stats.Damage;
-            if (damage > 0)
-                target.GetComponent<CrumbleTile>().Hurt(damage); // Hurts the tile
-        }
+        if (activateTriggers)
+            player.OnHit.Invoke(origin, contactPoint - origin, null);
     }
 
     // OnHit is called once when a player is hit, Return value is ammount of damage dealt
@@ -177,7 +179,7 @@ public abstract class Weapon {
     }
 
     // GetDamageDealt returns damage
-    protected virtual float GetDamageDealt(Vector3 origin, PlayerController targetPlayerController, object extraData) {
+    protected virtual float GetDamageDealt(Vector3 origin, object extraData) {
         return weaponData.damage * player.stats.Damage;
     }
 

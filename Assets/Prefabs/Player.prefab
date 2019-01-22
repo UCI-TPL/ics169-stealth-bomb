@@ -2440,11 +2440,13 @@ MonoBehaviour:
   PlayerHitbox: {fileID: 4290687003326676}
   ShootPoint: {fileID: 1406199181580888}
   floorCollider: {fileID: 135181991345102188}
-  HitBox: {fileID: 135886423390436444}
+  HitBox:
+  - {fileID: 135886423390436444}
   crown: {fileID: 1673957208925718}
   friction: 10
   airResistance: 10
   terminalVelocity: 10
+  DeathAnimationTime: 0.75
   acceleration: 10
   Colors:
   - {r: 1, g: 0.23266676, b: 0.2216981, a: 1}

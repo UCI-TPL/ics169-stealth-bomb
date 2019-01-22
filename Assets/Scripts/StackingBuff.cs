@@ -16,10 +16,10 @@ public class StackingBuff : Buff {
     private StackingBuff(float duration, object source) : base(duration, source) { }
 
     public override void Equip(Player player) {
-        foreach (PlayerStats.Modifier m in Modifiers) // Add power-up's modifiers to stats
-            player.stats.AddModifier(m);
         player.stats.AddModifier(counter);
         if (player.stats.GetStat(counterName) == 1) {
+            foreach (PlayerStats.Modifier m in Modifiers) // Add power-up's modifiers to stats
+                player.stats.AddModifier(m);
 
             if (!staticTriggers[buffData].ContainsKey(player))
                 staticTriggers[buffData].Add(player, Triggers);
@@ -29,10 +29,11 @@ public class StackingBuff : Buff {
     }
 
     public override void Unequip(Player player) {
-        foreach (PlayerStats.Modifier m in Modifiers) // Remove all modifiers granted by this powerup
-            player.stats.RemoveModifier(m);
         player.stats.RemoveModifier(counter);
         if (player.stats.GetStat(counterName) <= 0) {
+            foreach (PlayerStats.Modifier m in Modifiers) // Remove all modifiers granted by this powerup
+                player.stats.RemoveModifier(m);
+
             RemoveTriggers(player, staticTriggers[buffData][player]);
 
             staticTriggers[buffData].Remove(player);

@@ -4,7 +4,8 @@
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -15,11 +16,11 @@ MonoBehaviour:
     Modifiers: []
     Triggers:
     - modifiers: []
-      condition: 1
+      condition: 2
       cooldown: 0
       triggerWeapon: {fileID: 11400000, guid: e1cdd45559085cf468babb0df6c73b19, type: 2}
     - modifiers: []
-      condition: 13
+      condition: 14
       cooldown: 0
       triggerWeapon: {fileID: 11400000, guid: a47447c47d3e6684390f48995677e4ca, type: 2}
   counterName: FireBuffCount

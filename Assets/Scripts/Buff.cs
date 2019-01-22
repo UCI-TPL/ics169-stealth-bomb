@@ -54,6 +54,9 @@ public class Buff {
                 case Trigger.TriggerCondition.Hit:
                     player.OnHit.AddListener(t.Activate);
                     break;
+                case Trigger.TriggerCondition.Start:
+                    t.Activate(player.controller.transform.position, player.controller.transform.forward);
+                    break;
             }
         }
     }
@@ -149,6 +152,6 @@ public class Buff {
         }
 
         // Different types of Trigger Conditions available
-        public enum TriggerCondition { Update, Move, Stationary, Jump, Airborn, Land, Attack, Death, Touch, Hurt, StartDodge, EndDodge, Dodging, Hit}
+        public enum TriggerCondition { Update, Start, Move, Stationary, Jump, Airborn, Land, Attack, Death, Touch, Hurt, StartDodge, EndDodge, Dodging, Hit}
     }
 }

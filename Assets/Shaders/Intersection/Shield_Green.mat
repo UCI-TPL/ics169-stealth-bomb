@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Shield_Green
+  m_Shader: {fileID: 4800000, guid: a3d4bb388412d9b418ea0f80797c5832, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Floats:
+    - Vector1_9D75ED3F: 0.5
+    - Vector1_CA392C36: 2
+    m_Colors:
+    - Color_2C42FCDA: {r: 0, g: 1.4742693, b: 0.0057814484, a: 0.4}
+    - Color_6EE03AD3: {r: 1, g: 1, b: 1, a: 1}

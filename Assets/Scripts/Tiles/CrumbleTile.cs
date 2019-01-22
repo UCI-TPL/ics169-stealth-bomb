@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CrumbleTile : Tile {
+public class CrumbleTile : Tile, IHurtable {
 
     private const int MaxParticles = 150;
     private readonly static Queue<ParticleSystem> ParticlePool = new Queue<ParticleSystem>();
@@ -13,7 +13,6 @@ public class CrumbleTile : Tile {
     private float maxHealth;
     public float HealthPercent { get { return Health / maxHealth; } }
     public float Health { get; private set; }
-    public Texture[] DamagedTextures;
 
     [Header("Material Properties")]
     public float shakeCooldown = 0.02f;
@@ -46,14 +45,17 @@ public class CrumbleTile : Tile {
         Health = maxHealth;
     }
 
+
     /// <summary>
     /// Inflicts damage to this and all tiles above equal to the specified amount. Destroys the tile if health reaches 0.
     /// </summary>
     /// <param name="amount"> Amount of damage taken </param>
-    public override void Hurt(float amount) {
+    public float Hurt(Player damageDealer, float amount) {
         if (crumbling) // If a block is already crumbling it cannot be hurt
-            return;
+            return 0;
+        Health = Mathf.Max(0, Health - amount);
         TileManager.tileManager.DamagePillar(position, amount);
+        return 0;
     }
 
     /// <summary>

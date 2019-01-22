@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad71865715c938444871939d9518069b, type: 3}
+  m_Name: CreateShieldData
+  m_EditorClassIdentifier: 
+  name: CreateShield
+  image: {fileID: 0}
+  description: Creates shields
+  type: 2
+  autoAttack: 0
+  cooldown: 0
+  knockbackStrength: 0
+  damage: 0
+  buffs: []
+  shieldContainer: {fileID: 3328665903627092816, guid: 474976de328cd8140b512b899055a988,
+    type: 3}
+  PlayerColorMaterials:
+  - {fileID: 2100000, guid: a0f7865e1261be94aac602ed1cf56bbc, type: 2}
+  - {fileID: 2100000, guid: c95715db341618c40901222a5e314ab8, type: 2}
+  - {fileID: 2100000, guid: 380907e041c8263488b6a4eab057e177, type: 2}
+  - {fileID: 2100000, guid: f67cf22754ccb6545ac3634caffdb58b, type: 2}
