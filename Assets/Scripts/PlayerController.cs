@@ -199,6 +199,10 @@ public class PlayerController : MonoBehaviour, IHurtable {
         if (jumped && rb.velocity.y > 0) {
             rb.AddForce(Physics.gravity * jumpGravityMultiplier - Physics.gravity, ForceMode.Acceleration);
         }
+
+        // Show smoke when dodging
+        if (dashEffect != null)
+            dashEffect.SetActive(dodging, lastScaledVector);
     }
 
     // Rotate the player's facing direction
@@ -242,10 +246,6 @@ public class PlayerController : MonoBehaviour, IHurtable {
             lastForwardMovement = horizontalVector.normalized;
             lastScaledVector = scaledVector.normalized;
         }
-
-        // Show smoke when dodging
-        if (dashEffect  != null)
-            dashEffect.SetActive(dodging, lastScaledVector);
 
         Vector3 frictionVector;
         if (IsGrounded) {// If grounded apply friction
