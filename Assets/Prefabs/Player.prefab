@@ -2463,6 +2463,7 @@ MonoBehaviour:
   braking: 0
   dodgeSpeed: 0
   dashEffect: {fileID: 836355304951452006}
+  knockbackEffect: {fileID: 2150839798997783803}
 --- !u!114 &114294160423693134
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2937,6 +2938,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2024084529476366643}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2150839798997783803 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 130515607971194312, guid: 0523a0d5b38b56f4686708babaf3c06f,
+    type: 3}
+  m_PrefabInstance: {fileID: 2024084529476366643}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20e3a5fd1a2291f4ca6d27e3cd671e48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3532347248847658243
 PrefabInstance:
   m_ObjectHideFlags: 0

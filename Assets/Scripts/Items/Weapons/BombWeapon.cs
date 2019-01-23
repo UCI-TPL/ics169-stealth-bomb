@@ -60,7 +60,7 @@ public class BombWeapon : Weapon {
 
     protected override void Knockback(Vector3 origin, PlayerController targetPlayerController, object extraData)
     {
-        targetPlayerController.Knockback(((targetPlayerController.transform.position - origin).normalized + Vector3.up * -0.25f).normalized * KnockbackStrength);
+        targetPlayerController.Knockback(((targetPlayerController.transform.position - origin).normalized + Vector3.up * -0.25f).normalized * KnockbackStrength, player.playerNumber);
 
     }
 
