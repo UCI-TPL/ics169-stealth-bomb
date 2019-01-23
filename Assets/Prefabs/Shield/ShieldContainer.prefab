@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b63d3af6ce72ff4da7cec14c457ed9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: 180
+  rotationSpeed: 90
   shieldData: {fileID: 11400000, guid: e9935f3f6430cd14ab45145c4d75de76, type: 2}
   counterName: ShieldCount
 --- !u!1001 &1492137553083327862

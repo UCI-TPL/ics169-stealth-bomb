@@ -356,10 +356,10 @@ public class GameManager : MonoBehaviour {
         // MAKE SURE THE LEVELS HERE ARE IN THE BUILD SETTINGS
         private string[][] levelNames =
         {
-            new string[] { "Map1_TownMarket", "LoadLevel" },
-            new string[] { "LoadLevel" },
             new string[] { "Map1_TownMarket" },
             new string[] { "LoadLevel" },
+            new string[] { "Map1_TownMarket", "LoadLevel" },
+            new string[] { "LoadLevel", "Map1_TownMarket" },
             new string[] { "MAP" }
         };
         // A random number generator, used to pick a stage from an array in levelNames.
@@ -386,7 +386,7 @@ public class GameManager : MonoBehaviour {
             //TileManager.tileManager.LoadLevel("LoadLevel", (Scene loadedScene) => { State = GameState.Ready; roundScene = loadedScene; });
 
             int i = PickLevelGroup();
-            TileManager.tileManager.LoadLevel("LoadLevel", (Scene loadedScene) => { State = GameState.Ready; roundScene = loadedScene; });
+            TileManager.tileManager.LoadLevel(levelNames[i][rng.Next(0, levelNames[i].Length)], (Scene loadedScene) => { State = GameState.Ready; roundScene = loadedScene; });
             //Debug.Log("[GameManager, line 367] Checking if we get the right index for the level check. " + i);
 
 
@@ -431,7 +431,7 @@ public class GameManager : MonoBehaviour {
 
         public void ResetCurves() //must happen every round just in case the map changes 
         {
-            MapInfo newMap = GameObject.FindGameObjectWithTag("TileMap").GetComponent<MapInfo>(); //this has the info for the Ghost Curve for each map 
+            MapInfo newMap = GameObject.Find("Tile Map").GetComponent<MapInfo>(); //this has the info for the Ghost Curve for each map 
             GameManager.instance.curveManager.ResetCurve1(newMap.LeftCurve);
             GameManager.instance.curveManager.ResetCurve2(newMap.RightCurve);
         }

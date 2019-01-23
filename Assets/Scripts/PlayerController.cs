@@ -176,7 +176,7 @@ public class PlayerController : MonoBehaviour, IHurtable {
             yield return null; //the game crashes super hard if you remove this
         }
         //yield return new WaitForSeconds(DeathAnimationTime); //in this time an animation or something can happen 
-        if (this)
+        if (gameObject)
             GameManager.Destroy(gameObject);
         yield return null;
     }

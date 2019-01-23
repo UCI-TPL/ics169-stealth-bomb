@@ -4,7 +4,8 @@
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -23,9 +24,9 @@ MonoBehaviour:
   buffs: []
   projectile: {fileID: 11400000, guid: 9df1e8c6a587d604684f97e370ea1793, type: 2}
   blackHolePrefab: {fileID: 1115368707829486, guid: 8ef09f7d829499544acb1457f7bd23b3,
-    type: 2}
-  blackHoleGravity: 2.5
-  blackHoleRadius: 3
+    type: 3}
+  blackHoleGravity: 10
+  blackHoleRadius: 3.75
   blackHoleDuration: 8
   projSpeed: 30
   numProj: 1

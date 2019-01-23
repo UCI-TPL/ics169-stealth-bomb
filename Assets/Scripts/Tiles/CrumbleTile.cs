@@ -55,7 +55,7 @@ public class CrumbleTile : Tile, IHurtable {
         //    return 0;
         //Health = Mathf.Max(0, Health - amount);
         //TileManager.tileManager.DamagePillar(position, amount);
-        //return 0;
+        return 0;
     }
 
     /// <summary>

@@ -18,9 +18,9 @@ MonoBehaviour:
   type: 2
   autoAttack: 1
   cooldown: 0.35
-  knockbackStrength: 10
+  knockbackStrength: 20
   damage: 10
   buffs: []
-  projectile: {fileID: 11400000, guid: 9df1e8c6a587d604684f97e370ea1793, type: 2}
-  numProj: 3
-  projSpeed: 25
+  projectile: {fileID: 11400000, guid: 898ef1f4503804947985ca2706909d9b, type: 2}
+  numProj: 5
+  projSpeed: 20
