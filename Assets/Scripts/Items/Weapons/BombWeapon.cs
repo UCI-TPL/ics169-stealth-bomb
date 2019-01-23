@@ -66,14 +66,11 @@ public class BombWeapon : Weapon {
 
     protected void CreateBomb(Vector3 spawnPoint)
     {
-        if (!alreadyHit)
-        {
-            Bomb bomb = GameObject.Instantiate(data.bombPrefab, spawnPoint, Quaternion.identity).GetComponent<Bomb>();
-            bomb.SetUpBomb(data.explosionSize, data.growthRate);
-            // BombWeapon defines Hit. Bomb has an event, which Bomb adds a lambda(?) to as a listener, which is a wrapper for the Hit method defined by Weapon.
-            bomb.OnHit.AddListener((Vector3 origin, Vector3 contactPoint, GameObject target) => { Hit(origin, contactPoint, target, ChargeLevel); });
-            alreadyHit = true;
-        }
+        Bomb bomb = GameObject.Instantiate(data.bombPrefab, spawnPoint, Quaternion.identity).GetComponent<Bomb>();
+        bomb.SetUpBomb(data.explosionSize, data.growthRate);
+        // BombWeapon defines Hit. Bomb has an event, which Bomb adds a lambda(?) to as a listener, which is a wrapper for the Hit method defined by Weapon.
+        bomb.OnHit.AddListener((Vector3 origin, Vector3 contactPoint, GameObject target) => { Hit(origin, contactPoint, target, ChargeLevel); });
+        alreadyHit = true;
     }
 
     public override Weapon DeepCopy(WeaponData weaponData, Player player)

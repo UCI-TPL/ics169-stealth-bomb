@@ -37,6 +37,19 @@ public class Projectile : MonoBehaviour {
     //    }
     //}
 
+    // I added this method to make it possible for the bomb to bounce.
+    // As the projectile currently stops on a collision, i need to get hasHit
+    // to get the projectile moving again and to take track of bounces.
+    // I would have done this as a get/set value, but i didn't want to risk breaking something.
+    public bool getHasHit()
+    {
+        return hasHit;
+    }
+    public void setHasHit(bool value)
+    {
+        hasHit = value;
+    }
+
     private void OnCollisionEnter(Collision other) {
         if (hasHit)
             return;

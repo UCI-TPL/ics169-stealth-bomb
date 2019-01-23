@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1215857095}
   - component: {fileID: 1215857097}
   - component: {fileID: 7743166598750051238}
+  - component: {fileID: 1621534869129846937}
   m_Layer: 12
   m_Name: Bomb
   m_TagString: Arrow
@@ -187,6 +188,22 @@ MonoBehaviour:
   collider: {fileID: 1215857097}
   projectileRenderer: {fileID: 970677083677697377}
   hitEffect: {fileID: 0}
+--- !u!114 &1621534869129846937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1215857093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41f1bd7d28d712d40a0c4e00bd6092a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  proj: {fileID: 7743166598750051238}
+  rb: {fileID: 1215857096}
+  maxBounces: 2
+  arcHeight: 14
 --- !u!1 &970677083677697377
 GameObject:
   m_ObjectHideFlags: 0
