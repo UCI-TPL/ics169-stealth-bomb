@@ -57,6 +57,8 @@ public class PlayerController : MonoBehaviour, IHurtable {
     public bool rolling;
     public bool braking; 
     public float dodgeSpeed  = 0f;
+    [SerializeField]
+    private DashEffect dashEffect;
 
     // Required variables for jumping and detecting ground collisions
     private float jumpCooldown = 0;
@@ -234,6 +236,10 @@ public class PlayerController : MonoBehaviour, IHurtable {
             lastForwardMovement = horizontalVector.normalized;
             lastScaledVector = scaledVector.normalized;
         }
+
+        // Show smoke when dodging
+        if (dashEffect  != null)
+            dashEffect.SetActive(dodging, lastScaledVector);
 
         Vector3 frictionVector;
         if (IsGrounded) {// If grounded apply friction
