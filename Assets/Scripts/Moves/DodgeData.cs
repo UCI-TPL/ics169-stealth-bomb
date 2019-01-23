@@ -11,9 +11,14 @@ public class DodgeData : SpecialMoveData    //should be named DodgeDashData
     [Tooltip("How many times DodgeSpeed should be faster than normal speed")]
     public float SpeedMultiplier;
 
+    [Tooltip("Move while dashing")]
+    public bool MoveDuringDash;
+
+    /*
     [Tooltip("How long the player decelerates")]
     public float StopTime;
-
+    
+    */
     [Tooltip("Should this use the new or old system")]
     public bool NewDodge;
 
