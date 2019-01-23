@@ -71,7 +71,8 @@ public class ParabolaController : MonoBehaviour
 
     public void Reset() //when a new round starts, change the position of all 
     {
-        
+        parabolaFly = new ParabolaFly(ParabolaRoot.transform, max, min);
+        RefreshTransforms(Speed);
     }
 
 
@@ -111,6 +112,7 @@ public class ParabolaController : MonoBehaviour
 
     public Vector3 UpdatePosition(float avg)
     {
+        Debug.Log("avg is " + avg);
         if (avg < min)
             avg = min;
         if (avg > max)

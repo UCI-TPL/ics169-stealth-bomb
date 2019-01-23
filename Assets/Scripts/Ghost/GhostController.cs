@@ -14,11 +14,11 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
     [HideInInspector]
     public GameObject GhostBody;
 
-    [HideInInspector]
+
     public ParabolaController GhostParabola1; //maps can have either 1 or 2 parabolas    
-    [HideInInspector]
+  
     public ParabolaController GhostParabola2;
-    [HideInInspector]
+    
 
 
     public float cooldown = 0.1f;
@@ -40,7 +40,9 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
         GhostBody.GetComponentsInChildren<Renderer>()[1].material.SetColor("Color_998F7755", playerColor);
 
 
-        GameObject Curves = GameObject.FindGameObjectWithTag("ghost-curve");
+        //GameObject Curves = GameObject.FindGameObjectWithTag("ghost-curve");
+        GameObject Curves = GameObject.Find("GhostCurves");
+
 
         GhostParabola1 = Curves.transform.Find("Curve 1").gameObject.GetComponent<ParabolaController>();
         GhostParabola2 = Curves.transform.Find("Curve 2").gameObject.GetComponent<ParabolaController>();
@@ -73,6 +75,8 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
 
         Vector3 pos;
 
+        Debug.Log("Simply at " + transform.position.z + "   and    " + transform.position.x);
+
         if (transform.position.z >= transform.position.x) //depending on the position, go to either the first or second parabola and rotate accordingly
         {
             pos = GhostParabola1.UpdatePosition((transform.position.z + transform.position.x) / 2) + GameManager.instance.GhostOffset;
@@ -83,7 +87,10 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
             pos = GhostParabola2.UpdatePosition((transform.position.z + transform.position.x) / 2) - GameManager.instance.GhostOffset;
             GhostBody.transform.rotation = Quaternion.Euler(0f, 315, 0f);
         }
-        
+
+        //Debug.Log("One " + GhostParabola1.UpdatePosition((transform.position.z + transform.position.x) / 2));
+        //Debug.Log("Two " + GhostParabola2.UpdatePosition((transform.position.z + transform.position.x) / 2));
+
         if (pos != Vector3.zero)
             GhostBody.transform.position = pos;
        
