@@ -59,6 +59,8 @@ public class PlayerController : MonoBehaviour, IHurtable {
     public float dodgeSpeed = 0f;
     [SerializeField]
     private DashEffect dashEffect;
+    [SerializeField]
+    private KnockbackEffect knockbackEffect;
 
     // Required variables for jumping and detecting ground collisions
     private float jumpCooldown = 0;
@@ -273,7 +275,7 @@ public class PlayerController : MonoBehaviour, IHurtable {
             frictionVector -= Vector3.Project(frictionVector, scaledVector); // Scale friction to remove the forward direction, so friction doesnt slow player in moving direction
         // Debug.DrawRay(floorCollider.transform.position + Vector3.down * floorCollider.bounds.extents.y, frictionVector, Color.red);
         
-        rb.velocity += frictionVector * Time.fixedDeltaTime; // Add friction to velocity
+        rb.velocity += frictionVector * Time.fixedDeltaTime; // Add friction to velocity, friction is acceleration, so multiply by delta time to get change in velocity
         if (allowMovement) {
             Vector3 oldVelocity = rb.velocity.Scaled(new Vector3(1, 0, 1));
             Vector3 newVelocity = rb.velocity + scaledVector * Time.fixedDeltaTime * acceleration; // Clamp velocity to either max speed or current speed(if player was launched)
@@ -372,8 +374,26 @@ public class PlayerController : MonoBehaviour, IHurtable {
         }
     }
 
+    private IEnumerator lastKnockback;
     public void Knockback(Vector3 direction) {
         rb.AddForce(direction, ForceMode.VelocityChange); //move back in the direction of the projectile 
+        
+        // Show smoke when knockback
+        if (lastKnockback != null) {
+            StopCoroutine(lastKnockback);
+            knockbackEffect.SetActive(false, Vector3.zero);
+        }
+        knockbackEffect.SetActive(true, direction);
+        lastKnockback = StopKnockback(direction.magnitude/friction);
+        StartCoroutine(lastKnockback);
+
+        IEnumerator StopKnockback(float maxDuration) {
+            float stopTime = Time.time + maxDuration;
+            while(Time.time < stopTime) {
+                yield return null;
+            }
+            knockbackEffect.SetActive(false, Vector3.zero);
+        }
     }
 
     public float Hurt(Player damageDealer, float amount) {
