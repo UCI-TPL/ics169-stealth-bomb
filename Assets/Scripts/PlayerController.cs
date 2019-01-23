@@ -375,24 +375,26 @@ public class PlayerController : MonoBehaviour, IHurtable {
     }
 
     private IEnumerator lastKnockback;
-    public void Knockback(Vector3 direction) {
+    public void Knockback(Vector3 direction, int? playerNumber = null, bool showEffect = true) {
         rb.AddForce(direction, ForceMode.VelocityChange); //move back in the direction of the projectile 
-        
-        // Show smoke when knockback
-        if (lastKnockback != null) {
-            StopCoroutine(lastKnockback);
-            knockbackEffect.SetActive(false, Vector3.zero);
-        }
-        knockbackEffect.SetActive(true, direction);
-        lastKnockback = StopKnockback(direction.magnitude/friction);
-        StartCoroutine(lastKnockback);
 
-        IEnumerator StopKnockback(float maxDuration) {
-            float stopTime = Time.time + maxDuration;
-            while(Time.time < stopTime) {
-                yield return null;
+        if (showEffect) {
+            // Show smoke when knockback
+            if (lastKnockback != null) {
+                StopCoroutine(lastKnockback);
+                knockbackEffect.SetActive(false, Vector3.zero);
             }
-            knockbackEffect.SetActive(false, Vector3.zero);
+            knockbackEffect.SetActive(true, direction, playerNumber);
+            lastKnockback = StopKnockback(direction.magnitude / friction);
+            StartCoroutine(lastKnockback);
+
+            IEnumerator StopKnockback(float maxDuration) {
+                float stopTime = Time.time + maxDuration;
+                while (Time.time < stopTime) {
+                    yield return null;
+                }
+                knockbackEffect.SetActive(false, Vector3.zero);
+            }
         }
     }
 

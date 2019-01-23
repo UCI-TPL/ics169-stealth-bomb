@@ -284,7 +284,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 0.88346463, b: 0.8745098, a: 0.7490196}
+      maxColor: {r: 1, g: 0.9978795, b: 0.8745098, a: 0.7490196}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -4929,7 +4929,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 0.70228326, b: 0.6839622, a: 0.2509804}
+      maxColor: {r: 1, g: 1, b: 0.55, a: 0.2509804}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -5682,8 +5682,8 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 3
-        scalar: 16
-        minScalar: 8
+        scalar: 12
+        minScalar: 6
         maxCurve:
           serializedVersion: 2
           m_Curve:
@@ -9490,9 +9490,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 402745884254520025}
+  - component: {fileID: 130515607971194312}
   - component: {fileID: 7623268549275081647}
   - component: {fileID: 8397691175975780219}
-  - component: {fileID: 130515607971194312}
   m_Layer: 0
   m_Name: Knockback_Effect
   m_TagString: Untagged
@@ -9516,6 +9516,32 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &130515607971194312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5427672399294773591}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20e3a5fd1a2291f4ca6d27e3cd671e48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  impactRenderer: {fileID: 3615230183186581869}
+  trailPS: {fileID: 3728494141858424742}
+  impactPS: {fileID: 3906652324318924942}
+  knockbackColors:
+  - trailColor: {r: 1, g: 0.88346463, b: 0.8745098, a: 0.7490196}
+    impactColor: {r: 1, g: 0.5757143, b: 0.55, a: 0.2509804}
+  - trailColor: {r: 0.8745098, g: 0.89898425, b: 1, a: 0.7490196}
+    impactColor: {r: 0.55, g: 0.6303571, b: 1, a: 0.2509804}
+  - trailColor: {r: 1, g: 0.9978795, b: 0.8745098, a: 0.7490196}
+    impactColor: {r: 1, g: 1, b: 0.55, a: 0.2509804}
+  - trailColor: {r: 0.8828758, g: 1, b: 0.8745098, a: 0.7490196}
+    impactColor: {r: 0.56607145, g: 1, b: 0.55, a: 0.2509804}
+  - trailColor: {r: 1, g: 1, b: 1, a: 0.7490196}
+    impactColor: {r: 1, g: 1, b: 1, a: 0.2509804}
 --- !u!199 &7623268549275081647
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -14182,16 +14208,3 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
---- !u!114 &130515607971194312
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5427672399294773591}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20e3a5fd1a2291f4ca6d27e3cd671e48, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  impact: {fileID: 3615230183186581869}

@@ -18,7 +18,7 @@ MonoBehaviour:
   type: 2
   autoAttack: 0
   cooldown: 0.25
-  knockbackStrength: 14
+  knockbackStrength: 30
   damage: 30
   buffs: []
   instance:

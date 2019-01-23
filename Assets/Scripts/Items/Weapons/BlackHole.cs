@@ -117,7 +117,7 @@ public class BlackHole : MonoBehaviour {
 		// float dirX = player.gameObject.transform.position.x - transform.position.x;
 		// float dirY = player.gameObject.transform.position.y - transform.position.y;
 		// float dirZ = player.gameObject.transform.position.z - transform.position.z;
-		player.Knockback((new Vector3(dirX, 0.0f, dirZ).normalized /*+ Vector3.up*0.25f*/).normalized * blackHoleGravity);
+		player.Knockback((new Vector3(dirX, 0.0f, dirZ).normalized /*+ Vector3.up*0.25f*/).normalized * blackHoleGravity, showEffect: false);
 		// player.velocity = new Vector3(transform.position.x - player.position.x, transform.position.y - player.position.y, transform.position.z - player.position.z).normalized * blackHoleGravity;
 	}
 
