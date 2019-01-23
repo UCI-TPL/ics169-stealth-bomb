@@ -22,8 +22,8 @@ MonoBehaviour:
   knockbackStrength: 0
   damage: 0
   buffs: []
-  moveDuration: 0.175
+  moveDuration: 0.12
   moveType: 0
-  SpeedMultiplier: 10
-  MoveDuringDash: 0
+  SpeedMultiplier: 0.4
+  MoveDuringDash: 1
   NewDodge: 0

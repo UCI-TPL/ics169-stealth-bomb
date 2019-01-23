@@ -187,7 +187,6 @@ public class PlayerController : MonoBehaviour, IHurtable {
             Move(IsGrounded ? player.stats.moveSpeed : player.stats.airSpeed);
         else
         {
-            Debug.Log("What's happening");
             Move(dodgeSpeed); //hopefully this allows air dodges
         }
         if (input.controllers[player.playerNumber].jump.Pressed) {
@@ -279,7 +278,7 @@ public class PlayerController : MonoBehaviour, IHurtable {
             Vector3 oldVelocity = rb.velocity.Scaled(new Vector3(1, 0, 1));
             Vector3 newVelocity = rb.velocity + scaledVector * Time.fixedDeltaTime * acceleration; // Clamp velocity to either max speed or current speed(if player was launched)
             if (dodging) //don't take the old velocity into account at all when dodging
-                newVelocity = scaledVector * Time.deltaTime * acceleration; //scaled Vector is the direction of movement
+                newVelocity = scaledVector * acceleration; //scaled Vector is the direction of movement
             if (!dodging) //don't clamp while dodging
                 newVelocity = Vector3.ClampMagnitude(new Vector3(newVelocity.x, 0, newVelocity.z), Mathf.Max(oldVelocity.magnitude, speed * input.controllers[player.playerNumber].MoveVector().magnitude + 0.1f) - 0.1f);
             if (braking)
