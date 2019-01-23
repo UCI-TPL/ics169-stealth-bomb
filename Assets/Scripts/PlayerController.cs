@@ -209,6 +209,7 @@ public class PlayerController : MonoBehaviour, IHurtable {
     // Rotate the player's facing direction
     private void Update() {
         player.InGameUpdate();
+        
         PlayerHitbox.localScale = player == GameManager.instance.leader ? Vector3.one * 1.35f : Vector3.one;
         if (crown != null)
             crown.SetActive(player == GameManager.instance.leader);

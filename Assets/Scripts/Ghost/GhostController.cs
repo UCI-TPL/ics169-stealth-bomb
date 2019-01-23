@@ -6,7 +6,12 @@ using UnityEngine.UI;
 public class GhostController : PlayerController {   //this inherits from PlayerController so the movement remains the same 
 
 
-    Image CursorImage;
+
+    public GameObject Cursor;
+
+    //_AlbedoColor
+
+    //Image CursorImage;
     public GameObject Point; //the cursor that the player moves around
 
     public GameObject GhostPrefab; //the ghost that hangs out on the curve on the side of the map
@@ -31,8 +36,10 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
         right = Camera.main.transform.right;
         right.Scale(new Vector3(1, 0, 1));
         right.Normalize();
-        CursorImage = GetComponent<Image>(); //used to change to player color
-        CursorImage.color = playerColor;
+        // CursorImage = GetComponent<Image>(); //used to change to player color
+        // CursorImage.color = playerColor;
+        Cursor.GetComponent<Renderer>().material.SetColor("_AlbedoColor", playerColor);
+        Cursor.transform.Find("Cube").GetComponent<Renderer>().material.SetColor("Color_52FADAA",playerColor);
 
         GhostBody = Instantiate(GhostPrefab, transform.position, transform.rotation);
         //rend.material.SetColor("Color_91A455EE", playerColor);
@@ -75,7 +82,7 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
 
         Vector3 pos;
 
-        Debug.Log("Simply at " + transform.position.z + "   and    " + transform.position.x);
+        //Debug.Log("Simply at " + transform.position.z + "   and    " + transform.position.x);
 
         if (transform.position.z >= transform.position.x) //depending on the position, go to either the first or second parabola and rotate accordingly
         {

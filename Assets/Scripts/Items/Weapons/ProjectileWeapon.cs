@@ -14,6 +14,8 @@ public class ProjectileWeapon : Weapon {
 
     protected override void OnActivate(Vector3 start, Vector3 direction, PlayerController targetController = null) {
         data.projectile.Shoot(player, data.projSpeed, data.numProj, (Vector3 origin, Vector3 contactPoint, GameObject target) => { Hit(origin, contactPoint, target); });
+        if(data.SoundName != "")
+            GameManager.instance.audioManager.Play(data.SoundName);
     }
 
     // Create a deep copy of this weapon instance

@@ -112,7 +112,7 @@ public class ParabolaController : MonoBehaviour
 
     public Vector3 UpdatePosition(float avg)
     {
-        Debug.Log("avg is " + avg);
+        //Debug.Log("avg is " + avg);
         if (avg < min)
             avg = min;
         if (avg > max)

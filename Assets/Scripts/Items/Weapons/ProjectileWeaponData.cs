@@ -8,5 +8,6 @@ public class ProjectileWeaponData : WeaponData<ProjectileWeapon> {
     public ProjectileData projectile;
     public int numProj = 1;
     public float projSpeed = 20;
+    public string SoundName;
 
 }
