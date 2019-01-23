@@ -53,7 +53,6 @@ public class DodgeDash : Weapon
         player.controller.dodgeSpeed = player.controller.player.stats.moveSpeed * data.SpeedMultiplier;
         //player.EnableInvincibility(data.moveDuration / 2);  //the player is Invincible for half of the dash
         yield return new WaitForSeconds(data.moveDuration);
-        Debug.Log("ADS");
         player.controller.ResetVelocity();
 
 

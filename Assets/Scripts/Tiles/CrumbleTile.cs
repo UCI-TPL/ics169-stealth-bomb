@@ -51,11 +51,11 @@ public class CrumbleTile : Tile, IHurtable {
     /// </summary>
     /// <param name="amount"> Amount of damage taken </param>
     public float Hurt(Player damageDealer, float amount) {
-        if (crumbling) // If a block is already crumbling it cannot be hurt
-            return 0;
-        Health = Mathf.Max(0, Health - amount);
-        TileManager.tileManager.DamagePillar(position, amount);
-        return 0;
+        //if (crumbling) // If a block is already crumbling it cannot be hurt
+        //    return 0;
+        //Health = Mathf.Max(0, Health - amount);
+        //TileManager.tileManager.DamagePillar(position, amount);
+        //return 0;
     }
 
     /// <summary>
