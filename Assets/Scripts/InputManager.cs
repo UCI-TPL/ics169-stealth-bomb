@@ -98,10 +98,10 @@ public class InputManager : MonoBehaviour {
         ChangeControllerType(1, Controller.Type.TouchScreen);
 #endif
 
-#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
-        UpdateXInputStateThread = new Thread(UpdateXInputStateThreadLoop);
-        UpdateXInputStateThread.Start();
-#endif
+//#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
+//        UpdateXInputStateThread = new Thread(UpdateXInputStateThreadLoop);
+//        UpdateXInputStateThread.Start();
+//#endif
     }
 
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
@@ -821,12 +821,14 @@ public class InputManager : MonoBehaviour {
 
         // Update This controller's events
         public override void UpdateController() {
+            prevState = state;
+            state = GamePad.GetState(playerIndex);
             // State is updated in a different thread
-            if (stateUpdated)
-                UpdateState(state);
-            if (isActive)
-                UpdateEvents();
-            stateUpdated = true;
+            //if (stateUpdated)
+            //    UpdateState(state);
+            //if (isActive)
+            UpdateEvents();
+            //stateUpdated = true;
         }
 
         public void UpdateState(GamePadState state) {
