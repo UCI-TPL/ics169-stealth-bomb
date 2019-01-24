@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -359,9 +360,8 @@ public class GameManager : MonoBehaviour {
         {
             new string[] { "Map1_TownMarket" },
             new string[] { "LoadLevel" },
-            new string[] { "Map1_TownMarket", "LoadLevel" },
-            new string[] { "LoadLevel", "Map1_TownMarket" },
-            new string[] { "MAP" }
+            new string[] { "Map1_TownMarket" },
+            new string[] { "LoadLevel" }
         };
         // A random number generator, used to pick a stage from an array in levelNames.
         System.Random rng = new System.Random();
@@ -388,7 +388,6 @@ public class GameManager : MonoBehaviour {
 
             int i = PickLevelGroup();
             TileManager.tileManager.LoadLevel(levelNames[i][rng.Next(0, levelNames[i].Length)], (Scene loadedScene) => { State = GameState.Ready; roundScene = loadedScene; });
-            //Debug.Log("[GameManager, line 367] Checking if we get the right index for the level check. " + i);
 
 
             Resources.UnloadUnusedAssets();
@@ -398,36 +397,32 @@ public class GameManager : MonoBehaviour {
         // from. 0 = level group 1, 1 = level group 2, and so on.
         private int PickLevelGroup() {
             // counters for the number of players who's ranks fall within a particular level group.
-            int pr_G1 = 0;
-            int pr_G2 = 0;
-            int pr_G3 = 0;
-            int pr_G4 = 0;
+            int[] pr_Groups = { 0, 0, 0, 0 };
 
             // increment the counters based on the player ranks.
+            int ranksPerGroup;
+            if (GameManager.instance.maxRank >= 6)
+                ranksPerGroup = Mathf.CeilToInt(GameManager.instance.maxRank / 4);
+            else if (GameManager.instance.maxRank >= 4 && GameManager.instance.maxRank < 6)
+                ranksPerGroup = Mathf.FloorToInt(GameManager.instance.maxRank / 4);
+            else
+                return 3; // return the last level group if playing with few ranks.
+
             foreach (Player p in players)
             {
-                if (p.rank <= 2)
-                    pr_G1++;
-                else if (p.rank >= 3 || p.rank <= 5)
-                    pr_G2++;
-                else if (p.rank >= 6 || p.rank <= 8)
-                    pr_G3++;
+                if (p.rank < ranksPerGroup * 1)
+                    pr_Groups[0]++;
+                else if (p.rank >= ranksPerGroup * 1 && p.rank < ranksPerGroup * 2)
+                    pr_Groups[1]++;
+                else if (p.rank >= ranksPerGroup * 2 && p.rank < ranksPerGroup * 3)
+                    pr_Groups[2]++;
                 else
-                    pr_G4++;
+                    pr_Groups[3]++;
             }
 
-            // I would do returns in a ternary conditional operator, but that would get too long.
-            // compare the counters and return the int for the appropriate level group
-            if ((pr_G1 > pr_G2) && (pr_G1 > pr_G3) && (pr_G1 > pr_G4))          // if group 1 counter is greater than the rest.
-                return 0;
-            else if ((pr_G2 > pr_G1) && (pr_G2 > pr_G3) && (pr_G2 > pr_G4))     // if group 2 counter is greater than the rest.
-                return 1;
-            else if ((pr_G3 > pr_G1) && (pr_G3 > pr_G2) && (pr_G3 > pr_G4))     // if group 3 counter is greater than the rest.
-                return 2;
-            else if ((pr_G4 > pr_G1) && (pr_G4 > pr_G2) && (pr_G4 > pr_G3))     // if group 4 counter is greater than the rest.
-                return 3;
-            else                                                                // if no counter is greater than any other, load secret level?
-                return 4;
+            int pr_GroupMax = pr_Groups.Max();
+            int chosenGroup = Array.IndexOf(pr_Groups, pr_GroupMax);
+            return chosenGroup;           
         }
 
         public void ResetCurves() //must happen every round just in case the map changes 
