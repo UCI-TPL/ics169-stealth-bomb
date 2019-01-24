@@ -533,7 +533,7 @@ public class GameManager : MonoBehaviour {
 
         private void Player_onDeath(Player killer, Player killed) {
             GameManager.instance.ExpOnKill(killer, killed);
-            moveCamera.targets.Remove(players[killed.playerNumber].controller.gameObject);
+            moveCamera.targets.Remove(killed.controller.gameObject);
            
             activePlayersControllers.Remove(killed.controller.gameObject);
             Vector3 deathPosition = killed.controller.transform.position;
