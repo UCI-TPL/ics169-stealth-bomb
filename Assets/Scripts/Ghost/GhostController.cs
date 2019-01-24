@@ -11,7 +11,8 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
 
     //_AlbedoColor
 
-    //Image CursorImage;
+    [SerializeField]
+    Image CursorImage;
     public GameObject Point; //the cursor that the player moves around
 
     public GameObject GhostPrefab; //the ghost that hangs out on the curve on the side of the map
@@ -36,14 +37,14 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
         right = Camera.main.transform.right;
         right.Scale(new Vector3(1, 0, 1));
         right.Normalize();
-        // CursorImage = GetComponent<Image>(); //used to change to player color
-        // CursorImage.color = playerColor;
-        Cursor.GetComponent<Renderer>().material.SetColor("_AlbedoColor", playerColor);
-        Cursor.transform.Find("Cube").GetComponent<Renderer>().material.SetColor("Color_52FADAA",playerColor);
+        CursorImage = GetComponent<Image>(); //used to change to player color
+        CursorImage.color = playerColor;
+        //Cursor.GetComponent<Renderer>().material.SetColor("_AlbedoColor", playerColor);
+        //Cursor.transform.Find("Cube").GetComponent<Renderer>().material.SetColor("Color_52FADAA",playerColor);
 
         GhostBody = Instantiate(GhostPrefab, transform.position, transform.rotation);
         //rend.material.SetColor("Color_91A455EE", playerColor);
-        //GhostBody.GetComponentsInChildren<Renderer>()[1].material.color = playerColor;
+        GhostBody.GetComponentsInChildren<Renderer>()[1].material.color = playerColor;
         GhostBody.GetComponentsInChildren<Renderer>()[1].material.SetColor("Color_998F7755", playerColor);
 
 

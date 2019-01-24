@@ -53,7 +53,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4157136823194534}
   - component: {fileID: 114380574983239810}
-  - component: {fileID: 114407400500306902}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: game-manager
@@ -99,7 +98,7 @@ MonoBehaviour:
   DefaultPlayerData: {fileID: 11400000, guid: a943fa26298abe5409b720607ae16d86, type: 2}
   PlayerPrefab: {fileID: 114453241457146372, guid: 1525c93e4ceebd542b02ed13a439c69e,
     type: 3}
-  GhostPrefab: {fileID: 114002095781716024, guid: d5c232fe559c0d3469b847bd137bf8a7,
+  GhostPrefab: {fileID: 114002095781716024, guid: 350496cd6c510734e956c88d99aeec0e,
     type: 3}
   maxRank: 10
   ExpGainPerDamage: 0.5
@@ -112,19 +111,6 @@ MonoBehaviour:
   GhostOffsetLimit: 0
   countdown: 3
   countdownText: {fileID: 0}
---- !u!114 &114407400500306902
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1494888083987260}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da0ca78e648c7614fb6d91ee719d5d9a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gravity: -30
 --- !u!1001 &392423368870482795
 PrefabInstance:
   m_ObjectHideFlags: 0

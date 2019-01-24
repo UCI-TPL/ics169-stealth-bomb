@@ -186,6 +186,8 @@ MonoBehaviour:
   dodgeSpeed: 0
   dashEffect: {fileID: 0}
   knockbackEffect: {fileID: 0}
+  Cursor: {fileID: 0}
+  CursorImage: {fileID: 114715834920531786}
   Point: {fileID: 1597169029232234}
   GhostPrefab: {fileID: 1898897230688304, guid: 87ded8867057d76408927d062b0a927f,
     type: 3}
