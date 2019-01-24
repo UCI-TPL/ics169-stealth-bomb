@@ -53,6 +53,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4157136823194534}
   - component: {fileID: 114380574983239810}
+  - component: {fileID: 947806761363706678}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: game-manager
@@ -93,6 +94,7 @@ MonoBehaviour:
   audioManager: {fileID: 0}
   audioManagerPrefab: {fileID: 515700660680613677, guid: 1b8c06b91df79f54482875f6e398e58a,
     type: 3}
+  weatherManager: {fileID: 947806761363706678}
   curveManager: {fileID: 0}
   mainMenuSceneName: mainMenu
   DefaultPlayerData: {fileID: 11400000, guid: a943fa26298abe5409b720607ae16d86, type: 2}
@@ -111,6 +113,40 @@ MonoBehaviour:
   GhostOffsetLimit: 0
   countdown: 3
   countdownText: {fileID: 0}
+--- !u!114 &947806761363706678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1494888083987260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3edaa29b5d781c84bb46dcc0319005ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weatherPresets:
+  - lightDirection: {x: 60, y: 75, z: 0}
+    lightColor: {r: 1, g: 0.95686275, b: 0.8392157, a: 0}
+    lightIntensity: 1
+    shadowStrength: 1
+    ambientLighting: {r: 0.3504806, g: 0.37201852, b: 0.41509432, a: 0}
+    backgroundColor: {r: 0.69803923, g: 0.9529412, b: 1, a: 0}
+    fogColor: {r: 0, g: 0, b: 0, a: 0}
+  - lightDirection: {x: 17.984, y: 82.18, z: 10.636}
+    lightColor: {r: 0.6603774, g: 0.5431119, b: 0.22116414, a: 0}
+    lightIntensity: 2.69
+    shadowStrength: 0.5
+    ambientLighting: {r: 0.5381523, g: 0.3001234, b: 0.2276798, a: 0}
+    backgroundColor: {r: 0.643, g: 0.4946929, b: 0.381942, a: 0}
+    fogColor: {r: 0, g: 0, b: 0, a: 0}
+  - lightDirection: {x: 12.244, y: 82.39001, z: 11.441}
+    lightColor: {r: 0.103462085, g: 0.1665003, b: 0.2924528, a: 0}
+    lightIntensity: 3.14
+    shadowStrength: 0.551
+    ambientLighting: {r: 0.3210662, g: 0.32741377, b: 0.3679245, a: 0}
+    backgroundColor: {r: 0.208026, g: 0.2101918, b: 0.273, a: 0}
+    fogColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1001 &392423368870482795
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -8,7 +8,7 @@ using System;
 
 // Require an inputManager
 [RequireComponent(typeof(AudioManager))]
-[RequireComponent(typeof(InputManager))]
+[RequireComponent(typeof(WeatherManager))]
 public class GameManager : MonoBehaviour {
     public static GameManager instance;
 
@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour {
     public PlayerJoinManager playerJoinManager;
     public AudioManager audioManager;
     public GameObject audioManagerPrefab;
+    public WeatherManager weatherManager;
 
     public CurveManager curveManager; //used to reset the curves when a new round begins
 
@@ -452,6 +453,7 @@ public class GameManager : MonoBehaviour {
 
             SceneManager.SetActiveScene(roundScene);
             StartTime = Time.time;
+            GameManager.instance.weatherManager.ChangeWeather();
             TileManager.tileManager.StartGame();
 
             ItemSpawner.Instance.UpdateSpawnPoints(TileManager.tileManager.tileMap);
