@@ -407,9 +407,11 @@ public class PlayerController : MonoBehaviour, IHurtable {
 
     IEnumerator HurtIndicator() //show the player that it is hurt 
     {
-        rend.material.SetColor("Color_91A455EE", Color.white);
+        if (rend != null)
+            rend.material.SetColor("Color_91A455EE", Color.white);
         yield return new WaitForSeconds(0.04f); //the player flashes white 
-        rend.material.SetColor("Color_91A455EE", playerColor);
+        if (rend != null)
+            rend.material.SetColor("Color_91A455EE", playerColor);
     }
 
     // Restrict the player's movement for a duration

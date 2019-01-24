@@ -71,7 +71,8 @@ public class GroundEffect : MonoBehaviour {
         newInstance.IgnoreCollision = ignoreCollision;
         if (ignoreCollision != null) {
             foreach (Collider c in ignoreCollision)
-                Physics.IgnoreCollision(c, newInstance.hitBox);
+                if (c != null)
+                    Physics.IgnoreCollision(c, newInstance.hitBox);
         }
 
         newInstance.endTime = Time.time + duration;
