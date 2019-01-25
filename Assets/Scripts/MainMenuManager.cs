@@ -243,6 +243,7 @@ public class MainMenuManager : MonoBehaviour {
 		{
 			//Quit
 			case 0:
+				Debug.Log("Quit game.");
 				Application.Quit();
 				break;
 
@@ -383,6 +384,7 @@ public class MainMenuManager : MonoBehaviour {
 	private void mainMenuButtons( int i )
 	{
 		btn = mainMenuPanel.transform.GetChild(i).gameObject;
+		Debug.Log("main menu button selected: " + btn.name);
 		_buttonSelect();
 	}
 

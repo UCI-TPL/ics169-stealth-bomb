@@ -390,7 +390,7 @@ public class GameManager : MonoBehaviour {
             TileManager.tileManager.LoadLevel(levelNames[i][rng.Next(0, levelNames[i].Length)], (Scene loadedScene) => { State = GameState.Ready; roundScene = loadedScene; });
 
 
-            Resources.UnloadUnusedAssets();
+            //Resources.UnloadUnusedAssets();
         }
 
         // This returns an integer that corresponds to a level group that LoadLevel will load a level
