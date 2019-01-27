@@ -433,6 +433,7 @@ public class GameManager : MonoBehaviour {
         }
 
         public void StartGame() {
+            Application.targetFrameRate = 10;
             GameManager.instance.GhostOffset = Vector3.zero; 
             GameManager.instance.UpdateRank();
             GameManager.instance.audioManager.Stop("Fanfare");

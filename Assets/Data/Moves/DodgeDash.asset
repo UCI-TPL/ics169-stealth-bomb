@@ -24,6 +24,6 @@ MonoBehaviour:
   buffs: []
   moveDuration: 0.12
   moveType: 0
-  SpeedMultiplier: 0.4
+  SpeedMultiplier: 1.5
   MoveDuringDash: 1
-  NewDodge: 0
+  NewDodge: 1
