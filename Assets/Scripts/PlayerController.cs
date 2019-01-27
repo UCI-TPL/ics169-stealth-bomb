@@ -168,8 +168,6 @@ public class PlayerController : MonoBehaviour, IHurtable {
 
     public IEnumerator DeathAnimation() //after the player dies, change a shader property in a while loop to make the player dissovle 
     {
-        allowAttack = false;
-        allowMovement = false;
         float _deathTime = Time.time + DeathAnimationTime;
         float count = Time.time;
         while (Time.time <= _deathTime)

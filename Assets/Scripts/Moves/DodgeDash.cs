@@ -30,45 +30,37 @@ public class DodgeDash : Weapon
             player.controller.rolling = true;
         // player.controller.ResetCharge();
 
-        float target = player.stats.moveSpeed * data.SpeedMultiplier;
-        player.controller.dodgeSpeed = target;// player.controller.player.stats.moveSpeed * data.SpeedMultiplier;
-        //player.EnableInvincibility(data.moveDuration / 2);  //the player is Invincible for half of the dash
-
-        float movingTime = Time.time + data.moveDuration;
-        float timeDecrease  = 15f; //3f is good for deltaTime oh my
-
-        float decreaseLimit = 0.7f; //stops the dodgeSpeed from growing too low at high framerates
-        while(movingTime >= Time.time)
+        /*
+        if(data.NewDodge)
         {
-            Debug.Log("Speed is " + player.controller.dodgeSpeed);
-            if(data.NewDodge) //ignore this for now it isn't currently in use
+            float target = player.stats.moveSpeed * data.SpeedMultiplier;
+            player.controller.dodgeSpeed = target; //to start with
+            for (int i = 0; i < 10; i++)
             {
-                /*
                 yield return new WaitForSeconds(data.moveDuration / 10);
-                Debug.Log(" t os " + target + " and mov speed is " + player.stats.moveSpeed);
-                Debug.Log("Minus by "+ (target - player.stats.moveSpeed) * 0.1f * timeMultiplier);
-                float subtraction = (target - player.stats.moveSpeed) * 0.1f * timeMultiplier;
-                if(-subtraction < player.controller.dodgeSpeed)
-                    player.controller.dodgeSpeed += (target - player.stats.moveSpeed) * 0.1f * timeMultiplier;
-                timeMultiplier += 0.5f;
-                */
-                float subtraction = player.controller.dodgeSpeed * timeDecrease * Time.fixedDeltaTime;
-                player.controller.dodgeSpeed = player.controller.dodgeSpeed - subtraction;
-
-                if(player.controller.dodgeSpeed <= (target * decreaseLimit)) //this is to prevent the speed for dipping too low at high FPS. Out game is often in the 100s
-                {
-                    player.controller.dodgeSpeed = target * (decreaseLimit + 0.15f);
-                }
-                yield return null;
+                player.controller.dodgeSpeed -= (target - player.stats.moveSpeed) * 0.1f;
+                //Debug.Log("Speed is now : " + player.controller.dodgeSpeed);
             }
-            else
-            {
-                yield return null; //the crucial line that should never be removed.
-            }
-            
         }
-        //yield return new WaitForSeconds(data.moveDuration);
+        else
+        {
+            player.controller.dodgeSpeed = player.controller.player.stats.moveSpeed * data.SpeedMultiplier;
+            // player.controller.DisableAttack(data.moveDuration);
+            yield return new WaitForSeconds(data.moveDuration);
+        }
+        */
+
+        player.controller.dodgeSpeed = player.controller.player.stats.moveSpeed * data.SpeedMultiplier;
+        //player.EnableInvincibility(data.moveDuration / 2);  //the player is Invincible for half of the dash
+        yield return new WaitForSeconds(data.moveDuration);
         player.controller.ResetVelocity();
+
+
+        //player.controller.dodgeSpeed = 0f; //the speed is set to 0 to decelarate the player at the end of the dodge
+        
+        //player.controller.braking = true;  // this is a different brake implementation, this replaced the dodgeSpeed and ResetVelocity one
+        //yield return new WaitForSeconds(data.StopTime);
+        //player.controller.braking = false;
         player.controller.dodgeSpeed = player.controller.player.stats.moveSpeed;
         player.controller.dodging = false;
         if (data.MoveDuringDash)
