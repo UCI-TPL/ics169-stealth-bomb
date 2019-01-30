@@ -43,9 +43,20 @@ public class BlackHoleWeapon : Weapon {
 			alreadyHit = false;
 			data.projectile.Shoot(player, data.projSpeed, data.numProj, (Vector3 origin, Vector3 contactPoint, GameObject target) => { CreateBlackHole(contactPoint); });
 			timesUsed++;
-			player.controller.SwitchWeapon();
-			player.controller.PreviousWeapon = player.controller.Weapon;
+
+            // Adding in code to make it use a slingshot.
+            if (player.controller.PreviousWeapon == null)
+            {
+                player.ResetWeapon();
+                player.controller.PreviousWeapon = player.controller.Weapon;
+            }
+            else
+            {
+                player.controller.SwitchWeapon();
+                player.controller.PreviousWeapon = player.controller.Weapon;
+            }
 		}
+
 	}
 
 	protected override void OnHit(Vector3 origin, Vector3 contactPoint, PlayerController targetPlayerController, object extraData) {
