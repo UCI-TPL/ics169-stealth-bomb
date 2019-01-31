@@ -53,7 +53,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 1
 --- !u!96 &1215857095
 TrailRenderer:
@@ -202,6 +202,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   proj: {fileID: 7743166598750051238}
   rb: {fileID: 1215857096}
+  maxBounces: 5
   arcHeight: 18
   arcMoveSpeed: 8
 --- !u!1 &970677083677697377

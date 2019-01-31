@@ -6,7 +6,7 @@ public class BombProjectileAddon : MonoBehaviour
 {
     public Projectile proj;
     public Rigidbody rb;
-    //public int maxBounces = 1;
+    public int maxBounces = 2;
     private int bounceNum = 0;
     public float arcHeight = 3.5f;
     public float arcMoveSpeed = 2f;
@@ -27,19 +27,18 @@ public class BombProjectileAddon : MonoBehaviour
         {
             if (proj.getHasHit() == true)
             {
-                Debug.Log("Counting Bounce");
                 bounceNum++;
-                if (bounceNum <= 2)
+                if (bounceNum <= maxBounces)
                 {
                     proj.setHasHit(false);
                     rb.isKinematic = false;
                     Invoke("resetCollision", .042f);        // Hold off setting the flag for ~2-3 frames to let the bomb come back up.
 
 
-                    if (bounceNum == 2) { bombStop = true; }
+                    if (bounceNum == maxBounces) { bombStop = true; }
                     else
                     {
-                        proj.transform.rotation = Quaternion.Euler(proj.transform.rotation.eulerAngles.x, proj.transform.rotation.eulerAngles.y - 90f, proj.transform.rotation.eulerAngles.z);
+                        //proj.transform.rotation = Quaternion.Euler(proj.transform.rotation.eulerAngles.x, proj.transform.rotation.eulerAngles.y - 90f, proj.transform.rotation.eulerAngles.z);
                         proj.GetComponent<Rigidbody>().velocity = proj.transform.forward * 12f;
                         time = 0f;
                     }

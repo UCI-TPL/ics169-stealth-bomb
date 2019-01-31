@@ -18,4 +18,4 @@ MonoBehaviour:
     type: 3}
   lifetime: 3
   spreadAngle: 10
-  rotate90: 1
+  rotate90: 0
