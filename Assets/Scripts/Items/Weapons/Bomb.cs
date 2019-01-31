@@ -21,9 +21,19 @@ public class Bomb : MonoBehaviour {
         if (other.tag == "Player")
         {
             PlayerController oPlayer = other.gameObject.GetComponent<PlayerController>();
-            if (!hitPlayers[oPlayer.player.playerNumber]) {
+            if (!hitPlayers[oPlayer.player.playerNumber])
+            {
                 hitPlayers[oPlayer.player.playerNumber] = true;
                 OnHit.Invoke(transform.position, other.transform.position, other.gameObject);
+            }
+        }
+        else
+        {
+            Transform pTransform = other.transform.parent;
+            if (pTransform != null)
+            {
+                if (pTransform.name != "Player")
+                    OnHit.Invoke(transform.position, other.transform.position, other.gameObject);
             }
         }
     }

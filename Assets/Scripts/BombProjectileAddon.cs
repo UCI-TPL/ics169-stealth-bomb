@@ -24,23 +24,21 @@ public class BombProjectileAddon : MonoBehaviour
     {
         if (!bombStop)
         {
-
-
-
             if (proj.getHasHit() == true)
             {
-                if (bounceNum < 1)
+                bounceNum++;
+                if (bounceNum <= 2)
                 {
-                    bounceNum++;
+                    proj.setHasHit(false);
                     rb.detectCollisions = true;
                     rb.isKinematic = false;
-                    proj.transform.rotation = Quaternion.Euler(proj.transform.rotation.eulerAngles.x, proj.transform.rotation.eulerAngles.y - 90f, proj.transform.rotation.eulerAngles.z);
-                    proj.GetComponent<Rigidbody>().velocity = proj.transform.forward * 8f;
-                    proj.setHasHit(false);
-                }
-                else
-                {
-                    bombStop = true;
+
+                    if (bounceNum == 2) { bombStop = true; }
+                    else
+                    {
+                        proj.transform.rotation = Quaternion.Euler(proj.transform.rotation.eulerAngles.x, proj.transform.rotation.eulerAngles.y - 90f, proj.transform.rotation.eulerAngles.z);
+                        proj.GetComponent<Rigidbody>().velocity = proj.transform.forward * 8f;
+                    }
                 }
             }
         }
@@ -52,7 +50,6 @@ public class BombProjectileAddon : MonoBehaviour
         {
             time += Time.deltaTime;
             Vector3 movement = transform.position + new Vector3(0f, Mathf.Cos(time) * Time.deltaTime, 0f) * arcHeight;
-
             rb.MovePosition(movement);
         }
     }

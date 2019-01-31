@@ -89,7 +89,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ShowResolutionOverlay: 1
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -1263,7 +1263,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4442278408530312, guid: 75b5f308c529be34aaf614ece367b453, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 0.00000059604645
       objectReference: {fileID: 0}
     - target: {fileID: 4442278408530312, guid: 75b5f308c529be34aaf614ece367b453, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1306,7 +1306,7 @@ PrefabInstance:
     - target: {fileID: 224473012658931512, guid: 75b5f308c529be34aaf614ece367b453,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: -15.399963
+      value: -38.700012
       objectReference: {fileID: 0}
     - target: {fileID: 224473012658931512, guid: 75b5f308c529be34aaf614ece367b453,
         type: 3}
@@ -1326,7 +1326,7 @@ PrefabInstance:
     - target: {fileID: 224416041470867512, guid: 75b5f308c529be34aaf614ece367b453,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: -15.399963
+      value: -38.700012
       objectReference: {fileID: 0}
     - target: {fileID: 224416041470867512, guid: 75b5f308c529be34aaf614ece367b453,
         type: 3}
@@ -1346,12 +1346,12 @@ PrefabInstance:
     - target: {fileID: 224496860278899042, guid: 75b5f308c529be34aaf614ece367b453,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 78.5
+      value: 88.399994
       objectReference: {fileID: 0}
     - target: {fileID: 224496860278899042, guid: 75b5f308c529be34aaf614ece367b453,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 157
+      value: 176.79999
       objectReference: {fileID: 0}
     - target: {fileID: 224496860278899042, guid: 75b5f308c529be34aaf614ece367b453,
         type: 3}
@@ -2810,16 +2810,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114407400500306902, guid: 40632a0e2689da549ac1d33e92138743,
-        type: 3}
-      propertyPath: gravity
-      value: -50
-      objectReference: {fileID: 0}
     - target: {fileID: 947806761363706678, guid: 40632a0e2689da549ac1d33e92138743,
         type: 3}
       propertyPath: directionLight
       value: 
       objectReference: {fileID: 993188160}
+    - target: {fileID: 114407400500306902, guid: 40632a0e2689da549ac1d33e92138743,
+        type: 3}
+      propertyPath: gravity
+      value: -50
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 40632a0e2689da549ac1d33e92138743, type: 3}
 --- !u!1 &783223424

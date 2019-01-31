@@ -31,7 +31,7 @@ public class BombWeapon : Weapon {
         {
             timesUsed++;
             alreadyHit = false;
-            data.projectile.Shoot(player, data.projSpeed, data.projNum, (Vector3 origin, Vector3 contactPoint, GameObject target) => { CreateBomb(contactPoint); });
+            data.projectile.Shoot(player, data.projSpeed, data.projNum, (Vector3 origin, Vector3 contactPoint, GameObject target) => { CreateBomb(origin, contactPoint); });
             if (timesUsed == maxUses)
             {
                 if (player.controller.PreviousWeapon == null)           // Workaround for when a player holds onto a Bomb into a new round.
@@ -64,12 +64,12 @@ public class BombWeapon : Weapon {
 
     }
 
-    protected void CreateBomb(Vector3 spawnPoint)
+    protected void CreateBomb(Vector3 originBW, Vector3 spawnPoint)
     {
         Bomb bomb = GameObject.Instantiate(data.bombPrefab, spawnPoint, Quaternion.identity).GetComponent<Bomb>();
         bomb.SetUpBomb(data.explosionSize, data.growthRate);
         // BombWeapon defines Hit. Bomb has an event, which Bomb adds a lambda(?) to as a listener, which is a wrapper for the Hit method defined by Weapon.
-        bomb.OnHit.AddListener((Vector3 origin, Vector3 contactPoint, GameObject target) => { Hit(origin, contactPoint, target, ChargeLevel); });
+        bomb.OnHit.AddListener((Vector3 origin, Vector3 contactPoint, GameObject target) => { Hit(originBW, contactPoint, target, ChargeLevel); });
         alreadyHit = true;
     }
 
