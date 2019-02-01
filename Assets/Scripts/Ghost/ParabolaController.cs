@@ -5,34 +5,17 @@ using System.Collections.Generic;
 //This is not orignal code, found on Github at : https://gist.github.com/ditzel/68be36987d8e7c83d48f497294c66e08
 public class ParabolaController : MonoBehaviour
 {
-    /// <summary>
-    /// Animation Speed
-    /// </summary>
-    public float Speed = 1;
-
-    /// <summary>
-    /// Start of Parabola
-    /// </summary>
+    public float Speed = 1; //ignore this one 
     public GameObject ParabolaRoot; //the map can have either 1 or 2 Parabolas 
 
-    /// <summary>
-    /// Autostart Animation
-    /// </summary>
-    public bool Autostart = true;
-
-    /// <summary>
-    /// Animate
-    /// </summary>
+    public bool Autostart = true; //ignore these
     public bool Animation = true;
+    protected float animationTime = float.MaxValue;
+    protected ParabolaFly gizmo;
+
 
     //next parabola event
     internal bool nextParbola = false;
-
-    //animation time
-    protected float animationTime = float.MaxValue;
-
-    //gizmo
-    protected ParabolaFly gizmo;
 
     //draw
     protected ParabolaFly parabolaFly;
@@ -110,19 +93,22 @@ public class ParabolaController : MonoBehaviour
 
     }
 
-    public Vector3 UpdatePosition(float avg)
+    public Vector3 UpdatePosition(float avg) //standard case
     {
-        //Debug.Log("avg is " + avg);
-        if (avg < min)
-            avg = min;
-        if (avg > max)
-            avg = max;
+
+        Debug.Log("Receiving an avg pf " + avg);
+        avg = (avg < min || avg > max) ?  ( (avg < min) ? min : max)  : avg; //this is very hard to read but it was fun to write. Avg is min if its under min, avg is max if its over max 
         if (parabolaFly != null)
             return parabolaFly.GetPositionAtZ(avg);
         else
             return Vector3.zero;
     }
-
+    /*
+    public Vector3 UpdatePosition(Vector3 startPosition, float lerpPosition) //used when lerping from one side to the other
+    {
+        return Vector3.Lerp(startPosition,)
+    }
+    */
     public void FollowParabola()
     {
         RefreshTransforms(Speed);

@@ -429,8 +429,8 @@ public class GameManager : MonoBehaviour {
         public void ResetCurves() //must happen every round just in case the map changes 
         {
             MapInfo newMap = GameObject.Find("Tile Map").GetComponent<MapInfo>(); //this has the info for the Ghost Curve for each map 
-            GameManager.instance.curveManager.ResetCurve1(newMap.LeftCurve);
-            GameManager.instance.curveManager.ResetCurve2(newMap.RightCurve);
+            GameManager.instance.curveManager.ResetCurve1(newMap.LeftCurve, (int) newMap.min, (int)newMap.max);
+            GameManager.instance.curveManager.ResetCurve2(newMap.RightCurve, (int)newMap.min, (int)newMap.max);
         }
 
         public void StartGame() {

@@ -24,13 +24,27 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
     public ParabolaController GhostParabola1; //maps can have either 1 or 2 parabolas    
   
     public ParabolaController GhostParabola2;
-    
 
+    Vector3 startPosition; //used for lerping
+    Vector3 endPosition;
+
+    public bool switchSides = false; //lerp if true
+
+    public bool leftSide;
+
+    Vector3 latestPosition; //the position from the previous update, where ghost is lerping from
+
+    private float travelTime = 0.3f; //how long it takes to lerp all across
+
+    private float startTravelTime; //used to see how much travel has gone on 
 
     public float cooldown = 0.1f;
 
+    private Vector3 smoothVel; //used by smoothDamp don't worry about it 
+
     private void Start()
-    {   
+    {
+        smoothVel = Vector3.zero;
         forward = Camera.main.transform.forward;
         forward.Scale(new Vector3(1, 0, 1));
         forward.Normalize();
@@ -42,7 +56,11 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
         //Cursor.GetComponent<Renderer>().material.SetColor("_AlbedoColor", playerColor);
         //Cursor.transform.Find("Cube").GetComponent<Renderer>().material.SetColor("Color_52FADAA",playerColor);
 
+        leftSide = transform.position.z >= transform.position.x; //true for left, false for right   (could work for up & down as well)
+       
+
         GhostBody = Instantiate(GhostPrefab, transform.position, transform.rotation);
+        lastPosition = GhostBody.transform.position;
         //rend.material.SetColor("Color_91A455EE", playerColor);
         GhostBody.GetComponentsInChildren<Renderer>()[1].material.color = playerColor;
         GhostBody.GetComponentsInChildren<Renderer>()[1].material.SetColor("Color_998F7755", playerColor);
@@ -81,26 +99,42 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
     {
         Move(player.stats.moveSpeed);
 
+        Debug.Log("Position is " + transform.position.x + " and " + transform.position.z);
         Vector3 pos;
 
-        //Debug.Log("Simply at " + transform.position.z + "   and    " + transform.position.x);
+        if (((startTravelTime + travelTime) <= Time.time) && switchSides) //check to see if the side switching has ended
+            switchSides = false;
 
-        if (transform.position.z >= transform.position.x) //depending on the position, go to either the first or second parabola and rotate accordingly
+        if (leftSide != (transform.position.z >= transform.position.x)) //if this is true a side has been switched
         {
-            pos = GhostParabola1.UpdatePosition((transform.position.z + transform.position.x) / 2) + GameManager.instance.GhostOffset;
-            GhostBody.transform.rotation = Quaternion.Euler(0f, 135, 0f);
-        }
-        else
-        {
-            pos = GhostParabola2.UpdatePosition((transform.position.z + transform.position.x) / 2) - GameManager.instance.GhostOffset;
-            GhostBody.transform.rotation = Quaternion.Euler(0f, 315, 0f);
+            leftSide = !leftSide;
+            switchSides = true;
+            startTravelTime = Time.time;
+            latestPosition = GhostBody.transform.position;
         }
 
-        //Debug.Log("One " + GhostParabola1.UpdatePosition((transform.position.z + transform.position.x) / 2));
-        //Debug.Log("Two " + GhostParabola2.UpdatePosition((transform.position.z + transform.position.x) / 2));
+        ParabolaController Ghost = leftSide ? GhostParabola1 : GhostParabola2;
+        Vector3 offset = leftSide ? GameManager.instance.GhostOffset : -GameManager.instance.GhostOffset;
+        Quaternion rotation = (transform.position.z >= transform.position.x) ? Quaternion.Euler(0f, 135, 0f) : Quaternion.Euler(0f, 315f, 0f);
+        Vector3 currentPosition = Ghost.UpdatePosition((transform.position.z + transform.position.x) / 2) + offset;
+       
+        if (!switchSides) //this is the default case, business as usual no switching
+        {
+            pos = currentPosition;
+            GhostBody.transform.rotation = rotation;
+            latestPosition = GhostBody.transform.position;
+        }
+        else //if sides have switches then continue the lerp 
+        {
+            float lerpPosition = (Time.time - startTravelTime) / travelTime; //how far along the lerp should it be
+            pos = Vector3.Lerp(latestPosition, currentPosition, lerpPosition);
+            //pos = Vector3.SmoothDamp(latestPosition, currentPosition, ref smoothVel, 10f);
+        } 
 
         if (pos != Vector3.zero)
             GhostBody.transform.position = pos;
+
+        
        
     }
 
