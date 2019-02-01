@@ -143,6 +143,7 @@ public class GameManager : MonoBehaviour {
     #endregion
     // Use this for initialization
     void Awake () {
+        //Application.targetFrameRate = 1500; //sets the frame rate. Make it like 1000 to run at max possible FPS
         if (instance == null)
         {
             DontDestroyOnLoad(gameObject);

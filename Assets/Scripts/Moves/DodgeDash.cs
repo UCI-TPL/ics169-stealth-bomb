@@ -25,9 +25,31 @@ public class DodgeDash : Weapon
     public IEnumerator Dodge()
     {
 
+        float dSpeed = player.stats.moveSpeed * data.SpeedMultiplier;
         player.controller.dodging = true;
         if(data.MoveDuringDash)
             player.controller.rolling = true;
+
+        float dodgingTime = Time.time + data.moveDuration;
+        player.controller.dodgeSpeed = player.stats.moveSpeed * data.SpeedMultiplier;
+        while(dodgingTime >= Time.time)
+        {
+            //Debug.Log("Frame time is " + Time.deltaTime);
+            //Time.deltaTime is 0.09 for 11fps and 0.05 for 130fps
+            //the speed should decrease MORE at lower FPS to make up for the lack of decrements. At 11fps it might only decrease twice while at 100+ fps the while loop might run way more! 
+            float decrease =  dSpeed * data.DodgeDeceleration * Time.deltaTime; //if DodgeDeceleration isn't 0 the dodge will slow down as the dodge goes on, hopefully looking smooth
+            float percentage = (decrease * 100) / dSpeed;
+            float percentageChange = (dSpeed * 100) / (player.stats.moveSpeed * data.SpeedMultiplier);
+            dSpeed -= decrease;
+            player.controller.dodgeSpeed = dSpeed;
+
+            //Debug.Log(" percentage of change : "+percentage+" percentage changed is "+percentageChange);
+            //yield return null;
+            yield return new WaitForEndOfFrame();
+        }
+        player.controller.dodgeSpeed = player.stats.moveSpeed;
+        player.controller.ResetVelocity();
+
         // player.controller.ResetCharge();
 
         /*
@@ -50,21 +72,16 @@ public class DodgeDash : Weapon
         }
         */
 
-        player.controller.dodgeSpeed = player.controller.player.stats.moveSpeed * data.SpeedMultiplier;
+        //player.controller.dodgeSpeed = player.controller.player.stats.moveSpeed * data.SpeedMultiplier;
         //player.EnableInvincibility(data.moveDuration / 2);  //the player is Invincible for half of the dash
-        yield return new WaitForSeconds(data.moveDuration);
-        player.controller.ResetVelocity();
+        //yield return new WaitForSeconds(data.moveDuration);
+        //player.controller.ResetVelocity();
+        //player.controller.dodgeSpeed = player.controller.player.stats.moveSpeed;
 
-
-        //player.controller.dodgeSpeed = 0f; //the speed is set to 0 to decelarate the player at the end of the dodge
-        
-        //player.controller.braking = true;  // this is a different brake implementation, this replaced the dodgeSpeed and ResetVelocity one
-        //yield return new WaitForSeconds(data.StopTime);
-        //player.controller.braking = false;
-        player.controller.dodgeSpeed = player.controller.player.stats.moveSpeed;
         player.controller.dodging = false;
         if (data.MoveDuringDash)
             player.controller.rolling = false;
+       // yield return null;
 
     }
 
