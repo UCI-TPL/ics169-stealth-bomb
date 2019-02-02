@@ -309,8 +309,13 @@ public class InputManager : MonoBehaviour {
 
         // Remove all button mappings related to an action
         public void ClearButtonMapping(ActionCode action) {
-            ButtonMaps[action].Clear();
-            TestFromActionCode(action).Clear();
+            try {
+                ButtonMaps[action].Clear();
+                TestFromActionCode(action).Clear();
+            }
+            catch (KeyNotFoundException e) {
+                Debug.LogError("Action Code not set up correctly");
+            }
         }
 
         // Remove all button mappings for all actions
@@ -1048,7 +1053,7 @@ public class InputManager : MonoBehaviour {
 
         // List of every PlayerAction available
         public enum ActionCode {
-            Attack, Jump, Dodge, Start, Switch
+            Attack, Jump, Dodge, Start, Switch, testymode
         }
 
         // Type of Controller

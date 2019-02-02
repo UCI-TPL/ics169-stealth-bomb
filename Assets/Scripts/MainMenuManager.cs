@@ -83,6 +83,8 @@ public class MainMenuManager : MonoBehaviour {
 			ControllerNavigationNewVersion();
 		else
 			ControllerNavigationOldVersion();
+
+		// GameManager.instance.inputManager.controllers[0].
 	}
 
 	// rough version of being able to navigate main menu with more than 1 controller
@@ -117,26 +119,26 @@ public class MainMenuManager : MonoBehaviour {
 						}
 
 						if (selectionMenuPanel.activeSelf == true) {
-							if (currentStates[i].ThumbSticks.Left.X > 0) {
-								currentSelectionMenuButton++;
-								if (currentSelectionMenuButton > 3) {
-									currentSelectionMenuButton = 2;
-								}
-								selectionMenuButtons(currentSelectionMenuButton);
-								hasMoved = true;
-							}
+							// if (currentStates[i].ThumbSticks.Left.X > 0) {
+							// 	currentSelectionMenuButton++;
+							// 	if (currentSelectionMenuButton > 3) {
+							// 		currentSelectionMenuButton = 2;
+							// 	}
+							// 	selectionMenuButtons(currentSelectionMenuButton);
+							// 	hasMoved = true;
+							// }
 						}
 
 						if (remappingMenuPanel.activeSelf == true)
 						{
 
 							// update button pos
-							if (currentStates[i].ThumbSticks.Left.Y < 0.0f)
+							if (currentStates[i].ThumbSticks.Left.Y < -controllerStickDeadZone)
 							{
 								currentRemappingMenuButton++;
 								hasMoved = true;
 							}
-							else if (currentStates[i].ThumbSticks.Left.Y > 0f)
+							else if (currentStates[i].ThumbSticks.Left.Y > controllerStickDeadZone)
 							{
 								currentRemappingMenuButton--;
 								hasMoved = true;

@@ -65,7 +65,7 @@ MonoBehaviour:
     loop: 1
     source: {fileID: 0}
     output: {fileID: 243211916268380884, guid: 8fb7316e453bb03438b7782f518b5c48, type: 2}
-  - clip: {fileID: 8300000, guid: 342ab295c1bad414d9b9866edb295ad8, type: 3}
+  - clip: {fileID: 8300000, guid: b228e245d01d341358618b8715c56af2, type: 3}
     name: Battle
     volume: 0.3
     pitch: 1
