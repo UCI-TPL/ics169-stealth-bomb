@@ -13,6 +13,8 @@ public class Projectile : MonoBehaviour {
     public Player player;
     protected Vector3 origin;
 
+    public float damageMultiplier;
+
     public delegate void HitAction(Vector3 origin, Vector3 contactPoint, GameObject target);
     public HitAction OnHit;
 

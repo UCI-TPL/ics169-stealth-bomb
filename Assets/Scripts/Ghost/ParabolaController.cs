@@ -95,8 +95,6 @@ public class ParabolaController : MonoBehaviour
 
     public Vector3 UpdatePosition(float avg) //standard case
     {
-
-        Debug.Log("Receiving an avg pf " + avg);
         avg = (avg < min || avg > max) ?  ( (avg < min) ? min : max)  : avg; //this is very hard to read but it was fun to write. Avg is min if its under min, avg is max if its over max 
         if (parabolaFly != null)
             return parabolaFly.GetPositionAtZ(avg);

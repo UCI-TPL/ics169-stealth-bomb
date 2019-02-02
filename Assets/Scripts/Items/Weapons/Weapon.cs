@@ -155,6 +155,7 @@ public abstract class Weapon {
         IHurtable hurtable = (IHurtable)target.GetComponentInParent(typeof(IHurtable)); // Check if target is a player
         if (hurtable != null) {
             float damage = GetDamageDealt(origin, extraData);
+            Debug.Log("Damage is " + damage);
             if (target.CompareTag("Player")) {
                 PlayerController targetPlayerController = target.GetComponent<PlayerController>(); // Check if target is a player
                 OnHit(origin, contactPoint, targetPlayerController, extraData); // Activate OnHit effects and get damage dealt
@@ -180,6 +181,24 @@ public abstract class Weapon {
 
     // GetDamageDealt returns damage
     protected virtual float GetDamageDealt(Vector3 origin, object extraData) {
+        if(extraData != null)
+        {
+
+            float chargeLevel = (System.Convert.ToSingle(extraData) )/100;
+            //Debug.Log("Normally we have " + weaponData.damage * player.stats.Damage);
+            //Debug.Log("Extra data is : " + chargeLevel);
+
+            if (chargeLevel > 0.5f && chargeLevel <= 1f)
+            {
+                float dam = (weaponData.damage * player.stats.Damage);
+                dam = (dam / 2) + (dam * chargeLevel * 2f);
+                //Debug.Log("Potential Damage is " + dam);
+                return dam;
+            }
+            
+        }
+
+       
         return weaponData.damage * player.stats.Damage;
     }
 

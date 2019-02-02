@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 [System.Serializable]
 public class ChargeWeapon : Weapon {
 
@@ -42,32 +43,35 @@ public class ChargeWeapon : Weapon {
         else if((ChargeLevel * data.chargeLevels) > 1f) //colors only change the the weapon charges higher than one, so no glow for the fast bow
             rend.material.color = rend.material.color + ((player.controller.playerColor / data.colorAddition) * Time.deltaTime);
         */
-        /* use this for different phases of color attacks 
+
+        //Debug.Log(GetChargeLevel());
+        
+        /*
         switch ((int)(ChargeLevel * data.chargeLevels)) 
         {
             case 1:
-                rend.material.color = rend.material.color + ((Color.red / data.colorAddition) * Time.deltaTime);
+
+                //rend.material.color = rend.material.color + ((Color.red / data.colorAddition) * Time.deltaTime);
                 break;
             case 2:
-                rend.material.color = rend.material.color +  (Color.blue / data.colorAddition)  * Time.deltaTime;
+                //rend.material.color = rend.material.color +  (Color.blue / data.colorAddition)  * Time.deltaTime;
                 break;
             case 3:
-                rend.material.color = rend.material.color + (Color.green / data.colorAddition)  * Time.deltaTime;
+                //rend.material.color = rend.material.color + (Color.green / data.colorAddition)  * Time.deltaTime;
                 break;
         }
         */
+        
     }
 
     // OnRelease is called once when the weapon is released
     protected override void OnRelease() {
 
         GameManager.instance.audioManager.Play("Bow");
-        //AudioManager.audioManager.Play("Bow");
-
+       // Debug.Log("When firing we are at : " + ChargeLevel);
         rend.material.color = player.controller.playerColor;
-        //Debug.Log("Releasing with a chargeTime of " + chargeLevel);
-        //if (chargeLevel >= 1) { }
-        data.projectile.Shoot(player, data.projSpeed * Mathf.Pow(Mathf.Floor(ChargeLevel * data.chargeLevels), 2), data.numProj, (Vector3 origin, Vector3 contactPoint, GameObject target) => { Hit(origin, contactPoint, target); });
+        int chargeLevel = (int)(ChargeLevel * 100);
+        data.projectile.Shoot(player, data.projSpeed * Mathf.Pow(Mathf.Floor(ChargeLevel * data.chargeLevels), 2), data.numProj, (Vector3 origin, Vector3 contactPoint, GameObject target) => { Hit(origin, contactPoint, target, chargeLevel); });
         //Projectile arrow = GameObject.Instantiate(data.arrow, player.controller.ShootPoint.transform.position, player.transform.rotation, null); //this instantiates the arrow as an attack
         //arrow.player = player;
         //arrow.speed = data.projSpeed * Mathf.Floor(chargeLevel);

@@ -98,8 +98,6 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
     private void FixedUpdate()
     {
         Move(player.stats.moveSpeed);
-
-        Debug.Log("Position is " + transform.position.x + " and " + transform.position.z);
         Vector3 pos;
 
         if (((startTravelTime + travelTime) <= Time.time) && switchSides) //check to see if the side switching has ended

@@ -19,7 +19,7 @@ MonoBehaviour:
   autoAttack: 0
   cooldown: 0.25
   knockbackStrength: 30
-  damage: 30
+  damage: 20
   buffs: []
   instance:
     weaponData: {fileID: 11400000}
@@ -27,7 +27,7 @@ MonoBehaviour:
   projectile: {fileID: 11400000, guid: 9df1e8c6a587d604684f97e370ea1793, type: 2}
   colorAddition: 0.3
   GlowLimit: 2.5
-  chargeTime: 0.1
+  chargeTime: 0.2
   chargeLevels: 3
   numProj: 1
   projSpeed: 17.5
