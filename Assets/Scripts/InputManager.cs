@@ -274,6 +274,9 @@ public class InputManager : MonoBehaviour {
         private readonly ButtonTest StartTest = new ButtonTest();
         private readonly ButtonTest SwitchTest = new ButtonTest();
 
+        private readonly ButtonTest ConfirmTest = new ButtonTest();
+        private readonly ButtonTest CancelTest = new ButtonTest();
+
         // Public variables showing what the controlls are currently mapped to
         public readonly Dictionary<ActionCode, HashSet<ButtonCode>> ButtonMaps = new Dictionary<ActionCode, HashSet<ButtonCode>>();
         public JoyStickCode moveJoyStick { get; private set; }
@@ -337,6 +340,10 @@ public class InputManager : MonoBehaviour {
                     return StartTest;
                 case ActionCode.Switch:
                     return SwitchTest;
+                case ActionCode.Confirm:
+                    return ConfirmTest;
+                case ActionCode.Cancel:
+                    return CancelTest;
                 default:
                     return AttackTest;
             }
@@ -361,6 +368,8 @@ public class InputManager : MonoBehaviour {
             AddButtonMapping(ActionCode.Dodge, ButtonCode.LeftTrigger);
             AddButtonMapping(ActionCode.Start, ButtonCode.Start);
             AddButtonMapping(ActionCode.Switch, ButtonCode.Y);
+            AddButtonMapping(ActionCode.Confirm, ButtonCode.A);
+            AddButtonMapping(ActionCode.Cancel, ButtonCode.B);
             SetMoveJoyStick(JoyStickCode.Left);
             SetAimJoyStick(JoyStickCode.Right);
         }
@@ -438,6 +447,8 @@ public class InputManager : MonoBehaviour {
             ButtonMaps.Add(ActionCode.Dodge, new HashSet<ButtonCode>());
             ButtonMaps.Add(ActionCode.Start, new HashSet<ButtonCode>());
             ButtonMaps.Add(ActionCode.Switch, new HashSet<ButtonCode>());
+            ButtonMaps.Add(ActionCode.Confirm, new HashSet<ButtonCode>());
+            ButtonMaps.Add(ActionCode.Cancel, new HashSet<ButtonCode>());
             SetDefaultMapping();
 #endif
         }
@@ -1041,6 +1052,8 @@ public class InputManager : MonoBehaviour {
         public readonly ButtonEvent dodge = new ButtonEvent();
         public readonly ButtonEvent start = new ButtonEvent();
         public readonly ButtonEvent Switch = new ButtonEvent();
+        public readonly ButtonEvent confirm = new ButtonEvent();
+        public readonly ButtonEvent cancel = new ButtonEvent();
         public abstract Vector2 MoveVector();
         public abstract Vector2 AimVector();
 
@@ -1053,7 +1066,7 @@ public class InputManager : MonoBehaviour {
 
         // List of every PlayerAction available
         public enum ActionCode {
-            Attack, Jump, Dodge, Start, Switch, testymode
+            Attack, Jump, Dodge, Start, Switch, /*testymode,*/ Confirm, Cancel
         }
 
         // Type of Controller
