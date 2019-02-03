@@ -138,7 +138,8 @@ public class PlayerController : MonoBehaviour, IHurtable {
     public void Destroy() {
         if (Weapon != null)
             Weapon.UnequipWeapon();
-        StartCoroutine(DeathAnimation());
+        if(this.gameObject!= null)
+            StartCoroutine(DeathAnimation());
     }
 
     public void CheckHeight() //if the player is falling remove them from the Camera 
@@ -211,8 +212,8 @@ public class PlayerController : MonoBehaviour, IHurtable {
     // Rotate the player's facing direction
     private void Update() {
         player.InGameUpdate();
-        
-        PlayerHitbox.localScale = player == GameManager.instance.leader ? Vector3.one * 1.35f : Vector3.one;
+        if(PlayerHitbox)
+            PlayerHitbox.localScale = player == GameManager.instance.leader ? Vector3.one * 1.35f : Vector3.one;
         if (crown != null)
             crown.SetActive(player == GameManager.instance.leader);
 
@@ -444,7 +445,10 @@ public class PlayerController : MonoBehaviour, IHurtable {
 
     protected float CheckGroundDistance() {
         RaycastHit hit; // Create a SphereCast below the player and check the distance to the ground, if none return infinity;
-        return Physics.SphereCast(transform.position, floorCollider.bounds.extents.y, Vector3.down, out hit, 5f, groundLayerMask, QueryTriggerInteraction.Ignore) ? hit.distance : float.PositiveInfinity;
+        if (floorCollider)
+            return Physics.SphereCast(transform.position, floorCollider.bounds.extents.y, Vector3.down, out hit, 5f, groundLayerMask, QueryTriggerInteraction.Ignore) ? hit.distance : float.PositiveInfinity;
+        else
+            return float.NaN;
     }
 
     // Check the the player has collided with the ground
@@ -458,8 +462,12 @@ public class PlayerController : MonoBehaviour, IHurtable {
 #if UNITY_EDITOR //Editor only tag
     // Draw the groundcheck spherecast under the player
     private void OnDrawGizmosSelected() {
-        Gizmos.color = Color.red;
-        Gizmos.DrawSphere(transform.position + Vector3.down * CheckGroundDistance(), floorCollider.bounds.extents.y);
+        if(floorCollider)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(transform.position + Vector3.down * CheckGroundDistance(), floorCollider.bounds.extents.y);
+        }
+
     }
 #endif
 }

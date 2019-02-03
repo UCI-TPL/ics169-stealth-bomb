@@ -28,7 +28,7 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
     Vector3 startPosition; //used for lerping
     Vector3 endPosition;
 
-    public bool switchSides = false; //lerp if true
+    private bool switchSides = true; //lerp if true
 
     public bool leftSide;
 
@@ -36,6 +36,7 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
 
     private float travelTime = 0.3f; //how long it takes to lerp all across
 
+  
     private float startTravelTime; //used to see how much travel has gone on 
 
     public float cooldown = 0.1f;
@@ -44,6 +45,7 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
 
     private void Start()
     {
+       
         smoothVel = Vector3.zero;
         forward = Camera.main.transform.forward;
         forward.Scale(new Vector3(1, 0, 1));
@@ -53,13 +55,17 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
         right.Normalize();
         CursorImage = GetComponent<Image>(); //used to change to player color
         CursorImage.color = playerColor;
+        CursorImage.enabled = false;
+        //this.gameObject.SetActive(false);
+        //this.rend.material.color = Color.clear;
         //Cursor.GetComponent<Renderer>().material.SetColor("_AlbedoColor", playerColor);
         //Cursor.transform.Find("Cube").GetComponent<Renderer>().material.SetColor("Color_52FADAA",playerColor);
 
         leftSide = transform.position.z >= transform.position.x; //true for left, false for right   (could work for up & down as well)
-       
 
-        GhostBody = Instantiate(GhostPrefab, transform.position, transform.rotation);
+        Quaternion rotation = (transform.position.z >= transform.position.x) ? Quaternion.Euler(0f, 135, 0f) : Quaternion.Euler(0f, 315f, 0f);
+        GhostBody = Instantiate(GhostPrefab, transform.position, rotation);
+        
         lastPosition = GhostBody.transform.position;
         //rend.material.SetColor("Color_91A455EE", playerColor);
         GhostBody.GetComponentsInChildren<Renderer>()[1].material.color = playerColor;
@@ -75,6 +81,21 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
 
         input.controllers[player.playerNumber].attack.OnDown.AddListener(Activate);
 
+
+        StartCoroutine("SpawnCursor");
+
+        startTravelTime = Time.time; //this is included so when the ghost spawns, it spawns where thep player died and then floats to its proper spot real quick
+        latestPosition = GhostBody.transform.position;
+        travelTime = travelTime * 2f;
+
+
+    }
+
+    public IEnumerator SpawnCursor() //so the ghost player can spawn and fly away a bit before the image
+    {
+        yield return new WaitForSeconds(1f);
+        CursorImage.enabled = true;
+        travelTime = travelTime / 2f;
     }
 
     private float destoryTileTime = 0.0f;
@@ -97,6 +118,7 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
 
     private void FixedUpdate()
     {
+        Debug.Log("As the update begins switch sides is " + switchSides);
         Move(player.stats.moveSpeed);
         Vector3 pos;
 
@@ -126,12 +148,13 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
         {
             float lerpPosition = (Time.time - startTravelTime) / travelTime; //how far along the lerp should it be
             pos = Vector3.Lerp(latestPosition, currentPosition, lerpPosition);
+            Debug.Log("Lerping and at " + pos);
             //pos = Vector3.SmoothDamp(latestPosition, currentPosition, ref smoothVel, 10f);
         } 
 
         if (pos != Vector3.zero)
             GhostBody.transform.position = pos;
-
+        Debug.Log("Switch sides is " + switchSides);
         
        
     }

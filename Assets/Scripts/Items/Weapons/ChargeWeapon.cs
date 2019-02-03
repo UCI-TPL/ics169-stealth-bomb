@@ -36,6 +36,8 @@ public class ChargeWeapon : Weapon {
     // OnChargingUpdate is called once per frame while the weapon is charging
     protected override void OnChargingUpdate() {
 
+        //Debug.Log("g" + ChargeLevel);
+        InputManager.inputManager.controllers[player.playerNumber].Vibrate(ChargeLevel/3, 0.1f);
         //charging is completely disabled since the charge bar is now in place
         /*
         if (rend.material.color.maxColorComponent >= data.GlowLimit) //make this higher for that big crazy aura
@@ -45,7 +47,7 @@ public class ChargeWeapon : Weapon {
         */
 
         //Debug.Log(GetChargeLevel());
-        
+
         /*
         switch ((int)(ChargeLevel * data.chargeLevels)) 
         {
@@ -61,7 +63,7 @@ public class ChargeWeapon : Weapon {
                 break;
         }
         */
-        
+
     }
 
     // OnRelease is called once when the weapon is released

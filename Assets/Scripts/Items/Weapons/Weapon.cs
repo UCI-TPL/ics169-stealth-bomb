@@ -155,7 +155,7 @@ public abstract class Weapon {
         IHurtable hurtable = (IHurtable)target.GetComponentInParent(typeof(IHurtable)); // Check if target is a player
         if (hurtable != null) {
             float damage = GetDamageDealt(origin, extraData);
-            Debug.Log("Damage is " + damage);
+            //Debug.Log("Damage is " + damage);
             if (target.CompareTag("Player")) {
                 PlayerController targetPlayerController = target.GetComponent<PlayerController>(); // Check if target is a player
                 OnHit(origin, contactPoint, targetPlayerController, extraData); // Activate OnHit effects and get damage dealt
