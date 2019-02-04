@@ -405,11 +405,25 @@ public class InputManager : MonoBehaviour {
             start.Pressed = testAll;
 
             SwitchTest.Down(delegate { Switch.OnDown.Invoke(); });
-            SwitchTest.Up(delegate { start.OnUp.Invoke(); });
+            SwitchTest.Up(delegate { Switch.OnUp.Invoke(); });
             testAll = false;
-            foreach (TestEvent del in StartTest.Pressed)
+            foreach (TestEvent del in SwitchTest.Pressed)
                 testAll = testAll || del();
             Switch.Pressed = testAll;
+
+            ConfirmTest.Down(delegate { confirm.OnDown.Invoke(); });
+            ConfirmTest.Up(delegate { confirm.OnUp.Invoke(); });
+            testAll = false;
+            foreach (TestEvent del in ConfirmTest.Pressed)
+                testAll = testAll || del();
+            confirm.Pressed = testAll;
+
+            CancelTest.Down(delegate { cancel.OnDown.Invoke(); });
+            CancelTest.Up(delegate { cancel.OnUp.Invoke(); });
+            testAll = false;
+            foreach (TestEvent del in CancelTest.Pressed)
+                testAll = testAll || del();
+            cancel.Pressed = testAll;
 
         }
 
@@ -550,7 +564,7 @@ public class InputManager : MonoBehaviour {
 
 #region Button Defenitions
         private void ADown(Action action) {
-            if (ButtonDown(state.Buttons.A, prevState.Buttons.A))
+            if (ButtonDown(state.Buttons.A, prevState.Buttons.A)) 
                 action();
         }
 

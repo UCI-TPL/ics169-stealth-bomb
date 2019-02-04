@@ -73,6 +73,8 @@ public class MainMenuManager : MonoBehaviour {
 
 		for (int i = 0; i < 4; i++) {
 			players[i] = (PlayerIndex) i;
+			// InputManager.inputManager.controllers[i].confirm.OnDown.AddListener();
+			// InputManager.inputManager.controllers[i].cancel.OnDown.AddListener();
 		}
 	}
 

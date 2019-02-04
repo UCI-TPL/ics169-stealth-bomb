@@ -50,9 +50,12 @@ public class PlayerJoinManager : MonoBehaviour {
 	GamePadState[] currentStates;
 	GamePadState[] prevStates;
 	float[] playerTimers;
+	float inputTimer;
 
 	private int numOfPlayersReady;
 	private int playerUsingKeyboardIdx;
+
+	private InputManager input;
 
 	// Returns a list/array of player individual status on whether they will play or not. The returned array should not be able to be modified
 	// outside of this script (or at least should not have any effect on this script's variables).
@@ -88,15 +91,23 @@ public class PlayerJoinManager : MonoBehaviour {
 
 	// Use this for initialization
 	private void Start () {
+		input = InputManager.inputManager;
 		players = new PlayerIndex[4];
 		currentStates = new GamePadState[4];
 		prevStates = new GamePadState[4];
 		playerTimers = new float[4];
 		playersReady = new bool[4];
 		for (int i = 0; i < playersReady.Length; i++) {
+			// Debug.Log("playersReady index=" + i);
+			// InputManager.inputManager.controllers[i].confirm.OnDown.AddListener( () => ReadyPlayer(i) );
+			// input.controllers[i].confirm.OnDown.AddListener( delegate { ReadyPlayer(0); } );
 			players[i] = (PlayerIndex) i;
 			playersReady[i] = false;
 			playerTimers[i] = 0.0f;
+			AssignControllerEvents(i);
+			// InputManager.inputManager.controllers[i].confirm.OnDown.AddListener(TestConfirm);
+			// InputManager.inputManager.controllers[i].confirm.OnDown.AddListener( () => ReadyPlayer(i) );
+			// InputManager.inputManager.controllers[i].cancel.OnDown.AddListener();
 		}
 
 		// player1Ready = false;
@@ -109,6 +120,7 @@ public class PlayerJoinManager : MonoBehaviour {
 		selectionOP = playersObject.GetComponent<characterSelection>();
 		currentMenu = mMManager.GetComponent<MainMenuManager>();
 		playerUsingKeyboardIdx = -1;
+		inputTimer = 0.0f;
 		// if (gameManager != null) 
 		// 	playerManager = gameManager.GetComponent<ActivePlayerManager>();
 		// else
@@ -181,7 +193,7 @@ public class PlayerJoinManager : MonoBehaviour {
 			for (int i = 0; i < 4; i++) {
 				// Debug.Log("Player " + (i + 1) + " Timer = " + playerTimers[i]);
 				if (currentStates[i].IsConnected && playerTimers[i] >= cooldown) {
-					if (currentStates[i].Buttons.A == ButtonState.Pressed && playersReady[i] == false) {
+					/*if (currentStates[i].Buttons.A == ButtonState.Pressed && playersReady[i] == false) {
 						// Display the UI element showing the player has confirmed he/she is ready to play.
 						playersReady[i] = true;
 						// Debug.Log("Player " + players[i] + " is ready to play!");
@@ -190,18 +202,18 @@ public class PlayerJoinManager : MonoBehaviour {
 						selectionOP.playerIs(i);
 						selectionOP.playerIsReady();
 						ResetTimer(i);
-					}
+					}*/
 					// sets players back to main menu and resets their ready status.
 					if (currentStates[i].Buttons.B == ButtonState.Pressed && playersReady[i] == false) {
-						ResetTimer(i);
-						for (int idx = 0; idx < playersReady.Length; idx++) {
-							ResetPlayer(idx);
-						}
-						currentMenu.setMenu(1);
+						// ResetTimer(i);
+						// for (int idx = 0; idx < playersReady.Length; idx++) {
+						// 	ResetPlayer(idx);
+						// }
+						// currentMenu.setMenu(1);
 					}
-					else if ((currentStates[i].Buttons.B == ButtonState.Pressed && playersReady[i] == true) || playersReady[i] == false) {
-						if (currentStates[i].Buttons.B == ButtonState.Pressed) 
-							ResetTimer(i);
+					else if (/*(currentStates[i].Buttons.B == ButtonState.Pressed && playersReady[i] == true) ||*/ playersReady[i] == false) {
+						// if (currentStates[i].Buttons.B == ButtonState.Pressed) 
+						// 	ResetTimer(i);
 						
 						playersReady[i] = false;
 						// Debug.Log("Player " + players[i] + " is NOT ready to play!");
@@ -240,7 +252,83 @@ public class PlayerJoinManager : MonoBehaviour {
 			}
 
 			numOfPlayersReady = newNumOfPlayersReady;
+			inputTimer += 1.0f * Time.deltaTime;
 		}
+
+		else {
+			inputTimer = 0.0f;
+		}
+	}
+
+	// helper callback method that readies the player specified by the parameter/index.
+	private void ReadyPlayer(int playerIdx) {
+		// Debug.Log("ReadyPlayer called for player " + playerIdx + ".");
+		if (CanPlayerPressButton(playerIdx) && playersReady[playerIdx] == false) {
+			// Display the UI element showing the player has confirmed he/she is ready to play.
+			playersReady[playerIdx] = true;
+			// Debug.Log("Player " + players[i] + " is ready to play!");
+
+			//calling UI -Kyle
+			selectionOP.playerIs(playerIdx);
+			selectionOP.playerIsReady();
+		}
+	}
+
+	// helper callback method that unreadies the player specified by the parameter/index, or returns game to main menu panel.
+	private void SetPlayerBack(int playerIdx) {
+		if (CanPlayerPressButton(playerIdx)) {
+			if (playersReady[playerIdx] == true) {
+				playersReady[playerIdx] = false;
+				// Debug.Log("Player " + players[i] + " is NOT ready to play!");
+
+				//calling UI -Kyle
+				selectionOP.playerIs(playerIdx);
+				//selectionOP.playerIsNotReady();
+				selectionOP.playerConnected();
+			}
+			else {
+				for (int idx = 0; idx < playersReady.Length; idx++) {
+					ResetPlayer(idx);
+				}
+				currentMenu.setMenu(1);
+			}
+		}
+	}
+
+	private bool CanPlayerPressButton(int playerIdx) {
+		return currentStates[playerIdx].IsConnected && PlayerJoinScreenActive && inputTimer >= cooldown;
+	}
+
+	private void AssignControllerEvents(int playerIdx) {
+		switch (playerIdx) {
+			case 0:
+				input.controllers[playerIdx].confirm.OnDown.AddListener( () => ReadyPlayer(0) );
+				input.controllers[playerIdx].cancel.OnDown.AddListener( () => SetPlayerBack(0) );
+				input.controllers[playerIdx].start.OnDown.AddListener( () => StartGame(0) );
+				break;
+			case 1:
+				input.controllers[playerIdx].confirm.OnDown.AddListener( () => ReadyPlayer(1) );
+				input.controllers[playerIdx].cancel.OnDown.AddListener( () => SetPlayerBack(1) );
+				input.controllers[playerIdx].start.OnDown.AddListener( () => StartGame(1) );
+				break;
+			case 2:
+				input.controllers[playerIdx].confirm.OnDown.AddListener( () => ReadyPlayer(2) );
+				input.controllers[playerIdx].cancel.OnDown.AddListener( () => SetPlayerBack(2) );
+				input.controllers[playerIdx].start.OnDown.AddListener( () => StartGame(2) );
+				break;
+			case 3:
+				input.controllers[playerIdx].confirm.OnDown.AddListener( () => ReadyPlayer(3) );
+				input.controllers[playerIdx].cancel.OnDown.AddListener( () => SetPlayerBack(3) );
+				input.controllers[playerIdx].start.OnDown.AddListener( () => StartGame(3) );
+				break;
+			default:
+				Debug.Log("variable playerIdx out of range!");
+				break;
+		}
+	}
+
+	private void TestConfirm() {
+		Debug.Log("button A pressed.");
 	}
 
 	void RunGameReadyChecks(int newNumOfPlayersReady, int minNumOfPlayers) {
@@ -268,16 +356,24 @@ public class PlayerJoinManager : MonoBehaviour {
 					}
 				}
 				else {
-					if (playersReady[i] == true) {
-						// If the right conditions are met, this is where the protocol for starting the game happens.
-						// NOTE: implementation is subject to change for now.
-						if (currentStates[i].Buttons.Start == ButtonState.Pressed && prevStates[i].Buttons.Start == ButtonState.Released) {
-							// playerManager.SetPlayersStatus(GetPLayerReadyStatusList());
-							GameManager.instance.StartGame(GetPLayerReadyStatusList());
-						}
-					}
+					// if (playersReady[i] == true) {
+					// 	// If the right conditions are met, this is where the protocol for starting the game happens.
+					// 	// NOTE: implementation is subject to change for now.
+					// 	if (currentStates[i].Buttons.Start == ButtonState.Pressed && prevStates[i].Buttons.Start == ButtonState.Released) {
+					// 		// playerManager.SetPlayersStatus(GetPLayerReadyStatusList());
+					// 		GameManager.instance.StartGame(GetPLayerReadyStatusList());
+					// 	}
+					// }
 				}
 			}
+		}
+	}
+
+	// helper callback method that starts the game if the player and others are ready.
+	private void StartGame(int playerIdx) {
+		if (CanPlayerPressButton(playerIdx) && playersReady[playerIdx] == true) {
+			if ((!debugMode && numOfPlayersReady >= 2) || (debugMode && numOfPlayersReady >= 1))
+				GameManager.instance.StartGame(GetPLayerReadyStatusList());
 		}
 	}
 
