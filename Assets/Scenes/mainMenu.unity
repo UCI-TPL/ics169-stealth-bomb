@@ -3271,7 +3271,7 @@ MonoBehaviour:
   cooldown: 0.5
   loadNextLevelByName: 0
   nextLevel: 
-  playersObject: {fileID: 1865670}
+  playersObject: {fileID: 1757633926}
   mMManager: {fileID: 1668276870}
 --- !u!4 &200392769
 Transform:
@@ -13293,7 +13293,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &929809576
 RectTransform:
   m_ObjectHideFlags: 0
@@ -23434,7 +23434,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainMenuPanel: {fileID: 805036092}
-  selectionMenuPanel: {fileID: 929809575}
+  selectionMenuPanel: {fileID: 1931341466}
   remappingMenuPanel: {fileID: 1762129912}
   AudioPanel: {fileID: 1665807388}
   customMappingPanel: {fileID: 1888511360}
@@ -26979,7 +26979,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1931341467
 MonoBehaviour:
   m_ObjectHideFlags: 0
