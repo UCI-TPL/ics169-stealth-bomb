@@ -77,7 +77,7 @@ public class GameManager : MonoBehaviour {
     public List<Player> Winners = new List<Player>();
 
 
-    public void StartGame(bool[] playersReady) {
+    public void StartGame(bool[] playersReady, int[] xboxControllerNumbers) {
         // StopAllCoroutines();
         string s = "Players Recieved from Main Menu: ";
         for (int i = 0; i < playersReady.Length; ++i) {
@@ -85,7 +85,7 @@ public class GameManager : MonoBehaviour {
         }
         Debug.Log(s);
         rounds.Clear();
-        SetUpPlayers(playersReady);
+        SetUpPlayers(playersReady, xboxControllerNumbers);
         StartCoroutine(LoadLevelAsync(SceneManager.GetActiveScene().buildIndex + 1, delegate { StartCoroutine(UpdateGame()); }));
     }
 
@@ -191,7 +191,7 @@ public class GameManager : MonoBehaviour {
             {
                 if (players == null) {
                     Debug.LogWarning("GameManager did not recieve players from main menu, defaulting to 4 players on, This is correct if starting editor from game scene");
-                    SetUpPlayers(new bool[] { true, true, true, true }); // Set up players if game is not started in main menu
+                    SetUpPlayers(new bool[] { true, true, true, true }, new int[] { 0, 1, 2, 3 }); // Set up players if game is not started in main menu
                     StartCoroutine(UpdateGame());
                 }
             }
@@ -238,11 +238,11 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    public void SetUpPlayers(bool[] readyPlayers) {
+    public void SetUpPlayers(bool[] readyPlayers, int[] xboxControllerNumbers) {
         players = new Player[readyPlayers.Length];
         for (int i = 0; i < readyPlayers.Length; ++i) {
             if (readyPlayers[i]) {
-                players[i] = new Player(i, DefaultPlayerData);
+                players[i] = new Player(i, xboxControllerNumbers[i], DefaultPlayerData);
             }
         }
     }

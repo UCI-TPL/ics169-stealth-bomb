@@ -129,11 +129,11 @@ public class ProgressScreenUI : MonoBehaviour {
         bool pressedStart = false;
         UnityAction checkStart = delegate { pressedStart = true; };
         foreach (Player player in players)
-            InputManager.inputManager.controllers[player.playerNumber].start.OnDown.AddListener(checkStart);
+            InputManager.inputManager.controllers[player.inputControllerNumber].start.OnDown.AddListener(checkStart);
         while (!pressedStart)
             yield return null;
         foreach (Player player in players)
-            InputManager.inputManager.controllers[player.playerNumber].start.OnDown.RemoveListener(checkStart);
+            InputManager.inputManager.controllers[player.inputControllerNumber].start.OnDown.RemoveListener(checkStart);
         action.Invoke();
     }
 

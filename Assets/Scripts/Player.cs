@@ -13,6 +13,7 @@ public class Player : IHurtable {
     public PlayerData playerData { get; private set; }
 
     public int playerNumber;
+    public int inputControllerNumber;
     public Color Color { get { return GameManager.instance.DefaultPlayerData.Colors[playerNumber]; } } // Player's color
 
     public float health { get; private set; }
@@ -46,8 +47,9 @@ public class Player : IHurtable {
 
     public bool Invincible = false;
 
-    public Player(int playerNumber, PlayerData playerData) {
+    public Player(int playerNumber, int xboxControllerNumber, PlayerData playerData) {
         this.playerNumber = playerNumber;
+        this.inputControllerNumber = xboxControllerNumber;
         this.playerData = playerData;
         stats = new PlayerStats(this); // Creates a stats profile for the player
         ResetHealth();

@@ -242,6 +242,10 @@ public class InputManager : MonoBehaviour {
             if (Input.GetKeyUp(KeyCode.LeftShift))
                 dodge.OnUp.Invoke();
             dodge.Pressed = Input.GetKey(KeyCode.LeftShift);
+            if (Input.GetKeyDown(KeyCode.Return))
+                start.OnDown.Invoke();
+            if (Input.GetKeyDown(KeyCode.LeftAlt)) 
+                Switch.OnDown.Invoke();
         }
 
         public MouseKeyboard(int playerIndex) {

@@ -125,12 +125,12 @@ public class PlayerController : MonoBehaviour, IHurtable {
 
         lastPosition = transform.position;
 
-        input.controllers[player.playerNumber].attack.OnDown.AddListener(ActivateAttack);
-        input.controllers[player.playerNumber].attack.OnUp.AddListener(ReleaseAttack);
-        input.controllers[player.playerNumber].jump.OnUp.AddListener(ReleaseJump);
-        input.controllers[player.playerNumber].dodge.OnDown.AddListener(ActivateSpecialMove);
-        input.controllers[player.playerNumber].dodge.OnUp.AddListener(ReleaseSpecialMove);
-        input.controllers[player.playerNumber].Switch.OnDown.AddListener(SwitchWeapon);
+        input.controllers[player.inputControllerNumber].attack.OnDown.AddListener(ActivateAttack);
+        input.controllers[player.inputControllerNumber].attack.OnUp.AddListener(ReleaseAttack);
+        input.controllers[player.inputControllerNumber].jump.OnUp.AddListener(ReleaseJump);
+        input.controllers[player.inputControllerNumber].dodge.OnDown.AddListener(ActivateSpecialMove);
+        input.controllers[player.inputControllerNumber].dodge.OnUp.AddListener(ReleaseSpecialMove);
+        input.controllers[player.inputControllerNumber].Switch.OnDown.AddListener(SwitchWeapon);
 
         StartCoroutine(StartAnimation());
     }
@@ -194,7 +194,7 @@ public class PlayerController : MonoBehaviour, IHurtable {
         {
             Move(dodgeSpeed); //hopefully this allows air dodges
         }
-        if (input.controllers[player.playerNumber].jump.Pressed) {
+        if (input.controllers[player.inputControllerNumber].jump.Pressed) {
             Jump();
             //if (jumped && rb.velocity.y > 0) {
             //    rb.AddForce(Physics.gravity * jumpGravityMultiplier - Physics.gravity, ForceMode.Acceleration);
@@ -218,7 +218,7 @@ public class PlayerController : MonoBehaviour, IHurtable {
             crown.SetActive(player == GameManager.instance.leader);
 
 
-        Vector2 horizontalVector = input.controllers[player.playerNumber].AimVector();
+        Vector2 horizontalVector = input.controllers[player.inputControllerNumber].AimVector();
 
         //Debug.DrawRay(transform.position, transform.forward*100, Color.white);
         Vector3 scaledVector = (horizontalVector.y * forward) + (horizontalVector.x * right);
@@ -233,7 +233,7 @@ public class PlayerController : MonoBehaviour, IHurtable {
 
     // Move the player using the the controller's move input scaled by the provided speed
     protected void Move(float speed) {
-        Vector2 horizontalVector = input.controllers[player.playerNumber].MoveVector() * speed;
+        Vector2 horizontalVector = input.controllers[player.inputControllerNumber].MoveVector() * speed;
         if (dodging)
         {
             if (horizontalVector == Vector2.zero)
@@ -275,7 +275,7 @@ public class PlayerController : MonoBehaviour, IHurtable {
 
         // Remove friction in the desired move direction if moving slower than max speed in that direction
         Vector3 velocityInDirection = Vector3.Project(rb.velocity, scaledVector); // Get velocity in the desired move direction
-        if (Vector3.Distance(velocityInDirection, scaledVector) < Vector3.Distance(velocityInDirection, -scaledVector) && velocityInDirection.magnitude < input.controllers[player.playerNumber].MoveVector().magnitude * speed) // Check if we are moving slower than our maximum speed
+        if (Vector3.Distance(velocityInDirection, scaledVector) < Vector3.Distance(velocityInDirection, -scaledVector) && velocityInDirection.magnitude < input.controllers[player.inputControllerNumber].MoveVector().magnitude * speed) // Check if we are moving slower than our maximum speed
             frictionVector -= Vector3.Project(frictionVector, scaledVector); // Scale friction to remove the forward direction, so friction doesnt slow player in moving direction
         // Debug.DrawRay(floorCollider.transform.position + Vector3.down * floorCollider.bounds.extents.y, frictionVector, Color.red);
         
@@ -286,7 +286,7 @@ public class PlayerController : MonoBehaviour, IHurtable {
             if (dodging) //don't take the old velocity into account at all when dodging
                 newVelocity = scaledVector * acceleration; //scaled Vector is the direction of movement
             if (!dodging) //don't clamp while dodging
-                newVelocity = Vector3.ClampMagnitude(new Vector3(newVelocity.x, 0, newVelocity.z), Mathf.Max(oldVelocity.magnitude, speed * input.controllers[player.playerNumber].MoveVector().magnitude + 0.1f) - 0.1f);
+                newVelocity = Vector3.ClampMagnitude(new Vector3(newVelocity.x, 0, newVelocity.z), Mathf.Max(oldVelocity.magnitude, speed * input.controllers[player.inputControllerNumber].MoveVector().magnitude + 0.1f) - 0.1f);
             if (braking)
                 rb.velocity = new Vector3(0f, newVelocity.y, 0f);
             else
@@ -367,7 +367,7 @@ public class PlayerController : MonoBehaviour, IHurtable {
         Weapon = weapon;
         Weapon.EquipWeapon();
 
-        if (input.controllers[player.playerNumber].attack.Pressed && allowAttack) // If the attack button was held down at the time of equipting new weapon activate the new weapon
+        if (input.controllers[player.inputControllerNumber].attack.Pressed && allowAttack) // If the attack button was held down at the time of equipting new weapon activate the new weapon
             Weapon.Activate(ShootPoint.transform.position, ShootPoint.transform.forward);
     }
 
@@ -403,7 +403,7 @@ public class PlayerController : MonoBehaviour, IHurtable {
     }
 
     public float Hurt(Player damageDealer, float amount) {
-        input.controllers[player.playerNumber].Vibrate(1.0f, 0.1f);
+        input.controllers[player.inputControllerNumber].Vibrate(1.0f, 0.1f);
         StartCoroutine("HurtIndicator");
         return player.Hurt(damageDealer, amount);
     }
