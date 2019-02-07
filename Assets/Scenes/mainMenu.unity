@@ -3651,7 +3651,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   usingNewPlayerJoinSystem: 1
   PlayerJoinScreenActive: 1
-  debugMode: 0
+  debugMode: 1
   playerUsingMouseAndKeyboard: 0
   cooldown: 0.5
   loadNextLevelByName: 0

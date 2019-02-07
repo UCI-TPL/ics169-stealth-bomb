@@ -39,7 +39,7 @@ public class BombProjectileAddon : MonoBehaviour
                     else
                     {
                         //proj.transform.rotation = Quaternion.Euler(proj.transform.rotation.eulerAngles.x, proj.transform.rotation.eulerAngles.y - 90f, proj.transform.rotation.eulerAngles.z);
-                        proj.GetComponent<Rigidbody>().velocity = proj.transform.forward * 12f;
+                        proj.GetComponent<Rigidbody>().velocity = proj.transform.forward * 26f;
                         time = 0f;
                     }
                 }

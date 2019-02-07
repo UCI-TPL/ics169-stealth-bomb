@@ -18,13 +18,13 @@ MonoBehaviour:
   type: 2
   autoAttack: 0
   cooldown: 0.4
-  knockbackStrength: 45
+  knockbackStrength: 70
   damage: 15
   buffs: []
   projectile: {fileID: 11400000, guid: 6624025f156e9374882457ab4ec7f999, type: 2}
   projNum: 1
-  projSpeed: 12
+  projSpeed: 26
   bombPrefab: {fileID: 1422597313017000, guid: 0aa8a899bbb43694ba93e449c3a308ba, type: 3}
-  explosionSize: 6
+  explosionSize: 8
   growthRate: 0.15
   numberOfUses: 5
