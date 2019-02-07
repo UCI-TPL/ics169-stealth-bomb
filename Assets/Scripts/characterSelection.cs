@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class characterSelection : MonoBehaviour {
 
 	public GameObject players;
+	public PlayerJoinManager playerJoinManager;
 	public List<Text> playerOpList;
 	public List<Image> playerOpAList;
 	public Text readyText;
@@ -65,7 +66,11 @@ public class characterSelection : MonoBehaviour {
 
 	public void playerConnected()
 	{
-		playerOpList[player].text = "Press    to join";
+		if (playerJoinManager.usingNewPlayerJoinSystem)
+			playerOpList[player].text = "  get ready";
+		else
+			playerOpList[player].text = "Press    to join";
+		
 		playerOpAList[player].enabled = true;
 	}
 

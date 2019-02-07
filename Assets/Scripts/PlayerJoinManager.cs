@@ -35,6 +35,7 @@ public class PlayerJoinManager : MonoBehaviour {
 
 	public RectTransform[] joinPrompts;
 	public RectTransform[] playersUI;
+	public Text countdownText;
 
 	// [Tooltip("Reference to the game controller object.")]
 	// public GameObject gameManager;
@@ -44,6 +45,12 @@ public class PlayerJoinManager : MonoBehaviour {
 	bool[] playersJoined;
 	bool[] playersReady;
 	bool[] controllersConnected;
+	// an array of length 4, each space stores the controller number that the player will use in the rest of the game. This is passed to the game manager.
+	int[] inputControllerNumbers;
+	// the inverse of inputControllerNumbers. each index represents a controller and stores int that represents which player is using that controller
+	int[] controllersToPlayers;
+
+	int notAssignedController = -1;
 	// public bool player1Ready;
 	// public bool player2Ready;
 	// public bool player3Ready;
@@ -62,6 +69,7 @@ public class PlayerJoinManager : MonoBehaviour {
 
 	private int numOfPlayersJoined;
 	private int playerUsingKeyboardIdx;    // represents the player index that is currently using MMK input. if value isnt between 0-3, then no one is using MMK.
+	private float countdownTimer;
 
 	private InputManager input;
 
@@ -111,7 +119,7 @@ public class PlayerJoinManager : MonoBehaviour {
 
 	private void Awake() {
 		//find the script -Kyle
-		if (!usingNewPlayerJoinSystem)
+		// if (!usingNewPlayerJoinSystem)
 			selectionOP = playersObject.GetComponent<characterSelection>();
 		
 		currentMenu = mMManager.GetComponent<MainMenuManager>();
@@ -127,8 +135,12 @@ public class PlayerJoinManager : MonoBehaviour {
 		playersJoined = new bool[4];
 		playersReady = new bool[4];
 		controllersConnected = new bool[4];
+		inputControllerNumbers = new int[4];
+		controllersToPlayers = new int[4];
 		defaultInputControllerNumbers = new int[] { 0, 1, 2, 3 };
 		playersControlsGuideActive = new bool[4];
+		countdownText.gameObject.SetActive(false);
+		countdownTimer = 3.0f;
 
 		for (int i = 0; i < playersJoined.Length; i++) {
 			// Debug.Log("playersReady index=" + i);
@@ -142,7 +154,13 @@ public class PlayerJoinManager : MonoBehaviour {
 			playerTimers[i] = 0.0f;
 			AssignControllerEvents(i);
 			if (usingNewPlayerJoinSystem) {
+				inputControllerNumbers[i] = notAssignedController;   // represents they have not been assigned a controller yet
+				controllersToPlayers[i] = notAssignedController;
 				ResetPlayer(i);
+			}
+			else {
+				controllersToPlayers[i] = i;
+				inputControllerNumbers[i] = i;
 			}
 			// InputManager.inputManager.controllers[i].confirm.OnDown.AddListener(TestConfirm);
 			// InputManager.inputManager.controllers[i].confirm.OnDown.AddListener( () => ReadyPlayer(i) );
@@ -179,50 +197,72 @@ public class PlayerJoinManager : MonoBehaviour {
 
 	// Callback helper methods for player input //
 
-	// helper callback method that readies the player specified by the parameter/index.
-	private void PlayerJoin(int playerIdx) {
+	// helper callback method that readies the player using the controller specified by the parameter/index.
+	//Problem!!!!! Rejoining kicks controller to next player instead of getting the same one back
+	private void PlayerJoin(int controllerIdx) {
 		// Debug.Log("ReadyPlayer called for player " + playerIdx + ".");
-		if (CanPlayerPressButton(playerIdx) && playersJoined[playerIdx] == false) {
+		Debug.Log("input controller list before: " + inputControllerNumbers[0] + "," + inputControllerNumbers[1] + "," + inputControllerNumbers[2] + "," + inputControllerNumbers[3]);
+		if (CanPlayerPressButton(controllerIdx) && controllersToPlayers[controllerIdx] == notAssignedController /* && playersJoined[controllersToPlayers[controllerIdx]] == false */) {
 			// Display the UI element showing the player has confirmed he/she is ready to play.
-			playersJoined[playerIdx] = true;
 			// Debug.Log("Player " + players[i] + " is ready to play!");
 
 			if (!usingNewPlayerJoinSystem) {
+				playersJoined[controllerIdx] = true;
 				//calling UI -Kyle
-				selectionOP.playerIs(playerIdx);
+				selectionOP.playerIs(controllerIdx);
 				selectionOP.playerIsReady();
 			}
 			else {
-				joinPrompts[playerIdx].gameObject.SetActive(false);
-				playersUI[playerIdx].gameObject.SetActive(true);
+				int i = 0;
+				for (; i < inputControllerNumbers.Length; i++) {
+					if (inputControllerNumbers[i] == notAssignedController) {
+						inputControllerNumbers[i] = controllerIdx;
+						controllersToPlayers[controllerIdx] = i;
+						break;
+					}
+				}
+				if (i < 4) {
+					Debug.Log("Player " + (i + 1) + " joined.");
+					playersJoined[i] = true;
+					joinPrompts[i].gameObject.SetActive(false);
+					playersUI[i].gameObject.SetActive(true);
+					//calling UI -Kyle
+					selectionOP.playerIs(i);
+					selectionOP.playerConnected();
+				}
 			}
 		}
+		Debug.Log("input controller list after: " + inputControllerNumbers[0] + "," + inputControllerNumbers[1] + "," + inputControllerNumbers[2] + "," + inputControllerNumbers[3]);
 	}
 
-	// helper callback method that unreadies the player specified by the parameter/index, or returns game to main menu panel.
-	private void SetPlayerBack(int playerIdx) {
-		if (CanPlayerPressButton(playerIdx)) {
-			if (playersJoined[playerIdx] == true) {
+	// helper callback method that unreadies the player using the controller specified by the parameter/index, or returns game to main menu panel.
+	private void SetPlayerBack(int controllerIdx) {
+		if (CanPlayerPressButton(controllerIdx)) {
+			if (controllersToPlayers[controllerIdx] != notAssignedController && playersJoined[controllersToPlayers[controllerIdx]] == true) {
 				if (usingNewPlayerJoinSystem) {
 					// if player has already pressed start (readied up), then it will take the player back to previous stage
-					if (playersReady[playerIdx] == true) {
-						playersReady[playerIdx] = false;
-						playersUI[playerIdx].gameObject.SetActive(true);
+					if (playersReady[controllersToPlayers[controllerIdx]] == true) {
+						playersReady[controllersToPlayers[controllerIdx]] = false;
+						playersUI[controllersToPlayers[controllerIdx]].gameObject.SetActive(true);
+						selectionOP.playerIs(controllersToPlayers[controllerIdx]);
+						selectionOP.playerConnected();
 					}
 					// otherwise, player will be unjoin the lobby and will have to press A again to rejoin.
 					else {
 						// TEST THIS!!!!!
-						playersJoined[playerIdx] = false;
-						playersUI[playerIdx].gameObject.SetActive(false);
-						joinPrompts[playerIdx].gameObject.SetActive(false);
+						playersJoined[controllersToPlayers[controllerIdx]] = false;
+						playersUI[controllersToPlayers[controllerIdx]].gameObject.SetActive(false);
+						joinPrompts[controllersToPlayers[controllerIdx]].gameObject.SetActive(false);
+						inputControllerNumbers[controllersToPlayers[controllerIdx]] = notAssignedController;
+						controllersToPlayers[controllerIdx] = notAssignedController;
 					}
 				}
 				else {
-					playersJoined[playerIdx] = false;
+					playersJoined[controllerIdx] = false;
 					// Debug.Log("Player " + players[i] + " is NOT ready to play!");
 
 					//calling UI -Kyle
-					selectionOP.playerIs(playerIdx);
+					selectionOP.playerIs(controllerIdx);
 					//selectionOP.playerIsNotReady();
 					selectionOP.playerConnected();
 				}
@@ -239,19 +279,21 @@ public class PlayerJoinManager : MonoBehaviour {
 		}
 	}
 
-	// helper callback method that toggles on or off the specified player's personal controller guide on their player box.
-	private void ShowPlayerControls(int playerIdx) {
+	// helper callback method that toggles on or off the specified player's personal controller guide on their player box. (will later only work with new implementation)
+	// NOTE: controllerIdx represents the controller the player is using, not the player itself
+	private void ShowPlayerControls(int controllerIdx) {
 		// player needs to join in order to see their controls
-		if (CanPlayerPressButton(playerIdx) && playersJoined[playerIdx]) {
-			if (!playersControlsGuideActive[playerIdx]) {
-				Debug.Log("Player " + (playerIdx + 1) + " turned on their controller guide.");
+		if (CanPlayerPressButton(controllerIdx) && controllersToPlayers[controllerIdx] != notAssignedController 
+												&& playersJoined[controllersToPlayers[controllerIdx]] == true) {
+			if (!playersControlsGuideActive[controllersToPlayers[controllerIdx]]) {
+				Debug.Log("Player " + (controllersToPlayers[controllerIdx] + 1) + " turned on their controller guide.");
 			}
 			else {
-				Debug.Log("Player " + (playerIdx + 1) + " turned off their controller guide.");
+				Debug.Log("Player " + (controllersToPlayers[controllerIdx] + 1) + " turned off their controller guide.");
 			}
 
 			// temp toggle on or off for controller guide
-			playersControlsGuideActive[playerIdx] = !playersControlsGuideActive[playerIdx];
+			playersControlsGuideActive[controllersToPlayers[controllerIdx]] = !playersControlsGuideActive[controllersToPlayers[controllerIdx]];
 		}
 	}
 
@@ -260,6 +302,15 @@ public class PlayerJoinManager : MonoBehaviour {
 		if (CanPlayerPressButton(playerIdx) && playersJoined[playerIdx] == true) {
 			if ((!debugMode && numOfPlayersJoined >= 2) || (debugMode && numOfPlayersJoined >= 1))
 				GameManager.instance.StartGame(GetPLayerReadyStatusList(), defaultInputControllerNumbers);
+		}
+	}
+
+	private void ReadyPlayer(int controllerIdx) {
+		if (CanPlayerPressButton(controllerIdx) && controllersToPlayers[controllerIdx] != notAssignedController 
+												&& playersJoined[controllersToPlayers[controllerIdx]] == true) {
+			playersReady[controllersToPlayers[controllerIdx]] = true;
+			selectionOP.playerIs(controllersToPlayers[controllerIdx]);
+			selectionOP.playerIsReady();
 		}
 	}
 
@@ -273,32 +324,44 @@ public class PlayerJoinManager : MonoBehaviour {
 
 
 	// helper method that assigns what functions should be called by what input/event.
-	private void AssignControllerEvents(int playerIdx) {
+	private void AssignControllerEvents(int controllerIdx) {
 		// A button, B button, and Start button has been assigned. Still need to assign Y button.
-		switch (playerIdx) {
+		switch (controllerIdx) {
 			case 0:
-				input.controllers[playerIdx].confirm.OnDown.AddListener( () => PlayerJoin(0) );
-				input.controllers[playerIdx].cancel.OnDown.AddListener( () => SetPlayerBack(0) );
-				input.controllers[playerIdx].Switch.OnDown.AddListener( () => ShowPlayerControls(0) );
-				input.controllers[playerIdx].start.OnDown.AddListener( () => StartGame(0) );
+				input.controllers[controllerIdx].confirm.OnDown.AddListener( () => PlayerJoin(0) );
+				input.controllers[controllerIdx].cancel.OnDown.AddListener( () => SetPlayerBack(0) );
+				input.controllers[controllerIdx].Switch.OnDown.AddListener( () => ShowPlayerControls(0) );
+				if (!usingNewPlayerJoinSystem)
+					input.controllers[controllerIdx].start.OnDown.AddListener( () => StartGame(0) );
+				else 
+					input.controllers[controllerIdx].start.OnDown.AddListener( () => ReadyPlayer(0) );
 				break;
 			case 1:
-				input.controllers[playerIdx].confirm.OnDown.AddListener( () => PlayerJoin(1) );
-				input.controllers[playerIdx].cancel.OnDown.AddListener( () => SetPlayerBack(1) );
-				input.controllers[playerIdx].Switch.OnDown.AddListener( () => ShowPlayerControls(1) );
-				input.controllers[playerIdx].start.OnDown.AddListener( () => StartGame(1) );
+				input.controllers[controllerIdx].confirm.OnDown.AddListener( () => PlayerJoin(1) );
+				input.controllers[controllerIdx].cancel.OnDown.AddListener( () => SetPlayerBack(1) );
+				input.controllers[controllerIdx].Switch.OnDown.AddListener( () => ShowPlayerControls(1) );
+				if (!usingNewPlayerJoinSystem)
+					input.controllers[controllerIdx].start.OnDown.AddListener( () => StartGame(1) );
+				else 
+					input.controllers[controllerIdx].start.OnDown.AddListener( () => ReadyPlayer(1) );
 				break;
 			case 2:
-				input.controllers[playerIdx].confirm.OnDown.AddListener( () => PlayerJoin(2) );
-				input.controllers[playerIdx].cancel.OnDown.AddListener( () => SetPlayerBack(2) );
-				input.controllers[playerIdx].Switch.OnDown.AddListener( () => ShowPlayerControls(2) );
-				input.controllers[playerIdx].start.OnDown.AddListener( () => StartGame(2) );
+				input.controllers[controllerIdx].confirm.OnDown.AddListener( () => PlayerJoin(2) );
+				input.controllers[controllerIdx].cancel.OnDown.AddListener( () => SetPlayerBack(2) );
+				input.controllers[controllerIdx].Switch.OnDown.AddListener( () => ShowPlayerControls(2) );
+				if (!usingNewPlayerJoinSystem)
+					input.controllers[controllerIdx].start.OnDown.AddListener( () => StartGame(2) );
+				else 
+					input.controllers[controllerIdx].start.OnDown.AddListener( () => ReadyPlayer(2) );
 				break;
 			case 3:
-				input.controllers[playerIdx].confirm.OnDown.AddListener( () => PlayerJoin(3) );
-				input.controllers[playerIdx].cancel.OnDown.AddListener( () => SetPlayerBack(3) );
-				input.controllers[playerIdx].Switch.OnDown.AddListener( () => ShowPlayerControls(3) );
-				input.controllers[playerIdx].start.OnDown.AddListener( () => StartGame(3) );
+				input.controllers[controllerIdx].confirm.OnDown.AddListener( () => PlayerJoin(3) );
+				input.controllers[controllerIdx].cancel.OnDown.AddListener( () => SetPlayerBack(3) );
+				input.controllers[controllerIdx].Switch.OnDown.AddListener( () => ShowPlayerControls(3) );
+				if (!usingNewPlayerJoinSystem)
+					input.controllers[controllerIdx].start.OnDown.AddListener( () => StartGame(3) );
+				else 
+					input.controllers[controllerIdx].start.OnDown.AddListener( () => ReadyPlayer(3) );
 				break;
 			default:
 				Debug.Log("variable playerIdx out of range!");
@@ -321,6 +384,18 @@ public class PlayerJoinManager : MonoBehaviour {
 				//calling UI -Kyle
 				selectionOP.gameIsReady();
 			}
+			else {
+				countdownText.gameObject.SetActive(true);
+				countdownText.text = "Game starts in " + ((int) countdownTimer).ToString();
+				countdownTimer -= 1.0f * Time.deltaTime;
+
+				if (countdownTimer <= 0.0f) {
+					if (!debugMode)
+						GameManager.instance.StartGame(GetPLayerReadyStatusList(), inputControllerNumbers);
+					else 
+						GameManager.instance.StartGame(GetPLayerReadyStatusList(), defaultInputControllerNumbers); // assumes there is only 1 plugged-in controller
+				}
+			}
 		}
 		else if (newNumOfPlayersReady < minNumOfPlayers /*&& numOfPlayersReady >= 2*/) {
 			// Turn off the UI element showing that the game is ready to start.
@@ -328,6 +403,10 @@ public class PlayerJoinManager : MonoBehaviour {
 			if (!usingNewPlayerJoinSystem) {
 				//calling UI -Kyle
 				selectionOP.gameIsNotReady();
+			}
+			else {
+				countdownTimer = 3.0f;
+				countdownText.gameObject.SetActive(false);
 			}
 		}
 
@@ -379,6 +458,7 @@ public class PlayerJoinManager : MonoBehaviour {
 			// Debug.Log("playerUsingKeyboardIdx = " + playerUsingKeyboardIdx);
 
 			// This loop checks to see which controllers are connected to display confirmation UI element for that controller.
+			// NOTE: controllersToPlayers[i] gives the player index that controller is linked to
 			for (int i = 0; i < 4; i++) {
 				prevStates[i] = currentStates[i];
 				currentStates[i] = GamePad.GetState(players[i]);
@@ -386,20 +466,26 @@ public class PlayerJoinManager : MonoBehaviour {
 					if (currentStates[i].IsConnected) {
 						if (!prevStates[i].IsConnected) {
 							controllersConnected[i] = true;
-							playersJoined[i] = false;
+							if (controllersToPlayers[i] != notAssignedController)
+								playersJoined[controllersToPlayers[i]] = false;
+							// playersJoined[i] = false;
 							
 						}
 					}
 					else if (!currentStates[i].IsConnected /* && prevStates[i].IsConnected*/) {
 						controllersConnected[i] = false;
-						playersJoined[i] = false;
+						if (controllersToPlayers[i] != notAssignedController) {
+							playersJoined[controllersToPlayers[i]] = false;
+							ResetPlayer(controllersToPlayers[i]);
+						}
 					}
 				}
 				// condition for if player is using mouse and keyboard
 				else {
-					selectionOP.playerIs(i);
-					selectionOP.playerIsReady();
-					playersJoined[i] = true;
+					// selectionOP.playerIs(i);
+					// selectionOP.playerIsReady();
+					// PlayerJoin()
+					// playersJoined[i] = true;
 				}
 			}
 
@@ -432,24 +518,25 @@ public class PlayerJoinManager : MonoBehaviour {
 				}
 			}
 
-			// This loop checks to see which players have A to confirm they are ready.
+			// This loop checks to see which players have A to confirm they are ready. <- description not correct anymore
 			for (int i = 0; i < 4; i++) {
 				// Debug.Log("Player " + (i + 1) + " Timer = " + playerTimers[i]);
 				if (currentStates[i].IsConnected && playerTimers[i] >= cooldown) {
 					// sets players back to main menu and resets their ready status.
-					if (currentStates[i].Buttons.B == ButtonState.Pressed && playersJoined[i] == false) {
+					if (currentStates[i].Buttons.B == ButtonState.Pressed && controllersToPlayers[i] != notAssignedController && playersJoined[controllersToPlayers[i]] == false) {
 						
 					}
-					else if (/*(currentStates[i].Buttons.B == ButtonState.Pressed && playersReady[i] == true) ||*/ playersJoined[i] == false) {
-						playersJoined[i] = false;
+					else if (controllersToPlayers[i] != notAssignedController && playersJoined[controllersToPlayers[i]] == false) {
+						// playersJoined[i] = false;
 						// Debug.Log("Player " + players[i] + " is NOT ready to play!");
 
-						playersUI[i].gameObject.SetActive(false);
-						joinPrompts[i].gameObject.SetActive(true);
+						playersReady[controllersToPlayers[i]] = false;
 						// //calling UI -Kyle
-						// selectionOP.playerIs(i);
-						// //selectionOP.playerIsNotReady();
-						// selectionOP.playerConnected();
+						selectionOP.playerIs(controllersToPlayers[i]);
+						selectionOP.playerConnected();
+
+						playersUI[controllersToPlayers[i]].gameObject.SetActive(false);
+						joinPrompts[controllersToPlayers[i]].gameObject.SetActive(true);
 					}
 
 					// playerTimers[i] = 0.0f;
@@ -463,15 +550,18 @@ public class PlayerJoinManager : MonoBehaviour {
 			// Debug.Log("players ready: " + playersReady[0] + ", " + playersReady[1] + ", " + playersReady[2] + ", " + playersReady[3]);
 
 			int newNumOfPlayersReady = 0;
-			for (int i = 0; i < playersJoined.Length; i++) {
-				if (playersJoined[i] == true)
+			for (int i = 0; i < playersReady.Length; i++) {
+				if (playersReady[i] == true)
 					newNumOfPlayersReady++;
 			}
 
 			// the normal conditions needed for the game to start
 			if (!debugMode) 
 			{
-				RunGameReadyChecks(newNumOfPlayersReady, 2);
+				if (numOfControllersConnected > 2)
+					RunGameReadyChecks(newNumOfPlayersReady, numOfControllersConnected);
+				else 
+					RunGameReadyChecks(newNumOfPlayersReady, 2);
 			}
 
 			// conditions when in debug mode. Debug mode allows the game to start with only 1 player (and maybe more).
@@ -521,6 +611,10 @@ public class PlayerJoinManager : MonoBehaviour {
 		}
 		else {
 			playersReady[playerIdx] = false;
+			if (inputControllerNumbers[playerIdx] != notAssignedController) {
+				controllersToPlayers[inputControllerNumbers[playerIdx]] = notAssignedController;
+				inputControllerNumbers[playerIdx] = notAssignedController;
+			}
 			joinPrompts[playerIdx].gameObject.SetActive(false);
 			playersUI[playerIdx].gameObject.SetActive(false);
 		}
