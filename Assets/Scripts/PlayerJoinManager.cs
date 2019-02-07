@@ -499,19 +499,27 @@ public class PlayerJoinManager : MonoBehaviour {
 
 			// turns on join prompts for connected controllers
 			for (int i = 0; i < controllersConnected.Length; i++) {
-				if (i < numOfControllersConnected && !playersJoined[i]) {
-					joinPrompts[i].gameObject.SetActive(true);
-					playersUI[i].gameObject.SetActive(false);
-					if (i == 0) {
-						if (numOfControllersConnected < 3) 
-							joinPrompts[i].transform.localPosition = new Vector3(-100.0f, 0.0f, 0.0f);
-						else
-							joinPrompts[i].transform.localPosition = new Vector3(-300.0f, 0.0f, 0.0f);
+				if (i < numOfControllersConnected /*&& !playersJoined[i]*/) {
+					if (!playersJoined[i]) {
+						joinPrompts[i].gameObject.SetActive(true);
+						playersUI[i].gameObject.SetActive(false);
 					}
 					else {
-						joinPrompts[i].transform.localPosition = new Vector3(joinPrompts[i-1].transform.localPosition.x + 200.0f, 0.0f, 0.0f);
+						joinPrompts[i].gameObject.SetActive(false);
 					}
-					playersUI[i].transform.localPosition = joinPrompts[i].transform.localPosition;
+					Vector3 newPosition;
+					if (i == 0) {
+						if (numOfControllersConnected < 3) 
+							newPosition = new Vector3(-100.0f, 0.0f, 0.0f);
+						else
+							newPosition = new Vector3(-300.0f, 0.0f, 0.0f);
+					}
+					else {
+						newPosition = new Vector3(joinPrompts[i-1].transform.localPosition.x + 200.0f, 0.0f, 0.0f);
+						// joinPrompts[i].transform.localPosition = newPosition;
+					}
+					joinPrompts[i].transform.localPosition = newPosition;
+					playersUI[i].transform.localPosition = newPosition;
 				}
 				else {
 					joinPrompts[i].gameObject.SetActive(false);
