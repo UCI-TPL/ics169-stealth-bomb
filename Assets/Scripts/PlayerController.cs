@@ -389,7 +389,8 @@ public class PlayerController : MonoBehaviour, IHurtable {
                 knockbackEffect.SetActive(false, Vector3.zero);
             }
             knockbackEffect.SetActive(true, direction, playerNumber);
-            lastKnockback = StopKnockback(direction.magnitude / friction);
+            // Calculate the duration of the knockback
+            lastKnockback = StopKnockback(Mathf.Log(direction.magnitude, 1/(1-friction*Time.fixedDeltaTime)) * Time.fixedDeltaTime); // equation: https://www.desmos.com/calculator/2n0tww6mcp
             StartCoroutine(lastKnockback);
 
             IEnumerator StopKnockback(float maxDuration) {
