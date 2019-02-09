@@ -18,12 +18,12 @@ MonoBehaviour:
     but can take damage
   type: 0
   autoAttack: 0
-  cooldown: 0.25
+  cooldown: 0.5
   knockbackStrength: 0
   damage: 0
   buffs: []
-  moveDuration: 0.12
+  moveDuration: 0.08
   moveType: 0
-  SpeedMultiplier: 0.6
+  SpeedMultiplier: 0.8
   MoveDuringDash: 1
   DodgeDeceleration: 1.2
