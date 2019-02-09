@@ -111,7 +111,7 @@ MonoBehaviour:
   TimeDecreasePerPlayer: 10
   GhostOffset: {x: 0, y: 0, z: 0}
   GhostOffsetLimit: 0
-  countdown: 3
+  countdown: 1
   countdownText: {fileID: 0}
 --- !u!114 &947806761363706678
 MonoBehaviour:

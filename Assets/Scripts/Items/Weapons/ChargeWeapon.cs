@@ -35,35 +35,8 @@ public class ChargeWeapon : Weapon {
 
     // OnChargingUpdate is called once per frame while the weapon is charging
     protected override void OnChargingUpdate() {
-
-        //Debug.Log("g" + ChargeLevel);
-        InputManager.inputManager.controllers[player.playerNumber].Vibrate(ChargeLevel/3, 0.1f);
-        //charging is completely disabled since the charge bar is now in place
-        /*
-        if (rend.material.color.maxColorComponent >= data.GlowLimit) //make this higher for that big crazy aura
-            return;
-        else if((ChargeLevel * data.chargeLevels) > 1f) //colors only change the the weapon charges higher than one, so no glow for the fast bow
-            rend.material.color = rend.material.color + ((player.controller.playerColor / data.colorAddition) * Time.deltaTime);
-        */
-
-        //Debug.Log(GetChargeLevel());
-
-        /*
-        switch ((int)(ChargeLevel * data.chargeLevels)) 
-        {
-            case 1:
-
-                //rend.material.color = rend.material.color + ((Color.red / data.colorAddition) * Time.deltaTime);
-                break;
-            case 2:
-                //rend.material.color = rend.material.color +  (Color.blue / data.colorAddition)  * Time.deltaTime;
-                break;
-            case 3:
-                //rend.material.color = rend.material.color + (Color.green / data.colorAddition)  * Time.deltaTime;
-                break;
-        }
-        */
-
+        float vibrationLevel = 0.25f;
+        InputManager.inputManager.controllers[player.playerNumber].Vibrate(ChargeLevel * vibrationLevel, 0.1f);
     }
 
     // OnRelease is called once when the weapon is released
