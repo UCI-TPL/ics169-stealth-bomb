@@ -369,9 +369,11 @@ public class PlayerJoinManager : MonoBehaviour {
 		}
 	}
 
+
 	private void TestConfirm() {
 		Debug.Log("button A pressed.");
 	}
+
 
 	// Helper function that checks if players can start the game and, if so, adds UI to indicate this state.
 	// Also, still manages taking in MMK input since input manager's MMK support has not been integrated into the join manager yet
