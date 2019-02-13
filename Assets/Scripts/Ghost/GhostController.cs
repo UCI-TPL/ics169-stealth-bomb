@@ -118,7 +118,6 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
 
     private void FixedUpdate()
     {
-        Debug.Log("As the update begins switch sides is " + switchSides);
         Move(player.stats.moveSpeed);
         Vector3 pos;
 
@@ -148,13 +147,11 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
         {
             float lerpPosition = (Time.time - startTravelTime) / travelTime; //how far along the lerp should it be
             pos = Vector3.Lerp(latestPosition, currentPosition, lerpPosition);
-            Debug.Log("Lerping and at " + pos);
             //pos = Vector3.SmoothDamp(latestPosition, currentPosition, ref smoothVel, 10f);
         } 
 
         if (pos != Vector3.zero)
             GhostBody.transform.position = pos;
-        Debug.Log("Switch sides is " + switchSides);
         
        
     }

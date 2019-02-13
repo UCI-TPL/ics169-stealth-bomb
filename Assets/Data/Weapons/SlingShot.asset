@@ -17,10 +17,11 @@ MonoBehaviour:
   description: fast but weak projectile attack
   type: 2
   autoAttack: 1
-  cooldown: 0.15
-  knockbackStrength: 6
-  damage: 15
+  cooldown: 0.4
+  knockbackStrength: 20
+  damage: 30
   buffs: []
   projectile: {fileID: 11400000, guid: cc2f39c9384a2b84ab1b8e1b7c359c8e, type: 2}
   numProj: 1
-  projSpeed: 50
+  projSpeed: 35
+  SoundName: 

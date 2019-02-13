@@ -21,9 +21,9 @@ public class PlayerStats {
         AddStat("turn_speed", TurnSpeedStat); // Angles a player can turn per sec
     }
 
-    private readonly Stat MoveSpeedStat = new Stat(7.5f);
+    private readonly Stat MoveSpeedStat = new Stat(5.5f);    // old default: 7.5f
     private readonly Stat JumpForceStat = new Stat(1.5f);
-    private readonly Stat MaxHealthStat = new Stat(100);
+    private readonly Stat MaxHealthStat = new Stat(175);    // old default: 100f
     private readonly Stat AirSpeedStat = new Stat(50);
     private readonly Stat DodgeTimeStat = new Stat(0.2f);
     private readonly Stat DodgeRechargeStat = new Stat(0.8f);

@@ -70,8 +70,9 @@ public class GameManager : MonoBehaviour {
 
     //public int PlayersKilled = 0;
 
+
     [Header("In-Game: Starting Countdown")]
-    public int countdown = 3; //at the start of a round
+    //public int countdown = 2; //at the start of a round
     public GameObject countdownText;
 
     private List<GameRound> rounds = new List<GameRound>();
@@ -163,16 +164,19 @@ public class GameManager : MonoBehaviour {
 
     IEnumerator Countdown()
     {
-        float startTime = Time.time;
-        DisablePlayersMovement(countdown);
-        countdownText.SetActive(true);
-        float timeRemaining;
-        while (inGame && (timeRemaining = startTime + countdown - Time.time) > 0) {
-            countdownText.GetComponent<Text>().text = Mathf.Ceil(timeRemaining).ToString();
-            yield return null;
-        }
-        if (countdownText != null) // Ensure that game scene is still active, its possible that player returned to main menu
+        Debug.Log("Countdown starting");
+        if(countdownText != null) //only do the countdown if you can find it
+        {
+            DisablePlayersMovement(1f);
+            Text cText = countdownText.GetComponent<Text>();
+            countdownText.SetActive(true);
+            cText.text = "READY";
+            yield return new WaitForSeconds(1f);
+            cText.text = "GO!";
+            yield return new WaitForSeconds(1f);
             countdownText.SetActive(false);
+        }
+        yield return null;            
     }
 
     void DisablePlayersMovement(float duration)

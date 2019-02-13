@@ -33,6 +33,8 @@ public class PlayerJoinManager : MonoBehaviour {
 	public GameObject mMManager;
 	private MainMenuManager currentMenu; 
 
+	public Image bButtonMask;
+
 	public RectTransform[] joinPrompts;
 	public RectTransform[] playersUI;
 	public Text countdownText;
@@ -189,6 +191,8 @@ public class PlayerJoinManager : MonoBehaviour {
 		else {
 			UpdateNewVersion();
 		}
+
+		// bButtonMask.fillAmount = 
 	}
 
 
@@ -232,6 +236,11 @@ public class PlayerJoinManager : MonoBehaviour {
 				}
 			}
 		}
+		else if (CanPlayerPressButton(controllerIdx) && controllersToPlayers[controllerIdx] != notAssignedController) {
+			if (usingNewPlayerJoinSystem) {
+				ReadyPlayer(controllerIdx);
+			}
+		}
 		Debug.Log("input controller list after: " + inputControllerNumbers[0] + "," + inputControllerNumbers[1] + "," + inputControllerNumbers[2] + "," + inputControllerNumbers[3]);
 	}
 
@@ -250,6 +259,7 @@ public class PlayerJoinManager : MonoBehaviour {
 					// otherwise, player will be unjoin the lobby and will have to press A again to rejoin.
 					else {
 						// TEST THIS!!!!!
+						ToggleControllerGuide(controllersToPlayers[controllerIdx], false);
 						playersJoined[controllersToPlayers[controllerIdx]] = false;
 						playersUI[controllersToPlayers[controllerIdx]].gameObject.SetActive(false);
 						joinPrompts[controllersToPlayers[controllerIdx]].gameObject.SetActive(false);
@@ -287,13 +297,16 @@ public class PlayerJoinManager : MonoBehaviour {
 												&& playersJoined[controllersToPlayers[controllerIdx]] == true) {
 			if (!playersControlsGuideActive[controllersToPlayers[controllerIdx]]) {
 				Debug.Log("Player " + (controllersToPlayers[controllerIdx] + 1) + " turned on their controller guide.");
+				// the controller guide should always be the last child in the index
+				ToggleControllerGuide(controllersToPlayers[controllerIdx], true);
 			}
 			else {
 				Debug.Log("Player " + (controllersToPlayers[controllerIdx] + 1) + " turned off their controller guide.");
+				ToggleControllerGuide(controllersToPlayers[controllerIdx], false);
 			}
 
 			// temp toggle on or off for controller guide
-			playersControlsGuideActive[controllersToPlayers[controllerIdx]] = !playersControlsGuideActive[controllersToPlayers[controllerIdx]];
+			// playersControlsGuideActive[controllersToPlayers[controllerIdx]] = !playersControlsGuideActive[controllersToPlayers[controllerIdx]];
 		}
 	}
 
@@ -323,6 +336,13 @@ public class PlayerJoinManager : MonoBehaviour {
 	}
 
 
+	// helper method that toggles player's (specified by playerIdx) controller guide on or off.
+	private void ToggleControllerGuide(int playerIdx, bool turnOn) {
+		playersUI[playerIdx].GetChild(playersUI[playerIdx].childCount - 1).gameObject.SetActive(turnOn);
+		playersControlsGuideActive[playerIdx] = turnOn;
+	}
+
+
 	// helper method that assigns what functions should be called by what input/event.
 	private void AssignControllerEvents(int controllerIdx) {
 		// A button, B button, and Start button has been assigned. Still need to assign Y button.
@@ -333,8 +353,8 @@ public class PlayerJoinManager : MonoBehaviour {
 				input.controllers[controllerIdx].Switch.OnDown.AddListener( () => ShowPlayerControls(0) );
 				if (!usingNewPlayerJoinSystem)
 					input.controllers[controllerIdx].start.OnDown.AddListener( () => StartGame(0) );
-				else 
-					input.controllers[controllerIdx].start.OnDown.AddListener( () => ReadyPlayer(0) );
+				// else 
+					// input.controllers[controllerIdx].start.OnDown.AddListener( () => ReadyPlayer(0) );
 				break;
 			case 1:
 				input.controllers[controllerIdx].confirm.OnDown.AddListener( () => PlayerJoin(1) );
@@ -342,8 +362,8 @@ public class PlayerJoinManager : MonoBehaviour {
 				input.controllers[controllerIdx].Switch.OnDown.AddListener( () => ShowPlayerControls(1) );
 				if (!usingNewPlayerJoinSystem)
 					input.controllers[controllerIdx].start.OnDown.AddListener( () => StartGame(1) );
-				else 
-					input.controllers[controllerIdx].start.OnDown.AddListener( () => ReadyPlayer(1) );
+				// else 
+					// input.controllers[controllerIdx].start.OnDown.AddListener( () => ReadyPlayer(1) );
 				break;
 			case 2:
 				input.controllers[controllerIdx].confirm.OnDown.AddListener( () => PlayerJoin(2) );
@@ -351,8 +371,8 @@ public class PlayerJoinManager : MonoBehaviour {
 				input.controllers[controllerIdx].Switch.OnDown.AddListener( () => ShowPlayerControls(2) );
 				if (!usingNewPlayerJoinSystem)
 					input.controllers[controllerIdx].start.OnDown.AddListener( () => StartGame(2) );
-				else 
-					input.controllers[controllerIdx].start.OnDown.AddListener( () => ReadyPlayer(2) );
+				// else 
+					// input.controllers[controllerIdx].start.OnDown.AddListener( () => ReadyPlayer(2) );
 				break;
 			case 3:
 				input.controllers[controllerIdx].confirm.OnDown.AddListener( () => PlayerJoin(3) );
@@ -360,8 +380,8 @@ public class PlayerJoinManager : MonoBehaviour {
 				input.controllers[controllerIdx].Switch.OnDown.AddListener( () => ShowPlayerControls(3) );
 				if (!usingNewPlayerJoinSystem)
 					input.controllers[controllerIdx].start.OnDown.AddListener( () => StartGame(3) );
-				else 
-					input.controllers[controllerIdx].start.OnDown.AddListener( () => ReadyPlayer(3) );
+				// else 
+					// input.controllers[controllerIdx].start.OnDown.AddListener( () => ReadyPlayer(3) );
 				break;
 			default:
 				Debug.Log("variable playerIdx out of range!");
@@ -369,9 +389,11 @@ public class PlayerJoinManager : MonoBehaviour {
 		}
 	}
 
+
 	private void TestConfirm() {
 		Debug.Log("button A pressed.");
 	}
+
 
 	// Helper function that checks if players can start the game and, if so, adds UI to indicate this state.
 	// Also, still manages taking in MMK input since input manager's MMK support has not been integrated into the join manager yet
@@ -623,6 +645,7 @@ public class PlayerJoinManager : MonoBehaviour {
 				controllersToPlayers[inputControllerNumbers[playerIdx]] = notAssignedController;
 				inputControllerNumbers[playerIdx] = notAssignedController;
 			}
+			ToggleControllerGuide(playerIdx, false);
 			joinPrompts[playerIdx].gameObject.SetActive(false);
 			playersUI[playerIdx].gameObject.SetActive(false);
 		}
