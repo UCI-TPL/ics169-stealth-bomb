@@ -40,6 +40,11 @@ public class GameManager : MonoBehaviour {
     public Player leader;
     [Tooltip("Ranks required to win")]
     public int maxRank = 10;
+    public int maxPoints {
+        get {
+            return maxRank * 4;
+        }
+    }
     [Tooltip("Amount of experiance per precent life dealt")]
     public float ExpGainPerDamage = 0.5f;
     [Tooltip("Amount of experiance for killing blow")]
@@ -50,6 +55,8 @@ public class GameManager : MonoBehaviour {
     [Range(0, 1)]
     [Tooltip("Amount of bonus experiance per level under")]
     public float ExpBonusPerLvl = 0.25f;
+    [Tooltip("All settings relating to experiance gained")]
+    public ExperianceSettings ExperianceSettings;
 
     // variables for the game "timer"
     [Header("In-Game: 'Timer' Related")]
@@ -228,7 +235,7 @@ public class GameManager : MonoBehaviour {
                     break;
                 }
 
-                GameRound newRound = new GameRound(GetActivePlayers(players));
+                GameRound newRound = new GameRound(GetActivePlayers(players), rounds.Count);
                 rounds.Add(newRound);
                 newRound.LoadLevel();
                 StartCoroutine(StartGameAfterLoad(newRound));
@@ -334,9 +341,14 @@ public class GameManager : MonoBehaviour {
     }
 
     public class GameRound {
-
-        public Dictionary<Player, float> initialExperiance;
+        public readonly int RoundNumber;
         public Player[] players;
+        private Dictionary<BonusExperiance.ExperianceType, Dictionary<Player, List<BonusExperiance>>> experianceGained;
+        public Dictionary<BonusExperiance.ExperianceType, Dictionary<Player, List<BonusExperiance>>> ExperianceGained {
+            get {
+                return experianceGained ?? (experianceGained = CalculateExperiance());
+            }
+        }
         public bool isActive {
             get { return State != GameState.Finished && State != GameState.Created; }
         }
@@ -367,13 +379,33 @@ public class GameManager : MonoBehaviour {
         // A random number generator, used to pick a stage from an array in levelNames.
         System.Random rng = new System.Random();
 
+        #region Player Stat Variables
+        private readonly Player Leader;
+        private Dictionary<Player, int> initialRank;
+        public readonly Dictionary<Player, Dictionary<Player, float>> DamageDealt = new Dictionary<Player, Dictionary<Player, float>>();
+        public readonly Dictionary<Player, Dictionary<Player, float>> DamageTaken = new Dictionary<Player, Dictionary<Player, float>>();
+        public readonly Dictionary<Player, HashSet<Player>> Kills = new Dictionary<Player, HashSet<Player>>();
+        public readonly Dictionary<Player, Player> KilledBy = new Dictionary<Player, Player>();
+        #endregion
 
-        public GameRound(Player[] players) {
+
+        public GameRound(Player[] players, int roundNumber) {
             this.players = players;
-            initialExperiance = new Dictionary<Player, float>();
+            RoundNumber = roundNumber;
+            initialRank = new Dictionary<Player, int>();
+            // Set Up Player Stats
+            Leader = GameManager.instance.leader;
             foreach (Player player in this.players) {
-                initialExperiance.Add(player, player.experiance);
+                initialRank.Add(player, player.rank);
+                DamageDealt.Add(player, new Dictionary<Player, float>());
+                DamageTaken.Add(player, new Dictionary<Player, float>());
+                Kills.Add(player, new HashSet<Player>());
+                foreach (Player other in this.players) {
+                    DamageDealt[player].Add(other, 0);
+                    DamageTaken[player].Add(other, 0);
+                }
             }
+
             State = GameState.Created;
         }
 
@@ -527,6 +559,9 @@ public class GameManager : MonoBehaviour {
 
         private void Player_onHurt(Player damageDealer, Player reciever, float percentDealt) {
             GameManager.instance.ExpOnHurt(damageDealer, reciever, percentDealt);
+            // Update Player Stats
+            DamageDealt[damageDealer][reciever] += percentDealt;
+            DamageTaken[reciever][damageDealer] += percentDealt;
         }
 
         private void Player_onDeath(Player killer, Player killed) {
@@ -539,6 +574,10 @@ public class GameManager : MonoBehaviour {
                 deathPosition = new Vector3(deathPosition.x, 6f, deathPosition.z);
             instance.StartCoroutine(InstantiateGhost(killed.playerNumber, killed, deathPosition));
             killed.controller.DisableUI();
+            // Update Player Stats
+            if (killer != null)
+                Kills[killer].Add(killed);
+            KilledBy.Add(killed, killer);
         }
 
         private void Ghost_onDeath(Player killer, Player killed)
@@ -562,22 +601,97 @@ public class GameManager : MonoBehaviour {
             }
         }
 
+        private Dictionary<BonusExperiance.ExperianceType, Dictionary<Player, List<BonusExperiance>>> CalculateExperiance() {
+            // Running total of exp gained used for comeback calculation
+            Dictionary<Player, int> totalExp = new Dictionary<Player, int>();
+            foreach (Player player in players)
+                totalExp.Add(player, 0); // Initialize total exp
+            // Resulting exp gained dict
+            Dictionary<BonusExperiance.ExperianceType, Dictionary<Player, List<BonusExperiance>>> experianceGained = new Dictionary<BonusExperiance.ExperianceType, Dictionary<Player, List<BonusExperiance>>>();
+            // Calculate each exp type in specified order
+            foreach (BonusExperiance.ExperianceType type in GameManager.instance.ExperianceSettings.ExperianceOrder) {
+                Dictionary<Player, List<BonusExperiance>> expForType = CalculateExperiance(type);
+                foreach (KeyValuePair<Player, List<BonusExperiance>> keyValuePair in expForType)
+                    foreach (BonusExperiance exp in keyValuePair.Value)
+                        totalExp[keyValuePair.Key] += exp.Points;
+                experianceGained.Add(type, expForType);
+            }
+            return experianceGained;
+
+            Dictionary<Player, List<BonusExperiance>> CalculateExperiance(BonusExperiance.ExperianceType experianceType) {
+                Dictionary<Player, List<BonusExperiance>> playerExperiance = new Dictionary<Player, List<BonusExperiance>>();
+                foreach (Player player in players) {
+                    List<BonusExperiance> playerExpGained = new List<BonusExperiance>();
+
+                    // Depending on type of experiance run different calculations
+                    switch (experianceType) {
+                        case BonusExperiance.ExperianceType.Damage:
+                            float totalDamage = 0;
+                            foreach (float damage in DamageDealt[player].Values)
+                                totalDamage += damage;
+                            playerExpGained.Add(GameManager.instance.ExperianceSettings.GetExperiance(BonusExperiance.ExperianceType.Damage).MulPoints(totalDamage * 2));
+                            break;
+                        case BonusExperiance.ExperianceType.Kill:
+                            foreach (Player p in Kills[player])
+                                playerExpGained.Add(GameManager.instance.ExperianceSettings.GetExperiance(BonusExperiance.ExperianceType.Kill));
+                            break;
+                        case BonusExperiance.ExperianceType.LastOneStanding:
+                            if (!KilledBy.ContainsKey(player))
+                                playerExpGained.Add(GameManager.instance.ExperianceSettings.GetExperiance(BonusExperiance.ExperianceType.LastOneStanding));
+                            break;
+                        case BonusExperiance.ExperianceType.KillLeader:
+                            if (Kills[player].Contains(Leader))
+                                playerExpGained.Add(GameManager.instance.ExperianceSettings.GetExperiance(BonusExperiance.ExperianceType.KillLeader));
+                            break;
+                        case BonusExperiance.ExperianceType.Revenge:
+                            if (RoundNumber > 0 && GameManager.instance.rounds[RoundNumber - 1].KilledBy.ContainsKey(player) && Kills[player].Contains(GameManager.instance.rounds[RoundNumber - 1].KilledBy[player]))
+                                playerExpGained.Add(GameManager.instance.ExperianceSettings.GetExperiance(BonusExperiance.ExperianceType.Revenge));
+                            break;
+                        case BonusExperiance.ExperianceType.NoDamageTaken:
+                            if (KilledBy.ContainsKey(player))
+                                break;
+                            float damagetaken = 0;
+                            foreach (float damage in DamageTaken[player].Values)
+                                if ((damagetaken += damage) > 0)
+                                    break;
+
+                            if (damagetaken == 0)
+                                playerExpGained.Add(GameManager.instance.ExperianceSettings.GetExperiance(BonusExperiance.ExperianceType.NoDamageTaken));
+                            break;
+                        case BonusExperiance.ExperianceType.Comeback:
+                            if (Leader != null && initialRank[player] <= Leader.rank - 2)
+                                playerExpGained.Add(GameManager.instance.ExperianceSettings.GetExperiance(BonusExperiance.ExperianceType.Comeback).AddPoints(Mathf.FloorToInt(totalExp[player] * 1.5f)));
+                            break;
+                    }
+
+                    playerExperiance.Add(player, playerExpGained);
+                }
+                return playerExperiance;
+            }
+        }
 
         /// <summary>
         /// Instance of experiance gained during a round, Specifies how to display a set of experiance gained
         /// </summary>
-        public class BonusExperiance {
-            public virtual string Name { get; private set; }
-            public readonly Color Color;
-            public float Experiance { get; private set; }
+        [System.Serializable]
+        public struct BonusExperiance {
+            public string Name;
+            public Color Color;
+            public int Points;
+            public Sprite Sprite;
 
-            public BonusExperiance(string name, Color color) {
-                Name = name;
-                Color = color;
+            public BonusExperiance AddPoints(int amount) {
+                Points += amount;
+                return this;
             }
 
-            public float AddExperiance(float amount) {
-                return Experiance += amount;
+            public BonusExperiance MulPoints(float amount) {
+                Points = Mathf.FloorToInt(Points * amount);
+                return this;
+            }
+
+            public enum ExperianceType {
+                Damage, Kill, LastOneStanding, KillLeader, Revenge, NoDamageTaken, Comeback
             }
         }
 

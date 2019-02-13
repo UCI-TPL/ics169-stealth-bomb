@@ -38,7 +38,7 @@ public class ProgressScreenUI : MonoBehaviour {
     [SerializeField]
     private LayoutElement RulerTextLayoutElement;
 
-    private List<PlayerProgressObject> PlayerUIs = new List<PlayerProgressObject>();
+    private List<PlayerProgressObject> PlayerUIs;
     private Player[] players;
 
     [HideInInspector]
@@ -51,10 +51,13 @@ public class ProgressScreenUI : MonoBehaviour {
     }
 
     private void Update() {
-        // Fix ruler layout
-        RulerTextLayoutElement.minWidth = RulerTextLayoutElement.preferredWidth = PlayerIconsRect.rect.width;
+        // Only run updates if active
+        if (ProgressScreenRect.gameObject.activeInHierarchy) {
+            // Fix ruler layout
+            RulerTextLayoutElement.minWidth = RulerTextLayoutElement.preferredWidth = PlayerIconsRect.rect.width;
 
-        UpdateCrown();
+            //UpdateCrown();
+        }
     }
 
     /// <summary>
@@ -64,11 +67,16 @@ public class ProgressScreenUI : MonoBehaviour {
     /// <param name="action"> Event thats invoked when the progress screen is closed. </param>
     public void StartProgressScreen(GameManager.GameRound round, UnityAction action = null) {
         players = round.players; // Save list of players
+        if (PlayerUIs == null)
+            SetUpProgressScreen();
         DisplayScreen(1f);
         StartCoroutine(SlowPause(2, 0.05f));
-        SetUpProgressScreen(round);
+        // Set up progress screen if it hasnt yet been setup
 
-        InvokeUnscaled(UpdateExperiance, 1f);
+        // players should only be able to reach rank 10 once per game before being forced to head back to main menu.
+        RunEndgameChecksAndSetup();
+
+        InvokeUnscaled(delegate { AddExperiance(round); }, 1f);
 
         // Setup the closing the progress screen by pressing start
         StartCoroutine(InvokeOnPressStart(round.players, delegate {
@@ -81,9 +89,12 @@ public class ProgressScreenUI : MonoBehaviour {
         }));
     }
 
-    private void UpdateExperiance() {
-        for (int i = 0; i < players.Length; ++i) {
-            StartCoroutine(ExperianceOverTime(PlayerUIs[i].ExperianceSlider, players[i].experiance));
+    private void AddExperiance(GameManager.GameRound round) {
+        foreach (GameManager.GameRound.BonusExperiance.ExperianceType expType in GameManager.instance.ExperianceSettings.ExperianceOrder) {
+            for (int i = 0; i < players.Length; ++i) {
+                foreach (GameManager.GameRound.BonusExperiance exp in round.ExperianceGained[expType][players[i]])
+                    PlayerUIs[i].expBar.AddPoints(exp);
+            }
         }
     }
 
@@ -104,21 +115,21 @@ public class ProgressScreenUI : MonoBehaviour {
     /// <summary>
     /// Update which player has the crown.
     /// </summary>
-    public void UpdateCrown() {
-        float highestEXP = 0;
-        PlayerProgressObject leader = null;
-        foreach (PlayerProgressObject player in PlayerUIs) {
-            player.expBar.IsLeader = false;
-            if (player.Experiance > highestEXP) {
-                highestEXP = player.Experiance;
-                leader = player;
-            }
-            else if (player.Experiance == highestEXP)
-                leader = null;
-        }
-        if (leader != null)
-            leader.expBar.IsLeader = true;
-    }
+    //public void UpdateCrown() {
+    //    float highestEXP = 0;
+    //    PlayerProgressObject leader = null;
+    //    foreach (PlayerProgressObject player in PlayerUIs) {
+    //        player.expBar.IsLeader = false;
+    //        if (player.Experiance > highestEXP) {
+    //            highestEXP = player.Experiance;
+    //            leader = player;
+    //        }
+    //        else if (player.Experiance == highestEXP)
+    //            leader = null;
+    //    }
+    //    if (leader != null)
+    //        leader.expBar.IsLeader = true;
+    //}
 
     /// <summary>
     /// Invokes the event after any of the listed players press start
@@ -148,28 +159,19 @@ public class ProgressScreenUI : MonoBehaviour {
         StartCoroutine(MoveSmooth(ProgressScreenRect, targetPosition, animDuration));
     }
 
-    private void SetUpProgressScreen(GameManager.GameRound round) {
+    private void SetUpProgressScreen() {
+        PlayerUIs = new List<PlayerProgressObject>();
         for (int i = 0; i < players.Length; ++i) {
             PlayerProgressObject playerProgressObject;
             if (PlayerUIs.Count <= i) { // If there are not enough already created Player UIs then make a new one
                 GameObject playerIcon = Instantiate<GameObject>(PlayerIconPrefab, PlayerIconsRect);
                 GameObject playerSlider = Instantiate<GameObject>(ProgressScreenSliderPrefab, ProgressScreenSliderRect);
-                playerProgressObject = new PlayerProgressObject(playerIcon, playerSlider);
+                playerProgressObject = new PlayerProgressObject(playerIcon, playerSlider, GameManager.instance.maxPoints);
                 PlayerUIs.Add(playerProgressObject);
             }
-            else { // Reuse previously created PlayerUIs
-                playerProgressObject = PlayerUIs[i];
-                playerProgressObject.GO_icon.SetActive(true);
-                playerProgressObject.GO_progressBar.SetActive(true);
-            }
-            playerProgressObject.GO_icon.GetComponent<Image>().color = players[i].Color;
-            playerProgressObject.ExperianceSlider.maxValue = GameManager.instance.maxRank;
-            playerProgressObject.ExperianceSlider.value = round.initialExperiance[players[i]];
+            PlayerUIs[i].GO_icon.GetComponent<Image>().color = players[i].Color;
         }
 
-        // players should only be able to reach rank 10 once per game before being forced to head back to main menu.
-        RunEndgameChecksAndSetup();
-        // if (numOfMaxRankPlayers > )
         rankRulerUI.SetRange(0, GameManager.instance.maxRank); // Setup ruler to display number of ranks
     }
 
@@ -222,7 +224,7 @@ public class ProgressScreenUI : MonoBehaviour {
                 GameWon = true;
                 numOfMaxRankPlayers++;
                 PlayerUIs[i].GO_progressBar.GetComponent<ProgressBarAlphaController>().FadeInProgressBar();
-                PlayerUIs[i].ExperianceSlider.GetComponentInChildren<Outline>().enabled = true;
+                //PlayerUIs[i].ExperianceSlider.GetComponentInChildren<Outline>().enabled = true;
                 PlayerUIs[i].winTextController.TurnOnWinText();
                 // PlayerUIs[i].winTextController.SetupWinText(players[i]);
             }
@@ -245,18 +247,17 @@ public class ProgressScreenUI : MonoBehaviour {
     private class PlayerProgressObject {
         public readonly GameObject GO_icon;
         public readonly GameObject GO_progressBar;
-        public readonly Slider ExperianceSlider;
         public readonly ProgressBarWinTextController winTextController;
-        public float Experiance { get { return ExperianceSlider.value; } }
+        //public float Experiance { get { return ExperianceSlider.value; } }
         public ProgressScreen_EXPBar expBar;
 
-        public PlayerProgressObject(GameObject icon, GameObject progressBar) {
+        public PlayerProgressObject(GameObject icon, GameObject progressBar, int maxPoints) {
             GO_icon = icon;
             GO_progressBar = progressBar;
-            ExperianceSlider = progressBar.GetComponentInChildren<Slider>();
             expBar = progressBar.GetComponent<ProgressScreen_EXPBar>();
+            expBar.SetUp(maxPoints);
             winTextController = progressBar.GetComponent<ProgressBarWinTextController>();
-            ExperianceSlider.gameObject.GetComponentInChildren<Outline>().enabled = false;
+            //ExperianceSlider.gameObject.GetComponentInChildren<Outline>().enabled = false;
         }
     }
 }

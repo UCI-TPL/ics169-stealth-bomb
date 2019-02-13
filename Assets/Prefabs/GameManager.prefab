@@ -107,6 +107,7 @@ MonoBehaviour:
   ExpGainOnKill: 0.25
   ExpPenaltyPerLvl: 0.75
   ExpBonusPerLvl: 0.25
+  ExperianceSettings: {fileID: 11400000, guid: 454bbde1c3c37be4d8d4e98ada4ee69d, type: 2}
   TimeBeforeCrumble: 30
   TimeDecreasePerPlayer: 10
   GhostOffset: {x: 0, y: 0, z: 0}
