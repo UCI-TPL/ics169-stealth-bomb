@@ -250,6 +250,7 @@ public class PlayerJoinManager : MonoBehaviour {
 					// otherwise, player will be unjoin the lobby and will have to press A again to rejoin.
 					else {
 						// TEST THIS!!!!!
+						ToggleControllerGuide(controllersToPlayers[controllerIdx], false);
 						playersJoined[controllersToPlayers[controllerIdx]] = false;
 						playersUI[controllersToPlayers[controllerIdx]].gameObject.SetActive(false);
 						joinPrompts[controllersToPlayers[controllerIdx]].gameObject.SetActive(false);
@@ -287,13 +288,16 @@ public class PlayerJoinManager : MonoBehaviour {
 												&& playersJoined[controllersToPlayers[controllerIdx]] == true) {
 			if (!playersControlsGuideActive[controllersToPlayers[controllerIdx]]) {
 				Debug.Log("Player " + (controllersToPlayers[controllerIdx] + 1) + " turned on their controller guide.");
+				// the controller guide should always be the last child in the index
+				ToggleControllerGuide(controllersToPlayers[controllerIdx], true);
 			}
 			else {
 				Debug.Log("Player " + (controllersToPlayers[controllerIdx] + 1) + " turned off their controller guide.");
+				ToggleControllerGuide(controllersToPlayers[controllerIdx], false);
 			}
 
 			// temp toggle on or off for controller guide
-			playersControlsGuideActive[controllersToPlayers[controllerIdx]] = !playersControlsGuideActive[controllersToPlayers[controllerIdx]];
+			// playersControlsGuideActive[controllersToPlayers[controllerIdx]] = !playersControlsGuideActive[controllersToPlayers[controllerIdx]];
 		}
 	}
 
@@ -320,6 +324,13 @@ public class PlayerJoinManager : MonoBehaviour {
 	// helper method that returns whether or not the specified player can enter input.
 	private bool CanPlayerPressButton(int playerIdx) {
 		return currentStates[playerIdx].IsConnected && PlayerJoinScreenActive && inputTimer >= cooldown;
+	}
+
+
+	// helper method that toggles player's (specified by playerIdx) controller guide on or off.
+	private void ToggleControllerGuide(int playerIdx, bool turnOn) {
+		playersUI[playerIdx].GetChild(playersUI[playerIdx].childCount - 1).gameObject.SetActive(turnOn);
+		playersControlsGuideActive[playerIdx] = turnOn;
 	}
 
 
@@ -625,6 +636,7 @@ public class PlayerJoinManager : MonoBehaviour {
 				controllersToPlayers[inputControllerNumbers[playerIdx]] = notAssignedController;
 				inputControllerNumbers[playerIdx] = notAssignedController;
 			}
+			ToggleControllerGuide(playerIdx, false);
 			joinPrompts[playerIdx].gameObject.SetActive(false);
 			playersUI[playerIdx].gameObject.SetActive(false);
 		}
