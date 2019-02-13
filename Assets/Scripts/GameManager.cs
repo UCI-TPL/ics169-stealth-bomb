@@ -157,7 +157,7 @@ public class GameManager : MonoBehaviour {
 
     IEnumerator Countdown()
     {
-        Debug.Log("Countdown starting");
+        //Debug.Log("Countdown starting");
         if(countdownText != null) //only do the countdown if you can find it
         {
             DisablePlayersMovement(1f);

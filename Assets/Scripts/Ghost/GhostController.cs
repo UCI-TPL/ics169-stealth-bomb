@@ -12,13 +12,16 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
     //_AlbedoColor
 
     [SerializeField]
-    Image CursorImage;
+    //Image CursorImage;
     public GameObject Point; //the cursor that the player moves around
 
     public GameObject GhostPrefab; //the ghost that hangs out on the curve on the side of the map
 
     [HideInInspector]
     public GameObject GhostBody;
+
+    [Tooltip("The bomb the player throws to crumble tiles")]
+    public GameObject GhostBombPrefab;
 
 
     public ParabolaController GhostParabola1; //maps can have either 1 or 2 parabolas    
@@ -53,9 +56,10 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
         right = Camera.main.transform.right;
         right.Scale(new Vector3(1, 0, 1));
         right.Normalize();
-        CursorImage = GetComponent<Image>(); //used to change to player color
-        CursorImage.color = playerColor;
-        CursorImage.enabled = false;
+        //CursorImage = GetComponent<Image>(); //used to change to player color
+        //CursorImage.color = playerColor;
+        //CursorImage.enabled = false;
+        
         //this.gameObject.SetActive(false);
         //this.rend.material.color = Color.clear;
         //Cursor.GetComponent<Renderer>().material.SetColor("_AlbedoColor", playerColor);
@@ -71,8 +75,6 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
         GhostBody.GetComponentsInChildren<Renderer>()[1].material.color = playerColor;
         GhostBody.GetComponentsInChildren<Renderer>()[1].material.SetColor("Color_998F7755", playerColor);
 
-
-        //GameObject Curves = GameObject.FindGameObjectWithTag("ghost-curve");
         GameObject Curves = GameObject.Find("GhostCurves");
 
 
@@ -94,14 +96,16 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
     public IEnumerator SpawnCursor() //so the ghost player can spawn and fly away a bit before the image
     {
         yield return new WaitForSeconds(1f);
-        CursorImage.enabled = true;
+        //CursorImage.enabled = true;
         travelTime = travelTime / 2f;
     }
 
     private float destoryTileTime = 0.0f;
 
-    public void Activate()
+    public void Activate() //change this to throw a bomb
     {
+        //Vector3 forwardd = transform.TransformDirection(Vector3.forward) * 10;
+        //Debug.DrawRay(transform.position, forwardd, Color.green);
         if (destoryTileTime <= Time.time)
         {
             destoryTileTime = Time.time + cooldown;
@@ -109,15 +113,25 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
             RaycastHit hit;
             if (Physics.Raycast(Point.transform.position, Vector3.down, out hit, Mathf.Infinity, layerMask))
             {
-                Tile temp = hit.transform.GetComponent<Tile>();
-                if (temp)
-                    TileManager.tileManager.DestroyTiles(temp.position);
+                //Tile temp = hit.transform.GetComponent<Tile>();
+                //if (temp)
+                //{
+                    //TileManager.tileManager.DestroyTiles(temp.position);
+                GhostBomb ghostBomb = Instantiate(GhostBombPrefab, GhostBody.transform.position, GhostBody.transform.rotation).GetComponent<GhostBomb>();
+                ghostBomb.target = hit.transform.position;
+                //Debug.Log("Telling the bomb to go to " + hit.transform.position);
+                //ghostBomb.target = Point.transform.position;
+                    //ghostBomb.target = temp.position;
+                    //ghostBomb.transform.position = Vector3.Lerp(GhostBody.transform.position, temp.position, 0.1f);
+               // }
             }
+            
         }
     }
 
     private void FixedUpdate()
     {
+        //Debug.Log("Here we are at " + transform.position);
         Move(player.stats.moveSpeed);
         Vector3 pos;
 
