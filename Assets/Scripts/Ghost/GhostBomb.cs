@@ -35,16 +35,6 @@ public class GhostBomb : MonoBehaviour
         return new Vector3(mid.x, f(t) + Mathf.Lerp(start.y, end.y, t), mid.z);
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "Tile")
-        {
-            Tile temp = collision.gameObject.GetComponent<Tile>();
-            if(temp)
-                TileManager.tileManager.DestroyTiles(temp.position);
-            Destroy(this.gameObject);
-        }
-    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -52,7 +42,8 @@ public class GhostBomb : MonoBehaviour
         {
             Tile temp = other.GetComponent<Tile>();
             if (temp)
-                TileManager.tileManager.DestroyTiles(temp.position);
+                TileManager.tileManager.DamagePillar(temp.position, 50f); //takes 2 hits to kill stone, just one to kill grass
+                //TileManager.tileManager.DestroyTiles(temp.position); //to just destory anything without caring about health
             Destroy(this.gameObject);
         }
     }

@@ -13,7 +13,11 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
 
     [SerializeField]
     //Image CursorImage;
+
+   
     public GameObject Point; //the cursor that the player moves around
+
+    public GameObject AOE; //change the color of this
 
     public GameObject GhostPrefab; //the ghost that hangs out on the curve on the side of the map
 
@@ -59,11 +63,13 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
         //CursorImage = GetComponent<Image>(); //used to change to player color
         //CursorImage.color = playerColor;
         //CursorImage.enabled = false;
-        
+
         //this.gameObject.SetActive(false);
         //this.rend.material.color = Color.clear;
         //Cursor.GetComponent<Renderer>().material.SetColor("_AlbedoColor", playerColor);
         //Cursor.transform.Find("Cube").GetComponent<Renderer>().material.SetColor("Color_52FADAA",playerColor);
+        //AOE = transform.Find("Cube").gameObject;
+        AOE.GetComponent<Renderer>().material.SetColor("Color_52FADAA", playerColor);
 
         leftSide = transform.position.z >= transform.position.x; //true for left, false for right   (could work for up & down as well)
 
@@ -132,7 +138,7 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
     private void FixedUpdate()
     {
         //Debug.Log("Here we are at " + transform.position);
-        Move(player.stats.moveSpeed);
+        Move(player.stats.moveSpeed * 0.8f);
         Vector3 pos;
 
         if (((startTravelTime + travelTime) <= Time.time) && switchSides) //check to see if the side switching has ended

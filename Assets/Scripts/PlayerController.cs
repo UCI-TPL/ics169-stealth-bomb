@@ -138,8 +138,9 @@ public class PlayerController : MonoBehaviour, IHurtable {
     public void Destroy() {
         if (Weapon != null)
             Weapon.UnequipWeapon();
-        if(this.gameObject!= null)
-            StartCoroutine(DeathAnimation());
+        if(this)
+            if(this.gameObject!= null)
+                StartCoroutine(DeathAnimation());
     }
 
     public void CheckHeight() //if the player is falling remove them from the Camera 
@@ -181,8 +182,8 @@ public class PlayerController : MonoBehaviour, IHurtable {
             yield return null; //the game crashes super hard if you remove this
         }
         //yield return new WaitForSeconds(DeathAnimationTime); //in this time an animation or something can happen 
-        if (gameObject)
-            GameManager.Destroy(gameObject);
+        if (this.gameObject)
+            GameManager.Destroy(this.gameObject);
         yield return null;
     }
 
