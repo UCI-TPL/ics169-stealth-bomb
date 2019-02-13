@@ -232,6 +232,11 @@ public class PlayerJoinManager : MonoBehaviour {
 				}
 			}
 		}
+		else if (CanPlayerPressButton(controllerIdx) && controllersToPlayers[controllerIdx] != notAssignedController) {
+			if (usingNewPlayerJoinSystem) {
+				ReadyPlayer(controllerIdx);
+			}
+		}
 		Debug.Log("input controller list after: " + inputControllerNumbers[0] + "," + inputControllerNumbers[1] + "," + inputControllerNumbers[2] + "," + inputControllerNumbers[3]);
 	}
 
@@ -344,8 +349,8 @@ public class PlayerJoinManager : MonoBehaviour {
 				input.controllers[controllerIdx].Switch.OnDown.AddListener( () => ShowPlayerControls(0) );
 				if (!usingNewPlayerJoinSystem)
 					input.controllers[controllerIdx].start.OnDown.AddListener( () => StartGame(0) );
-				else 
-					input.controllers[controllerIdx].start.OnDown.AddListener( () => ReadyPlayer(0) );
+				// else 
+					// input.controllers[controllerIdx].start.OnDown.AddListener( () => ReadyPlayer(0) );
 				break;
 			case 1:
 				input.controllers[controllerIdx].confirm.OnDown.AddListener( () => PlayerJoin(1) );
@@ -353,8 +358,8 @@ public class PlayerJoinManager : MonoBehaviour {
 				input.controllers[controllerIdx].Switch.OnDown.AddListener( () => ShowPlayerControls(1) );
 				if (!usingNewPlayerJoinSystem)
 					input.controllers[controllerIdx].start.OnDown.AddListener( () => StartGame(1) );
-				else 
-					input.controllers[controllerIdx].start.OnDown.AddListener( () => ReadyPlayer(1) );
+				// else 
+					// input.controllers[controllerIdx].start.OnDown.AddListener( () => ReadyPlayer(1) );
 				break;
 			case 2:
 				input.controllers[controllerIdx].confirm.OnDown.AddListener( () => PlayerJoin(2) );
@@ -362,8 +367,8 @@ public class PlayerJoinManager : MonoBehaviour {
 				input.controllers[controllerIdx].Switch.OnDown.AddListener( () => ShowPlayerControls(2) );
 				if (!usingNewPlayerJoinSystem)
 					input.controllers[controllerIdx].start.OnDown.AddListener( () => StartGame(2) );
-				else 
-					input.controllers[controllerIdx].start.OnDown.AddListener( () => ReadyPlayer(2) );
+				// else 
+					// input.controllers[controllerIdx].start.OnDown.AddListener( () => ReadyPlayer(2) );
 				break;
 			case 3:
 				input.controllers[controllerIdx].confirm.OnDown.AddListener( () => PlayerJoin(3) );
@@ -371,8 +376,8 @@ public class PlayerJoinManager : MonoBehaviour {
 				input.controllers[controllerIdx].Switch.OnDown.AddListener( () => ShowPlayerControls(3) );
 				if (!usingNewPlayerJoinSystem)
 					input.controllers[controllerIdx].start.OnDown.AddListener( () => StartGame(3) );
-				else 
-					input.controllers[controllerIdx].start.OnDown.AddListener( () => ReadyPlayer(3) );
+				// else 
+					// input.controllers[controllerIdx].start.OnDown.AddListener( () => ReadyPlayer(3) );
 				break;
 			default:
 				Debug.Log("variable playerIdx out of range!");
