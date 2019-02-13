@@ -34,6 +34,8 @@ public class PlayerJoinManager : MonoBehaviour {
 	private MainMenuManager currentMenu; 
 
 	public Image bButtonMask;
+	public float fillSpeed = 0.2f;
+	private float[] bButtonTimers;
 
 	public RectTransform[] joinPrompts;
 	public RectTransform[] playersUI;
@@ -141,6 +143,7 @@ public class PlayerJoinManager : MonoBehaviour {
 		controllersToPlayers = new int[4];
 		defaultInputControllerNumbers = new int[] { 0, 1, 2, 3 };
 		playersControlsGuideActive = new bool[4];
+		bButtonTimers = new float[4];
 		countdownText.gameObject.SetActive(false);
 		countdownTimer = 3.0f;
 
@@ -153,6 +156,7 @@ public class PlayerJoinManager : MonoBehaviour {
 			playersReady[i] = false;
 			controllersConnected[i] = false;
 			playersControlsGuideActive[i] = false;
+			bButtonTimers[i] = 0.0f;
 			playerTimers[i] = 0.0f;
 			AssignControllerEvents(i);
 			if (usingNewPlayerJoinSystem) {
@@ -192,7 +196,22 @@ public class PlayerJoinManager : MonoBehaviour {
 			UpdateNewVersion();
 		}
 
-		// bButtonMask.fillAmount = 
+		float farthestTimer = 0.0f;
+		for (int i = 0; i < bButtonTimers.Length; i++) {
+			if (input.controllers[i].cancel.Pressed) {
+				bButtonTimers[i] += fillSpeed * Time.deltaTime;
+			}
+			else {
+				bButtonTimers[i] = 0.0f;
+			}
+
+			if (farthestTimer < bButtonTimers[i])
+				farthestTimer = bButtonTimers[i];
+		}
+
+		bButtonMask.fillAmount = farthestTimer;
+		if (farthestTimer >= 1.0f)
+			GoBackToMainMenu();
 	}
 
 
@@ -280,12 +299,9 @@ public class PlayerJoinManager : MonoBehaviour {
 				// joinPrompts[playerIdx].gameObject.SetActive(true);
 			}
 
-			else {
-				for (int idx = 0; idx < playersJoined.Length; idx++) {
-					ResetPlayer(idx);
-				}
-				currentMenu.setMenu(1);
-			}
+			// else {
+			// 	GoBackToMainMenu();
+			// }
 		}
 	}
 
@@ -340,6 +356,15 @@ public class PlayerJoinManager : MonoBehaviour {
 	private void ToggleControllerGuide(int playerIdx, bool turnOn) {
 		playersUI[playerIdx].GetChild(playersUI[playerIdx].childCount - 1).gameObject.SetActive(turnOn);
 		playersControlsGuideActive[playerIdx] = turnOn;
+	}
+
+
+	// helper function exits out of pre-game lobby to main menu
+	private void GoBackToMainMenu() {
+		for (int idx = 0; idx < playersJoined.Length; idx++) {
+			ResetPlayer(idx);
+		}
+		currentMenu.setMenu(1);
 	}
 
 
