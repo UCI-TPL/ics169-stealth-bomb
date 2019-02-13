@@ -33,6 +33,8 @@ public class PlayerJoinManager : MonoBehaviour {
 	public GameObject mMManager;
 	private MainMenuManager currentMenu; 
 
+	public Image bButtonMask;
+
 	public RectTransform[] joinPrompts;
 	public RectTransform[] playersUI;
 	public Text countdownText;
@@ -189,6 +191,8 @@ public class PlayerJoinManager : MonoBehaviour {
 		else {
 			UpdateNewVersion();
 		}
+
+		// bButtonMask.fillAmount = 
 	}
 
 
