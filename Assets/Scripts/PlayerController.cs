@@ -111,14 +111,7 @@ public class PlayerController : MonoBehaviour, IHurtable {
 
     // Set up controllers
     private void Start() {
-
-        forward = Camera.main.transform.forward;
-        forward.Scale(new Vector3(1, 0, 1));
-        forward.Normalize();
-        //lastForwardMovement = forward * dodgeSpeed;
-        right = Camera.main.transform.right;
-        right.Scale(new Vector3(1, 0, 1));
-        right.Normalize();
+        UpdateCameraDirection();
 
         // rend.material.color = playerColor; //setting the player color based on playeNum 
         rend.material.SetColor("Color_91A455EE", playerColor); //this is how shader properties are changed 
@@ -140,6 +133,16 @@ public class PlayerController : MonoBehaviour, IHurtable {
             Weapon.UnequipWeapon();
         if(this.gameObject!= null)
             StartCoroutine(DeathAnimation());
+    }
+
+    private void UpdateCameraDirection() {
+        forward = Camera.main.transform.forward;
+        forward.Scale(new Vector3(1, 0, 1));
+        forward.Normalize();
+        //lastForwardMovement = forward * dodgeSpeed;
+        right = Camera.main.transform.right;
+        right.Scale(new Vector3(1, 0, 1));
+        right.Normalize();
     }
 
     public void CheckHeight() //if the player is falling remove them from the Camera 
@@ -211,6 +214,7 @@ public class PlayerController : MonoBehaviour, IHurtable {
 
     // Rotate the player's facing direction
     private void Update() {
+        UpdateCameraDirection();
         player.InGameUpdate();
         if(PlayerHitbox)
             PlayerHitbox.localScale = player == GameManager.instance.leader ? Vector3.one * 1.35f : Vector3.one;

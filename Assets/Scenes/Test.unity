@@ -4308,6 +4308,11 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 781607798818270388, guid: c25fb0ff46de0794e9b16494430460b7,
+        type: 3}
+      propertyPath: anglePerUnit
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 781607797746062185, guid: c25fb0ff46de0794e9b16494430460b7,
         type: 3}
       propertyPath: far clip plane
@@ -4317,6 +4322,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 781607797746062181, guid: c25fb0ff46de0794e9b16494430460b7,
+        type: 3}
+      propertyPath: m_Name
+      value: Main Camera Ortho
       objectReference: {fileID: 0}
     - target: {fileID: 781607797746062183, guid: c25fb0ff46de0794e9b16494430460b7,
         type: 3}
@@ -4349,6 +4359,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8112350132337805675, guid: c25fb0ff46de0794e9b16494430460b7,
+        type: 3}
+      propertyPath: m_Name
+      value: Main Camera
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c25fb0ff46de0794e9b16494430460b7, type: 3}
