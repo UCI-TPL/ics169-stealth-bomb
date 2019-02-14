@@ -1049,6 +1049,12 @@ Transform:
   m_Father: {fileID: 105593422}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!20 &389956017 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 3456392614914661249, guid: c25fb0ff46de0794e9b16494430460b7,
+    type: 3}
+  m_PrefabInstance: {fileID: 1288790125}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &391516856
 GameObject:
   m_ObjectHideFlags: 0
@@ -4275,17 +4281,74 @@ PrefabInstance:
     - target: {fileID: 781607798818270388, guid: c25fb0ff46de0794e9b16494430460b7,
         type: 3}
       propertyPath: maxZoom
-      value: 18
+      value: 160
       objectReference: {fileID: 0}
     - target: {fileID: 781607798818270388, guid: c25fb0ff46de0794e9b16494430460b7,
         type: 3}
       propertyPath: maxZoomDistance
-      value: 20
+      value: 26
+      objectReference: {fileID: 0}
+    - target: {fileID: 781607798818270388, guid: c25fb0ff46de0794e9b16494430460b7,
+        type: 3}
+      propertyPath: minZoomDistance
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 781607798818270388, guid: c25fb0ff46de0794e9b16494430460b7,
+        type: 3}
+      propertyPath: minZoom
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 781607798818270388, guid: c25fb0ff46de0794e9b16494430460b7,
+        type: 3}
+      propertyPath: targetCamera
+      value: 
+      objectReference: {fileID: 389956017}
+    - target: {fileID: 781607798818270388, guid: c25fb0ff46de0794e9b16494430460b7,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 781607797746062185, guid: c25fb0ff46de0794e9b16494430460b7,
         type: 3}
       propertyPath: far clip plane
       value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: 781607797746062181, guid: c25fb0ff46de0794e9b16494430460b7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 781607797746062183, guid: c25fb0ff46de0794e9b16494430460b7,
+        type: 3}
+      propertyPath: m_BeforeTransparentBundles.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 781607797746062183, guid: c25fb0ff46de0794e9b16494430460b7,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 781607797746062183, guid: c25fb0ff46de0794e9b16494430460b7,
+        type: 3}
+      propertyPath: m_BeforeTransparentBundles.Array.data[0].assemblyQualifiedName
+      value: LWRPAO, Post-processLWRPAO, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 1058484253, guid: c25fb0ff46de0794e9b16494430460b7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1058484253, guid: c25fb0ff46de0794e9b16494430460b7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 175.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1058484253, guid: c25fb0ff46de0794e9b16494430460b7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -175.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8112350132337805675, guid: c25fb0ff46de0794e9b16494430460b7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c25fb0ff46de0794e9b16494430460b7, type: 3}

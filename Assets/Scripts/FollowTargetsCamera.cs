@@ -11,9 +11,7 @@ public class FollowTargetsCamera : MonoBehaviour {
     public float smoothTime = 1f;
     public float minZoom;
     public float maxZoom;
-    [Range(0, 1)]
     public float minZoomDistance;
-    [Range(0, 1)]
     public float maxZoomDistance;
 
     void LateUpdate () {
@@ -37,13 +35,14 @@ public class FollowTargetsCamera : MonoBehaviour {
                 averagePos /= targets.Count;
                 transform.position = Vector3.SmoothDamp(transform.position, averagePos, ref currentVelocity, smoothTime);
                 Vector3 size = screenSpaceBounds.size;
-                float zoomLevel = Mathf.Clamp01(Mathf.InverseLerp(minZoom, maxZoom, Mathf.Max(size.x, size.y)));
-                targetCamera.fieldOfView = Mathf.Lerp(targetCamera.fieldOfView, Mathf.Lerp(minZoom, maxZoom, zoomLevel), Time.deltaTime);
+                float zoomLevel = Mathf.InverseLerp(minZoomDistance, maxZoomDistance, Mathf.Max(size.x, size.y));
+                targetCamera.transform.position = Vector3.Lerp(targetCamera.transform.position, targetCamera.transform.parent.position - targetCamera.transform.forward * Mathf.Lerp(minZoom, maxZoom, zoomLevel), Time.deltaTime);
             }
         }
 	}
 
     private static Vector3 ScaleToCamera(Vector3 worldPosition, Camera camera) {
-        return Vector3.Scale(camera.WorldToScreenPoint(worldPosition), new Vector3(1 / (float)camera.pixelWidth, 1 / (float)camera.pixelHeight, 0));
+        return Vector3.ProjectOnPlane(worldPosition, camera.transform.forward);
+        // return Vector3.Scale(camera.WorldToScreenPoint(worldPosition), new Vector3(1 / (float)camera.pixelWidth, 1 / (float)camera.pixelHeight, 0));
     }
 }
