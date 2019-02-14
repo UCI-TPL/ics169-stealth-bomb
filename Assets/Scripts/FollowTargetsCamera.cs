@@ -11,6 +11,9 @@ public class FollowTargetsCamera : MonoBehaviour {
     public float smoothTime = 1f;
     public float minZoom;
     public float maxZoom;
+    [Range(0, 1)]
+    public float minZoomDistance;
+    [Range(0, 1)]
     public float maxZoomDistance;
 
     void LateUpdate () {
@@ -33,8 +36,9 @@ public class FollowTargetsCamera : MonoBehaviour {
             if (targets.Count > 0) {
                 averagePos /= targets.Count;
                 transform.position = Vector3.SmoothDamp(transform.position, averagePos, ref currentVelocity, smoothTime);
-                Vector3 size = screenSpaceBounds.size * targetCamera.orthographicSize * 2;
-                targetCamera.orthographicSize = Mathf.Lerp(targetCamera.orthographicSize, Mathf.Lerp(minZoom, maxZoom, Mathf.Max(size.x, size.y) / maxZoomDistance), Time.deltaTime);
+                Vector3 size = screenSpaceBounds.size;
+                float zoomLevel = Mathf.Clamp01(Mathf.InverseLerp(minZoom, maxZoom, Mathf.Max(size.x, size.y)));
+                targetCamera.fieldOfView = Mathf.Lerp(targetCamera.fieldOfView, Mathf.Lerp(minZoom, maxZoom, zoomLevel), Time.deltaTime);
             }
         }
 	}
