@@ -211,7 +211,7 @@ public class PlayerJoinManager : MonoBehaviour {
 
 		bButtonMask.fillAmount = farthestTimer;
 		if (farthestTimer >= 1.0f)
-			GoBackToMainMenu();
+			ExitPreGameLobby();
 	}
 
 
@@ -360,11 +360,11 @@ public class PlayerJoinManager : MonoBehaviour {
 
 
 	// helper function exits out of pre-game lobby to main menu
-	private void GoBackToMainMenu() {
+	public void ExitPreGameLobby() {
 		for (int idx = 0; idx < playersJoined.Length; idx++) {
 			ResetPlayer(idx);
 		}
-		currentMenu.setMenu(1);
+		currentMenu.GoToMenu(1, 1);
 	}
 
 
