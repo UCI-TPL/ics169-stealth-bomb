@@ -24,6 +24,18 @@ public class SlingshotProjAddon : MonoBehaviour
 
     void Update()
     {
+        
+        Ray ray = new Ray(transform.position, transform.forward);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, Time.deltaTime * projSpeed + .1f))
+        {
+            Vector3 reflectDir = Vector3.Reflect(ray.direction, hit.normal);
+            float rot = 90 - Mathf.Atan2(reflectDir.z, reflectDir.x) * Mathf.Rad2Deg;
+            transform.eulerAngles = new Vector3(0, rot, 0);
+        }
+        
+
         if (!bombStop)
         {
             if (proj.getHasHit() == true)
@@ -53,31 +65,5 @@ public class SlingshotProjAddon : MonoBehaviour
     {
         rb.detectCollisions = true;
         rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-    }
-
-    public void OnCollisionEnter(Collision collision)
-    {
-        //Debug.Log("Angle from FWD to N: " + Vector3.SignedAngle(transform.forward, collision.GetContact(0).normal, transform.up));
-        //Debug.Log("Angle from BWD to N: " + Vector3.SignedAngle(-transform.forward, collision.GetContact(0).normal, transform.up));
-        //Debug.Log("Cross Product (F & N): " + Vector3.Cross(transform.forward, collision.GetContact(0).normal));
-        //float angle;
-        /*
-        if ((transform.rotation.eulerAngles.y >= 180f) && (transform.rotation.eulerAngles.y < 359.9f))
-        {
-            //angle = transform.rotation.eulerAngles.y - Vector3.SignedAngle(transform.forward, collision.GetContact(0).normal, transform.up) + Vector3.SignedAngle(-transform.forward, collision.GetContact(0).normal, transform.up);
-            angle = transform.rotation.eulerAngles.y - Vector3.SignedAngle(transform.forward, collision.GetContact(0).normal, transform.up);
-        }
-        else
-        {
-            //angle = transform.rotation.eulerAngles.y + Vector3.SignedAngle(transform.forward, collision.GetContact(0).normal, transform.up) - Vector3.SignedAngle(-transform.forward, collision.GetContact(0).normal, transform.up);
-            angle = transform.rotation.eulerAngles.y + Vector3.SignedAngle(transform.forward, collision.GetContact(0).normal, transform.up);
-        }
-        */
-
-        float angle;
-        angle = transform.rotation.eulerAngles.y + Vector3.SignedAngle(transform.forward, collision.GetContact(0).normal, transform.up) + Vector3.SignedAngle(-transform.forward, collision.GetContact(0).normal, transform.up);
-        transform.rotation = Quaternion.Euler(0f, angle, 0f);
-        
-
     }
 }
