@@ -35,6 +35,7 @@ public class PlayerJoinManager : MonoBehaviour {
 
 	public Image bButtonMask;
 	public float fillSpeed = 0.2f;
+	public float initialFillAmount = 0.18f; // originally 0.0f
 	private float[] bButtonTimers;
 
 	public RectTransform[] joinPrompts;
@@ -156,7 +157,7 @@ public class PlayerJoinManager : MonoBehaviour {
 			playersReady[i] = false;
 			controllersConnected[i] = false;
 			playersControlsGuideActive[i] = false;
-			bButtonTimers[i] = 0.0f;
+			bButtonTimers[i] = initialFillAmount;
 			playerTimers[i] = 0.0f;
 			AssignControllerEvents(i);
 			if (usingNewPlayerJoinSystem) {
@@ -202,7 +203,7 @@ public class PlayerJoinManager : MonoBehaviour {
 				bButtonTimers[i] += fillSpeed * Time.deltaTime;
 			}
 			else {
-				bButtonTimers[i] = 0.0f;
+				bButtonTimers[i] = initialFillAmount;
 			}
 
 			if (farthestTimer < bButtonTimers[i])
