@@ -664,7 +664,7 @@ public class GameManager : MonoBehaviour {
                             break;
                         case BonusExperiance.ExperianceType.Comeback:
                             if (Leader != null && initialRank[player] <= Leader.rank - 2)
-                                playerExpGained.Add(GameManager.instance.ExperianceSettings.GetExperiance(BonusExperiance.ExperianceType.Comeback).AddPoints(Mathf.FloorToInt(totalExp[player] * 1.5f)));
+                                playerExpGained.Add(GameManager.instance.ExperianceSettings.GetExperiance(BonusExperiance.ExperianceType.Comeback).AddPoints(Mathf.FloorToInt(totalExp[player] * 0.5f)));
                             break;
                     }
 
