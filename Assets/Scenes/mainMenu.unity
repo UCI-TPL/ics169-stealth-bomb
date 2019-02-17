@@ -1268,21 +1268,19 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 78071785}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3773888f56ad847e286a9d6846601277, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mainMenuPanel: {fileID: 805036092}
-  selectionMenuPanel: {fileID: 1931341466}
+  selectionMenuPanel: {fileID: 929809575}
   remappingMenuPanel: {fileID: 1762129912}
-  AudioPanel: {fileID: 0}
+  AudioPanel: {fileID: 1665807388}
   customMappingPanel: {fileID: 1888511360}
-  xboxControllerDisplay: {fileID: 0}
-  pcControllerDisplay: {fileID: 0}
   newVersion: 1
   controllerStickDeadZone: 0.5
-  cooldown: 0.25
+  cooldown: 160
   buttonCoolDown: 0.5
 --- !u!114 &78071787
 MonoBehaviour:
@@ -4043,6 +4041,7 @@ MonoBehaviour:
   mMManager: {fileID: 1668276870}
   bButtonMask: {fileID: 723486411}
   fillSpeed: 0.2
+  initialFillAmount: 0.18
   joinPrompts:
   - {fileID: 1842094170}
   - {fileID: 1953448775}
@@ -8275,10 +8274,10 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1668276871}
         m_MethodName: ExitGame
-        m_Mode: 1
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 430597255}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -14050,7 +14049,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &805036093
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15830,7 +15829,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &929809576
 RectTransform:
   m_ObjectHideFlags: 0
@@ -17931,7 +17930,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 0
+    m_Mode: 3
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -17958,7 +17957,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 516870800}
+      - m_Target: {fileID: 1668276871}
         m_MethodName: Mute
         m_Mode: 1
         m_Arguments:
@@ -19913,7 +19912,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 2
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -27420,11 +27419,9 @@ MonoBehaviour:
   remappingMenuPanel: {fileID: 1762129912}
   AudioPanel: {fileID: 1665807388}
   customMappingPanel: {fileID: 1888511360}
-  xboxControllerDisplay: {fileID: 1572713504}
-  pcControllerDisplay: {fileID: 1608842546}
   newVersion: 1
   controllerStickDeadZone: 0.5
-  cooldown: 80
+  cooldown: 0.25
   buttonCoolDown: 0.5
 --- !u!4 &1668276872
 Transform:
@@ -33340,7 +33337,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 0
+    m_Mode: 2
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}

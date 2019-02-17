@@ -80,11 +80,11 @@ public class GameManager : MonoBehaviour {
 
     public void StartGame(bool[] playersReady, int[] xboxControllerNumbers) {
         // StopAllCoroutines();
-        string s = "Players Recieved from Main Menu: ";
-        for (int i = 0; i < playersReady.Length; ++i) {
-          s += "player " + i.ToString() + ": " + playersReady[i].ToString() + "  ";
-        }
-        Debug.Log(s);
+        // string s = "Players Recieved from Main Menu: ";
+        // for (int i = 0; i < playersReady.Length; ++i) {
+        //   s += "player " + i.ToString() + ": " + playersReady[i].ToString() + "  ";
+        // }
+        // Debug.Log(s);
         rounds.Clear();
         SetUpPlayers(playersReady, xboxControllerNumbers);
         StartCoroutine(LoadLevelAsync(SceneManager.GetActiveScene().buildIndex + 1, delegate { StartCoroutine(UpdateGame()); }));
