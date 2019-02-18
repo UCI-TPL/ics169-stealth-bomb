@@ -52,8 +52,17 @@ public class BlackHoleWeapon : Weapon {
             }
             else
             {
-                player.ChangeWeapon(player.controller.PreviousWeapon.weaponData);
-                player.controller.PreviousWeapon = player.controller.Weapon;
+                if (player.controller.PreviousWeapon.type == Weapon.Type.Temp)
+                {
+                    player.controller.SwitchWeapon();
+                    player.ResetWeapon();
+                    player.controller.SwitchWeapon();
+                }
+                else
+                {
+                    player.ChangeWeapon(player.controller.PreviousWeapon.weaponData);
+                    player.controller.PreviousWeapon = player.controller.Weapon;
+                }
             }
 		}
 
