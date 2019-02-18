@@ -12,7 +12,7 @@ public abstract class Weapon {
     protected Player player; // Player that this weapon is attached to
     // Having the type check in the ChargeLevel allows us to have a hacky solution
     // for checking how much ammo the bomb weapons have as long as they define a GetChargeLevel method.
-    public float ChargeLevel { get { return (isCharging || type.Equals(Type.Instant)) ? Mathf.Clamp(GetChargeLevel(), 0, 1) : 0; } }    
+    public float ChargeLevel { get { return (isCharging || type.Equals(Type.Instant) || type.Equals(Type.Temp)) ? Mathf.Clamp(GetChargeLevel(), 0, 1) : 0; } }    
     protected virtual float GetChargeLevel() {
         return 0;
     }
@@ -213,7 +213,7 @@ public abstract class Weapon {
 
     // Classify weapons as charged or instant, Charged attacks cannot be used as triggers
     public enum Type {
-        Instant, Charge, Move
+        Instant, Charge, Temp, Move
     }
 
     // This method was taken from https://stackoverflow.com/questions/7233905/how-to-detect-if-virtual-method-is-overridden-in-c-sharp/7234217#7234217

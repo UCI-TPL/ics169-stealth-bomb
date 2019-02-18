@@ -443,7 +443,7 @@ public class GameManager : MonoBehaviour {
             }
         }
 
-            public void StartGame() {
+        public void StartGame() {
             GameManager.instance.GhostOffset = Vector3.zero; 
             GameManager.instance.UpdateRank();
             GameManager.instance.audioManager.Stop("Fanfare");
@@ -505,7 +505,6 @@ public class GameManager : MonoBehaviour {
         }
 
         private void GameOver() {
-
             GameManager.instance.audioManager.Stop("Battle");
             GameManager.instance.audioManager.Play("Fanfare");
             State = GameState.ProgressScreen;
@@ -517,8 +516,9 @@ public class GameManager : MonoBehaviour {
             //         break;
             //     }
             // }
-        
+            
             ProgressScreenUI.Instance.StartProgressScreen(this, Reset);
+
         }
 
         private void Reset() {

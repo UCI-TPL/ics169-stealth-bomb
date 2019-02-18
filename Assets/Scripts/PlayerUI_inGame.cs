@@ -50,11 +50,11 @@ public class PlayerUI_inGame : MonoBehaviour {
         playerUI_healthBar.fillAmount = playerCon.player.health / playerCon.player.stats.maxHealth;
         playerUI_TextCanvas.rotation = Quaternion.Euler(50f, cameraTransform.rotation.eulerAngles.y, 0f);
 
-        if (playerCon.Weapon.type.Equals(Weapon.Type.Instant))
+        if (playerCon.Weapon.type.Equals(Weapon.Type.Temp))
         {
             playerUI_AimArrowL.color = playerUI_AimArrowR.color = Color.cyan;       //#87c8e1
         }
-        else if (!playerCon.Weapon.type.Equals(Weapon.Type.Instant))
+        else if (!playerCon.Weapon.type.Equals(Weapon.Type.Temp))
         {
             playerUI_AimArrowL.color = playerUI_AimArrowR.color = Color.white;
         }

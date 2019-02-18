@@ -16,7 +16,7 @@ public class BlackHoleWeapon : Weapon {
 
 	public BlackHoleWeapon(): base() { }
 
-	public BlackHoleWeapon(WeaponData weaponData, Player player): base(weaponData, player, Type.Instant) {
+	public BlackHoleWeapon(WeaponData weaponData, Player player): base(weaponData, player, Type.Temp) {
 		data = (BlackHoleWeaponData) weaponData;
 		timesUsed = 0;
 	}
@@ -52,7 +52,7 @@ public class BlackHoleWeapon : Weapon {
             }
             else
             {
-                player.controller.SwitchWeapon();
+                player.ChangeWeapon(player.controller.PreviousWeapon.weaponData);
                 player.controller.PreviousWeapon = player.controller.Weapon;
             }
 		}

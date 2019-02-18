@@ -137,7 +137,32 @@ public class PlayerController : MonoBehaviour, IHurtable {
 
     public void Destroy() {
         if (Weapon != null)
+        {
+            if (Weapon.type == Weapon.Type.Temp)
+            {
+                //Debug.Log("Here we are");
+                if (PreviousWeapon.type != Weapon.Type.Temp)
+                {
+                    Weapon = PreviousWeapon;
+                }
+                else
+                {
+                    //Debug.Log("NO TEMP WEAPONS ALLOWED");
+                    player.ResetWeapon();
+                }
+                player.ChangeWeapon(Weapon.weaponData);
+            }
+            else if (PreviousWeapon != null && PreviousWeapon.type == Weapon.Type.Temp)
+            {
+                //Debug.Log("Oopsie Daisy we gotta bad");
+                PreviousWeapon = Weapon;
+                SwitchWeapon();
+                player.ChangeWeapon(Weapon.weaponData);
+            }
+
             Weapon.UnequipWeapon();
+        }
+
         if(this)
             if(this.gameObject!= null)
                 StartCoroutine(DeathAnimation());

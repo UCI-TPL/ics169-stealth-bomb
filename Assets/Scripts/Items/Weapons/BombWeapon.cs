@@ -10,7 +10,7 @@ public class BombWeapon : Weapon {
 
 
     public BombWeapon() : base() { }
-    public BombWeapon(WeaponData weaponData, Player player) : base(weaponData, player, Type.Instant) {
+    public BombWeapon(WeaponData weaponData, Player player) : base(weaponData, player, Type.Temp) {
         base.isCharging = true;
         data = (BombWeaponData)weaponData;
         timesUsed = 0;
@@ -40,10 +40,9 @@ public class BombWeapon : Weapon {
                     player.controller.PreviousWeapon = player.controller.Weapon;
                 }
                 else
-                { 
-                    player.controller.SwitchWeapon();
-                    player.ResetWeapon();
-                    player.controller.SwitchWeapon();
+                {
+                    player.ChangeWeapon(player.controller.PreviousWeapon.weaponData);
+                    player.controller.PreviousWeapon = player.controller.Weapon;
                 }
             }
         }
