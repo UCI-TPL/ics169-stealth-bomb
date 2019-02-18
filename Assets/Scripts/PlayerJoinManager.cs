@@ -211,8 +211,10 @@ public class PlayerJoinManager : MonoBehaviour {
 		}
 
 		bButtonMask.fillAmount = farthestTimer;
-		if (farthestTimer >= 1.0f)
+		if (farthestTimer >= 1.0f) {
 			ExitPreGameLobby();
+			farthestTimer = initialFillAmount;
+		}
 	}
 
 

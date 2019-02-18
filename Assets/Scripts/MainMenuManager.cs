@@ -23,9 +23,9 @@ public class MainMenuManager : MonoBehaviour {
     public GameObject AudioPanel;
 	public GameObject customMappingPanel;
 
-	public GameObject xboxControllerDisplay;
+	// public GameObject xboxControllerDisplay;
 
-	public GameObject pcControllerDisplay;
+	// public GameObject pcControllerDisplay;
 
 	public bool newVersion = true;
 
@@ -41,6 +41,7 @@ public class MainMenuManager : MonoBehaviour {
 	GamePadState[] prevStates;
 	PlayerIndex[] players;
 	private int currentMainMenuButton;
+	private int prevMainMenuButton;
 	private int currentSelectionMenuButton;
 	private int currentRemappingMenuButton;
 	private int currentCustomMappingButton;
@@ -61,7 +62,7 @@ public class MainMenuManager : MonoBehaviour {
 
 	private void Start()
 	{
-		currentMainMenuButton = 1;
+		// currentMainMenuButton = 1;
 		int[] menuSettings = new int[2];
 		menuSettings[0] = 1;
 		menuSettings[1] = 1;
@@ -69,7 +70,8 @@ public class MainMenuManager : MonoBehaviour {
 		input = InputManager.inputManager;
 		playerSet = false;
 		CheckForAndSkipDeactivatedButtons(false);
-		mainMenuButtons(currentMainMenuButton);
+		// mainMenuButtons(currentMainMenuButton);
+		prevMainMenuButton = currentMainMenuButton;
 		currentSelectionMenuButton = 2;
 		currentRemappingMenuButton = 1;
 		timer = cooldown;   // 7.5f
@@ -82,7 +84,7 @@ public class MainMenuManager : MonoBehaviour {
 
 		for (int i = 0; i < 4; i++) {
 			players[i] = (PlayerIndex) i;
-			// AssignControllerEvents(i);
+			AssignControllerEvents(i);
 			// InputManager.inputManager.controllers[i].confirm.OnDown.AddListener();
 			// InputManager.inputManager.controllers[i].cancel.OnDown.AddListener();
 		}
@@ -90,7 +92,7 @@ public class MainMenuManager : MonoBehaviour {
 
 	void Update() {
 		// Debug.Log("cooldown = " + cooldown);
-		int prevMainMenuButton = currentMainMenuButton;
+		prevMainMenuButton = currentMainMenuButton;
 
 		if (newVersion)
 			ControllerNavigationNewVersion();
@@ -117,43 +119,50 @@ public class MainMenuManager : MonoBehaviour {
 		for (int i = 0; i < players.Length; i++) {
 			prevStates[i] = currentStates[i];
 			currentStates[i] = GamePad.GetState(players[i]);
+			// Debug.Log("Test 1");
 
 			if (Input.GetAxis("Mouse X") == 0 || Input.GetAxis("Mouse Y") == 0) {
+				// Debug.Log("Test 1.5: timer = " + timer);
 			// assuming cooldown is finished, allow input from controller
 				if (timer >= cooldown) {
+					// Debug.Log("Test 2");
 					hasMoved = false;
 					// makes sure controller is connected and there is no other input since cooldown finished
 					if (currentStates[i].IsConnected && !hasMoved) {
 						if (mainMenuPanel.activeSelf == true) {
-							// if (currentStates[i].ThumbSticks.Left.Y > controllerStickDeadZone /*&& prevState.ThumbSticks.Left.Y <= 0.0f*/) {
+							// Debug.Log("Test 3");
+							// Debug.Log("Left Thumbstick input = " + currentStates[i].ThumbSticks.Left.Y);
+							if (currentStates[i].ThumbSticks.Left.Y > controllerStickDeadZone /*&& prevState.ThumbSticks.Left.Y <= 0.0f*/) {
+								currentMainMenuButton--;
+								CheckAndMoveCursorToBottom();
+								CheckForAndSkipDeactivatedButtons(true);
+								mainMenuButtons(currentMainMenuButton);
+								Debug.Log("cursor moved up to " + currentMainMenuButton);
+								hasMoved = true;
+							}
+							else if (currentStates[i].ThumbSticks.Left.Y < -controllerStickDeadZone /*&& prevState.ThumbSticks.Left.Y >= 0.0f*/) {
+								currentMainMenuButton++;
+								CheckAndMoveCursorToTop();
+								CheckForAndSkipDeactivatedButtons(false);
+								mainMenuButtons(currentMainMenuButton);
+								Debug.Log("cursor moved down to " + currentMainMenuButton);
+								hasMoved = true;
+							}
+
+							// if (input.controllers[i].MoveVector().y > controllerStickDeadZone /*&& prevState.ThumbSticks.Left.Y <= 0.0f*/) {
 							// 	currentMainMenuButton--;
 							// 	CheckAndMoveCursorToBottom();
 							// 	CheckForAndSkipDeactivatedButtons(true);
 							// 	mainMenuButtons(currentMainMenuButton);
 							// 	hasMoved = true;
 							// }
-							// else if (currentStates[i].ThumbSticks.Left.Y < -controllerStickDeadZone /*&& prevState.ThumbSticks.Left.Y >= 0.0f*/) {
+							// else if (input.controllers[i].MoveVector().y < -controllerStickDeadZone /*&& prevState.ThumbSticks.Left.Y >= 0.0f*/) {
 							// 	currentMainMenuButton++;
 							// 	CheckAndMoveCursorToTop();
 							// 	CheckForAndSkipDeactivatedButtons(false);
 							// 	mainMenuButtons(currentMainMenuButton);
 							// 	hasMoved = true;
 							// }
-
-							if (input.controllers[i].MoveVector().y > controllerStickDeadZone /*&& prevState.ThumbSticks.Left.Y <= 0.0f*/) {
-								currentMainMenuButton--;
-								CheckAndMoveCursorToBottom();
-								CheckForAndSkipDeactivatedButtons(true);
-								mainMenuButtons(currentMainMenuButton);
-								hasMoved = true;
-							}
-							else if (input.controllers[i].MoveVector().y < -controllerStickDeadZone /*&& prevState.ThumbSticks.Left.Y >= 0.0f*/) {
-								currentMainMenuButton++;
-								CheckAndMoveCursorToTop();
-								CheckForAndSkipDeactivatedButtons(false);
-								mainMenuButtons(currentMainMenuButton);
-								hasMoved = true;
-							}
 						}
 
 						if (selectionMenuPanel.activeSelf == true) {
@@ -206,10 +215,11 @@ public class MainMenuManager : MonoBehaviour {
 
 				// NOTE: this button may have to change later. Most likely will conflict with PlayerJoinManager.cs controls!!
 				// getCurrentPanel() (or menu) needs to be <= 1, indicating that we are currently in the main menu, or we pressed quit while in the Unity editor.
-				if (currentStates[i].Buttons.A == ButtonState.Pressed /* && prevState.Buttons.A == ButtonState.Released */ && getCurrentPanel() == 1) {
-					Debug.Log("clicking");
-					b.onClick.Invoke();
-				}
+				// if (currentStates[i].Buttons.A == ButtonState.Pressed /* && prevState.Buttons.A == ButtonState.Released */ && getCurrentPanel() == 1 && btn.transform.GetSiblingIndex() == currentMainMenuButton) {
+				// 	// Debug.Log("clicking");
+				// 	// b.onClick.Invoke();
+				// 	ActivateButton();
+				// }
 				// Debug.Log("current main menu button: " + currentMainMenuButton);
 			}
 		}
@@ -218,18 +228,36 @@ public class MainMenuManager : MonoBehaviour {
 			timer += 1.0f * Time.deltaTime;
 	}
 
+	// void LateUpdate() {
+	// 	if (Input.GetAxis("Mouse X") == 0 || Input.GetAxis("Mouse Y") == 0) {
+	// 		mainMenuButtons(currentMainMenuButton);
+	// 	}
+	// }
+
 	// Callback method for pressing/clicking on a unity button (planned to be A button)
 	private void ActivateSelectedMenuOption(int controllerIdx) {
 		if (CanPlayerPressButton(controllerIdx)) {
-			Debug.Log("clicking/pressing");
-			b.onClick.Invoke();
+			// Debug.Log("clicking/pressing:" + b.name);
+			// Debug.Log("current main menu button upon pressing A = " + currentMainMenuButton);
+			// b.onClick.Invoke();
+			ActivateButton();
 		}
 	}
 
 
 	// helper method that returns whether or not the specified player can enter input.
 	private bool CanPlayerPressButton(int controllerIdx) {
-		return currentStates[controllerIdx].IsConnected && getCurrentPanel() == 1 && buttonTimer >= buttonCoolDown;
+		return currentStates[controllerIdx].IsConnected && getCurrentPanel() == 1 && buttonTimer >= buttonCoolDown /* && btn.transform.GetSiblingIndex() == currentMainMenuButton*/;
+	}
+
+	private void ActivateButton() {
+		Debug.Log("clicking/pressing:" + b.name);
+		Debug.Log("current main menu button upon pressing A = " + currentMainMenuButton);
+		// starts at 1 because 0 represents the game title.
+		// for (int i = 1; i < mainMenuPanel.transform.childCount; i++) {
+		// 	if (b.)
+		// }
+		b.onClick.Invoke();
 	}
 
 
@@ -320,7 +348,8 @@ public class MainMenuManager : MonoBehaviour {
 	public void setMenu(/* int m, int selectedMainMenuButton,*/ int[] menuSettings)
 	{ 
 		// menu = m; 
-		menu = menuSettings[0];
+		if (menuSettings[0] != 0) menu = menuSettings[0];
+
 		switch(menuSettings[0])
 		{
 			//Quit
@@ -395,8 +424,11 @@ public class MainMenuManager : MonoBehaviour {
 
 	// public functions that can be used by UI inspector of onClick for buttons //
 
-	public void ExitGame() {
-		GoToMenu(0, 0);
+	public void ExitGame(GameObject exitButton) {
+		int exitButtonIdx = exitButton.transform.GetSiblingIndex();
+		Debug.Log("exit button sibling index: " + exitButtonIdx);
+		if (exitButtonIdx == currentMainMenuButton)
+			GoToMenu(0, 0);
 	}
 
 	public void OpenPreGameLobby() {
@@ -433,30 +465,35 @@ public class MainMenuManager : MonoBehaviour {
         remappingMenuPanel.SetActive(false);
     }
 
+	public void Mute() {
+		Debug.Log("Mute button pressed.");
+		GameManager.instance.Mute();
+	}
+
     public void SetVolume()
     {
 
     }
 
-	public void SelectControllerDisplay(int i) {
-		if (selectionMenuPanel.activeSelf == true) {
-			switch (i) {
-				case 0:
-					xboxControllerDisplay.SetActive(true);
-					pcControllerDisplay.SetActive(false);
-					break;
-				case 1:
-					xboxControllerDisplay.SetActive(false);
-					pcControllerDisplay.SetActive(true);
-					break;
-			}
-		}
-	}
+	// public void SelectControllerDisplay(int i) {
+	// 	if (selectionMenuPanel.activeSelf == true) {
+	// 		switch (i) {
+	// 			case 0:
+	// 				xboxControllerDisplay.SetActive(true);
+	// 				pcControllerDisplay.SetActive(false);
+	// 				break;
+	// 			case 1:
+	// 				xboxControllerDisplay.SetActive(false);
+	// 				pcControllerDisplay.SetActive(true);
+	// 				break;
+	// 		}
+	// 	}
+	// }
 
-	public void ResetControllerDisplay(bool doesNothing) {
-		xboxControllerDisplay.SetActive(true);
-		pcControllerDisplay.SetActive(false);
-	}
+	// public void ResetControllerDisplay(bool doesNothing) {
+	// 	xboxControllerDisplay.SetActive(true);
+	// 	pcControllerDisplay.SetActive(false);
+	// }
 
 
 	// helper method to check if the controller cursor/highlighter has gone too high in the buttons index and needs to be needs moved to the bottom of the menu.
@@ -510,7 +547,8 @@ public class MainMenuManager : MonoBehaviour {
 	private void mainMenuButtons( int i )
 	{
 		btn = mainMenuPanel.transform.GetChild(i).gameObject;
-		Debug.Log("main menu button selected: " + btn.name);
+		if (prevMainMenuButton != currentMainMenuButton)
+			Debug.Log("main menu button selected: " + btn.name);
 		_buttonSelect();
 	}
 
