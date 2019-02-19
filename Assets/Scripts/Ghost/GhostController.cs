@@ -77,7 +77,7 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
         GhostBody = Instantiate(GhostPrefab, transform.position, rotation);
         
         lastPosition = GhostBody.transform.position;
-        //rend.material.SetColor("Color_91A455EE", playerColor);
+        rend.material.SetColor("_Color", playerColor);
         //GhostBody.GetComponentsInChildren<Renderer>()[1].material.color = playerColor;
         GhostBody.GetComponentsInChildren<Renderer>()[1].material.SetColor("Color_998F7755", playerColor);
 
@@ -177,9 +177,9 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
         lr.positionCount = 3;
         RaycastHit hit;
         Vector3 tPosition;
-        if (Physics.Raycast(Point.transform.position, Vector3.down, out hit, Mathf.Infinity, layerMask))
-             tPosition = new Vector3(transform.position.x, hit.transform.position.y, transform.position.z); //the position on the ground 
-        else
+        //if (Physics.Raycast(Point.transform.position, Vector3.down, out hit, Mathf.Infinity, layerMask))
+        //     tPosition = new Vector3(transform.position.x, hit.transform.position.y, transform.position.z); //the position on the ground 
+        //else
             tPosition = new Vector3(transform.position.x, GhostBody.transform.position.y - 10f, transform.position.z); //the 10f below the decal object (maybe under the floor) 
         lr.SetPosition(0, tPosition);
         lr.SetPosition(1, transform.position); //decal object

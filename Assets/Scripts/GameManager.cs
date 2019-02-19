@@ -457,7 +457,7 @@ public class GameManager : MonoBehaviour {
                 s += player.playerNumber.ToString() + ", ";
             //Debug.Log(s);
 
-            Debug.Log("This is where the round indeed starts amirighte?");
+            //Debug.Log("This is where the round indeed starts amirighte?");
             SceneManager.SetActiveScene(roundScene);
             StartTime = Time.time;
             GameManager.instance.weatherManager.ChangeWeather();
