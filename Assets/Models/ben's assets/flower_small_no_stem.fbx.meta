@@ -1,46 +1,32 @@
 fileFormatVersion: 2
-guid: 164e3e8fdf2bdf945852ed525c3be224
+guid: f15c8a0578c9b92469b4a938774c353d
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
-    100002: pCube1
-    100004: pCube2
-    100006: pCube3
-    100008: pCube4
-    100010: pCube6
-    100012: pCube7
-    100014: pCube8
-    100016: transform1
-    100018: transform2
-    100020: transform3
-    100022: transform4
-    100024: transform5
-    100026: transform6
-    100028: transform7
     400000: //RootNode
-    400002: pCube1
-    400004: pCube2
-    400006: pCube3
-    400008: pCube4
-    400010: pCube6
-    400012: pCube7
-    400014: pCube8
-    400016: transform1
-    400018: transform2
-    400020: transform3
-    400022: transform4
-    400024: transform5
-    400026: transform6
-    400028: transform7
     2100000: lambert2
     2100002: lambert3
-    2100004: lambert6
-    2100006: lambert5
-    2300000: pCube8
-    3300000: pCube8
-    4300000: pCube8
-  externalObjects: {}
+    2100004: lambert4
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: pSphere1
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert2
+    second: {fileID: 2100000, guid: c492ee95a90acec449c6fe816283540c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert3
+    second: {fileID: 2100000, guid: f2419673b111aa84c938c1b0c6bd8bf1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert4
+    second: {fileID: 2100000, guid: 63168aff737fd604e828befc78f26026, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

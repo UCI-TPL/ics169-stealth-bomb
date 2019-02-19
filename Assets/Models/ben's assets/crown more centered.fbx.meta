@@ -1,22 +1,96 @@
 fileFormatVersion: 2
-guid: 14ab1cfc9aaf71b48a50c9cd4dd52e0e
+guid: 84f9d24187968004488db6720d7cf0fb
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
-    100002: pCylinder1
-    100004: pCylinder9
+    100002: polySurface10
+    100004: polySurface11
+    100006: polySurface12
+    100008: polySurface12 1
+    100010: polySurface13
+    100012: polySurface14
+    100014: polySurface15
+    100016: polySurface16
+    100018: polySurface17
+    100020: polySurface17 1
+    100022: polySurface18
+    100024: polySurface19
+    100026: polySurface20
+    100028: pPipe1
+    100030: pPipe3
+    100032: pPipe5
+    100034: pPipe6
+    100036: pSphere1
+    100038: pSphere2
+    100040: pSphere3
+    100042: pSphere4
+    100044: pSphere5
+    100046: transform1
+    100048: transform10
+    100050: transform11
+    100052: transform12
+    100054: transform13
+    100056: transform14
+    100058: transform15
+    100060: transform16
+    100062: transform17
+    100064: transform2
+    100066: transform3
+    100068: transform4
+    100070: transform5
+    100072: transform6
+    100074: transform7
+    100076: transform8
+    100078: transform9
     400000: //RootNode
-    400002: pCylinder1
-    400004: pCylinder9
-    2100000: lambert1
-    2100002: phongE1
-    2300000: pCylinder1
-    2300002: pCylinder9
-    3300000: pCylinder1
-    3300002: pCylinder9
-    4300000: pCylinder1
-    4300002: pCylinder9
+    400002: polySurface10
+    400004: polySurface11
+    400006: polySurface12
+    400008: polySurface12 1
+    400010: polySurface13
+    400012: polySurface14
+    400014: polySurface15
+    400016: polySurface16
+    400018: polySurface17
+    400020: polySurface17 1
+    400022: polySurface18
+    400024: polySurface19
+    400026: polySurface20
+    400028: pPipe1
+    400030: pPipe3
+    400032: pPipe5
+    400034: pPipe6
+    400036: pSphere1
+    400038: pSphere2
+    400040: pSphere3
+    400042: pSphere4
+    400044: pSphere5
+    400046: transform1
+    400048: transform10
+    400050: transform11
+    400052: transform12
+    400054: transform13
+    400056: transform14
+    400058: transform15
+    400060: transform16
+    400062: transform17
+    400064: transform2
+    400066: transform3
+    400068: transform4
+    400070: transform5
+    400072: transform6
+    400074: transform7
+    400076: transform8
+    400078: transform9
+    2100000: phongE1
+    2100002: phong1
+    2100004: phongE3
+    2100006: phongE2
+    2100008: phongE4
+    2300000: polySurface17
+    3300000: polySurface17
+    4300000: polySurface17
   externalObjects: {}
   materials:
     importMaterials: 1

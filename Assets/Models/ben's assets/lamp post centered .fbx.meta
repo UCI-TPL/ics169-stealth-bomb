@@ -1,17 +1,63 @@
 fileFormatVersion: 2
-guid: 92b2b08717295b5438f43918b85f7373
+guid: 6bb40dafcb0289542949b032c898230e
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
+    100002: pCone1
+    100004: pCone2
+    100006: pCylinder1
+    100008: pCylinder2
+    100010: pCylinder3
+    100012: pSphere1
+    100014: pSphere2
+    100016: pSphere3
     400000: //RootNode
-    2100000: lambert1
-    2100002: lambert4
-    2100004: lambert5
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: pCube1
-  externalObjects: {}
+    400002: pCone1
+    400004: pCone2
+    400006: pCylinder1
+    400008: pCylinder2
+    400010: pCylinder3
+    400012: pSphere1
+    400014: pSphere2
+    400016: pSphere3
+    2100000: lambert2
+    2100002: phongE1
+    2300000: pCone1
+    2300002: pCone2
+    2300004: pCylinder1
+    2300006: pCylinder2
+    2300008: pCylinder3
+    2300010: pSphere1
+    2300012: pSphere2
+    2300014: pSphere3
+    3300000: pCone1
+    3300002: pCone2
+    3300004: pCylinder1
+    3300006: pCylinder2
+    3300008: pCylinder3
+    3300010: pSphere1
+    3300012: pSphere2
+    3300014: pSphere3
+    4300000: pCylinder1
+    4300002: pSphere1
+    4300004: pCylinder2
+    4300006: pCone1
+    4300008: pSphere2
+    4300010: pCylinder3
+    4300012: pCone2
+    4300014: pSphere3
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert2
+    second: {fileID: 2100000, guid: 5601ed01fc0db8f498bbb9fa448cbd65, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: phongE1
+    second: {fileID: 2100000, guid: a0efa308bb5e131499b187e3bcf923de, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
