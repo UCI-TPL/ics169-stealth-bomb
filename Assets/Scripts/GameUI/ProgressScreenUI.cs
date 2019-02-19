@@ -5,7 +5,6 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 
 [ExecuteInEditMode]
-[RequireComponent(typeof(Canvas))]
 public class ProgressScreenUI : MonoBehaviour {
     
     private static ProgressScreenUI instance;
@@ -23,20 +22,32 @@ public class ProgressScreenUI : MonoBehaviour {
 
     [SerializeField]
     private RectTransform ProgressScreenRect;
+    //[SerializeField]
+    //private RectTransform PlayerIconsRect;
+    //[SerializeField]
+    //private GameObject PlayerIconPrefab;
+    //[SerializeField]
+    //private RectTransform ProgressScreenSliderRect;
+    //[SerializeField]
+    //private GameObject ProgressScreenSliderPrefab;
     [SerializeField]
-    private RectTransform PlayerIconsRect;
+    private RectTransform PlayerEXPRect;
     [SerializeField]
-    private GameObject PlayerIconPrefab;
-    [SerializeField]
-    private RectTransform ProgressScreenSliderRect;
-    [SerializeField]
-    private GameObject ProgressScreenSliderPrefab;
+    private GameObject PlayerEXPBarPrefab;
 
-    [Header("Ruler Settings")]
+    [Header("Level Settings")]
     [SerializeField]
-    private RankRulerUI rankRulerUI;
+    private RectTransform LevelTextRect;
     [SerializeField]
-    private LayoutElement RulerTextLayoutElement;
+    private GameObject LevelTextPrefab;
+    [SerializeField]
+    private RectTransform LevelThresholdRect;
+    [SerializeField]
+    private GameObject DottedLinePrefab;
+    //[SerializeField]
+    //private RankRulerUI rankRulerUI;
+    //[SerializeField]
+    //private LayoutElement RulerTextLayoutElement;
 
     private List<PlayerProgressObject> PlayerUIs;
     private Player[] players;
@@ -46,15 +57,15 @@ public class ProgressScreenUI : MonoBehaviour {
 
     // Use this for initialization
     void Awake () {
-        canvas = GetComponent<Canvas>();
+        canvas = GetComponentInParent<Canvas>();
         GameWon = false;
     }
 
     private void Update() {
         // Only run updates if active
         if (ProgressScreenRect.gameObject.activeInHierarchy) {
-            // Fix ruler layout
-            RulerTextLayoutElement.minWidth = RulerTextLayoutElement.preferredWidth = PlayerIconsRect.rect.width;
+            //// Fix ruler layout
+            //RulerTextLayoutElement.minWidth = RulerTextLayoutElement.preferredWidth = PlayerIconsRect.rect.width;
 
             //UpdateCrown();
         }
@@ -74,7 +85,7 @@ public class ProgressScreenUI : MonoBehaviour {
         // Set up progress screen if it hasnt yet been setup
 
         // players should only be able to reach rank 10 once per game before being forced to head back to main menu.
-        RunEndgameChecksAndSetup();
+        //RunEndgameChecksAndSetup();
 
         InvokeUnscaled(delegate { AddExperiance(round); }, 1f);
 
@@ -164,15 +175,22 @@ public class ProgressScreenUI : MonoBehaviour {
         for (int i = 0; i < players.Length; ++i) {
             PlayerProgressObject playerProgressObject;
             if (PlayerUIs.Count <= i) { // If there are not enough already created Player UIs then make a new one
-                GameObject playerIcon = Instantiate<GameObject>(PlayerIconPrefab, PlayerIconsRect);
-                GameObject playerSlider = Instantiate<GameObject>(ProgressScreenSliderPrefab, ProgressScreenSliderRect);
-                playerProgressObject = new PlayerProgressObject(playerIcon, playerSlider, GameManager.instance.maxPoints);
+                GameObject playerEXPBar = Instantiate<GameObject>(PlayerEXPBarPrefab, PlayerEXPRect);
+                playerProgressObject = new PlayerProgressObject(playerEXPBar, GameManager.instance.maxPoints);
                 PlayerUIs.Add(playerProgressObject);
             }
-            PlayerUIs[i].GO_icon.GetComponent<Image>().color = players[i].Color;
+            PlayerUIs[i].GO_progressBar.GetComponent<ProgressScreen_EXPBar>().SetColor(players[i].Color);
         }
 
-        rankRulerUI.SetRange(0, GameManager.instance.maxRank); // Setup ruler to display number of ranks
+        // Set up text display of number of levels to win
+        Instantiate<GameObject>(LevelTextPrefab, LevelTextRect).GetComponent<Text>().text = "Win!";
+        Instantiate<GameObject>(DottedLinePrefab, LevelThresholdRect);
+        for (int i = GameManager.instance.maxRank-1; i >= 1; --i) {
+            Instantiate<GameObject>(LevelTextPrefab, LevelTextRect).GetComponent<Text>().text = i.ToString();
+            Instantiate<GameObject>(DottedLinePrefab, LevelThresholdRect);
+        }
+
+        //rankRulerUI.SetRange(0, GameManager.instance.maxRank); // Setup ruler to display number of ranks
     }
 
     // Move to a position over a duration and slowing down near end
@@ -245,14 +263,12 @@ public class ProgressScreenUI : MonoBehaviour {
     }
 
     private class PlayerProgressObject {
-        public readonly GameObject GO_icon;
         public readonly GameObject GO_progressBar;
         public readonly ProgressBarWinTextController winTextController;
         //public float Experiance { get { return ExperianceSlider.value; } }
         public ProgressScreen_EXPBar expBar;
 
-        public PlayerProgressObject(GameObject icon, GameObject progressBar, int maxPoints) {
-            GO_icon = icon;
+        public PlayerProgressObject(GameObject progressBar, int maxPoints) {
             GO_progressBar = progressBar;
             expBar = progressBar.GetComponent<ProgressScreen_EXPBar>();
             expBar.SetUp(maxPoints);

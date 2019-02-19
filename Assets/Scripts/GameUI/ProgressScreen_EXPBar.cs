@@ -22,6 +22,10 @@ public class ProgressScreen_EXPBar : MonoBehaviour {
 
     public ExperiancePoint experiancePointPrefab;
 
+    public void SetColor(Color color) {
+        HandleRect.GetComponent<Image>().color = color;
+    }
+
     private void LateUpdate() {
         if (HandleRect != null) {
             float yPosition = 0;
