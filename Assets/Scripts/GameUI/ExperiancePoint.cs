@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[ExecuteInEditMode]
 [RequireComponent(typeof(Image))]
 public class ExperiancePoint : MonoBehaviour
 {
@@ -22,7 +23,7 @@ public class ExperiancePoint : MonoBehaviour
 
     // Update is called once per frame
     void LateUpdate() {
-        rectTransform.sizeDelta = new Vector2(expBar.PointWidth * points, rectTransform.sizeDelta.y);
+        rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, expBar.PointHeight * points);
     }
 
     public void SetExperiance(GameManager.GameRound.BonusExperiance experiance) {
