@@ -103,7 +103,9 @@ public class CrumbleTile : Tile, IHurtable {
     }
 
     private IEnumerator DisolveEffect(float duration) {
-        GetComponentInChildren<Collider>().enabled = false;
+        Collider c = GetComponentInChildren<Collider>();
+        if (c != null)
+            c.enabled = false;
         float startTime = Time.time;
         float endTime = Time.time + duration;
         while (endTime >= Time.time) {
