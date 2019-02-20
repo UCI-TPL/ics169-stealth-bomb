@@ -90,6 +90,8 @@ public class PlayerJoinManager : MonoBehaviour {
 
 	private int[] defaultInputControllerNumbers;
 
+	private bool alreadyLoadingScene;
+
 	// Returns a list/array of player individual status on whether they will play or not. The returned array should not be able to be modified
 	// outside of this script (or at least should not have any effect on this script's variables).
 	public bool[] GetPLayerReadyStatusList() {
@@ -147,6 +149,7 @@ public class PlayerJoinManager : MonoBehaviour {
 		bButtonTimers = new float[4];
 		countdownText.gameObject.SetActive(false);
 		countdownTimer = 3.0f;
+		alreadyLoadingScene = false;
 
 		for (int i = 0; i < playersJoined.Length; i++) {
 			// Debug.Log("playersReady index=" + i);
@@ -190,30 +193,32 @@ public class PlayerJoinManager : MonoBehaviour {
 	// Update is called once per frame
 	// NOTE: May want to reimplement Update to function more as a state machine later!!!
 	void Update () {
-		if (!usingNewPlayerJoinSystem) {
-			UpdateOldVersion();
-		}
-		else {
-			UpdateNewVersion();
-		}
-
-		float farthestTimer = 0.0f;
-		for (int i = 0; i < bButtonTimers.Length; i++) {
-			if (input.controllers[i].cancel.Pressed) {
-				bButtonTimers[i] += fillSpeed * Time.deltaTime;
+		if (!alreadyLoadingScene) {
+			if (!usingNewPlayerJoinSystem) {
+				UpdateOldVersion();
 			}
 			else {
-				bButtonTimers[i] = initialFillAmount;
+				UpdateNewVersion();
 			}
 
-			if (farthestTimer < bButtonTimers[i])
-				farthestTimer = bButtonTimers[i];
-		}
+			float farthestTimer = 0.0f;
+			for (int i = 0; i < bButtonTimers.Length; i++) {
+				if (input.controllers[i].cancel.Pressed) {
+					bButtonTimers[i] += fillSpeed * Time.deltaTime;
+				}
+				else {
+					bButtonTimers[i] = initialFillAmount;
+				}
 
-		bButtonMask.fillAmount = farthestTimer;
-		if (farthestTimer >= 1.0f) {
-			ExitPreGameLobby();
-			farthestTimer = initialFillAmount;
+				if (farthestTimer < bButtonTimers[i])
+					farthestTimer = bButtonTimers[i];
+			}
+
+			bButtonMask.fillAmount = farthestTimer;
+			if (farthestTimer >= 1.0f) {
+				ExitPreGameLobby();
+				farthestTimer = initialFillAmount;
+			}
 		}
 	}
 
@@ -444,6 +449,8 @@ public class PlayerJoinManager : MonoBehaviour {
 						GameManager.instance.StartGame(GetPLayerReadyStatusList(), inputControllerNumbers);
 					else 
 						GameManager.instance.StartGame(GetPLayerReadyStatusList(), defaultInputControllerNumbers); // assumes there is only 1 plugged-in controller
+					
+					alreadyLoadingScene = true;
 				}
 			}
 		}
