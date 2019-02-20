@@ -72,7 +72,7 @@ MonoBehaviour:
     loop: 1
     source: {fileID: 0}
     output: {fileID: 243211916268380884, guid: 8fb7316e453bb03438b7782f518b5c48, type: 2}
-  - clip: {fileID: 8300000, guid: 03e66ba11fe164b4fb7baf0dd366b1a6, type: 3}
+  - clip: {fileID: 8300000, guid: 700b60ebec05fc64b835267d8ea655f6, type: 3}
     name: Fanfare
     volume: 0.3
     pitch: 1

@@ -117,6 +117,9 @@ public class GameManager : MonoBehaviour {
         Time.fixedDeltaTime = 0.02f;
         foreach (GameRound round in instance.rounds)
             round.EndGame();
+        GameManager.instance.audioManager.Stop("Fanfare");
+        GameManager.instance.audioManager.Stop("Battle");
+        GameManager.instance.audioManager.Play("Main Menu");
         SceneManager.LoadScene(instance.mainMenuSceneName);
     }
 
