@@ -30,8 +30,16 @@ public class ProgressScreen_EXPBar : MonoBehaviour {
         if (HandleRect != null) {
             float yPosition = 0;
             if (FillRect.childCount > 0) {
-                RectTransform lastChild = FillRect.GetChild(FillRect.childCount - 1).GetComponent<RectTransform>();
-                yPosition = (lastChild.rect.height / 2 - lastChild.anchoredPosition.y) / BaseRect.rect.height;
+                RectTransform topChild = FillRect.GetChild(FillRect.childCount - 1).GetComponent<RectTransform>();
+                float topPosition = topChild.rect.height / 2 - topChild.anchoredPosition.y;
+                for (int i = FillRect.childCount - 1; i > 0; --i) {
+                    RectTransform underChild = FillRect.GetChild(i - 1).GetComponent<RectTransform>();
+                    if (topPosition > (underChild.rect.height / 2 - underChild.anchoredPosition.y))
+                        break;
+                    topChild = FillRect.GetChild(i-1).GetComponent<RectTransform>();
+                    topPosition = topChild.rect.height / 2 - topChild.anchoredPosition.y;
+                }
+                yPosition = topPosition / BaseRect.rect.height;
             }
             HandleRect.anchorMax = new Vector2(1, yPosition);
             HandleRect.anchorMin = new Vector2(0, yPosition);
@@ -43,7 +51,7 @@ public class ProgressScreen_EXPBar : MonoBehaviour {
         MaxPoints = maxPoints;
     }
 
-    public void AddPoints(GameManager.GameRound.BonusExperiance experiance) {
-        Instantiate<GameObject>(experiancePointPrefab.gameObject, FillRect).GetComponent<ExperiancePoint>().SetExperiance(experiance);
+    public void AddPoints(GameManager.GameRound.BonusExperiance experiance, float animationDuration = 0) {
+        Instantiate<GameObject>(experiancePointPrefab.gameObject, FillRect).GetComponent<ExperiancePoint>().SetExperiance(experiance, animationDuration);
     }
 }

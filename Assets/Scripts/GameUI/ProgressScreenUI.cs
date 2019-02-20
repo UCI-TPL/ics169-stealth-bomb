@@ -104,7 +104,7 @@ public class ProgressScreenUI : MonoBehaviour {
         foreach (GameManager.GameRound.BonusExperiance.ExperianceType expType in GameManager.instance.ExperianceSettings.ExperianceOrder) {
             for (int i = 0; i < players.Length; ++i) {
                 foreach (GameManager.GameRound.BonusExperiance exp in round.ExperianceGained[expType][players[i]])
-                    PlayerUIs[i].expBar.AddPoints(exp);
+                    PlayerUIs[i].expBar.AddPoints(exp, 0.5f);
             }
         }
     }

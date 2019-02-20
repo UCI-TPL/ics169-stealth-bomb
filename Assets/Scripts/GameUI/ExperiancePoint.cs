@@ -11,7 +11,8 @@ public class ExperiancePoint : MonoBehaviour
     private RectTransform rectTransform;
     private Image image;
 
-    public int points = 1;
+    private float currentPoints;
+    public int Points { get; private set; }
 
     // Start is called before the first frame update
     void Awake()
@@ -22,12 +23,24 @@ public class ExperiancePoint : MonoBehaviour
     }
 
     // Update is called once per frame
-    void LateUpdate() {
-        rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, expBar.PointHeight * points);
+    void Update() {
+        rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, expBar.PointHeight * currentPoints);
     }
 
-    public void SetExperiance(GameManager.GameRound.BonusExperiance experiance) {
-        points = experiance.Points;
+    public void SetExperiance(GameManager.GameRound.BonusExperiance experiance, float animationDuration = 0) {
+        Points = experiance.Points;
         image.color = experiance.Color;
+        StopAllCoroutines();
+        StartCoroutine(AddPointsOverTime(animationDuration));
+    }
+
+    private IEnumerator AddPointsOverTime(float duration) {
+        float startingPoints = rectTransform.sizeDelta.y / expBar.PointHeight;
+        float endTime = Time.unscaledTime + duration;
+        while (endTime > Time.unscaledTime) {
+            currentPoints = MathHelper.LerpDamped(startingPoints, Points, (duration - endTime + Time.unscaledTime) / duration, 3);
+            yield return null;
+        }
+        currentPoints = Points;
     }
 }
