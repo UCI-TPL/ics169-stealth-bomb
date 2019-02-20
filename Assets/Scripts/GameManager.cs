@@ -84,6 +84,7 @@ public class GameManager : MonoBehaviour {
         // Debug.Log(s);
         rounds.Clear();
         SetUpPlayers(playersReady, xboxControllerNumbers);
+        leader = null;
         StartCoroutine(LoadLevelAsync(SceneManager.GetActiveScene().buildIndex + 1, delegate { StartCoroutine(UpdateGame()); }));
     }
 
