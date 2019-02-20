@@ -12,13 +12,22 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
     //_AlbedoColor
 
     [SerializeField]
-    Image CursorImage;
+    //Image CursorImage;
+
+   
     public GameObject Point; //the cursor that the player moves around
+
+    public LineRenderer lr; //to connect the cursor to the ghost visually 
+
+    public GameObject AOE; //change the color of this
 
     public GameObject GhostPrefab; //the ghost that hangs out on the curve on the side of the map
 
     [HideInInspector]
     public GameObject GhostBody;
+
+    [Tooltip("The bomb the player throws to crumble tiles")]
+    public GameObject GhostBombPrefab;
 
 
     public ParabolaController GhostParabola1; //maps can have either 1 or 2 parabolas    
@@ -46,20 +55,21 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
     private void Start()
     {
        
-        smoothVel = Vector3.zero;
+        smoothVel = Vector3.zero; //stuff for movement 
         forward = Camera.main.transform.forward;
         forward.Scale(new Vector3(1, 0, 1));
         forward.Normalize();
         right = Camera.main.transform.right;
         right.Scale(new Vector3(1, 0, 1));
         right.Normalize();
-        CursorImage = GetComponent<Image>(); //used to change to player color
-        CursorImage.color = playerColor;
-        CursorImage.enabled = false;
-        //this.gameObject.SetActive(false);
-        //this.rend.material.color = Color.clear;
-        //Cursor.GetComponent<Renderer>().material.SetColor("_AlbedoColor", playerColor);
-        //Cursor.transform.Find("Cube").GetComponent<Renderer>().material.SetColor("Color_52FADAA",playerColor);
+     
+        AOE.GetComponent<Renderer>().material.SetColor("Color_52FADAA", playerColor * 2f);
+        lr = GetComponent<LineRenderer>();
+        lr.positionCount = 1;
+        lr.SetPosition(0, transform.position);
+        Renderer rend = GetComponent<Renderer>();
+        lr.startColor = playerColor;
+        lr.endColor = playerColor;
 
         leftSide = transform.position.z >= transform.position.x; //true for left, false for right   (could work for up & down as well)
 
@@ -67,12 +77,10 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
         GhostBody = Instantiate(GhostPrefab, transform.position, rotation);
         
         lastPosition = GhostBody.transform.position;
-        //rend.material.SetColor("Color_91A455EE", playerColor);
-        GhostBody.GetComponentsInChildren<Renderer>()[1].material.color = playerColor;
+        rend.material.SetColor("_Color", playerColor);
+        //GhostBody.GetComponentsInChildren<Renderer>()[1].material.color = playerColor;
         GhostBody.GetComponentsInChildren<Renderer>()[1].material.SetColor("Color_998F7755", playerColor);
 
-
-        //GameObject Curves = GameObject.FindGameObjectWithTag("ghost-curve");
         GameObject Curves = GameObject.Find("GhostCurves");
 
 
@@ -94,13 +102,12 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
     public IEnumerator SpawnCursor() //so the ghost player can spawn and fly away a bit before the image
     {
         yield return new WaitForSeconds(1f);
-        CursorImage.enabled = true;
         travelTime = travelTime / 2f;
     }
 
     private float destoryTileTime = 0.0f;
 
-    public void Activate()
+    public void Activate() 
     {
         if (destoryTileTime <= Time.time)
         {
@@ -109,16 +116,16 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
             RaycastHit hit;
             if (Physics.Raycast(Point.transform.position, Vector3.down, out hit, Mathf.Infinity, layerMask))
             {
-                Tile temp = hit.transform.GetComponent<Tile>();
-                if (temp)
-                    TileManager.tileManager.DestroyTiles(temp.position);
+                GhostBomb ghostBomb = Instantiate(GhostBombPrefab, GhostBody.transform.position, GhostBody.transform.rotation).GetComponent<GhostBomb>();
+                ghostBomb.target = hit.transform.position;
             }
+            
         }
     }
 
     private void FixedUpdate()
     {
-        Move(player.stats.moveSpeed);
+        Move(player.stats.moveSpeed * 0.8f);
         Vector3 pos;
 
         if (((startTravelTime + travelTime) <= Time.time) && switchSides) //check to see if the side switching has ended
@@ -152,8 +159,32 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
 
         if (pos != Vector3.zero)
             GhostBody.transform.position = pos;
+
+
+
+
+        UpdateLine();
+    }
+
+
+    public void UpdateLine() //this updates the Line Rendeer between the Ghost and the AOE Cursor thing
+    {
         
-       
+        int layerMask = 1 << 11; //this makes sure that it can only detect the Ground layer
+
+        // If you hit the ground, draw a line from the ground, to the decal object, and then to ghostbody
+
+        lr.positionCount = 3;
+        RaycastHit hit;
+        Vector3 tPosition;
+        //if (Physics.Raycast(Point.transform.position, Vector3.down, out hit, Mathf.Infinity, layerMask))
+        //     tPosition = new Vector3(transform.position.x, hit.transform.position.y, transform.position.z); //the position on the ground 
+        //else
+            tPosition = new Vector3(transform.position.x, GhostBody.transform.position.y - 10f, transform.position.z); //the 10f below the decal object (maybe under the floor) 
+        lr.SetPosition(0, tPosition);
+        lr.SetPosition(1, transform.position); //decal object
+        lr.SetPosition(2, GhostBody.transform.position); //ghost body
+
     }
 
 

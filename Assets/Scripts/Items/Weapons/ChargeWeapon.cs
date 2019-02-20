@@ -44,7 +44,8 @@ public class ChargeWeapon : Weapon {
 
         GameManager.instance.audioManager.Play("Bow");
        // Debug.Log("When firing we are at : " + ChargeLevel);
-        rend.material.color = player.controller.playerColor;
+        //rend.material.color = player.controller.playerColor;
+        
         int chargeLevel = (int)(ChargeLevel * 100);
         data.projectile.Shoot(player, data.projSpeed * Mathf.Pow(Mathf.Floor(ChargeLevel * data.chargeLevels), 2), data.numProj, (Vector3 origin, Vector3 contactPoint, GameObject target) => { Hit(origin, contactPoint, target, chargeLevel); });
         //Projectile arrow = GameObject.Instantiate(data.arrow, player.controller.ShootPoint.transform.position, player.transform.rotation, null); //this instantiates the arrow as an attack

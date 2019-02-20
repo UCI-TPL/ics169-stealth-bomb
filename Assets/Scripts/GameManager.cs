@@ -77,11 +77,11 @@ public class GameManager : MonoBehaviour {
 
     public void StartGame(bool[] playersReady, int[] xboxControllerNumbers) {
         // StopAllCoroutines();
-        string s = "Players Recieved from Main Menu: ";
-        for (int i = 0; i < playersReady.Length; ++i) {
-          s += "player " + i.ToString() + ": " + playersReady[i].ToString() + "  ";
-        }
-        Debug.Log(s);
+        // string s = "Players Recieved from Main Menu: ";
+        // for (int i = 0; i < playersReady.Length; ++i) {
+        //   s += "player " + i.ToString() + ": " + playersReady[i].ToString() + "  ";
+        // }
+        // Debug.Log(s);
         rounds.Clear();
         SetUpPlayers(playersReady, xboxControllerNumbers);
         StartCoroutine(LoadLevelAsync(SceneManager.GetActiveScene().buildIndex + 1, delegate { StartCoroutine(UpdateGame()); }));
@@ -114,6 +114,9 @@ public class GameManager : MonoBehaviour {
         Time.fixedDeltaTime = 0.02f;
         foreach (GameRound round in instance.rounds)
             round.EndGame();
+        GameManager.instance.audioManager.Stop("Fanfare");
+        GameManager.instance.audioManager.Stop("Battle");
+        GameManager.instance.audioManager.Play("Main Menu");
         SceneManager.LoadScene(instance.mainMenuSceneName);
     }
 
@@ -154,7 +157,7 @@ public class GameManager : MonoBehaviour {
 
     IEnumerator Countdown()
     {
-        Debug.Log("Countdown starting");
+        //Debug.Log("Countdown starting");
         if(countdownText != null) //only do the countdown if you can find it
         {
             DisablePlayersMovement(1f);
@@ -420,6 +423,12 @@ public class GameManager : MonoBehaviour {
             MapInfo newMap = GameObject.Find("Tile Map").GetComponent<MapInfo>(); //this has the info for the Ghost Curve for each map 
             GameManager.instance.curveManager.ResetCurve1(newMap.LeftCurve, (int) newMap.min, (int)newMap.max);
             GameManager.instance.curveManager.ResetCurve2(newMap.RightCurve, (int)newMap.min, (int)newMap.max);
+
+            GameObject[] ghosts = GameObject.FindGameObjectsWithTag("ghost");
+            foreach (GameObject g in ghosts)
+            {
+                Destroy(g);
+            }
         }
 
         public void StartGame() {
@@ -436,6 +445,7 @@ public class GameManager : MonoBehaviour {
                 s += player.playerNumber.ToString() + ", ";
             //Debug.Log(s);
 
+            //Debug.Log("This is where the round indeed starts amirighte?");
             SceneManager.SetActiveScene(roundScene);
             StartTime = Time.time;
             GameManager.instance.weatherManager.ChangeWeather();
@@ -498,8 +508,9 @@ public class GameManager : MonoBehaviour {
             //         break;
             //     }
             // }
-        
+            
             ProgressScreenUI.Instance.StartProgressScreen(this, Reset);
+
         }
 
         private void Reset() {
@@ -529,8 +540,8 @@ public class GameManager : MonoBehaviour {
            
             activePlayersControllers.Remove(killed.controller.gameObject);
             Vector3 deathPosition = killed.controller.transform.position;
-            if (deathPosition.y < 0)
-                deathPosition = new Vector3(deathPosition.x, 6f, deathPosition.z);
+            //if (deathPosition.y < 0)
+            deathPosition = new Vector3(deathPosition.x, 6f, deathPosition.z);
             instance.StartCoroutine(InstantiateGhost(killed.playerNumber, killed, deathPosition));
             killed.controller.DisableUI();
             // Update Player Stats
@@ -552,10 +563,23 @@ public class GameManager : MonoBehaviour {
 
                 if (!killed.ghost) //this means that the killed player has already been made into a ghost 
                 { 
+
                     players[killedNum].ResetHealth();
+                    /*
                     players[killedNum].SetGhost(Instantiate<GameObject>(GameManager.instance.GhostPrefab.gameObject, deathPosition, Quaternion.identity).GetComponent<PlayerController>()); //SetGhost works like SetController but without weapons
                     ghostPlayerControllers.Add(players[killedNum].controller.gameObject); //to make sure it gets deleted
                     moveCamera.targets.Add(players[killedNum].controller.gameObject);
+                    */
+                    
+                    GameObject tempGhost = Instantiate<GameObject>(GameManager.instance.GhostPrefab.gameObject, deathPosition, Quaternion.identity);
+                    if(tempGhost)
+                    {
+                        players[killedNum].SetGhost(tempGhost.GetComponent<PlayerController>()); //SetGhost works like SetController but without weapons
+                        ghostPlayerControllers.Add(players[killedNum].controller.gameObject); //to make sure it gets deleted
+                        moveCamera.targets.Add(players[killedNum].controller.gameObject);
+                    }
+                   
+
                 }
             }
         }
