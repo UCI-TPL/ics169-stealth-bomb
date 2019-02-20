@@ -227,7 +227,7 @@ public class PlayerJoinManager : MonoBehaviour {
 	//Problem!!!!! Rejoining kicks controller to next player instead of getting the same one back
 	private void PlayerJoin(int controllerIdx) {
 		// Debug.Log("ReadyPlayer called for player " + playerIdx + ".");
-		Debug.Log("input controller list before: " + inputControllerNumbers[0] + "," + inputControllerNumbers[1] + "," + inputControllerNumbers[2] + "," + inputControllerNumbers[3]);
+		// Debug.Log("input controller list before: " + inputControllerNumbers[0] + "," + inputControllerNumbers[1] + "," + inputControllerNumbers[2] + "," + inputControllerNumbers[3]);
 		if (CanPlayerPressButton(controllerIdx) && controllersToPlayers[controllerIdx] == notAssignedController /* && playersJoined[controllersToPlayers[controllerIdx]] == false */) {
 			// Display the UI element showing the player has confirmed he/she is ready to play.
 			// Debug.Log("Player " + players[i] + " is ready to play!");
@@ -263,7 +263,7 @@ public class PlayerJoinManager : MonoBehaviour {
 				ReadyPlayer(controllerIdx);
 			}
 		}
-		Debug.Log("input controller list after: " + inputControllerNumbers[0] + "," + inputControllerNumbers[1] + "," + inputControllerNumbers[2] + "," + inputControllerNumbers[3]);
+		// Debug.Log("input controller list after: " + inputControllerNumbers[0] + "," + inputControllerNumbers[1] + "," + inputControllerNumbers[2] + "," + inputControllerNumbers[3]);
 	}
 
 	// helper callback method that unreadies the player using the controller specified by the parameter/index, or returns game to main menu panel.

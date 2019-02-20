@@ -21,6 +21,8 @@ public class MainMenuManager : MonoBehaviour {
 	public GameObject selectionMenuPanel;
 	public GameObject remappingMenuPanel;
     public GameObject AudioPanel;
+
+	public AudioMenuManager audioMenuManager;
 	public GameObject customMappingPanel;
 
 	// public GameObject xboxControllerDisplay;
@@ -48,7 +50,7 @@ public class MainMenuManager : MonoBehaviour {
 
 	// xbox controller variables
 	public float controllerStickDeadZone = 0.5f; // keep this between 0 and 1.
-	public float cooldown = 10.0f;
+	public float cooldown = 0.25f;
 	private float timer;	
 	public float buttonCoolDown = 0.5f;
 	private float buttonTimer;
@@ -106,8 +108,8 @@ public class MainMenuManager : MonoBehaviour {
 			buttonTimer = 0.0f;
 		}
 
-		if (prevMainMenuButton != currentMainMenuButton)
-				Debug.Log("current main menu button number: " + currentMainMenuButton);
+		// if (prevMainMenuButton != currentMainMenuButton)
+		// 		Debug.Log("current main menu button number: " + currentMainMenuButton);
 		
 		// GameManager.instance.inputManager.controllers[0].
 	}
@@ -137,7 +139,7 @@ public class MainMenuManager : MonoBehaviour {
 								CheckAndMoveCursorToBottom();
 								CheckForAndSkipDeactivatedButtons(true);
 								mainMenuButtons(currentMainMenuButton);
-								Debug.Log("cursor moved up to " + currentMainMenuButton);
+								// Debug.Log("cursor moved up to " + currentMainMenuButton);
 								hasMoved = true;
 							}
 							else if (currentStates[i].ThumbSticks.Left.Y < -controllerStickDeadZone /*&& prevState.ThumbSticks.Left.Y >= 0.0f*/) {
@@ -145,7 +147,7 @@ public class MainMenuManager : MonoBehaviour {
 								CheckAndMoveCursorToTop();
 								CheckForAndSkipDeactivatedButtons(false);
 								mainMenuButtons(currentMainMenuButton);
-								Debug.Log("cursor moved down to " + currentMainMenuButton);
+								// Debug.Log("cursor moved down to " + currentMainMenuButton);
 								hasMoved = true;
 							}
 
@@ -205,6 +207,8 @@ public class MainMenuManager : MonoBehaviour {
 							
 						}
 
+						// if (AudioPanel.activeSelf == true)
+
 						if (hasMoved) 
 						{
 							timer = 0.0f;
@@ -251,8 +255,8 @@ public class MainMenuManager : MonoBehaviour {
 	}
 
 	private void ActivateButton() {
-		Debug.Log("clicking/pressing:" + b.name);
-		Debug.Log("current main menu button upon pressing A = " + currentMainMenuButton);
+		// Debug.Log("clicking/pressing:" + b.name);
+		// Debug.Log("current main menu button upon pressing A = " + currentMainMenuButton);
 		// starts at 1 because 0 represents the game title.
 		// for (int i = 1; i < mainMenuPanel.transform.childCount; i++) {
 		// 	if (b.)
@@ -360,7 +364,7 @@ public class MainMenuManager : MonoBehaviour {
 
 			//Main menu
 			case 1:
-				Debug.Log("to main menu");
+				// Debug.Log("to main menu");
 				mainMenuPanel.SetActive(true);
 				selectionMenuPanel.SetActive(false);
 				remappingMenuPanel.SetActive(false);
@@ -417,6 +421,10 @@ public class MainMenuManager : MonoBehaviour {
 				customMappingButtons(0);
 				currentCustomMappingButton = 0;
 				break;
+
+			// audio settings Menu
+			case 5:
+				break;  // all setup is taken care of in another function;
 			default:
 				break;		
 		}
@@ -463,6 +471,7 @@ public class MainMenuManager : MonoBehaviour {
         AudioPanel.SetActive(true);
         selectionMenuPanel.SetActive(false);
         remappingMenuPanel.SetActive(false);
+		audioMenuManager.ResetAudioPanel();
     }
 
 	public void Mute() {
@@ -547,8 +556,8 @@ public class MainMenuManager : MonoBehaviour {
 	private void mainMenuButtons( int i )
 	{
 		btn = mainMenuPanel.transform.GetChild(i).gameObject;
-		if (prevMainMenuButton != currentMainMenuButton)
-			Debug.Log("main menu button selected: " + btn.name);
+		// if (prevMainMenuButton != currentMainMenuButton)
+		// 	Debug.Log("main menu button selected: " + btn.name);
 		_buttonSelect();
 	}
 
