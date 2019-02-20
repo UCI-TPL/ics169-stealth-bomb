@@ -98,7 +98,7 @@ MonoBehaviour:
   curveManager: {fileID: 0}
   mainMenuSceneName: mainMenu
   DefaultPlayerData: {fileID: 11400000, guid: a943fa26298abe5409b720607ae16d86, type: 2}
-  PlayerPrefab: {fileID: 114453241457146372, guid: 1525c93e4ceebd542b02ed13a439c69e,
+  PlayerPrefab: {fileID: 114453241457146372, guid: 5cecd69732f39ec45acf4af83e0a755c,
     type: 3}
   GhostPrefab: {fileID: 114002095781716024, guid: 350496cd6c510734e956c88d99aeec0e,
     type: 3}

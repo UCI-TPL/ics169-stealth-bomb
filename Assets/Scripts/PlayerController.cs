@@ -25,6 +25,11 @@ public class PlayerController : MonoBehaviour, IHurtable {
 
     protected Rigidbody rb;
     public Renderer rend;
+    public GameObject PlayerModel; //the empty that holds in the parts 
+    public Renderer rendHead; //the various parts of a player
+    public Renderer rendHair;
+    public Renderer rendBottom;
+    public Renderer rendTorso;
     public Transform PlayerHitbox;
     public GameObject ShootPoint;
     public Collider floorCollider;
@@ -121,7 +126,9 @@ public class PlayerController : MonoBehaviour, IHurtable {
         right.Normalize();
 
         // rend.material.color = playerColor; //setting the player color based on playeNum 
-        rend.material.SetColor("Color_91A455EE", playerColor); //this is how shader properties are changed 
+
+        SetPlayerColor();
+        //rend.material.SetColor("Color_91A455EE", playerColor); //this is how shader properties are changed 
 
         lastPosition = transform.position;
 
@@ -132,7 +139,31 @@ public class PlayerController : MonoBehaviour, IHurtable {
         input.controllers[player.inputControllerNumber].dodge.OnUp.AddListener(ReleaseSpecialMove);
         input.controllers[player.inputControllerNumber].Switch.OnDown.AddListener(SwitchWeapon);
 
-        StartCoroutine(StartAnimation());
+        //StartCoroutine(StartAnimation());
+    }
+
+    public void SetPlayerColor() //gives color to the various parts of the player
+    {
+        rendTorso.material.SetColor("_Color", playerColor);
+        rendTorso.material.SetColor("_Emission", playerColor / 2);
+
+        rendBottom.material.SetColor("_Color", playerColor);
+        rendBottom.material.SetColor("_Emission", playerColor / 2);
+
+        rendHead.material.SetColor("_Color", playerColor);
+        rendHead.material.SetColor("_Emission", playerColor / 2);
+
+        //rendHair.material.SetColor("_Color", Color.black);
+
+        rendHair.material.SetColor("_Color", playerColor * 0.7f);
+        rendHair.material.SetColor("_Emission", playerColor / 2);
+
+        rendTorso.material.SetFloat("Vector1_F96347CF", -1f);
+        rendBottom.material.SetFloat("Vector1_F96347CF", -1f);
+        rendHead.material.SetFloat("Vector1_F96347CF", -1f);
+        rendHair.material.SetFloat("Vector1_F96347CF", -1f);
+
+
     }
 
     public void Destroy() {
@@ -183,18 +214,27 @@ public class PlayerController : MonoBehaviour, IHurtable {
         while (Time.time <= _startTime)
         {
             float dissolveValue = 1 - (Time.time - (count * Time.deltaTime)) * 1.5f; //-1 is not dissolved, 1 is fully disolved
-            if (rend)
-                rend.material.SetFloat("Vector1_F96347CF", dissolveValue);
+            //if (rend)
+            //{
+       
+                //rendTorso.material.SetFloat("Vector1_F96347CF", dissolveValue);
+            //}
+            //rend.material.SetFloat("Vector1_F96347CF", dissolveValue);
             yield return null; //the game crashes super hard if you remove this
         }
 
-        if (rend)
-            rend.material.SetFloat("Vector1_F96347CF", -1f);
+        //if (rend)
+        //{
+        //rendTorso.material.SetFloat("Vector1_F96347CF", -1f);
+        //rendTorso.material.SetColor("Color_91A455EE", playerColor);
+       // }
+            //rend.material.SetFloat("Vector1_F96347CF", -1f);
         yield return null;
     }
 
     public IEnumerator DeathAnimation() //after the player dies, change a shader property in a while loop to make the player dissovle 
     {
+        /* disabling everything for now since colors and such are being changed
         allowAttack = false;
         allowMovement = false;
         float _deathTime = Time.time + DeathAnimationTime;
@@ -202,10 +242,14 @@ public class PlayerController : MonoBehaviour, IHurtable {
         while (Time.time <= _deathTime)
         {
             float dissolveValue = Time.time - count - 0.75f; //-1 is not dissolved, 1 is fully disolved
-            if (rend)
-                rend.material.SetFloat("Vector1_F96347CF", dissolveValue);
+            if (rendTorso)
+            {
+                rendTorso.material.SetFloat("Vector1_F96347CF", dissolveValue);
+             }
+            //rend.material.SetFloat("Vector1_F96347CF", dissolveValue);
             yield return null; //the game crashes super hard if you remove this
         }
+        */
         //yield return new WaitForSeconds(DeathAnimationTime); //in this time an animation or something can happen 
         if (this.gameObject)
             GameManager.Destroy(this.gameObject);
@@ -438,10 +482,16 @@ public class PlayerController : MonoBehaviour, IHurtable {
     IEnumerator HurtIndicator() //show the player that it is hurt 
     {
         if (rend != null)
-            rend.material.SetColor("Color_91A455EE", Color.white);
+        {
+            rendTorso.material.SetColor("_Color", Color.white);
+            //rend.material.SetColor("Color_91A455EE", Color.white);
+        }
         yield return new WaitForSeconds(0.04f); //the player flashes white 
         if (rend != null)
-            rend.material.SetColor("Color_91A455EE", playerColor);
+        {
+            rendTorso.material.SetColor("_Color", playerColor);
+        }
+            //rend.material.SetColor("Color_91A455EE", playerColor);
     }
 
     // Restrict the player's movement for a duration
