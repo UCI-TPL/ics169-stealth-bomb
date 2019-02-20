@@ -4326,7 +4326,7 @@ PrefabInstance:
     - target: {fileID: 781607798818270388, guid: c25fb0ff46de0794e9b16494430460b7,
         type: 3}
       propertyPath: anglePerUnit
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 781607797746062185, guid: c25fb0ff46de0794e9b16494430460b7,
         type: 3}

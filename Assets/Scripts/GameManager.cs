@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour {
     public int maxRank = 10;
     public int maxPoints {
         get {
-            return maxRank * 4;
+            return maxRank * ExperianceSettings.PointsPerLevel;
         }
     }
     [Tooltip("All settings relating to experiance gained")]
@@ -301,7 +301,9 @@ public class GameManager : MonoBehaviour {
         private Dictionary<BonusExperiance.ExperianceType, Dictionary<Player, List<BonusExperiance>>> experianceGained;
         public Dictionary<BonusExperiance.ExperianceType, Dictionary<Player, List<BonusExperiance>>> ExperianceGained {
             get {
-                return experianceGained ?? (experianceGained = CalculateExperiance());
+                if (experianceGained == null)
+                    CalculateExperiance();
+                return experianceGained;
             }
         }
         public bool isActive {
@@ -482,7 +484,8 @@ public class GameManager : MonoBehaviour {
 
         private void GameOver() {
             // Recalculate Experiance Gained
-            experianceGained = CalculateExperiance();
+            foreach (KeyValuePair<Player, int> exp in CalculateExperiance())
+                exp.Key.AddExperiance(exp.Value);
 
             GameManager.instance.audioManager.Stop("Battle");
             GameManager.instance.audioManager.Play("Fanfare");
@@ -557,13 +560,13 @@ public class GameManager : MonoBehaviour {
             }
         }
 
-        private Dictionary<BonusExperiance.ExperianceType, Dictionary<Player, List<BonusExperiance>>> CalculateExperiance() {
+        private Dictionary<Player, int> CalculateExperiance() {
             // Running total of exp gained used for comeback calculation
             Dictionary<Player, int> totalExp = new Dictionary<Player, int>();
             foreach (Player player in players)
                 totalExp.Add(player, 0); // Initialize total exp
             // Resulting exp gained dict
-            Dictionary<BonusExperiance.ExperianceType, Dictionary<Player, List<BonusExperiance>>> experianceGained = new Dictionary<BonusExperiance.ExperianceType, Dictionary<Player, List<BonusExperiance>>>();
+            experianceGained = new Dictionary<BonusExperiance.ExperianceType, Dictionary<Player, List<BonusExperiance>>>();
             // Calculate each exp type in specified order
             foreach (BonusExperiance.ExperianceType type in GameManager.instance.ExperianceSettings.ExperianceOrder) {
                 Dictionary<Player, List<BonusExperiance>> expForType = CalculateExperiance(type);
@@ -572,7 +575,7 @@ public class GameManager : MonoBehaviour {
                         totalExp[keyValuePair.Key] += exp.Points;
                 experianceGained.Add(type, expForType);
             }
-            return experianceGained;
+            return totalExp;
 
             Dictionary<Player, List<BonusExperiance>> CalculateExperiance(BonusExperiance.ExperianceType experianceType) {
                 Dictionary<Player, List<BonusExperiance>> playerExperiance = new Dictionary<Player, List<BonusExperiance>>();
