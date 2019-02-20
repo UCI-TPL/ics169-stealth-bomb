@@ -12,10 +12,12 @@ public class ExperianceSettingsEditor : Editor {
     }
 
     SerializedProperty ExperianceTypes;
+    SerializedProperty pointsPerLevel;
 
     private void OnEnable() {
         // Setup the SerializedProperties.
         ExperianceTypes = serializedObject.FindProperty("ExperianceTypes");
+        pointsPerLevel = serializedObject.FindProperty("pointsPerLevel");
         // Populate the array of experiance types with different Experiance Types from enum
         while (ExperianceTypes.arraySize < Enum.GetNames(typeof(GameManager.GameRound.BonusExperiance.ExperianceType)).Length) {
             int index = ExperianceTypes.arraySize;
@@ -30,6 +32,9 @@ public class ExperianceSettingsEditor : Editor {
     public override void OnInspectorGUI() {
         GUIStyle BoldLabel = new GUIStyle(GUI.skin.label);
         BoldLabel.fontStyle = FontStyle.Bold;
+
+        EditorGUILayout.PropertyField(pointsPerLevel);
+
         for (int i = 0; i < ExperianceTypes.arraySize; ++i) {
             SerializedProperty itemAtIndex = ExperianceTypes.GetArrayElementAtIndex(i);
             EditorGUILayout.BeginVertical(GUI.skin.box);

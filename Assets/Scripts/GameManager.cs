@@ -45,16 +45,6 @@ public class GameManager : MonoBehaviour {
             return maxRank * 4;
         }
     }
-    [Tooltip("Amount of experiance per precent life dealt")]
-    public float ExpGainPerDamage = 0.5f;
-    [Tooltip("Amount of experiance for killing blow")]
-    public float ExpGainOnKill = 0.25f;
-    [Range(0,1)]
-    [Tooltip("Amount experiance is scalled by per level over")]
-    public float ExpPenaltyPerLvl = 0.75f;
-    [Range(0, 1)]
-    [Tooltip("Amount of bonus experiance per level under")]
-    public float ExpBonusPerLvl = 0.25f;
     [Tooltip("All settings relating to experiance gained")]
     public ExperianceSettings ExperianceSettings;
 
@@ -293,45 +283,6 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    public float ExpOnHurt(Player damageDealer, Player reciever, float percentDealt) {
-        if (damageDealer != null)
-            return damageDealer.AddExperiance(ScaleExpGain(damageDealer.rank, reciever.rank, percentDealt * ExpGainPerDamage));
-            //StartCoroutine(ExperianceOverTime(damageDealer, ScaleExpGain(damageDealer.rank, reciever.rank, percentDealt * ExpGainPerDamage)));
-        return 0;
-    }
-
-    public float ExpOnKill(Player killer, Player killed) {
-        if (killer != null)
-            return killer.AddExperiance(ScaleExpGain(killer.rank, killed.rank, ExpGainOnKill));
-            //StartCoroutine(ExperianceOverTime(killer, ScaleExpGain(killer.rank, killed.rank, ExpGainOnKill)));
-        return 0;
-    }
-
-    private float ScaleExpGain(int dealerRank, int recieverRank, float amount) {
-        float experianceGain = amount;
-        if (dealerRank > recieverRank)
-            experianceGain *= Mathf.Pow(ExpPenaltyPerLvl, dealerRank - recieverRank); // Scale Experiance gain down by amount overleveled
-        else
-            experianceGain *= 1 + ExpBonusPerLvl * (recieverRank - dealerRank); // Scale Experiance gain up according to amount underleveled
-        return experianceGain;
-    }
-
-    /// <summary>
-    /// Grant experiance to a player, This happens over time very quickly to give it that pokemon like level up
-    /// </summary>
-    private IEnumerator ExperianceOverTime(Player player, float amount) {
-        float duration = Mathf.Sqrt(amount);
-        float endTime = Time.time + duration;
-        float remaining = amount;
-        while (endTime > Time.time) {
-            float add = remaining - amount * Mathf.Pow(Mathf.Max(endTime - Time.time, 0) / duration, 2f);
-            player.AddExperiance(add);
-            remaining -= add;
-            //UpdateRank(); // Update Ranking after granting experiance to a player
-            yield return null;
-        }
-    }
-
     // helper method to check for winner
     private void CheckForWinner() {
         // ties are currently possible
@@ -530,6 +481,8 @@ public class GameManager : MonoBehaviour {
         }
 
         private void GameOver() {
+            // Recalculate Experiance Gained
+            experianceGained = CalculateExperiance();
 
             GameManager.instance.audioManager.Stop("Battle");
             GameManager.instance.audioManager.Play("Fanfare");
@@ -562,14 +515,13 @@ public class GameManager : MonoBehaviour {
         }
 
         private void Player_onHurt(Player damageDealer, Player reciever, float percentDealt) {
-            GameManager.instance.ExpOnHurt(damageDealer, reciever, percentDealt);
             // Update Player Stats
             DamageDealt[damageDealer][reciever] += percentDealt;
             DamageTaken[reciever][damageDealer] += percentDealt;
         }
 
         private void Player_onDeath(Player killer, Player killed) {
-            GameManager.instance.ExpOnKill(killer, killed);
+            // Stop camera from tracking dead player
             moveCamera.targets.Remove(killed.controller.gameObject);
            
             activePlayersControllers.Remove(killed.controller.gameObject);

@@ -6,6 +6,10 @@ using UnityEngine;
 public class ExperianceSettings : ScriptableObject {
 
     [SerializeField]
+    private int pointsPerLevel = 4;
+    public int PointsPerLevel { get { return pointsPerLevel; } }
+
+    [SerializeField]
     private GameManager.GameRound.BonusExperiance[] ExperianceTypes;
     // Order exp is calculated
     public readonly GameManager.GameRound.BonusExperiance.ExperianceType[] ExperianceOrder = { GameManager.GameRound.BonusExperiance.ExperianceType.Damage,
