@@ -22,6 +22,7 @@ public class ProgressScreenUI : MonoBehaviour {
 
     [SerializeField]
     private RectTransform ProgressScreenRect;
+
     //[SerializeField]
     //private RectTransform PlayerIconsRect;
     //[SerializeField]
