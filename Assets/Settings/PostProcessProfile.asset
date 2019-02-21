@@ -87,7 +87,7 @@ MonoBehaviour:
     value: {r: 0.3962264, g: 0.3962264, b: 0.3962264, a: 0.34901962}
   edgeSource:
     overrideState: 1
-    value: 1
+    value: 0
   edgeThreshold:
     overrideState: 1
     value: 1
@@ -1482,7 +1482,7 @@ MonoBehaviour:
     value: {x: 0.5, y: 0.5}
   intensity:
     overrideState: 1
-    value: 0.53
+    value: 0.6
   smoothness:
     overrideState: 1
     value: 0.4
