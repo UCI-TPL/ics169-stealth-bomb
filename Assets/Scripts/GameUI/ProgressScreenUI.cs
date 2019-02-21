@@ -58,6 +58,7 @@ public class ProgressScreenUI : MonoBehaviour {
 
     // Use this for initialization
     void Awake () {
+        instance = this;
         canvas = GetComponentInParent<Canvas>();
         GameWon = false;
     }
