@@ -337,6 +337,9 @@ public class GameManager : MonoBehaviour {
             new string[] { "Map1_TownMarket" },
             new string[] { "LoadLevel" }
         };
+
+        private string[] testLevels = { "Map1_TownMarket", "LoadLevel" };
+
         // A random number generator, used to pick a stage from an array in levelNames.
         System.Random rng = new System.Random();
 
@@ -375,13 +378,15 @@ public class GameManager : MonoBehaviour {
                 Reset();
         }
 
+        private static int mapCount = 0;
+
         // Make sure that the levels that are made have only the tile maps before being uploaded.
         public void LoadLevel() {
             State = GameState.Loading;
             //TileManager.tileManager.LoadLevel("LoadLevel", (Scene loadedScene) => { State = GameState.Ready; roundScene = loadedScene; });
 
             int i = PickLevelGroup();
-            TileManager.tileManager.LoadLevel(levelNames[i][rng.Next(0, levelNames[i].Length)], (Scene loadedScene) => { State = GameState.Ready; roundScene = loadedScene; });
+            TileManager.tileManager.LoadLevel(testLevels[mapCount++ % testLevels.Length], (Scene loadedScene) => { State = GameState.Ready; roundScene = loadedScene; });
 
 
             //Resources.UnloadUnusedAssets();
