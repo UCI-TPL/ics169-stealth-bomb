@@ -17,8 +17,8 @@ public class Player : IHurtable {
     public Color Color { get { return GameManager.instance.DefaultPlayerData.Colors[playerNumber]; } } // Player's color
 
     public float health { get; private set; }
-    public float experiance { get; private set; }
-    public int rank { get { return Mathf.FloorToInt(experiance); } }
+    public int experiance { get; private set; }
+    public int rank { get { return experiance / GameManager.instance.ExperianceSettings.PointsPerLevel; } }
 
     private List<Buff> permPowerups = new List<Buff>();
     private List<Buff> buffs = new List<Buff>();
@@ -85,7 +85,7 @@ public class Player : IHurtable {
         lastHurtBy = null;
     }
 
-    public float AddExperiance(float amount) {
+    public float AddExperiance(int amount) {
         experiance += amount;
         return amount;
     }
