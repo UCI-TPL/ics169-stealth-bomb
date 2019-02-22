@@ -34,6 +34,8 @@ public class MainMenuManager : MonoBehaviour {
 	private GameObject btn;
 	private Button b;
 
+	public string nameOfButtonSoundEffect = "Bow";
+
 
 	PlayerIndex player1 = PlayerIndex.One;
 	bool playerSet;
@@ -131,7 +133,7 @@ public class MainMenuManager : MonoBehaviour {
 					hasMoved = false;
 					// makes sure controller is connected and there is no other input since cooldown finished
 					if (currentStates[i].IsConnected && !hasMoved) {
-						if (mainMenuPanel.activeSelf == true) {
+						if (mainMenuPanel.activeSelf == true && getCurrentPanel() == 1) {
 							// Debug.Log("Test 3");
 							// Debug.Log("Left Thumbstick input = " + currentStates[i].ThumbSticks.Left.Y);
 							if (currentStates[i].ThumbSticks.Left.Y > controllerStickDeadZone /*&& prevState.ThumbSticks.Left.Y <= 0.0f*/) {
@@ -261,6 +263,7 @@ public class MainMenuManager : MonoBehaviour {
 		// for (int i = 1; i < mainMenuPanel.transform.childCount; i++) {
 		// 	if (b.)
 		// }
+		// b.image.color = b.colors.pressedColor;
 		b.onClick.Invoke();
 	}
 
@@ -424,6 +427,11 @@ public class MainMenuManager : MonoBehaviour {
 
 			// audio settings Menu
 			case 5:
+				mainMenuPanel.SetActive(false);
+				AudioPanel.SetActive(true);
+				selectionMenuPanel.SetActive(false);
+				remappingMenuPanel.SetActive(false);
+				audioMenuManager.ResetAudioPanel();
 				break;  // all setup is taken care of in another function;
 			default:
 				break;		
@@ -458,6 +466,30 @@ public class MainMenuManager : MonoBehaviour {
 	}
 
 	public void GoToMenu(int m, int selectedMainMenuButton) {
+		// bool soundPlaying = false;
+		// do { 
+		// 	GameManager.instance.audioManager.IsSoundPlaying(nameOfButtonSoundEffect, out soundPlaying);
+		// 	Debug.Log("is sound playing: " + soundPlaying);
+		// } while (soundPlaying);
+		
+		// int[] menuSettings = new int[2];
+		// menuSettings[0] = m;
+		// menuSettings[1] = selectedMainMenuButton;
+		// setMenu(menuSettings);
+
+		StartCoroutine(OpenMenuDelayed(m, selectedMainMenuButton));
+	}
+
+	private IEnumerator OpenMenuDelayed(int m, int selectedMainMenuButton) {
+		Sound s = GameManager.instance.audioManager.GetSound(nameOfButtonSoundEffect);
+		if (s == null || b.gameObject.GetComponent<ButtonController>() == null) {
+			yield return null;
+		}
+		else {
+			menu = m;
+			yield return new WaitForSeconds(s.clip.length);
+		}
+
 		int[] menuSettings = new int[2];
 		menuSettings[0] = m;
 		menuSettings[1] = selectedMainMenuButton;
@@ -467,11 +499,6 @@ public class MainMenuManager : MonoBehaviour {
     public void OpenAudioPanel() //things would be easier to read as seperate functions
     {
 		GoToMenu(5, 0);
-        mainMenuPanel.SetActive(false);
-        AudioPanel.SetActive(true);
-        selectionMenuPanel.SetActive(false);
-        remappingMenuPanel.SetActive(false);
-		audioMenuManager.ResetAudioPanel();
     }
 
 	public void Mute() {

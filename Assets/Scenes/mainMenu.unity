@@ -1280,6 +1280,7 @@ MonoBehaviour:
   audioMenuManager: {fileID: 0}
   customMappingPanel: {fileID: 1888511360}
   newVersion: 1
+  nameOfButtonSoundEffect: Bow
   controllerStickDeadZone: 0.5
   cooldown: 160
   buttonCoolDown: 0.5
@@ -8337,6 +8338,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectedScale: 1.2
+  pressedSound: 
 --- !u!1 &432624734
 GameObject:
   m_ObjectHideFlags: 0
@@ -18086,6 +18088,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectedScale: 1.2
+  pressedSound: 
 --- !u!1 &1064639433
 GameObject:
   m_ObjectHideFlags: 0
@@ -20082,6 +20085,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectedScale: 1.2
+  pressedSound: 
 --- !u!1 &1211220728
 GameObject:
   m_ObjectHideFlags: 0
@@ -20314,6 +20318,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectedScale: 1.2
+  pressedSound: 
 --- !u!1 &1217169298
 GameObject:
   m_ObjectHideFlags: 0
@@ -27528,6 +27533,7 @@ MonoBehaviour:
   audioMenuManager: {fileID: 1039935055}
   customMappingPanel: {fileID: 1888511360}
   newVersion: 1
+  nameOfButtonSoundEffect: Bow
   controllerStickDeadZone: 0.5
   cooldown: 0.25
   buttonCoolDown: 0.5
@@ -33536,6 +33542,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectedScale: 1.2
+  pressedSound: 
 --- !u!1 &2044621201
 GameObject:
   m_ObjectHideFlags: 0

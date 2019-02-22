@@ -38,6 +38,7 @@ public class AudioManager : MonoBehaviour {
                 return;
             }
             s.source.Play();
+            // Debug.Log("name of audio mixer group for sound " + s.name + ": " + s.source.outputAudioMixerGroup.name);
     }
 
     public void Stop(string name)
@@ -64,6 +65,34 @@ public class AudioManager : MonoBehaviour {
         audioMixer.SetFloat("MusicVolume", volume);
         audioMixer.SetFloat("SoundEffectsVolume", volume);
 
+    }
+
+    public void IsSoundPlaying(string name, out bool isOutputPlaying) {
+        foreach (Sound s in sounds) {
+            if (s.name.Equals(name)) {
+                if (s.source.isPlaying)
+                    isOutputPlaying = true;
+                else 
+                    isOutputPlaying = false;
+                
+                return;
+            }
+        }
+
+        isOutputPlaying = false;
+        Debug.Log("Sound " + name + " does not exist in audio manager!");
+    }
+
+    // uses same algorithm as Play(string) does to find sound
+    public Sound GetSound(string name) {
+        Sound s = Array.Find(sounds, sound => sound.name == name); //this is kinda cool 
+        if (s == null) //error checking, only play a sound if you can find it
+        {
+            Debug.LogError("Sounds " + name + " could not be found");
+            return null;
+        }
+
+        return s;
     }
 
     public void SetMasterVolume(float volume)
