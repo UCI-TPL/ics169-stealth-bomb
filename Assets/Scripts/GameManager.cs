@@ -547,7 +547,7 @@ public class GameManager : MonoBehaviour {
             activePlayersControllers.Remove(killed.controller.gameObject);
             Vector3 deathPosition = killed.controller.transform.position;
             //if (deathPosition.y < 0)
-            deathPosition = new Vector3(deathPosition.x, 6f, deathPosition.z);
+            deathPosition = new Vector3(deathPosition.x, 10f, deathPosition.z);
             instance.StartCoroutine(InstantiateGhost(killed.playerNumber, killed, deathPosition));
             killed.controller.DisableUI();
             // Update Player Stats

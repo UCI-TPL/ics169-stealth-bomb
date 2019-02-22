@@ -106,9 +106,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {x: 0, y: 0, z: 0}
-  travelTime: 0.4
+  travelTime: 0.02
   travelDuration: 0
   startTravelTime: 0
+  target1: {fileID: 0}
+  target2: {fileID: 0}
+  v2: {x: 0, y: 0, z: 0}
+  v3: {x: 0, y: 0, z: 0}
 --- !u!54 &4516277662102529542
 Rigidbody:
   m_ObjectHideFlags: 0

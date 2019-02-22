@@ -66,6 +66,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   input: {fileID: 0}
   rend: {fileID: 0}
+  PlayerModel: {fileID: 0}
+  rendHead: {fileID: 0}
+  rendHair: {fileID: 0}
+  rendBottom: {fileID: 0}
+  rendTorso: {fileID: 0}
   PlayerHitbox: {fileID: 0}
   ShootPoint: {fileID: 0}
   floorCollider: {fileID: 0}
@@ -259,7 +264,7 @@ Transform:
   m_GameObject: {fileID: 4959820064822183533}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -0.319, z: 0}
-  m_LocalScale: {x: 2.36, y: 10, z: 2.36}
+  m_LocalScale: {x: 2.36, y: 20, z: 2.36}
   m_Children: []
   m_Father: {fileID: 2234300553027833934}
   m_RootOrder: 2

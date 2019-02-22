@@ -52,6 +52,8 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
 
     private Vector3 smoothVel; //used by smoothDamp don't worry about it 
 
+    private float lastGroundDistance = 4f; //the previously height of the crosshair  
+
     private void Start()
     {
        
@@ -116,8 +118,10 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
             RaycastHit hit;
             if (Physics.Raycast(Point.transform.position, Vector3.down, out hit, Mathf.Infinity, layerMask))
             {
+                float distance = this.transform.position.y - hit.transform.position.y;
                 GhostBomb ghostBomb = Instantiate(GhostBombPrefab, GhostBody.transform.position, GhostBody.transform.rotation).GetComponent<GhostBomb>();
-                ghostBomb.target = hit.transform.position;
+                ghostBomb.v2 = this.transform.position;
+                ghostBomb.v3 = new Vector3(this.transform.position.x, this.transform.position.y - distance, this.transform.position.z);
             }
             
         }
@@ -171,22 +175,41 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
     {
         
         int layerMask = 1 << 11; //this makes sure that it can only detect the Ground layer
-
-        // If you hit the ground, draw a line from the ground, to the decal object, and then to ghostbody
-
         lr.positionCount = 3;
         RaycastHit hit;
-        Vector3 tPosition;
-        //if (Physics.Raycast(Point.transform.position, Vector3.down, out hit, Mathf.Infinity, layerMask))
-        //     tPosition = new Vector3(transform.position.x, hit.transform.position.y, transform.position.z); //the position on the ground 
-        //else
-            tPosition = new Vector3(transform.position.x, GhostBody.transform.position.y - 10f, transform.position.z); //the 10f below the decal object (maybe under the floor) 
-        lr.SetPosition(0, tPosition);
-        lr.SetPosition(1, transform.position); //decal object
-        lr.SetPosition(2, GhostBody.transform.position); //ghost body
-
+        if(Physics.Raycast(Point.transform.position, Vector3.down, out hit, Mathf.Infinity, layerMask))
+        {
+            lastGroundDistance = transform.position.y - hit.transform.position.y;
+            DrawLine(lastGroundDistance);
+        }
+        else
+            DrawLine(lastGroundDistance);
     }
 
+    int vertexCount = 12;
+    public void DrawLine(float descent)
+    {
+        List<Vector3> linePoints = new List<Vector3>();
+        Vector3 v1 = GhostBody.transform.position; //this is the start point, the ghost body
+        Vector3 v2 = this.transform.position; //this is the top of the decal
+        float distance = Vector3.Distance(v1, v2);
+        Vector3 v3 = new Vector3(v2.x, v2.y - descent, v2.z); //this point where the crosshair is, the ground
+
+        Vector4 v4 = new Vector3(0f, 0f, 0f);
+        v4 = v2 + (v1.normalized * (distance/3));
+        
+        for(float ratio = 0; ratio <= 1; ratio += (1f/(vertexCount )))
+        {
+            Vector3 tangent1 = Vector3.Lerp(v1, v4, ratio); //this is the line between the ghost body & the top of the decal object
+            Vector3 tangent2 = Vector3.Lerp(v4, v3, ratio); //the line between the top of the decal object & the ground
+            Vector3 point = Vector3.Lerp(tangent1, tangent2, ratio); //a point on the curve that we want to make
+            linePoints.Add(point);
+        }
+
+        //Debug.Log("Made it out and the way to go is  " + linePoints);
+        lr.positionCount = linePoints.Count;
+        lr.SetPositions(linePoints.ToArray());
+    }
 
 
 
