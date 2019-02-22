@@ -15,16 +15,16 @@ public class ButtonController : MonoBehaviour, ISelectHandler, IDeselectHandler
     }
 
     // Start is called before the first frame update
-    void Start()
-    {
+    // void Start()
+    // {
         
-    }
+    // }
 
     // Update is called once per frame
-    void Update()
-    {
+    // void Update()
+    // {
         
-    }
+    // }
 
     public void OnSelect(BaseEventData eventData) {
         b.transform.localScale = new Vector3(selectedScale, selectedScale, b.transform.localScale.z);
