@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class PositionMarker : MonoBehaviour {
     private RectTransform canvas;
-    private Image circleImage;
+    public Image circleImage;
     private RectTransform imageRect;
 
     [SerializeField]
@@ -67,6 +67,11 @@ public class PositionMarker : MonoBehaviour {
             //imageRect.sizeDelta = new Vector2(imageRect.sizeDelta.x, imageRect.sizeDelta.y * (1 + 0.2f * Vector2.Distance(lastPos1, currPos)));
         }
     }
+    public void SetSize(float size)
+    {
+        transform.localScale = new Vector3(size, transform.localScale.y, size);
+    }
+
 
     //private void FixedUpdate() {
     //    lastPos1 = lastPos2;

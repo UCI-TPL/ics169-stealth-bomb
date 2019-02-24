@@ -13,6 +13,8 @@ public class GhostBomb : MonoBehaviour
   
     public float travelTime; //how long it should travel
 
+    private float actualTravelTime;
+
     [HideInInspector]
     public float travelDuration; //how long it has travelled
 
@@ -32,8 +34,9 @@ public class GhostBomb : MonoBehaviour
 
     void Start()
     {
+        actualTravelTime = travelTime / vertexCount;
         startTravelTime = Time.time; //start time
-        travelDuration = startTravelTime + travelTime; //end time
+        travelDuration = startTravelTime + actualTravelTime; //end time
         target = GetNextPoint();
         
     }
@@ -66,7 +69,7 @@ public class GhostBomb : MonoBehaviour
     {
         if(Time.time <= travelDuration)
         {
-            float lerpPosition = (Time.time - startTravelTime) / travelTime; //how far along the lerp should it be
+            float lerpPosition = (Time.time - startTravelTime) / actualTravelTime; //how far along the lerp should it be
             transform.position = Vector3.Lerp(transform.position, target, lerpPosition);
             //transform.position = GhostBomb.Parabola(transform.position, target, 2f, lerpPosition);
         }
@@ -76,7 +79,7 @@ public class GhostBomb : MonoBehaviour
             if(point != Vector3.zero)
             {
                 target = point;
-                travelDuration = Time.time + travelTime; //restart the lerp but going to a different part of the curve
+                travelDuration = Time.time + actualTravelTime; //restart the lerp but going to a different part of the curve
             }   
         }
         

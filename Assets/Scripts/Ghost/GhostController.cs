@@ -4,21 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class GhostController : PlayerController {   //this inherits from PlayerController so the movement remains the same 
-
-
-
-    public GameObject Cursor;
-
-    //_AlbedoColor
-
-    [SerializeField]
-    //Image CursorImage;
-
    
     public GameObject Point; //the cursor that the player moves around
 
     public LineRenderer lr; //to connect the cursor to the ghost visually 
 
+    public PositionMarker Target;
     public GameObject AOE; //change the color of this
 
     public GameObject GhostPrefab; //the ghost that hangs out on the curve on the side of the map
@@ -64,7 +55,8 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
         right = Camera.main.transform.right;
         right.Scale(new Vector3(1, 0, 1));
         right.Normalize();
-     
+
+        Target.color = playerColor;
         AOE.GetComponent<Renderer>().material.SetColor("Color_52FADAA", playerColor * 2f);
         lr = GetComponent<LineRenderer>();
         lr.positionCount = 1;
@@ -107,6 +99,30 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
         travelTime = travelTime / 2f;
     }
 
+    public IEnumerator  PositionMarkerExpand(float time) //time is half of the bomb travel time. It will expand for one half, and then retract for a second half
+    {
+        yield return new WaitForSeconds(time);
+        float startTime = Time.time;
+        float expandTime = Time.time + time;
+        float maxSize = 2f;
+        while(expandTime >= Time.time)
+        {
+            float ratio = (Time.time - startTime) / (time);
+            float size = Mathf.Lerp(1f,maxSize,ratio); //the grows to 2 over time as the bomb progresses
+            Target.SetSize(size);
+            yield return null;
+        }
+        float shrinkTime = Time.time + time;
+        startTime = Time.time;
+        while (shrinkTime >= Time.time)
+        {
+            float ratio = (Time.time - startTime) / (time);
+            float size = Mathf.Lerp(maxSize, 1f, ratio); //the grows to 2 over time as the bomb progresses
+            Target.SetSize(size);
+            yield return null;
+        }
+    }
+
     private float destoryTileTime = 0.0f;
 
     public void Activate() 
@@ -122,6 +138,7 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
                 GhostBomb ghostBomb = Instantiate(GhostBombPrefab, GhostBody.transform.position, GhostBody.transform.rotation).GetComponent<GhostBomb>();
                 ghostBomb.v2 = this.transform.position;
                 ghostBomb.v3 = new Vector3(this.transform.position.x, this.transform.position.y - distance, this.transform.position.z);
+                StartCoroutine("PositionMarkerExpand",(ghostBomb.travelTime/2)); 
             }
             
         }
