@@ -103,7 +103,11 @@ public class PlayerController : MonoBehaviour, IHurtable {
         get { return rb.velocity.magnitude > 0.1f; }
     }
 
+    //All the particle systems
 
+    public GameObject ChargeParticleEffects; //the parent prefab that holds all the effects
+    [HideInInspector]
+    public ParticleSystem Circle;
 
     // Initialize referances
     private void Awake() {
@@ -112,6 +116,12 @@ public class PlayerController : MonoBehaviour, IHurtable {
             Debug.LogError("Input Manager does not exist");
         rb = GetComponent<Rigidbody>();
         rend = rend == null ? GetComponent<Renderer>() : rend;
+        if(!this)
+        {
+            Debug.LogError("WHAT");
+        }
+        if(ShootPoint)
+            Circle = ChargeParticleEffects.transform.Find("Circle").GetComponent<ParticleSystem>();
     }
 
     // Set up controllers
@@ -187,9 +197,16 @@ public class PlayerController : MonoBehaviour, IHurtable {
             Weapon.UnequipWeapon();
         }
 
-        if(this)
-            if(this.gameObject!= null)
+        if (this)
+            if (this.gameObject != null)
+            {
+                if(Circle)
+                {
+                    Circle.Stop();
+                    Circle.Clear();
+                }
                 StartCoroutine(DeathAnimation());
+            }
     }
 
     private void UpdateCameraDirection() {
