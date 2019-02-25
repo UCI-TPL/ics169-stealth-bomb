@@ -27,6 +27,8 @@ public class PlayerJoinManager : MonoBehaviour {
 	//both for the references to the UI script -Kyle
 	
 	public GameObject playersObject;
+	[SerializeField]
+	private Button backButton;
 	private characterSelection selectionOP;
 
 	//reference the mainMenuManager for setting PJActive to true;
@@ -37,6 +39,8 @@ public class PlayerJoinManager : MonoBehaviour {
 	public float fillSpeed = 0.2f;
 	public float initialFillAmount = 0.18f; // originally 0.0f
 	private float[] bButtonTimers;
+	[HideInInspector]
+	public bool bButtonActivated;
 
 	public RectTransform[] joinPrompts;
 	public RectTransform[] playersUI;
@@ -147,6 +151,7 @@ public class PlayerJoinManager : MonoBehaviour {
 		defaultInputControllerNumbers = new int[] { 0, 1, 2, 3 };
 		playersControlsGuideActive = new bool[4];
 		bButtonTimers = new float[4];
+		bButtonActivated = false;
 		countdownText.gameObject.SetActive(false);
 		countdownTimer = 3.0f;
 		alreadyLoadingScene = false;
@@ -202,22 +207,25 @@ public class PlayerJoinManager : MonoBehaviour {
 			}
 
 			float farthestTimer = 0.0f;
-			for (int i = 0; i < bButtonTimers.Length; i++) {
-				if (input.controllers[i].cancel.Pressed) {
-					bButtonTimers[i] += fillSpeed * Time.deltaTime;
-				}
-				else {
-					bButtonTimers[i] = initialFillAmount;
+			if (PlayerJoinScreenActive) {
+				for (int i = 0; i < bButtonTimers.Length; i++) {
+					if (input.controllers[i].cancel.Pressed) {
+						bButtonTimers[i] += fillSpeed * Time.deltaTime;
+					}
+					else {
+						bButtonTimers[i] = initialFillAmount;
+					}
+
+					if (farthestTimer < bButtonTimers[i])
+						farthestTimer = bButtonTimers[i];
 				}
 
-				if (farthestTimer < bButtonTimers[i])
-					farthestTimer = bButtonTimers[i];
-			}
-
-			bButtonMask.fillAmount = farthestTimer;
-			if (farthestTimer >= 1.0f) {
-				ExitPreGameLobby();
-				farthestTimer = initialFillAmount;
+				bButtonMask.fillAmount = farthestTimer;
+				if (farthestTimer >= 1.0f) {
+					bButtonActivated = true;
+					backButton.onClick.Invoke();
+					// farthestTimer = initialFillAmount;
+				}
 			}
 		}
 	}
@@ -369,10 +377,15 @@ public class PlayerJoinManager : MonoBehaviour {
 
 	// helper function exits out of pre-game lobby to main menu
 	public void ExitPreGameLobby() {
+		Debug.Log("back button invoked");
+		bButtonActivated = true;
 		for (int idx = 0; idx < playersJoined.Length; idx++) {
 			ResetPlayer(idx);
 		}
-		currentMenu.GoToMenu(1, 1);
+		int[] menuSettings = new int[2];
+		menuSettings[0] = 1;
+		menuSettings[1] = 1;
+		currentMenu.setMenu(menuSettings);
 	}
 
 
@@ -639,6 +652,7 @@ public class PlayerJoinManager : MonoBehaviour {
 		}
 
 		else {
+			bButtonActivated = false;
 			inputTimer = 0.0f;
 		}
 	}

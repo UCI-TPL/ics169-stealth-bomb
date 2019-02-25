@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using XInputDotNetPure;
 
@@ -22,6 +23,8 @@ public class MainMenuManager : MonoBehaviour {
 	public GameObject remappingMenuPanel;
     public GameObject AudioPanel;
 
+	public GameObject CreditsPanel;
+
 	public AudioMenuManager audioMenuManager;
 	public GameObject customMappingPanel;
 
@@ -32,7 +35,7 @@ public class MainMenuManager : MonoBehaviour {
 	public bool newVersion = true;
 
 	private GameObject btn;
-	private Button b;
+	private ButtonController b;
 
 	public string nameOfButtonSoundEffect = "Bow";
 
@@ -140,7 +143,7 @@ public class MainMenuManager : MonoBehaviour {
 								currentMainMenuButton--;
 								CheckAndMoveCursorToBottom();
 								CheckForAndSkipDeactivatedButtons(true);
-								mainMenuButtons(currentMainMenuButton);
+								// mainMenuButtons(currentMainMenuButton);
 								// Debug.Log("cursor moved up to " + currentMainMenuButton);
 								hasMoved = true;
 							}
@@ -148,66 +151,53 @@ public class MainMenuManager : MonoBehaviour {
 								currentMainMenuButton++;
 								CheckAndMoveCursorToTop();
 								CheckForAndSkipDeactivatedButtons(false);
-								mainMenuButtons(currentMainMenuButton);
+								// mainMenuButtons(currentMainMenuButton);
 								// Debug.Log("cursor moved down to " + currentMainMenuButton);
 								hasMoved = true;
 							}
 
-							// if (input.controllers[i].MoveVector().y > controllerStickDeadZone /*&& prevState.ThumbSticks.Left.Y <= 0.0f*/) {
-							// 	currentMainMenuButton--;
-							// 	CheckAndMoveCursorToBottom();
-							// 	CheckForAndSkipDeactivatedButtons(true);
-							// 	mainMenuButtons(currentMainMenuButton);
-							// 	hasMoved = true;
-							// }
-							// else if (input.controllers[i].MoveVector().y < -controllerStickDeadZone /*&& prevState.ThumbSticks.Left.Y >= 0.0f*/) {
-							// 	currentMainMenuButton++;
-							// 	CheckAndMoveCursorToTop();
-							// 	CheckForAndSkipDeactivatedButtons(false);
-							// 	mainMenuButtons(currentMainMenuButton);
-							// 	hasMoved = true;
-							// }
+							mainMenuButtons(currentMainMenuButton);
 						}
 
-						if (selectionMenuPanel.activeSelf == true) {
-							// if (currentStates[i].ThumbSticks.Left.X > 0) {
-							// 	currentSelectionMenuButton++;
-							// 	if (currentSelectionMenuButton > 3) {
-							// 		currentSelectionMenuButton = 2;
-							// 	}
-							// 	selectionMenuButtons(currentSelectionMenuButton);
-							// 	hasMoved = true;
-							// }
-						}
+						// if (selectionMenuPanel.activeSelf == true) {
+						// 	// if (currentStates[i].ThumbSticks.Left.X > 0) {
+						// 	// 	currentSelectionMenuButton++;
+						// 	// 	if (currentSelectionMenuButton > 3) {
+						// 	// 		currentSelectionMenuButton = 2;
+						// 	// 	}
+						// 	// 	selectionMenuButtons(currentSelectionMenuButton);
+						// 	// 	hasMoved = true;
+						// 	// }
+						// }
 
-						if (remappingMenuPanel.activeSelf == true)
-						{
+						// if (remappingMenuPanel.activeSelf == true)
+						// {
 
-							// update button pos
-							if (currentStates[i].ThumbSticks.Left.Y < -controllerStickDeadZone)
-							{
-								currentRemappingMenuButton++;
-								hasMoved = true;
-							}
-							else if (currentStates[i].ThumbSticks.Left.Y > controllerStickDeadZone)
-							{
-								currentRemappingMenuButton--;
-								hasMoved = true;
-							}
+						// 	// update button pos
+						// 	if (currentStates[i].ThumbSticks.Left.Y < -controllerStickDeadZone)
+						// 	{
+						// 		currentRemappingMenuButton++;
+						// 		hasMoved = true;
+						// 	}
+						// 	else if (currentStates[i].ThumbSticks.Left.Y > controllerStickDeadZone)
+						// 	{
+						// 		currentRemappingMenuButton--;
+						// 		hasMoved = true;
+						// 	}
 							
-							// fix outbound pos
-							if (currentRemappingMenuButton > 5)
-							{
-								currentRemappingMenuButton = 1;
-							}
-							else if (currentRemappingMenuButton < 1)
-							{
-								currentRemappingMenuButton = 5;
-							}
+						// 	// fix outbound pos
+						// 	if (currentRemappingMenuButton > 5)
+						// 	{
+						// 		currentRemappingMenuButton = 1;
+						// 	}
+						// 	else if (currentRemappingMenuButton < 1)
+						// 	{
+						// 		currentRemappingMenuButton = 5;
+						// 	}
 							
-							remappingMenuButtons(currentRemappingMenuButton);
+						// 	remappingMenuButtons(currentRemappingMenuButton);
 							
-						}
+						// }
 
 						// if (AudioPanel.activeSelf == true)
 
@@ -253,7 +243,7 @@ public class MainMenuManager : MonoBehaviour {
 
 	// helper method that returns whether or not the specified player can enter input.
 	private bool CanPlayerPressButton(int controllerIdx) {
-		return currentStates[controllerIdx].IsConnected && getCurrentPanel() == 1 && buttonTimer >= buttonCoolDown /* && btn.transform.GetSiblingIndex() == currentMainMenuButton*/;
+		return currentStates[controllerIdx].IsConnected && (getCurrentPanel() == 1 || getCurrentPanel() == 6) && buttonTimer >= buttonCoolDown /* && btn.transform.GetSiblingIndex() == currentMainMenuButton*/;
 	}
 
 	private void ActivateButton() {
@@ -263,8 +253,9 @@ public class MainMenuManager : MonoBehaviour {
 		// for (int i = 1; i < mainMenuPanel.transform.childCount; i++) {
 		// 	if (b.)
 		// }
-		// b.image.color = b.colors.pressedColor;
-		b.onClick.Invoke();
+		// b.image.color = Color.red; //new Color(b.colors.pressedColor.r, b.colors.pressedColor.g, b.colors.pressedColor.b, b.colors.pressedColor.a);
+		// b.onClick.Invoke();
+		b.PressButton();
 	}
 
 
@@ -356,6 +347,7 @@ public class MainMenuManager : MonoBehaviour {
 	{ 
 		// menu = m; 
 		if (menuSettings[0] != 0) menu = menuSettings[0];
+		EventSystem.current.SetSelectedGameObject(null);
 
 		switch(menuSettings[0])
 		{
@@ -372,6 +364,7 @@ public class MainMenuManager : MonoBehaviour {
 				selectionMenuPanel.SetActive(false);
 				remappingMenuPanel.SetActive(false);
 				customMappingPanel.SetActive(false);
+				CreditsPanel.SetActive(false);
                 if(AudioPanel)
                     AudioPanel.SetActive(false);
 				// if (selectedMainMenuButton != -1)
@@ -397,7 +390,7 @@ public class MainMenuManager : MonoBehaviour {
 				selectionMenuPanel.SetActive(true);
 				remappingMenuPanel.SetActive(false);
 				customMappingPanel.SetActive(false);
-				selectionMenuButtons(2);
+				// selectionMenuButtons(2);
 				currentSelectionMenuButton = 2;
 				InputManager.inputManager.UseMouseAndKeyboardForFirstDisconnectedPlayer(false);
 				break;
@@ -409,7 +402,7 @@ public class MainMenuManager : MonoBehaviour {
 				selectionMenuPanel.SetActive(false);
 				remappingMenuPanel.SetActive(true);
 				customMappingPanel.SetActive(false);
-				remappingMenuButtons(1);
+				// remappingMenuButtons(1);
 				currentRemappingMenuButton = 1;
 				// Debug.Log("exiting remapBtn menu display");
 				break;
@@ -421,7 +414,7 @@ public class MainMenuManager : MonoBehaviour {
 				selectionMenuPanel.SetActive(false);
 				remappingMenuPanel.SetActive(false);
 				customMappingPanel.SetActive(true);
-				customMappingButtons(0);
+				// customMappingButtons(0);
 				currentCustomMappingButton = 0;
 				break;
 
@@ -433,6 +426,17 @@ public class MainMenuManager : MonoBehaviour {
 				remappingMenuPanel.SetActive(false);
 				audioMenuManager.ResetAudioPanel();
 				break;  // all setup is taken care of in another function;
+			
+			case 6:
+				mainMenuPanel.SetActive(false);
+				selectionMenuPanel.SetActive(false);
+				remappingMenuPanel.SetActive(false);
+				customMappingPanel.SetActive(false);
+				CreditsPanel.SetActive(true);
+				// b = CreditsPanel.transform.GetComponentInChildren<Button>();
+				// b.Select();
+				break;
+			
 			default:
 				break;		
 		}
@@ -455,6 +459,20 @@ public class MainMenuManager : MonoBehaviour {
 		GoToMenu(3, 0);
 	}
 
+	public void OpenCreditsScreen() {
+		GoToMenu(6, 0);
+	}
+
+	public void OpenAudioPanel() //things would be easier to read as seperate functions
+    {
+		GoToMenu(5, 0);
+    }
+
+	public void Mute() {
+		Debug.Log("Mute button pressed.");
+		GameManager.instance.Mute();
+	}
+
 	public void ExitRemappingScreen(GameObject settingsButton) {
 		int settingsButtonIdx = settingsButton.transform.GetSiblingIndex();
 		GoToMenu(1, settingsButtonIdx);
@@ -463,6 +481,11 @@ public class MainMenuManager : MonoBehaviour {
 	public void ExitAudio(GameObject audioButton) {
 		int audioButtonIdx = audioButton.transform.GetSiblingIndex();
 		GoToMenu(1, audioButtonIdx);
+	}
+
+	public void ExitCredits(GameObject creditsButton) {
+		int creditsButtonIdx = creditsButton.transform.GetSiblingIndex();
+		GoToMenu(1, creditsButtonIdx);
 	}
 
 	public void GoToMenu(int m, int selectedMainMenuButton) {
@@ -480,10 +503,11 @@ public class MainMenuManager : MonoBehaviour {
 		StartCoroutine(OpenMenuDelayed(m, selectedMainMenuButton));
 	}
 
+
 	private IEnumerator OpenMenuDelayed(int m, int selectedMainMenuButton) {
 		Sound s = GameManager.instance.audioManager.GetSound(nameOfButtonSoundEffect);
-		if (s == null || b.gameObject.GetComponent<ButtonController>() == null) {
-			yield return null;
+		if (s == null || b == null || b.gameObject.GetComponent<ButtonController>() == null) {
+			yield return new WaitForSeconds(0.0f);
 		}
 		else {
 			menu = m;
@@ -493,18 +517,10 @@ public class MainMenuManager : MonoBehaviour {
 		int[] menuSettings = new int[2];
 		menuSettings[0] = m;
 		menuSettings[1] = selectedMainMenuButton;
+		Debug.Log("menu settings: " + menuSettings[0] + ", " + menuSettings[1]);
 		setMenu(menuSettings);
 	}
 
-    public void OpenAudioPanel() //things would be easier to read as seperate functions
-    {
-		GoToMenu(5, 0);
-    }
-
-	public void Mute() {
-		Debug.Log("Mute button pressed.");
-		GameManager.instance.Mute();
-	}
 
     public void SetVolume()
     {
@@ -608,7 +624,9 @@ public class MainMenuManager : MonoBehaviour {
 
 	private void _buttonSelect()
 	{
-		b = btn.GetComponent<Button>();
+		Debug.Log(btn.name + " button selected");
+		if (b == null || b.gameObject != btn)
+			b = btn.GetComponent<ButtonController>();
 		b.Select();
 	}
 

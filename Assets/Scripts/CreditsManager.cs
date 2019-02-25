@@ -1,0 +1,118 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.Events;
+using XInputDotNetPure;
+
+public class CreditsManager : MonoBehaviour
+{
+    public MainMenuManager mainMenuManager;
+
+    public GameObject backBtn;
+    private ButtonController b;
+
+    private InputManager input;
+
+    private bool creditsPanelActive;
+
+    GamePadState[] currentStates;
+	GamePadState[] prevStates;
+	PlayerIndex[] players;
+
+    private float timer;
+    private float buttonTimer;
+
+    void Awake() {
+        // b = backBtn.GetComponent<ButtonController>();
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        input = InputManager.inputManager;
+        currentStates = new GamePadState[4];
+		prevStates = new GamePadState[4];
+		players = new PlayerIndex[4];
+
+        timer = mainMenuManager.cooldown;
+        buttonTimer = 0.0f;
+
+        for (int i = 0; i < currentStates.Length; i++) {
+            players[i] = (PlayerIndex) i;
+            AssignControllerEvents(i);
+        }
+
+        creditsPanelActive = false;
+    }
+
+    // Update is called once per frame
+    // barebones xbox controller navigation for now, since there is only 1 button
+    void Update()
+    {
+        creditsPanelActive = (mainMenuManager.getCurrentPanel() == 6);
+
+        if (creditsPanelActive) {
+            for (int i = 0; i < players.Length; i++) {
+                prevStates[i] = currentStates[i];
+                currentStates[i] = GamePad.GetState(players[i]);
+
+                // if (Input.GetAxis("Mouse X") == 0 || Input.GetAxis("Mouse Y") == 0) {
+                //     if (currentStates[i].IsConnected) {
+                //         _ButtonSelect();
+                //     }
+                // }
+                // if (b == null) 
+                //     b = backBtn.GetComponent<ButtonController>();
+                
+                // if (!b.IsButtonInNormalState())
+                    _ButtonSelect();
+            }
+
+            buttonTimer += 1.0f * Time.deltaTime;
+        }
+        
+		else {
+			buttonTimer = 0.0f;
+		}
+    }
+
+    private void ActivateButton(int controllerIdx) {
+        if (CanPlayerPressButton(controllerIdx)) {
+            b.PressButton();
+            // b.onClick.Invoke();
+        }
+    }
+
+    private bool CanPlayerPressButton(int controllerIdx) {
+        return currentStates[controllerIdx].IsConnected && creditsPanelActive && buttonTimer >= mainMenuManager.buttonCoolDown;
+    }
+
+    // helper method that assigns what functions should be called by what input/event.
+	private void AssignControllerEvents(int controllerIdx) {
+		// A button, B button, and Start button has been assigned. Still need to assign Y button.
+		switch (controllerIdx) {
+			case 0:
+				input.controllers[controllerIdx].confirm.OnDown.AddListener( () => ActivateButton(0) );
+				break;
+			case 1:
+				input.controllers[controllerIdx].confirm.OnDown.AddListener( () => ActivateButton(1) );
+				break;
+			case 2:
+				input.controllers[controllerIdx].confirm.OnDown.AddListener( () => ActivateButton(2) );
+				break;
+			case 3:
+				input.controllers[controllerIdx].confirm.OnDown.AddListener( () => ActivateButton(3) );
+				break;
+			default:
+				Debug.Log("variable playerIdx out of range!");
+				break;
+		}
+	}
+
+    private void _ButtonSelect() {
+        b = backBtn.GetComponent<ButtonController>();
+        if (b.IsButtonInNormalState())
+            b.Select();
+    }
+}

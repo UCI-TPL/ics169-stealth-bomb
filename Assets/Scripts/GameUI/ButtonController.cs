@@ -4,40 +4,71 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class ButtonController : MonoBehaviour, ISelectHandler, IDeselectHandler
+public class ButtonController : Button, ISelectHandler, IDeselectHandler
 {
     public float selectedScale = 1.2f;
 
-    public string pressedSound = "Bow";
+    BaseEventData m_BaseEvent;
 
-    private Button b;
+    // public string pressedSound = "Bow";
 
-    void Awake() {
-        b = this.gameObject.GetComponent<Button>();
-    }
+    // [SerializeField]
+    // private Button b;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        if (pressedSound != null) {
-            b.onClick.AddListener(() => GameManager.instance.audioManager.Play("Bow"));
-        }
-        // b.DoStateTransition(SelectionState.Pressed, true);
-    }
-
-    // Update is called once per frame
-    // void Update()
-    // {
-        
+    // void Awake() {
+    //     b = this.gameObject.GetComponent<Button>();
     // }
 
-    public void OnSelect(BaseEventData eventData) {
-        b.transform.localScale = new Vector3(selectedScale, selectedScale, b.transform.localScale.z);
+    // // Start is called before the first frame update
+    // void Start()
+    // {
+    //     if (pressedSound != null) {
+    //         b.onClick.AddListener(() => GameManager.instance.audioManager.Play("Bow"));
+    //     }
+    //     // b.DoStateTransition(SelectionState.Pressed, true);
+    // }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (base.IsHighlighted(m_BaseEvent) || base.IsPressed()) {
+            Debug.Log(this.gameObject.name + " transition state = " + base.currentSelectionState);
+            this.transform.localScale = new Vector3(selectedScale, selectedScale, this.transform.localScale.z);
+        }
+        else {
+            this.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+        }
     }
 
-    public void OnDeselect(BaseEventData eventData) {
-        b.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+    public void PlayPressedButtonSound(string sound) {
+        // base.onClick.AddListener(() => GameManager.instance.audioManager.Play(pressedSound));
+        GameManager.instance.audioManager.Play(sound);
     }
+
+    public void SelectButton() {
+        // this.transform.localScale = new Vector3(selectedScale, selectedScale, this.transform.localScale.z);
+        base.DoStateTransition(SelectionState.Highlighted, true);
+    }
+
+    public void PressButton() {
+        base.DoStateTransition(SelectionState.Pressed, true);
+        base.onClick.Invoke();
+    }
+
+    public bool IsButtonInNormalState() {
+        return !(base.IsHighlighted(m_BaseEvent) || base.IsPressed());
+    }
+
+    public override void OnSelect(BaseEventData eventData) {
+        // this.transform.localScale = new Vector3(selectedScale, selectedScale, this.transform.localScale.z);
+        Debug.Log(this.gameObject.name + " actually selected.");
+        base.OnSelect(eventData);
+    }
+
+    // public override void OnDeselect(BaseEventData eventData) {
+    //     // this.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+    //     base.OnDeselect(eventData);
+    // }
 
 
 }
