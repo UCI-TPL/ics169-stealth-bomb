@@ -84,10 +84,10 @@ MonoBehaviour:
     value: 1
   edgeColor:
     overrideState: 1
-    value: {r: 0.3962264, g: 0.3962264, b: 0.3962264, a: 0.34901962}
+    value: {r: 0.18867922, g: 0.18867922, b: 0.18867922, a: 0.5058824}
   edgeSource:
     overrideState: 1
-    value: 0
+    value: 1
   edgeThreshold:
     overrideState: 1
     value: 1
@@ -127,7 +127,7 @@ MonoBehaviour:
       m_NumAlphaKeys: 2
   fillOpacity:
     overrideState: 0
-    value: 0
+    value: 1
 --- !u!114 &114375464177707528
 MonoBehaviour:
   m_ObjectHideFlags: 3

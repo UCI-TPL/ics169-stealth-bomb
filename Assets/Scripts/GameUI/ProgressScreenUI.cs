@@ -56,6 +56,8 @@ public class ProgressScreenUI : MonoBehaviour {
     [HideInInspector]
     public bool GameWon { get; private set; }
 
+    public UnityEvent[] gainPoints;
+
     // Use this for initialization
     void Awake () {
         instance = this;

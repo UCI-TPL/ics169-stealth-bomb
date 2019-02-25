@@ -334,11 +334,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Progress Screen
       objectReference: {fileID: 0}
-    - target: {fileID: 2489146479369555737, guid: 58583ebe1ee89ad468f6bfdc181efd7f,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2419155855270471217, guid: 58583ebe1ee89ad468f6bfdc181efd7f,
         type: 3}
       propertyPath: m_LocalPosition.x
