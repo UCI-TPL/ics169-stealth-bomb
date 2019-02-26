@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ShotGunBullet
-  m_Shader: {fileID: 4800000, guid: f6fd95ce00088c54eb94436a68428121, type: 3}
+  m_Name: ShotGunSparks
+  m_Shader: {fileID: 4800000, guid: 31531e420bd2ed346b155bb0bcf02b07, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -18,8 +18,11 @@ Material:
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
-    m_TexEnvs: []
+    m_TexEnvs:
+    - Texture2D_F0001079:
+        m_Texture: {fileID: 10307, guid: 0000000000000000f000000000000000, type: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_2FAC9C4: 4
-    - Vector1_B54B58DC: 0.25
+    - Vector1_3438BD14: 3
     m_Colors: []
