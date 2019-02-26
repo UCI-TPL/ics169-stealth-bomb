@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour, IHurtable {
     // public SpecialMove specialMove; // Dodge, Ice Wall, etc. 
     public Weapon Weapon { get; private set; }
     public Weapon PreviousWeapon;
+    public WeaponParticles weaponParticles; //this script will handle playing particle effects when attacking
+    //public GameObject WeaponParticles; 
 
     private Player _player;
     public Player player {
@@ -105,9 +107,12 @@ public class PlayerController : MonoBehaviour, IHurtable {
 
     //All the particle systems
 
-    public GameObject ChargeParticleEffects; //the parent prefab that holds all the effects
-    [HideInInspector]
-    public ParticleSystem Circle;
+    //[SerializeField]
+    //private GameObject ChargeParticleEffects; //the parent prefab that holds all the effects
+
+
+    //[HideInInspector]
+    //public ParticleSystem Circle;
 
     // Initialize referances
     private void Awake() {
@@ -120,8 +125,10 @@ public class PlayerController : MonoBehaviour, IHurtable {
         {
             Debug.LogError("WHAT");
         }
-        if(ShootPoint)
-            Circle = ChargeParticleEffects.transform.Find("Circle").GetComponent<ParticleSystem>();
+
+        weaponParticles = new WeaponParticles();
+        //if(ShootPoint)
+        //    Circle = ChargeParticleEffects.transform.Find("Circle").GetComponent<ParticleSystem>();
     }
 
     // Set up controllers
@@ -200,11 +207,13 @@ public class PlayerController : MonoBehaviour, IHurtable {
         if (this)
             if (this.gameObject != null)
             {
+                /*
                 if(Circle)
                 {
                     Circle.Stop();
                     Circle.Clear();
                 }
+                */
                 StartCoroutine(DeathAnimation());
             }
     }
@@ -450,6 +459,7 @@ public class PlayerController : MonoBehaviour, IHurtable {
     }
 
     public void EquipWeapon(Weapon weapon) {
+
         if (Weapon != null)
         {
             PreviousWeapon = this.Weapon;
@@ -457,6 +467,14 @@ public class PlayerController : MonoBehaviour, IHurtable {
         }
         Weapon = weapon;
         Weapon.EquipWeapon();
+        if(weaponParticles.Root != null)
+            Destroy(weaponParticles.Root);
+        if (weapon.weaponData.particleEffects != null) //attach the particle effects prefab to shootpoint if it exists 
+        {
+            weaponParticles.UpdateRoot( Instantiate(weapon.weaponData.particleEffects, ShootPoint.transform), playerColor ); //instantiate a particles prefab and make it the root of the weapon particles script
+            //weaponParticles.Root = Instantiate(weapon.weaponData.particleEffects, ShootPoint.transform);
+            weaponParticles.Root.name = "WeaponParticles";
+        }
 
         if (input.controllers[player.inputControllerNumber].attack.Pressed && allowAttack) // If the attack button was held down at the time of equipting new weapon activate the new weapon
             Weapon.Activate(ShootPoint.transform.position, ShootPoint.transform.forward);
