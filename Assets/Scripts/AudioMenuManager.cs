@@ -147,12 +147,12 @@ public class AudioMenuManager : MonoBehaviour
 	}
 
     private void ActivateButton(int controllerIdx) {
-        if (CanPlayerPressButton(controllerIdx)) {
+        if (PlayerCanPressButton(controllerIdx)) {
             ((Button) AudioMenuInteractables[currentAudioMenuInteractable]).onClick.Invoke();
         }
     }
 
-    private bool CanPlayerPressButton(int controllerIdx) {
+    private bool PlayerCanPressButton(int controllerIdx) {
         return currentStates[controllerIdx].IsConnected && audioPanelActive && buttonTimer >= mainMenuManager.buttonCoolDown && currentAudioMenuInteractable >= 3;
     }
 

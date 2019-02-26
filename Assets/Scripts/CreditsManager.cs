@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using XInputDotNetPure;
 
 public class CreditsManager : MonoBehaviour
@@ -53,23 +54,9 @@ public class CreditsManager : MonoBehaviour
         creditsPanelActive = (mainMenuManager.getCurrentPanel() == 6);
 
         if (creditsPanelActive) {
-            for (int i = 0; i < players.Length; i++) {
-                prevStates[i] = currentStates[i];
-                currentStates[i] = GamePad.GetState(players[i]);
+            UpdateControllersAndButtons();
 
-                // if (Input.GetAxis("Mouse X") == 0 || Input.GetAxis("Mouse Y") == 0) {
-                //     if (currentStates[i].IsConnected) {
-                //         _ButtonSelect();
-                //     }
-                // }
-                // if (b == null) 
-                //     b = backBtn.GetComponent<ButtonController>();
-                
-                // if (!b.IsButtonInNormalState())
-                    _ButtonSelect();
-            }
-
-            buttonTimer += 1.0f * Time.deltaTime;
+            // put any you want to update while credits panel is open in this bracket
         }
         
 		else {
@@ -77,14 +64,39 @@ public class CreditsManager : MonoBehaviour
 		}
     }
 
-    private void ActivateButton(int controllerIdx) {
-        if (CanPlayerPressButton(controllerIdx)) {
+    private void UpdateControllersAndButtons() {
+        for (int i = 0; i < players.Length; i++) {
+            prevStates[i] = currentStates[i];
+            currentStates[i] = GamePad.GetState(players[i]);
+
+            // if (Input.GetAxis("Mouse X") == 0 || Input.GetAxis("Mouse Y") == 0) {
+            //     if (currentStates[i].IsConnected) {
+            //         _ButtonSelect();
+            //     }
+            // }
+            // if (b == null) 
+            //     b = backBtn.GetComponent<ButtonController>();
+            
+            // if (!b.IsButtonInNormalState())
+                _ButtonSelect();
+        }
+
+        buttonTimer += 1.0f * Time.deltaTime;
+    }
+
+    private void PressSelectedMenuOption(int controllerIdx) {
+        if (PlayerCanPressButton(controllerIdx)) {
             b.PressButton();
             // b.onClick.Invoke();
         }
     }
 
-    private bool CanPlayerPressButton(int controllerIdx) {
+    private void ReleaseSelectedMenuOption(int controllerIdx) {
+		if (PlayerCanPressButton(controllerIdx))
+			b.ReleaseButton();
+	}
+
+    private bool PlayerCanPressButton(int controllerIdx) {
         return currentStates[controllerIdx].IsConnected && creditsPanelActive && buttonTimer >= mainMenuManager.buttonCoolDown;
     }
 
@@ -93,16 +105,20 @@ public class CreditsManager : MonoBehaviour
 		// A button, B button, and Start button has been assigned. Still need to assign Y button.
 		switch (controllerIdx) {
 			case 0:
-				input.controllers[controllerIdx].confirm.OnDown.AddListener( () => ActivateButton(0) );
+				input.controllers[controllerIdx].confirm.OnDown.AddListener( () => PressSelectedMenuOption(0) );
+				input.controllers[controllerIdx].confirm.OnUp.AddListener( () => ReleaseSelectedMenuOption(0) );
 				break;
 			case 1:
-				input.controllers[controllerIdx].confirm.OnDown.AddListener( () => ActivateButton(1) );
+				input.controllers[controllerIdx].confirm.OnDown.AddListener( () => PressSelectedMenuOption(1) );
+				input.controllers[controllerIdx].confirm.OnUp.AddListener( () => ReleaseSelectedMenuOption(1) );
 				break;
 			case 2:
-				input.controllers[controllerIdx].confirm.OnDown.AddListener( () => ActivateButton(2) );
+				input.controllers[controllerIdx].confirm.OnDown.AddListener( () => PressSelectedMenuOption(2) );
+				input.controllers[controllerIdx].confirm.OnUp.AddListener( () => ReleaseSelectedMenuOption(2) );
 				break;
 			case 3:
-				input.controllers[controllerIdx].confirm.OnDown.AddListener( () => ActivateButton(3) );
+				input.controllers[controllerIdx].confirm.OnDown.AddListener( () => PressSelectedMenuOption(3) );
+				input.controllers[controllerIdx].confirm.OnUp.AddListener( () => ReleaseSelectedMenuOption(3) );
 				break;
 			default:
 				Debug.Log("variable playerIdx out of range!");
@@ -113,6 +129,7 @@ public class CreditsManager : MonoBehaviour
     private void _ButtonSelect() {
         b = backBtn.GetComponent<ButtonController>();
         if (b.IsButtonInNormalState())
-            b.Select();
+            EventSystem.current.SetSelectedGameObject(backBtn);
+            // b.Select();
     }
 }
