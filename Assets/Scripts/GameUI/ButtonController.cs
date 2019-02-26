@@ -10,7 +10,9 @@ public class ButtonController : Button, ISelectHandler, IDeselectHandler
 
     BaseEventData m_BaseEvent;
 
-    // public string pressedSound = "Bow";
+    private bool buttonPressed = false;
+
+    public string pressedSound = "Bow";
 
     // [SerializeField]
     // private Button b;
@@ -32,8 +34,11 @@ public class ButtonController : Button, ISelectHandler, IDeselectHandler
     void Update()
     {
         if (base.IsHighlighted(m_BaseEvent) || base.IsPressed()) {
-            Debug.Log(this.gameObject.name + " transition state = " + base.currentSelectionState);
+            // Debug.Log(this.gameObject.name + " transition state = " + base.currentSelectionState);
             this.transform.localScale = new Vector3(selectedScale, selectedScale, this.transform.localScale.z);
+
+            // if (base.IsPressed()) buttonPressed = true;
+            // else buttonPressed = false;
         }
         else {
             this.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
@@ -42,7 +47,7 @@ public class ButtonController : Button, ISelectHandler, IDeselectHandler
 
     public void PlayPressedButtonSound(string sound) {
         // base.onClick.AddListener(() => GameManager.instance.audioManager.Play(pressedSound));
-        GameManager.instance.audioManager.Play(sound);
+        GameManager.instance.audioManager.Play(pressedSound);
     }
 
     public void SelectButton() {
@@ -52,7 +57,16 @@ public class ButtonController : Button, ISelectHandler, IDeselectHandler
 
     public void PressButton() {
         base.DoStateTransition(SelectionState.Pressed, true);
-        base.onClick.Invoke();
+        buttonPressed = true;
+        // base.onClick.Invoke();
+    }
+
+    public void ReleaseButton() {
+        if (buttonPressed) {
+            base.onClick.Invoke();
+            buttonPressed = false;
+            base.DoStateTransition(SelectionState.Highlighted, true);
+        }
     }
 
     public bool IsButtonInNormalState() {
@@ -61,7 +75,7 @@ public class ButtonController : Button, ISelectHandler, IDeselectHandler
 
     public override void OnSelect(BaseEventData eventData) {
         // this.transform.localScale = new Vector3(selectedScale, selectedScale, this.transform.localScale.z);
-        Debug.Log(this.gameObject.name + " actually selected.");
+        // Debug.Log(this.gameObject.name + " actually selected.");
         base.OnSelect(eventData);
     }
 
