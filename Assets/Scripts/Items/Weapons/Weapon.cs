@@ -32,6 +32,7 @@ public abstract class Weapon {
     }
 
     private Buff[] weaponBuffs;
+    private ParticleSystem activationEffect;
 
     public Weapon() { }
 
@@ -50,6 +51,8 @@ public abstract class Weapon {
             weaponBuffs[i] = weaponData.buffs[i].Instance(Mathf.Infinity, this);
             player.AddBuff(weaponBuffs[i]);
         }
+        activationEffect = weaponData.activationEffect == null ? null : GameObject.Instantiate<GameObject>(weaponData.activationEffect, player.controller.ShootPoint.transform.position, player.controller.ShootPoint.transform.rotation, player.controller.ShootPoint.transform).GetComponent<ParticleSystem>();
+
         Start();
     }
     
@@ -96,7 +99,7 @@ public abstract class Weapon {
                 isCharging = true;
             }
 
-            OnActivate(start, direction, targetController);
+            Attack(start, direction, targetController);
 
             if (overrideChargeUpdate) // Only start OnCharginUpdate coroutine if its been overriden in derived class, This is for slight optimization
                 player.controller.StartCoroutine(ChargingUpdate(numCharging));
@@ -108,6 +111,12 @@ public abstract class Weapon {
             Activate(Vector3.zero, Vector3.zero, targetController);
             yield return null;
         }
+    }
+
+    private void Attack(Vector3 start, Vector3 direction, PlayerController targetController = null) {
+        OnActivate(start, direction, targetController);
+        if (activationEffect != null)
+            activationEffect.Play(true);
     }
 
     // OnActivate is called once when the weapon is activated

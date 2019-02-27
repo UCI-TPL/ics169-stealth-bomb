@@ -28,6 +28,7 @@ public abstract class WeaponData : ItemData {
     public float knockbackStrength = 0;
     public float damage = 0;
     public GameObject particleEffects;
+    public GameObject activationEffect;
     public BuffData[] buffs;
 
     public abstract Weapon NewInstance(Player player);
