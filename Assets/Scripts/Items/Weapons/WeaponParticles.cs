@@ -24,16 +24,6 @@ public class WeaponParticles
         {
             part.GetComponent<Renderer>().material.color = playerColor * 2.5f;
         }
-        //Particles[0] = Root.transform.Find("Center").GetComponent<ParticleSystem>();
-        //Particles[0].GetComponent<Renderer>().material.color = playerColor * 1.5f;
-        //Particles[1] = Root.transform.Find("Lines").GetComponent<ParticleSystem>();
-        //Particles[1].GetComponent<Renderer>().material.color = playerColor * 1.5f;
-        //Particles[1] = Root.transform.Find("Circle").GetComponent<ParticleSystem>();
-        //Particles[1].GetComponent<Renderer>().material.color = playerColor * 1.5f;
-        //Circle = Root.transform.Find("Circle").GetComponent<ParticleSystem>(); //hardcoded for the hell of it hee hee
-        //Circle.GetComponent<Renderer>().material.color = playerColor * 1.5f;
-
-
     }
 
     public void Play()
@@ -49,18 +39,6 @@ public class WeaponParticles
             part.Stop();
             part.Clear();
         }
-        //Circle.Stop();
-        //Circle.Clear();
     }
 
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
