@@ -90,10 +90,10 @@ public class LaserBeam : MonoBehaviour {
         front.transform.localScale = Vector3.one * Width * FrontScale;
         end.transform.localScale = Vector3.one * Width;
 
-        beamMaterial.SetFloat("Vector1_5DB383F", length / Width / 4);
-        beamMaterial.SetFloat("Vector1_81F1F082", Speed);
-        frontMaterial.SetFloat("Vector1_81F1F082", Speed / 2);
-        endMaterial.SetFloat("Vector1_81F1F082", Speed / 2);
+        beamMaterial.SetFloat("_Tiling", length / Width / 4);
+        beamMaterial.SetFloat("_Speed", Speed);
+        frontMaterial.SetFloat("_Speed", Speed / 2);
+        endMaterial.SetFloat("_Speed", Speed / 2);
 
         UpdateParticles(length, Width / 2);
     }
@@ -158,9 +158,9 @@ public class LaserBeam : MonoBehaviour {
 
     public void SetColor(Color color) {
         HDRColor = color * 2;
-        beamMaterial.SetColor("Color_E025656E", HDRColor);
-        frontMaterial.SetColor("Color_E025656E", HDRColor);
-        endMaterial.SetColor("Color_E025656E", HDRColor);
+        beamMaterial.SetColor("_Color", HDRColor);
+        frontMaterial.SetColor("_Color", HDRColor);
+        endMaterial.SetColor("_Color", HDRColor);
         var main = beamParticleSystem.main;
         main.startColor = color;
     }
