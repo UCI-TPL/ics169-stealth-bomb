@@ -12,7 +12,17 @@ public class ButtonController : Button, ISelectHandler, IDeselectHandler
 
     private bool buttonPressed = false;
 
-    public string pressedSound = "Bow";
+    private bool playSelectedButtonSFX = true;
+
+    [Tooltip("Determines whether or not the button will play the pressedButtonSound.")]
+    [SerializeField]
+    private bool playPressedButtonSFX;
+
+    [Tooltip("The name of the sound in AudioManager that you want to play when the button is selected.")]
+    public string selectedButtonSound = "Bow";
+
+    [Tooltip("The name of the sound in AudioManager that you want to play when the button is pressed and activated.")]
+    public string pressedButtonSound = "Bow";
 
     // [SerializeField]
     // private Button b;
@@ -45,9 +55,28 @@ public class ButtonController : Button, ISelectHandler, IDeselectHandler
         }
     }
 
-    public void PlayPressedButtonSound(string sound) {
-        // base.onClick.AddListener(() => GameManager.instance.audioManager.Play(pressedSound));
-        GameManager.instance.audioManager.Play(pressedSound);
+    public void EnlargeButton() {
+        this.transform.localScale = new Vector3(selectedScale, selectedScale, this.transform.localScale.z);
+    }
+
+    public void UnenlargeButton() {
+        this.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+    }
+
+    public void PlayPressedButtonSound() {
+        // playSelectedButtonSFX = !playPressedButtonSFX;
+        if (pressedButtonSound != null && pressedButtonSound != "" && playPressedButtonSFX) {
+            GameManager.instance.audioManager.Play(pressedButtonSound);
+        }
+    }
+
+    public void PlaySelectedButtonSound() {
+        // Debug.Log("PlaySelectedButtonSound() called.");
+        // Debug.Log("selectedButtonSound variable = " + selectedButtonSound);
+        if (selectedButtonSound != null && selectedButtonSound != "") {
+            // Debug.Log("selectedButtonSound variable is not null or empty string.");
+            GameManager.instance.audioManager.Play(selectedButtonSound);
+        } 
     }
 
     public void SelectButton() {
@@ -75,13 +104,25 @@ public class ButtonController : Button, ISelectHandler, IDeselectHandler
 
     public override void OnSelect(BaseEventData eventData) {
         // this.transform.localScale = new Vector3(selectedScale, selectedScale, this.transform.localScale.z);
-        // Debug.Log(this.gameObject.name + " actually selected.");
+        // Debug.Log(gameObject.name + ": OnSelect() called; currentSelectedGameobject = " + EventSystem.current.currentSelectedGameObject.name);
         base.OnSelect(eventData);
     }
 
-    // public override void OnDeselect(BaseEventData eventData) {
-    //     // this.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-    //     base.OnDeselect(eventData);
+    public override void OnDeselect(BaseEventData eventData) {
+        // this.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+        base.OnDeselect(eventData);
+        // Debug.Log(gameObject.name + ": OnDeselect() called; currentSelectedGameobject = " + eventData.selectedObject.name /*EventSystem.current.currentSelectedGameObject.name*/);
+    }
+
+    // protected override void OnDisable() {
+    //     Debug.Log(gameObject.name + ": OnDisable() called.");
+    //     base.OnDisable();
+    // }
+
+    // protected override void OnEnable() {
+    //     // playSelectedButtonSFX = true;  // should reenable selected button sound after the menu that the button belongs is turned back on.
+    //     Debug.Log(gameObject.name + ": OnEnable() called.");
+    //     base.OnEnable();
     // }
 
 

@@ -486,7 +486,7 @@ public class MainMenuManager : MonoBehaviour {
 		int[] menuSettings = new int[2];
 		menuSettings[0] = m;
 		menuSettings[1] = selectedMainMenuButton;
-		Debug.Log("menu settings: " + menuSettings[0] + ", " + menuSettings[1]);
+		// Debug.Log("menu settings: " + menuSettings[0] + ", " + menuSettings[1]);
 		setMenu(menuSettings);
 	}
 
@@ -596,8 +596,11 @@ public class MainMenuManager : MonoBehaviour {
 		Debug.Log(btn.name + " button selected");
 		if (b == null || b.gameObject != btn)
 			b = btn.GetComponent<ButtonController>();
-		// b.Select();
-		EventSystem.current.SetSelectedGameObject(btn);
+		// Debug.Log("current selected object = " + EventSystem.current.currentSelectedGameObject.name);
+		if (EventSystem.current.currentSelectedGameObject != null)
+			b.PlaySelectedButtonSound();
+		b.Select();
+		// EventSystem.current.SetSelectedGameObject(btn);
 	}
 
 	// old version of update: not really being used anymore

@@ -641,6 +641,11 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: OpenCreditsScreen
       objectReference: {fileID: 0}
+    - target: {fileID: 603691197012529394, guid: 67467becd7dac8b478fcd9448d153842,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 603691196035011671, guid: 67467becd7dac8b478fcd9448d153842,
         type: 3}
       propertyPath: m_Text
@@ -8532,6 +8537,9 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
   selectedScale: 1.2
+  playPressedButtonSFX: 0
+  selectedButtonSound: 
+  pressedButtonSound: Bow
 --- !u!1 &432624734
 GameObject:
   m_ObjectHideFlags: 0
@@ -11795,6 +11803,11 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: Mute
       objectReference: {fileID: 0}
+    - target: {fileID: 603691197012529394, guid: 67467becd7dac8b478fcd9448d153842,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 603691196035011671, guid: 67467becd7dac8b478fcd9448d153842,
         type: 3}
       propertyPath: m_Text
@@ -11819,6 +11832,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Navigation.m_Mode
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 603691197012529389, guid: 67467becd7dac8b478fcd9448d153842,
+        type: 3}
+      propertyPath: playPressedButtonSFX
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 67467becd7dac8b478fcd9448d153842, type: 3}
@@ -13404,6 +13422,11 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
       value: 
       objectReference: {fileID: 722177440}
+    - target: {fileID: 603691197012529394, guid: 67467becd7dac8b478fcd9448d153842,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 603691196035011671, guid: 67467becd7dac8b478fcd9448d153842,
         type: 3}
       propertyPath: m_Text
@@ -13434,6 +13457,11 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgument
       value: 
       objectReference: {fileID: 722177440}
+    - target: {fileID: 603691197012529389, guid: 67467becd7dac8b478fcd9448d153842,
+        type: 3}
+      propertyPath: playPressedButtonSFX
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 67467becd7dac8b478fcd9448d153842, type: 3}
 --- !u!224 &722177439 stripped
@@ -17588,6 +17616,11 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 603691197012529394, guid: 67467becd7dac8b478fcd9448d153842,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 603691196035011671, guid: 67467becd7dac8b478fcd9448d153842,
         type: 3}
       propertyPath: m_Text
@@ -18867,6 +18900,9 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
   selectedScale: 1.2
+  playPressedButtonSFX: 0
+  selectedButtonSound: 
+  pressedButtonSound: Bow
 --- !u!1 &1064639433
 GameObject:
   m_ObjectHideFlags: 0
@@ -20893,6 +20929,9 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
   selectedScale: 1.2
+  playPressedButtonSFX: 0
+  selectedButtonSound: 
+  pressedButtonSound: Bow
 --- !u!1 &1211220728
 GameObject:
   m_ObjectHideFlags: 0
@@ -21155,6 +21194,9 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
   selectedScale: 1.2
+  playPressedButtonSFX: 0
+  selectedButtonSound: 
+  pressedButtonSound: Bow
 --- !u!1 &1217169298
 GameObject:
   m_ObjectHideFlags: 0
@@ -23397,6 +23439,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 603691197012529394, guid: 67467becd7dac8b478fcd9448d153842,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 603691196035011671, guid: 67467becd7dac8b478fcd9448d153842,
         type: 3}
@@ -36268,6 +36315,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: OpenPreGameLobby
+      objectReference: {fileID: 0}
+    - target: {fileID: 603691197012529394, guid: 67467becd7dac8b478fcd9448d153842,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 603691197012529389, guid: 67467becd7dac8b478fcd9448d153842,
         type: 3}
