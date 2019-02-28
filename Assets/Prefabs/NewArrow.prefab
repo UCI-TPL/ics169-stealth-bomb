@@ -519,6 +519,7 @@ MonoBehaviour:
   trail: {fileID: 8348122419703277450}
   collider: {fileID: 1215857097}
   projectileRenderer: {fileID: 970677083677697377}
+  damageMultiplier: 0
   hitEffect: {fileID: 0}
 --- !u!1 &1216569940
 GameObject:
