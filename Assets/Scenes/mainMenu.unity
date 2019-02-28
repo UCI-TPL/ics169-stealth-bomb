@@ -4224,6 +4224,9 @@ MonoBehaviour:
   - {fileID: 1906285549}
   - {fileID: 1785240546}
   countdownText: {fileID: 1582573484}
+  inputControllerNumbers: 00000000000000000000000000000000
+  controllersToPlayers: 00000000000000000000000000000000
+  numOfTimesMenuLoaded: 0
 --- !u!4 &200392769
 Transform:
   m_ObjectHideFlags: 0
