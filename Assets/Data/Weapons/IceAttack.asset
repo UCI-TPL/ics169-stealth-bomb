@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3832f005ef720b645856b75289a4346f, type: 3}
-  m_Name: TEST WAVE
+  m_Name: IceAttack
   m_EditorClassIdentifier: 
-  name: Sling Shot
+  name: Ice Attack
   image: {fileID: 21300000, guid: 3a65d680b08180147bdc7628aef83eb5, type: 3}
   description: fast but weak projectile attack
   type: 2
@@ -20,7 +20,10 @@ MonoBehaviour:
   cooldown: 0.2
   knockbackStrength: 4
   damage: 10
+  particleEffects: {fileID: 0}
+  activationEffect: {fileID: 0}
   buffs: []
   projectile: {fileID: 11400000, guid: 33422fbc30a08f742b85e7ddd382a116, type: 2}
   numProj: 1
   projSpeed: 60
+  SoundName: 
