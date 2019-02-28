@@ -20,7 +20,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs: []
     m_Floats:
-    - _SpeedScale: 0.1
+    - _SpeedScale: 0.05
     m_Colors:
     - _Albedo: {r: 11.313708, g: 11.313708, b: 11.313708, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
