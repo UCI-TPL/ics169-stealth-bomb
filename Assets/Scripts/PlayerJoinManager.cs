@@ -55,9 +55,17 @@ public class PlayerJoinManager : MonoBehaviour {
 	bool[] playersReady;
 	bool[] controllersConnected;
 	// an array of length 4, each space stores the controller number that the player will use in the rest of the game. This is passed to the game manager.
-	int[] inputControllerNumbers;
+	// [HideInInspector]
+	// [SerializeField]
+	public int[] inputControllerNumbers = new int[4];
 	// the inverse of inputControllerNumbers. each index represents a controller and stores int that represents which player is using that controller
-	int[] controllersToPlayers;
+	// [HideInInspector]
+	// [SerializeField]
+	public int[] controllersToPlayers = new int[4];
+
+	[HideInInspector]
+	// [SerializeField]
+	public int numOfTimesMenuLoaded = 0;
 
 	int notAssignedController = -1;
 	// public bool player1Ready;
@@ -146,8 +154,12 @@ public class PlayerJoinManager : MonoBehaviour {
 		playersJoined = new bool[4];
 		playersReady = new bool[4];
 		controllersConnected = new bool[4];
-		inputControllerNumbers = new int[4];
-		controllersToPlayers = new int[4];
+		Debug.Log("inputControllerNumbers length = " + inputControllerNumbers.Length + ", controllersToPlayers length = " + controllersToPlayers.Length);
+		// if (inputControllerNumbers == null || controllersToPlayers == null || inputControllerNumbers.Length == 0 || controllersToPlayers.Length == 0) {
+		// 	inputControllerNumbers = new int[4];
+		// 	controllersToPlayers = new int[4];
+		// 	numOfTimesMenuLoaded = 0;
+		// }
 		defaultInputControllerNumbers = new int[] { 0, 1, 2, 3 };
 		playersControlsGuideActive = new bool[4];
 		bButtonTimers = new float[4];
@@ -155,6 +167,7 @@ public class PlayerJoinManager : MonoBehaviour {
 		countdownText.gameObject.SetActive(false);
 		countdownTimer = 3.0f;
 		alreadyLoadingScene = false;
+		numOfTimesMenuLoaded += 1;
 
 		for (int i = 0; i < playersJoined.Length; i++) {
 			// Debug.Log("playersReady index=" + i);
@@ -169,8 +182,10 @@ public class PlayerJoinManager : MonoBehaviour {
 			playerTimers[i] = 0.0f;
 			AssignControllerEvents(i);
 			if (usingNewPlayerJoinSystem) {
-				inputControllerNumbers[i] = notAssignedController;   // represents they have not been assigned a controller yet
-				controllersToPlayers[i] = notAssignedController;
+				if (numOfTimesMenuLoaded <= 1) {
+					inputControllerNumbers[i] = notAssignedController;   // represents they have not been assigned a controller yet
+					controllersToPlayers[i] = notAssignedController;
+				}
 				ResetPlayer(i);
 			}
 			else {
@@ -690,7 +705,7 @@ public class PlayerJoinManager : MonoBehaviour {
 		}
 		else {
 			playersReady[playerIdx] = false;
-			if (inputControllerNumbers[playerIdx] != notAssignedController) {
+			if (inputControllerNumbers[playerIdx] != notAssignedController && numOfTimesMenuLoaded <= 1) {
 				controllersToPlayers[inputControllerNumbers[playerIdx]] = notAssignedController;
 				inputControllerNumbers[playerIdx] = notAssignedController;
 			}
