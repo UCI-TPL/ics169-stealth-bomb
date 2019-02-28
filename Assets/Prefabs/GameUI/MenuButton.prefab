@@ -92,6 +92,7 @@ GameObject:
   - component: {fileID: 603691197012529395}
   - component: {fileID: 603691197012529394}
   - component: {fileID: 603691197012529389}
+  - component: {fileID: 8165526707480251332}
   m_Layer: 5
   m_Name: MenuButton
   m_TagString: Untagged
@@ -177,7 +178,7 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 0.19117647, g: 0.19117647, b: 0.19117647, a: 1}
-    m_HighlightedColor: {r: 0.8941177, g: 0.9058824, b: 0.2784314, a: 1}
+    m_HighlightedColor: {r: 0.9803922, g: 0.52156866, b: 0, a: 1}
     m_PressedColor: {r: 1, g: 1, b: 1, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -240,8 +241,8 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 0.19215688, g: 0.19215688, b: 0.19215688, a: 1}
-    m_HighlightedColor: {r: 0.8941177, g: 0.9058824, b: 0.2784314, a: 1}
+    m_NormalColor: {r: 0.9803922, g: 0.52156866, b: 0, a: 1}
+    m_HighlightedColor: {r: 0.3602941, g: 0.7088236, b: 1, a: 1}
     m_PressedColor: {r: 1, g: 1, b: 1, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -288,3 +289,18 @@ MonoBehaviour:
   playPressedButtonSFX: 1
   selectedButtonSound: Bow
   pressedButtonSound: Bow
+--- !u!114 &8165526707480251332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 603691197012529392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1573420865, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
+  m_EffectDistance: {x: 5, y: -5}
+  m_UseGraphicAlpha: 1
