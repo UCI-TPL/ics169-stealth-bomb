@@ -29,6 +29,9 @@ public abstract class WeaponData : ItemData {
     public float damage = 0;
     public GameObject particleEffects;
     public GameObject activationEffect;
+    public GameObject weaponModel;
+    public Vector3 ShootPointPosition;
+    public Vector3 WeaponPosition;
     public BuffData[] buffs;
 
     public abstract Weapon NewInstance(Player player);

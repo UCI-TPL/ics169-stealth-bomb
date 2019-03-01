@@ -23,6 +23,10 @@ MonoBehaviour:
   particleEffects: {fileID: 0}
   activationEffect: {fileID: 6452504376299636866, guid: 8ea626b6594dd2d419827b46aaaef206,
     type: 3}
+  weaponModel: {fileID: 2954963622644718079, guid: d9c2613605f070e4b82bba8bf7e230e5,
+    type: 3}
+  ShootPointPosition: {x: 0, y: 0.3, z: 1.12}
+  WeaponPosition: {x: -0.2, y: -0.3, z: 0}
   buffs: []
   projectile: {fileID: 11400000, guid: 898ef1f4503804947985ca2706909d9b, type: 2}
   numProj: 5

@@ -22,10 +22,16 @@ MonoBehaviour:
   damage: 20
   particleEffects: {fileID: 2697296058055973653, guid: 704692142a673ae44b5fc3f0018abcae,
     type: 3}
+  activationEffect: {fileID: 0}
+  weaponModel: {fileID: 7158462634764954210, guid: a314f1df7604eb44c917a8f09520054c,
+    type: 3}
+  ShootPointPosition: {x: 0, y: 0.65, z: 0}
+  WeaponPosition: {x: -0.2, y: -1.5, z: 0}
   buffs: []
   instance:
     weaponData: {fileID: 11400000}
     type: 1
+    rumbleOnce: 0
   projectile: {fileID: 11400000, guid: 9df1e8c6a587d604684f97e370ea1793, type: 2}
   colorAddition: 0.3
   GlowLimit: 2.5

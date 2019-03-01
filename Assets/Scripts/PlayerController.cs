@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour, IHurtable {
     public Weapon specialMove;
     // public SpecialMove specialMove; // Dodge, Ice Wall, etc. 
     public Weapon Weapon { get; private set; }
+    public GameObject WeaponModel;
     public Weapon PreviousWeapon;
     public WeaponParticles weaponParticles; //this script will handle playing particle effects when attacking
     //public GameObject WeaponParticles; 
@@ -77,6 +78,8 @@ public class PlayerController : MonoBehaviour, IHurtable {
     private static readonly int groundLayerMask = 1 << groundLayer;
     private static readonly float maxGroundDistance = 0.5f;
     private bool touchedGround;
+
+    public Vector3 ShootPointDefaultPosition; //the default spot if there are no weapon model spot
 
     private float lastGroundCheck = 0;
     private bool isGrounded = false;
@@ -149,6 +152,7 @@ public class PlayerController : MonoBehaviour, IHurtable {
         input.controllers[player.inputControllerNumber].dodge.OnUp.AddListener(ReleaseSpecialMove);
         input.controllers[player.inputControllerNumber].Switch.OnDown.AddListener(SwitchWeapon);
 
+        //ShootPointDefaultPosition = ShootPoint.transform.localPosition;
         //StartCoroutine(StartAnimation());
     }
 
@@ -207,13 +211,6 @@ public class PlayerController : MonoBehaviour, IHurtable {
         if (this)
             if (this.gameObject != null)
             {
-                /*
-                if(Circle)
-                {
-                    Circle.Stop();
-                    Circle.Clear();
-                }
-                */
                 StartCoroutine(DeathAnimation());
             }
     }
@@ -222,7 +219,6 @@ public class PlayerController : MonoBehaviour, IHurtable {
         forward = Camera.main.transform.forward;
         forward.Scale(new Vector3(1, 0, 1));
         forward.Normalize();
-        //lastForwardMovement = forward * dodgeSpeed;
         right = Camera.main.transform.right;
         right.Scale(new Vector3(1, 0, 1));
         right.Normalize();
@@ -393,8 +389,6 @@ public class PlayerController : MonoBehaviour, IHurtable {
                 rb.velocity = new Vector3(newVelocity.x, rb.velocity.y, newVelocity.z);
             
         }
-        //if (rb.velocity != Vector3.zero && dodging)
-        //  Debug.Log("Velocity is " + rb.velocity+" and more importantly "+rb.velocity.magnitude); 
     }
 
     private void UpdateTriggers() {
@@ -467,13 +461,28 @@ public class PlayerController : MonoBehaviour, IHurtable {
         }
         Weapon = weapon;
         Weapon.EquipWeapon();
+        if (WeaponModel != null)
+            Destroy(WeaponModel);
         if(weaponParticles.Root != null)
             Destroy(weaponParticles.Root);
+
+        ShootPoint.transform.localPosition = ShootPointDefaultPosition;
         if (weapon.weaponData.particleEffects != null) //attach the particle effects prefab to shootpoint if it exists 
         {
             weaponParticles.UpdateRoot( Instantiate(weapon.weaponData.particleEffects, ShootPoint.transform), playerColor ); //instantiate a particles prefab and make it the root of the weapon particles script
-            //weaponParticles.Root = Instantiate(weapon.weaponData.particleEffects, ShootPoint.transform);
             weaponParticles.Root.name = "WeaponParticles";
+            //if (weapon.weaponData.ShootPointPosition != null)
+            //    weaponParticles.Root.transform.localPosition = weapon.weaponData.ShootPointPosition;
+          
+        }
+        if(weapon.weaponData.weaponModel != null)
+        {
+            WeaponModel = Instantiate(weapon.weaponData.weaponModel, ShootPoint.transform);
+            WeaponModel.name = "Weapon";
+            if (weapon.weaponData.WeaponPosition != null)
+            {
+                WeaponModel.transform.localPosition = weapon.weaponData.WeaponPosition;
+            }
         }
 
         if (input.controllers[player.inputControllerNumber].attack.Pressed && allowAttack) // If the attack button was held down at the time of equipting new weapon activate the new weapon

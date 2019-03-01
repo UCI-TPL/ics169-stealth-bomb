@@ -20,6 +20,12 @@ MonoBehaviour:
   cooldown: 0.4
   knockbackStrength: 20
   damage: 30
+  particleEffects: {fileID: 0}
+  activationEffect: {fileID: 0}
+  weaponModel: {fileID: 7189202260010906160, guid: bdb336e18f6d85544b0de73f5db36c2e,
+    type: 3}
+  ShootPointPosition: {x: 0, y: 0, z: 0}
+  ParticlePosition: {x: 0, y: 0, z: 0}
   buffs: []
   projectile: {fileID: 11400000, guid: cc2f39c9384a2b84ab1b8e1b7c359c8e, type: 2}
   numProj: 1
