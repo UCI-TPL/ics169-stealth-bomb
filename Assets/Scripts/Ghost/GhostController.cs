@@ -68,13 +68,16 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
         leftSide = transform.position.z >= transform.position.x; //true for left, false for right   (could work for up & down as well)
 
         Quaternion rotation = (transform.position.z >= transform.position.x) ? Quaternion.Euler(0f, 135, 0f) : Quaternion.Euler(0f, 315f, 0f);
+
+        GhostBodyInstantiate();
+        /*
         GhostBody = Instantiate(GhostPrefab, transform.position, rotation);
         
         lastPosition = GhostBody.transform.position;
         rend.material.SetColor("_Color", playerColor);
         //GhostBody.GetComponentsInChildren<Renderer>()[1].material.color = playerColor;
         GhostBody.GetComponentsInChildren<Renderer>()[1].material.SetColor("Color_998F7755", playerColor);
-
+        */
         GameObject Curves = GameObject.Find("GhostCurves");
 
 
@@ -91,6 +94,22 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
         travelTime = travelTime * 2f;
 
 
+    }
+
+    public void GhostBodyInstantiate()
+    {
+        Quaternion rotation = (transform.position.z >= transform.position.x) ? Quaternion.Euler(0f, 135, 0f) : Quaternion.Euler(0f, 315f, 0f);
+        GhostBody = Instantiate(GhostPrefab, transform.position, rotation);
+
+        lastPosition = GhostBody.transform.position;
+        rend.material.SetColor("_Color", playerColor);
+        //GhostBody.GetComponentsInChildren<Renderer>()[1].material.color = playerColor;
+        Renderer[] ghostsRen = GhostBody.GetComponentsInChildren<Renderer>();
+        foreach( Renderer ren in ghostsRen)
+        {
+            ren.material.SetColor("Color_998F7755", playerColor);
+        }
+        //GhostBody.GetComponentsInChildren<Renderer>()[1].material.SetColor("Color_998F7755", playerColor);
     }
 
     public IEnumerator SpawnCursor() //so the ghost player can spawn and fly away a bit before the image
@@ -146,7 +165,7 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
 
     private void FixedUpdate()
     {
-        Move(player.stats.moveSpeed * 0.8f);
+        Move(player.stats.moveSpeed * 1f);
         Vector3 pos;
 
         if (((startTravelTime + travelTime) <= Time.time) && switchSides) //check to see if the side switching has ended

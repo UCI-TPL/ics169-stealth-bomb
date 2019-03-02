@@ -524,7 +524,7 @@ public class GameManager : MonoBehaviour {
                 g.GetComponent<PlayerController>().Destroy();
             foreach (GameObject g in ghostPlayerControllers)
             {
-                g.GetComponent<PlayerController>().Destroy();
+                g.GetComponent<GhostController>().Destroy();
             }
             foreach (Player player in players) {
                 player.OnHurt -= Player_onHurt;
@@ -541,9 +541,9 @@ public class GameManager : MonoBehaviour {
         }
 
         private void Player_onDeath(Player killer, Player killed) {
-            // Stop camera from tracking dead player
-            moveCamera.targets.Remove(killed.controller.gameObject);
-           
+
+            moveCamera.targets.Remove(killed.controller.gameObject);             // Stop camera from tracking dead player
+
             activePlayersControllers.Remove(killed.controller.gameObject);
             Vector3 deathPosition = killed.controller.transform.position;
             //if (deathPosition.y < 0)
@@ -565,18 +565,11 @@ public class GameManager : MonoBehaviour {
         {
             if(activePlayersControllers.Count  > 1) //Don't spawn the last player as a ghost
             {
-                yield return new WaitForSeconds(1.3f);
-
+                yield return new WaitForSeconds(1.0f);
                 if (!killed.ghost) //this means that the killed player has already been made into a ghost 
                 { 
 
                     players[killedNum].ResetHealth();
-                    /*
-                    players[killedNum].SetGhost(Instantiate<GameObject>(GameManager.instance.GhostPrefab.gameObject, deathPosition, Quaternion.identity).GetComponent<PlayerController>()); //SetGhost works like SetController but without weapons
-                    ghostPlayerControllers.Add(players[killedNum].controller.gameObject); //to make sure it gets deleted
-                    moveCamera.targets.Add(players[killedNum].controller.gameObject);
-                    */
-                    
                     GameObject tempGhost = Instantiate<GameObject>(GameManager.instance.GhostPrefab.gameObject, deathPosition, Quaternion.identity);
                     if(tempGhost)
                     {
