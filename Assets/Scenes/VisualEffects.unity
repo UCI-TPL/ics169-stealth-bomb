@@ -9554,6 +9554,36 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5815842983556971158, guid: 5c7ebaffd35edd14f80e0ed57bd3ab15,
+        type: 3}
+      propertyPath: ShapeModule.enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5815842983556971158, guid: 5c7ebaffd35edd14f80e0ed57bd3ab15,
+        type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5815842983556971158, guid: 5c7ebaffd35edd14f80e0ed57bd3ab15,
+        type: 3}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: 5815842983556971158, guid: 5c7ebaffd35edd14f80e0ed57bd3ab15,
+        type: 3}
+      propertyPath: looping
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5815842983556971158, guid: 5c7ebaffd35edd14f80e0ed57bd3ab15,
+        type: 3}
+      propertyPath: TrailModule.enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5815842983556971158, guid: 5c7ebaffd35edd14f80e0ed57bd3ab15,
+        type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c7ebaffd35edd14f80e0ed57bd3ab15, type: 3}
 --- !u!1001 &8795961483098705288
