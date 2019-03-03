@@ -430,6 +430,7 @@ public class MainMenuManager : MonoBehaviour {
 
 	public void OpenCreditsScreen() {
 		GoToMenu(6, 0);
+
 	}
 
 	public void OpenAudioPanel() //things would be easier to read as seperate functions

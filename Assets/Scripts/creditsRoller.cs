@@ -26,16 +26,32 @@ public class creditsRoller : MonoBehaviour
         rolling = false;
         creditCounter = 0;
         numOfCredit = credits.Length;
+    }
 
+    public void begin()
+    {
+        gameObject.SetActive(true);
+        rolling = false;
+        creditCounter = 0;
+        numOfCredit = credits.Length;
+    }
+
+    public void end()
+    {
+        foreach(GameObject c in credits)
+        {
+            c.SetActive(false);
+        }
+        gameObject.SetActive(false);
     }
 
 
     private void Update()
     {
-        if (creditCounter != numOfCredit)
-        {
-            print(creditCounter);
-        }
+        // if (creditCounter != numOfCredit)
+        // {
+        //     print(creditCounter);
+        // }
 
         if (!rolling && creditCounter != numOfCredit)
         {
