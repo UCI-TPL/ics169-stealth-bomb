@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Cloud
-  m_Shader: {fileID: 4800000, guid: 1a29d0092ddb5df4e909565472d39fa6, type: 3}
+  m_Name: VolumeSphereParticle
+  m_Shader: {fileID: 4800000, guid: a8103bb58bdb8c3439d96346e6996e64, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -20,11 +20,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs: []
     m_Floats:
-    - Vector1_1AEFE309: 19.72
-    - Vector1_9BC1A4D1: 2.5
-    - Vector1_A3DFEF49: 0.3
-    - Vector1_A5CCD16F: 1
-    - Vector1_F585A067: 3
+    - Vector1_6325E8F5: 0.3
+    - Vector1_F10C5CB1: 10
     m_Colors:
-    - Color_202C153: {r: 1, g: 1, b: 1, a: 1}
-    - Color_3D7C7788: {r: 2.122147, g: 3.3706656, b: 3.3826706, a: 1}
+    - _Albedo: {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 0.7490196}
