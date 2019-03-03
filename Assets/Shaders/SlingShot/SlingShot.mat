@@ -46,6 +46,7 @@ Material:
     m_Floats:
     - Vector1_3385D432: 0
     - Vector1_7CD8929: 0
+    - Vector1_9705E591: 0.75
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
@@ -55,11 +56,14 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
+    - _LineVariationSpeed: 0.001
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _ReceiveShadows: 1
+    - _Smoothness: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
+    - _SpeedLinesLength: 1
     - _SpeedScale: 0.1
     - _SrcBlend: 1
     - _Surface: 0
