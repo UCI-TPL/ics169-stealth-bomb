@@ -454,7 +454,7 @@ public class GameManager : MonoBehaviour {
             //Debug.Log("This is where the round indeed starts amirighte?");
             SceneManager.SetActiveScene(roundScene);
             StartTime = Time.time;
-            GameManager.instance.weatherManager.ChangeWeather();
+            GameManager.instance.weatherManager.ChangeWeather(1);
             TileManager.tileManager.StartGame();
 
             ItemSpawner.Instance.UpdateSpawnPoints(TileManager.tileManager.tileMap);
