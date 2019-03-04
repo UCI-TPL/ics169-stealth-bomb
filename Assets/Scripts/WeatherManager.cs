@@ -20,6 +20,7 @@ public class WeatherManager : MonoBehaviour {
             directionLight.intensity = weatherPresets[randomPreset].lightIntensity;
             directionLight.shadowStrength = weatherPresets[randomPreset].shadowStrength;
             Camera.main.backgroundColor = weatherPresets[randomPreset].backgroundColor;
+            Shader.SetGlobalColor(Shader.PropertyToID("_BackgroundColor"), Camera.main.backgroundColor.linear);
             RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Flat;
             RenderSettings.ambientLight = weatherPresets[randomPreset].ambientLighting;
             previousPreset = randomPreset;

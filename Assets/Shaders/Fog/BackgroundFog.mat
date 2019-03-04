@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Fog 1
+  m_Name: BackgroundFog
   m_Shader: {fileID: 4800000, guid: 20df26c44574eb04488293d61f3b2de6, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -26,6 +26,7 @@ Material:
     - Vector1_733187E: 3.5
     - Vector1_95A55CF8: 10
     - Vector1_D1B8034D: 35
+    - _Curve: 10
     m_Colors:
-    - Color_1B31539F: {r: 0.20802596, g: 0.21019176, b: 0.27299997, a: 1}
+    - Color_1B31539F: {r: 0.18823531, g: 0.19215688, b: 0.26666668, a: 1}
     - _Center: {r: 13.5, g: 3, b: 13.5, a: 0}
