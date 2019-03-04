@@ -202,8 +202,12 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
 
 
 
+        
+    }
 
+    private void LateUpdate() {
         UpdateLine();
+        transform.forward = new Vector3(1, 0, 1);
     }
 
 
@@ -229,7 +233,7 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
         Vector3 v1 = GhostBody.transform.position; //this is the start point, the ghost body
         Vector3 v2 = this.transform.position; //this is the top of the decal
         float distance = Vector3.Distance(v1, v2);
-        Vector3 v3 = new Vector3(v2.x, v2.y - descent, v2.z); //this point where the crosshair is, the ground
+        Vector3 v3 = new Vector3(v2.x, v2.y - descent + 0.5f, v2.z); //this point where the crosshair is, the ground
 
         Vector4 v4 = new Vector3(0f, 0f, 0f);
         v4 = v2 + (v1.normalized * (distance/3));

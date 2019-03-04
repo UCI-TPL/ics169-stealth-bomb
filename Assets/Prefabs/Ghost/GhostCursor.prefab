@@ -63,6 +63,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e74df27a6e1d98e43ae251f9908c9e63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  WeaponModel: {fileID: 0}
   input: {fileID: 0}
   rend: {fileID: 0}
   PlayerModel: {fileID: 0}
@@ -95,6 +96,7 @@ MonoBehaviour:
   dodgeSpeed: 0
   dashEffect: {fileID: 0}
   knockbackEffect: {fileID: 0}
+  ShootPointDefaultPosition: {x: 0, y: 0, z: 0}
   Point: {fileID: 1363944635466104}
   lr: {fileID: 0}
   Target: {fileID: 5410895931071856692}
@@ -248,7 +250,7 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 2048
-  sprite: {fileID: 21300000, guid: ea5fd2486b787224db756434bd1a6de3, type: 3}
+  sprite: {fileID: 21300000, guid: 8f2bcf7a46167e44fa4c5e9a3f69ad1e, type: 3}
   color: {r: 0.16470587, g: 1, b: 0.16759633, a: 1}
   minDistance: 0
   maxDistance: 20
