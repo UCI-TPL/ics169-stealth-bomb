@@ -80,6 +80,7 @@ Material:
     - _Mode: 6
     - _OcclusionStrength: 1
     - _ReceiveShadows: 0
+    - _ScrollSpeed: 2
     - _Shininess: 1
     - _SmoothnessTextureChannel: 0
     - _SoftParticlesEnabled: 0

@@ -244,6 +244,7 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
 
         //Debug.Log("Made it out and the way to go is  " + linePoints);
         lr.positionCount = linePoints.Count;
+        linePoints.Reverse();
         lr.SetPositions(linePoints.ToArray());
     }
 
