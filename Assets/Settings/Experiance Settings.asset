@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34e8d9a348c4cbc46b6c6dee982e03d1, type: 3}
   m_Name: Experiance Settings
   m_EditorClassIdentifier: 
+  pointsPerLevel: 4
   ExperianceTypes:
   - Name: Damage
     Color: {r: 0.509434, g: 0.509434, b: 0.509434, a: 1}
@@ -19,19 +20,19 @@ MonoBehaviour:
     Sprite: {fileID: 0}
   - Name: Kill
     Color: {r: 1, g: 0.17500001, b: 0.17500001, a: 1}
-    Points: 2
+    Points: 1
     Sprite: {fileID: 0}
   - Name: Survivor
     Color: {r: 0.99300003, g: 0.9750055, b: 0.27804, a: 1}
-    Points: 2
+    Points: 1
     Sprite: {fileID: 0}
   - Name: Overthrone
     Color: {r: 1, g: 1, b: 1, a: 1}
-    Points: 3
+    Points: 2
     Sprite: {fileID: 0}
   - Name: Revenge
     Color: {r: 0.84599996, g: 0.136206, b: 0.41594946, a: 1}
-    Points: 2
+    Points: 1
     Sprite: {fileID: 0}
   - Name: Perfect Game
     Color: {r: 0.608, g: 0.8973158, b: 1, a: 1}

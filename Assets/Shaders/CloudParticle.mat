@@ -7,24 +7,24 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Cloud
-  m_Shader: {fileID: 4800000, guid: 1a29d0092ddb5df4e909565472d39fa6, type: 3}
+  m_Name: CloudParticle
+  m_Shader: {fileID: 4800000, guid: 3bd8d50bb53c64b4bad320ff0a84676d, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 2999
   stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs: []
     m_Floats:
-    - Vector1_1AEFE309: 19.72
     - Vector1_9BC1A4D1: 2.5
     - Vector1_A3DFEF49: 0.3
-    - Vector1_A5CCD16F: 1
-    - Vector1_F585A067: 3
+    - Vector1_A5CCD16F: 0.5
+    - Vector1_B540A47: 0.2
+    - Vector1_F585A067: 4
     m_Colors:
-    - Color_202C153: {r: 1, g: 1, b: 1, a: 1}
+    - Color_202C153: {r: 1.4142135, g: 1.4142135, b: 1.4142135, a: 1}
     - Color_3D7C7788: {r: 0.46865508, g: 0.46865508, b: 0.46865508, a: 1}
