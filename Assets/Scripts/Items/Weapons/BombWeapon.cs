@@ -61,7 +61,7 @@ public class BombWeapon : Weapon {
     {
         if (!alreadyHit)
         {
-            GameObject.Instantiate(data.bombPrefab, (Vector3)extraData, Quaternion.identity);
+            GameObject.Instantiate(data.bombPrefab, contactPoint, Quaternion.identity);
             alreadyHit = true;
         }
     }

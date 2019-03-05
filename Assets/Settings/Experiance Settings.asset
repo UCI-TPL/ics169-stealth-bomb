@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34e8d9a348c4cbc46b6c6dee982e03d1, type: 3}
   m_Name: Experiance Settings
   m_EditorClassIdentifier: 
-  pointsPerLevel: 4
+  pointsPerLevel: 5
   ExperianceTypes:
   - Name: Damage
     Color: {r: 0.509434, g: 0.509434, b: 0.509434, a: 1}

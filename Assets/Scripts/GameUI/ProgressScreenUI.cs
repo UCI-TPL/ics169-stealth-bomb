@@ -57,6 +57,9 @@ public class ProgressScreenUI : MonoBehaviour {
     public bool GameWon { get; private set; }
 
     [SerializeField]
+    private GameObject pointText;
+
+    [SerializeField]
     private UnityEvent Damage;
     [SerializeField]
     private UnityEvent Kill;
@@ -107,20 +110,24 @@ public class ProgressScreenUI : MonoBehaviour {
         InvokeUnscaled(delegate { StartCoroutine(AddExperiance(round)); }, 1f);
 
         // Setup the closing the progress screen by pressing start
-        StartCoroutine(InvokeOnPressStart(round.players, delegate {
-            StopAllCoroutines(); // Ensure all coroutines and invokes are reset
-            CancelInvoke();
-            Time.timeScale = 1;
-            Time.fixedDeltaTime = 0.02f;
-            action.Invoke();
-            ProgressScreenRect.gameObject.SetActive(false);
-        }));
+        StartCoroutine(InvokeOnPressStart(round.players, delegate{ PressStart(action); }));
+    }
+
+    private void PressStart(UnityAction action) {
+        StopAllCoroutines(); // Ensure all coroutines and invokes are reset
+        CancelInvoke();
+        Time.timeScale = 1;
+        Time.fixedDeltaTime = 0.02f;
+        action.Invoke();
+        ProgressScreenRect.gameObject.SetActive(false);
     }
 
     private IEnumerator AddExperiance(GameManager.GameRound round) {
         float testTime = Time.unscaledTime;
         foreach (GameManager.GameRound.BonusExperiance.ExperianceType expType in GameManager.instance.ExperianceSettings.ExperianceOrder) {
             if (round.ExperianceGained.ContainsKey(expType)) {
+                Instantiate<GameObject>(pointText, ProgressScreenRect).GetComponent<PointText>().SetText(GameManager.instance.ExperianceSettings.GetExperiance(expType).Name);
+                yield return new WaitForSecondsRealtime(0.5f);
                 int biggestStack = 0;
                 foreach (KeyValuePair<Player, List<GameManager.GameRound.BonusExperiance>> keyValuePair in round.ExperianceGained[expType]) {
                     biggestStack = Mathf.Max(biggestStack, keyValuePair.Value.Count);
@@ -128,7 +135,9 @@ public class ProgressScreenUI : MonoBehaviour {
                         PlayerUIs[keyValuePair.Key].expBar.AddPoints(exp, 0.5f);
                     }
                 }
-                yield return new WaitForSecondsRealtime(biggestStack * 0.5f + 0.5f);
+
+
+                yield return new WaitForSecondsRealtime(0.5f);
                 //Debug.Log(testTime - Time.unscaledTime);
             }
         }
@@ -190,7 +199,7 @@ public class ProgressScreenUI : MonoBehaviour {
     private void DisplayScreen(float animDuration) {
         ProgressScreenRect.gameObject.SetActive(true);
         ProgressScreenRect.anchoredPosition = Vector2.zero; // forces the screen's anchored position to zero, this is the default position
-        Vector3 targetPosition = ProgressScreenRect.position; // saves the default position as the target position
+        Vector3 targetPosition = ProgressScreenRect.anchoredPosition; // saves the default position as the target position
         ProgressScreenRect.anchoredPosition = new Vector2(0, -canvas.GetComponent<RectTransform>().rect.height); // Places the screen just under the screen out of view
         StartCoroutine(MoveSmooth(ProgressScreenRect, targetPosition, animDuration));
     }
@@ -219,14 +228,14 @@ public class ProgressScreenUI : MonoBehaviour {
     }
 
     // Move to a position over a duration and slowing down near end
-    private IEnumerator MoveSmooth(RectTransform rt, Vector3 targetPosition, float duration) {
+    private IEnumerator MoveSmooth(RectTransform rt, Vector2 targetPosition, float duration) {
         float endTime = Time.unscaledTime + duration;
-        Vector3 distance = rt.position - targetPosition;
+        Vector2 distance = rt.anchoredPosition - targetPosition;
         while (endTime > Time.unscaledTime) {
-            rt.position = targetPosition + distance * Mathf.Pow((endTime - Time.unscaledTime) / duration, 3f);
+            rt.anchoredPosition = targetPosition + distance * Mathf.Pow((endTime - Time.unscaledTime) / duration, 3f);
             yield return null;
         }
-        rt.position = targetPosition;
+        rt.anchoredPosition = targetPosition;
     }
 
     /// <summary>

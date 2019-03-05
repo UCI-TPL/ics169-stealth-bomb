@@ -102,11 +102,7 @@ MonoBehaviour:
     type: 3}
   GhostPrefab: {fileID: 114002095781716024, guid: 350496cd6c510734e956c88d99aeec0e,
     type: 3}
-  maxRank: 10
-  ExpGainPerDamage: 0.5
-  ExpGainOnKill: 0.25
-  ExpPenaltyPerLvl: 0.75
-  ExpBonusPerLvl: 0.25
+  maxRank: 5
   ExperianceSettings: {fileID: 11400000, guid: 454bbde1c3c37be4d8d4e98ada4ee69d, type: 2}
   TimeBeforeCrumble: 30
   TimeDecreasePerPlayer: 10

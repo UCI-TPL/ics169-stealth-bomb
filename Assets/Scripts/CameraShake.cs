@@ -39,7 +39,7 @@ public class CameraShake : MonoBehaviour {
         float endTime = Time.time + duration;
         float newIntensity;
         while (endTime >= Time.time) {
-            newIntensity = intensity * (-Mathf.Pow(1 - (endTime - Time.time) / duration, 2) + 1);
+            newIntensity = Mathf.Max(0.01f, intensity * (-Mathf.Pow(1 - (endTime - Time.time) / duration, 2) + 1));
             Shake(newIntensity, 0.1f);
             yield return new WaitForSeconds(0.1f);
         }
