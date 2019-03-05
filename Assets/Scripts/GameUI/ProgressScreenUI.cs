@@ -50,13 +50,26 @@ public class ProgressScreenUI : MonoBehaviour {
     //[SerializeField]
     //private LayoutElement RulerTextLayoutElement;
 
-    private List<PlayerProgressObject> PlayerUIs;
+    private Dictionary<Player, PlayerProgressObject> PlayerUIs;
     private Player[] players;
 
     [HideInInspector]
     public bool GameWon { get; private set; }
 
-    public UnityEvent[] gainPoints;
+    [SerializeField]
+    private UnityEvent Damage;
+    [SerializeField]
+    private UnityEvent Kill;
+    [SerializeField]
+    private UnityEvent LastOneStanding;
+    [SerializeField]
+    private UnityEvent KillLeader;
+    [SerializeField]
+    private UnityEvent Revenge;
+    [SerializeField]
+    private UnityEvent NoDamageTaken;
+    [SerializeField]
+    private UnityEvent ComeBack;
 
     // Use this for initialization
     void Awake () {
@@ -91,7 +104,7 @@ public class ProgressScreenUI : MonoBehaviour {
         // players should only be able to reach rank 10 once per game before being forced to head back to main menu.
         //RunEndgameChecksAndSetup();
 
-        InvokeUnscaled(delegate { AddExperiance(round); }, 1f);
+        InvokeUnscaled(delegate { StartCoroutine(AddExperiance(round)); }, 1f);
 
         // Setup the closing the progress screen by pressing start
         StartCoroutine(InvokeOnPressStart(round.players, delegate {
@@ -104,11 +117,19 @@ public class ProgressScreenUI : MonoBehaviour {
         }));
     }
 
-    private void AddExperiance(GameManager.GameRound round) {
+    private IEnumerator AddExperiance(GameManager.GameRound round) {
+        float testTime = Time.unscaledTime;
         foreach (GameManager.GameRound.BonusExperiance.ExperianceType expType in GameManager.instance.ExperianceSettings.ExperianceOrder) {
-            for (int i = 0; i < players.Length; ++i) {
-                foreach (GameManager.GameRound.BonusExperiance exp in round.ExperianceGained[expType][players[i]])
-                    PlayerUIs[i].expBar.AddPoints(exp, 0.5f);
+            if (round.ExperianceGained.ContainsKey(expType)) {
+                int biggestStack = 0;
+                foreach (KeyValuePair<Player, List<GameManager.GameRound.BonusExperiance>> keyValuePair in round.ExperianceGained[expType]) {
+                    biggestStack = Mathf.Max(biggestStack, keyValuePair.Value.Count);
+                    foreach (GameManager.GameRound.BonusExperiance exp in keyValuePair.Value) {
+                        PlayerUIs[keyValuePair.Key].expBar.AddPoints(exp, 0.5f);
+                    }
+                }
+                yield return new WaitForSecondsRealtime(biggestStack * 0.5f + 0.5f);
+                //Debug.Log(testTime - Time.unscaledTime);
             }
         }
     }
@@ -175,15 +196,15 @@ public class ProgressScreenUI : MonoBehaviour {
     }
 
     private void SetUpProgressScreen() {
-        PlayerUIs = new List<PlayerProgressObject>();
+        PlayerUIs = new Dictionary<Player, PlayerProgressObject>();
         for (int i = 0; i < players.Length; ++i) {
             PlayerProgressObject playerProgressObject;
             if (PlayerUIs.Count <= i) { // If there are not enough already created Player UIs then make a new one
                 GameObject playerEXPBar = Instantiate<GameObject>(PlayerEXPBarPrefab, PlayerEXPRect);
                 playerProgressObject = new PlayerProgressObject(playerEXPBar, GameManager.instance.maxPoints);
-                PlayerUIs.Add(playerProgressObject);
+                PlayerUIs.Add(players[i], playerProgressObject);
             }
-            PlayerUIs[i].GO_progressBar.GetComponent<ProgressScreen_EXPBar>().SetColor(players[i].Color);
+            PlayerUIs[players[i]].GO_progressBar.GetComponent<ProgressScreen_EXPBar>().SetColor(players[i].Color);
         }
 
         // Set up text display of number of levels to win
@@ -239,28 +260,28 @@ public class ProgressScreenUI : MonoBehaviour {
     private void RunEndgameChecksAndSetup() {
         // bool gameWon = false;
         int numOfMaxRankPlayers = 0;
-        for (int i = 0; i < players.Length; i++) {
-            if (!PlayerUIs[i].winTextController.alreadySetUp)
-                PlayerUIs[i].winTextController.SetupWinText(players[i]);
-            if (players[i].rank >= GameManager.instance.maxRank) {
+        foreach (Player player in players) {
+            if (!PlayerUIs[player].winTextController.alreadySetUp)
+                PlayerUIs[player].winTextController.SetupWinText(player);
+            if (player.rank >= GameManager.instance.maxRank) {
                 GameWon = true;
                 numOfMaxRankPlayers++;
-                PlayerUIs[i].GO_progressBar.GetComponent<ProgressBarAlphaController>().FadeInProgressBar();
-                //PlayerUIs[i].ExperianceSlider.GetComponentInChildren<Outline>().enabled = true;
-                PlayerUIs[i].winTextController.TurnOnWinText();
-                // PlayerUIs[i].winTextController.SetupWinText(players[i]);
+                PlayerUIs[player].GO_progressBar.GetComponent<ProgressBarAlphaController>().FadeInProgressBar();
+                //PlayerUIs[player].ExperianceSlider.GetComponentInChildren<Outline>().enabled = true;
+                PlayerUIs[player].winTextController.TurnOnWinText();
+                // PlayerUIs[player].winTextController.SetupWinText(players[i]);
             }
             else {
-                PlayerUIs[i].winTextController.TurnOffWinText();
+                PlayerUIs[player].winTextController.TurnOffWinText();
             }
         }
 
         if (GameWon) {
             Debug.Log("game won");
-            for (int i = 0; i < players.Length; i++) {
-                if (players[i].rank < GameManager.instance.maxRank) {
-                    Debug.Log("Player " + i + " should be faded out");
-                    PlayerUIs[i].GO_progressBar.GetComponent<ProgressBarAlphaController>().FadeOutProgressBar();
+            foreach (Player player in players) {
+                if (player.rank < GameManager.instance.maxRank) {
+                    Debug.Log("Player " + player.playerNumber + " should be faded out");
+                    PlayerUIs[player].GO_progressBar.GetComponent<ProgressBarAlphaController>().FadeOutProgressBar();
                 }
             }
         }

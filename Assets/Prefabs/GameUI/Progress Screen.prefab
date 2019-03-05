@@ -594,12 +594,38 @@ MonoBehaviour:
   LevelThresholdRect: {fileID: 7751142999753342915}
   DottedLinePrefab: {fileID: 856619673796090044, guid: e8d0e4cc28959374988a474b3d24a8bf,
     type: 3}
-  gainPoints:
-  - m_PersistentCalls:
+  Damage:
+    m_PersistentCalls:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - m_PersistentCalls:
+  Kill:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  LastOneStanding:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  KillLeader:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  Revenge:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  NoDamageTaken:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  ComeBack:
+    m_PersistentCalls:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
@@ -716,6 +742,7 @@ GameObject:
   - component: {fileID: 2529325367540703205}
   - component: {fileID: 2529415597501925857}
   - component: {fileID: 2708046838868347408}
+  - component: {fileID: 5663886707917255010}
   m_Layer: 5
   m_Name: StartNextRoundInstructions
   m_TagString: Untagged
@@ -737,11 +764,11 @@ RectTransform:
   m_Father: {fileID: 3425122062191524632}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.25, y: 0}
-  m_AnchorMax: {x: 0.75, y: 0}
+  m_AnchorMin: {x: 0.2, y: 0}
+  m_AnchorMax: {x: 0.8, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 18.907421}
-  m_Pivot: {x: 0.5, y: 0}
+  m_SizeDelta: {x: 0, y: 25.884}
+  m_Pivot: {x: 0.5, y: 0.35}
 --- !u!222 &2421301678584994617
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -783,7 +810,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Press Start to begin next round
+  m_Text: Press Start to Skip
 --- !u!114 &2529415597501925857
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -796,7 +823,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66ccbbb765277e44f8e3291759ff6360, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextRoundStr: Press Start to begin next round
+  nextRoundStr: Press Start to Skip
   returnMenuStr: Press Start to return to main menu
 --- !u!114 &2708046838868347408
 MonoBehaviour:
@@ -811,7 +838,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AspectMode: 1
-  m_AspectRatio: 20.087349
+  m_AspectRatio: 15
+--- !u!114 &5663886707917255010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2489360997386979871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -900027084, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 1, g: 1, b: 1, a: 1}
+  m_EffectDistance: {x: 2, y: -2}
+  m_UseGraphicAlpha: 1
 --- !u!1 &2489601102117987753
 GameObject:
   m_ObjectHideFlags: 0
@@ -1096,7 +1138,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.65}
   m_AnchorMax: {x: 0.5, y: 0.65}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 759.6, y: 572.4}
+  m_SizeDelta: {x: 647.1, y: 567.9}
   m_Pivot: {x: 0.5, y: 0.65}
 --- !u!222 &6101101455200256699
 CanvasRenderer:
@@ -1209,12 +1251,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 12
-    m_Right: 12
-    m_Top: 49
+    m_Left: 10
+    m_Right: 10
+    m_Top: 48
     m_Bottom: 24
   m_ChildAlignment: 3
-  m_Spacing: 12.1536
+  m_Spacing: 10.3536
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 1
@@ -1328,6 +1370,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: OverthroneText
       objectReference: {fileID: 0}
+    - target: {fileID: 2138131679299897803, guid: 0768fa368451c4c43b21e786105e8ead,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3770695375091687687, guid: 0768fa368451c4c43b21e786105e8ead,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1401,7 +1448,7 @@ PrefabInstance:
     - target: {fileID: 3770695375091687687, guid: 0768fa368451c4c43b21e786105e8ead,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: -192.60004
+      value: -108
       objectReference: {fileID: 0}
     - target: {fileID: 3770695375091687687, guid: 0768fa368451c4c43b21e786105e8ead,
         type: 3}
@@ -1436,7 +1483,7 @@ PrefabInstance:
     - target: {fileID: 1770949144045393172, guid: 0768fa368451c4c43b21e786105e8ead,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 278.52
+      value: 633.6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0768fa368451c4c43b21e786105e8ead, type: 3}

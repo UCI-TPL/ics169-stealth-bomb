@@ -593,10 +593,12 @@ public class GameManager : MonoBehaviour {
             // Calculate each exp type in specified order
             foreach (BonusExperiance.ExperianceType type in GameManager.instance.ExperianceSettings.ExperianceOrder) {
                 Dictionary<Player, List<BonusExperiance>> expForType = CalculateExperiance(type);
-                foreach (KeyValuePair<Player, List<BonusExperiance>> keyValuePair in expForType)
-                    foreach (BonusExperiance exp in keyValuePair.Value)
-                        totalExp[keyValuePair.Key] += exp.Points;
-                experianceGained.Add(type, expForType);
+                if (expForType != null) {
+                    foreach (KeyValuePair<Player, List<BonusExperiance>> keyValuePair in expForType)
+                        foreach (BonusExperiance exp in keyValuePair.Value)
+                            totalExp[keyValuePair.Key] += exp.Points;
+                    experianceGained.Add(type, expForType);
+                }
             }
             return totalExp;
 
@@ -611,7 +613,9 @@ public class GameManager : MonoBehaviour {
                             float totalDamage = 0;
                             foreach (float damage in DamageDealt[player].Values)
                                 totalDamage += damage;
-                            playerExpGained.Add(GameManager.instance.ExperianceSettings.GetExperiance(BonusExperiance.ExperianceType.Damage).MulPoints(totalDamage));
+                            BonusExperiance damageExp = GameManager.instance.ExperianceSettings.GetExperiance(BonusExperiance.ExperianceType.Damage).MulPoints(totalDamage);
+                            if (damageExp.Points > 0)
+                                playerExpGained.Add(damageExp);
                             break;
                         case BonusExperiance.ExperianceType.Kill:
                             foreach (Player p in Kills[player])
@@ -641,14 +645,18 @@ public class GameManager : MonoBehaviour {
                                 playerExpGained.Add(GameManager.instance.ExperianceSettings.GetExperiance(BonusExperiance.ExperianceType.NoDamageTaken));
                             break;
                         case BonusExperiance.ExperianceType.Comeback:
-                            if (Leader != null && initialRank[player] <= Leader.rank - 2)
-                                playerExpGained.Add(GameManager.instance.ExperianceSettings.GetExperiance(BonusExperiance.ExperianceType.Comeback).AddPoints(Mathf.FloorToInt(totalExp[player] * 0.5f)));
+                            if (Leader != null && initialRank[player] <= Leader.rank - 2) {
+                                BonusExperiance c = GameManager.instance.ExperianceSettings.GetExperiance(BonusExperiance.ExperianceType.Comeback).AddPoints(Mathf.FloorToInt(totalExp[player] * 0.5f));
+                                if (c.Points > 0)
+                                    playerExpGained.Add(c);
+                            }
                             break;
                     }
 
-                    playerExperiance.Add(player, playerExpGained);
+                    if (playerExpGained.Count > 0) // Add player experiance if not empty
+                        playerExperiance.Add(player, playerExpGained);
                 }
-                return playerExperiance;
+                return playerExperiance.Count > 0 ? playerExperiance : null; // Return null if no experiance gained
             }
         }
 

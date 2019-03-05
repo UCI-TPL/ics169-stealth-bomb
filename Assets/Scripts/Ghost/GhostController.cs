@@ -36,7 +36,7 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
 
     private float travelTime = 0.3f; //how long it takes to lerp all across
 
-  
+    private Vector3 targetPosition;
     private float startTravelTime; //used to see how much travel has gone on 
 
     public float cooldown = 0.1f;
@@ -100,6 +100,7 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
     {
         Quaternion rotation = (transform.position.z >= transform.position.x) ? Quaternion.Euler(0f, 135, 0f) : Quaternion.Euler(0f, 315f, 0f);
         GhostBody = Instantiate(GhostPrefab, transform.position, rotation);
+        targetPosition = transform.position;
 
         lastPosition = GhostBody.transform.position;
         rend.material.SetColor("_Color", playerColor);
@@ -183,6 +184,8 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
         Vector3 offset = leftSide ? GameManager.instance.GhostOffset : -GameManager.instance.GhostOffset;
         Quaternion rotation = (transform.position.z >= transform.position.x) ? Quaternion.Euler(0f, 135, 0f) : Quaternion.Euler(0f, 315f, 0f);
         Vector3 currentPosition = Ghost.UpdatePosition((transform.position.z + transform.position.x) / 2) + offset;
+
+        pos = currentPosition;
        
         if (!switchSides) //this is the default case, business as usual no switching
         {
@@ -193,21 +196,21 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
         else //if sides have switches then continue the lerp 
         {
             float lerpPosition = (Time.time - startTravelTime) / travelTime; //how far along the lerp should it be
-            pos = Vector3.Lerp(latestPosition, currentPosition, lerpPosition);
+            //pos = Vector3.Lerp(latestPosition, currentPosition, lerpPosition);
             //pos = Vector3.SmoothDamp(latestPosition, currentPosition, ref smoothVel, 10f);
-        } 
+        }
 
         if (pos != Vector3.zero)
-            GhostBody.transform.position = pos;
-
-
-
-        
+            targetPosition = pos;
+            //GhostBody.transform.position = pos;
     }
+
+    private Vector3 currVelocity;
 
     private void LateUpdate() {
         UpdateLine();
         transform.forward = new Vector3(1, 0, 1);
+        GhostBody.transform.position = Vector3.SmoothDamp(GhostBody.transform.position, targetPosition, ref currVelocity, travelTime);
     }
 
 
