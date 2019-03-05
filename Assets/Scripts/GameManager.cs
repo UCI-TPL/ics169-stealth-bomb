@@ -158,7 +158,8 @@ public class GameManager : MonoBehaviour {
 
     IEnumerator Countdown()
     {
-        //Debug.Log("Countdown starting");
+        instance.audioManager.PlayRandomSound("Ready");
+
         if(countdownText != null) //only do the countdown if you can find it
         {
             DisablePlayersMovement(1f);
@@ -543,6 +544,8 @@ public class GameManager : MonoBehaviour {
         private void Player_onDeath(Player killer, Player killed) {
 
             moveCamera.targets.Remove(killed.controller.gameObject);             // Stop camera from tracking dead player
+
+            instance.audioManager.PlayRandomSound("Death");
 
             activePlayersControllers.Remove(killed.controller.gameObject);
             Vector3 deathPosition = killed.controller.transform.position;

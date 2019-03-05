@@ -22,8 +22,8 @@ public class DodgeData : SpecialMoveData    //should be named DodgeDashData
     {
         if (moveType == SpecialMoveData.MoveType.DodgeDash) //make one for every type of SpecialMove
             return  (new DodgeDash(this, player));
-        else if (moveType == SpecialMoveData.MoveType.DodgeRoll)
-            return  (new DodgeRoll(this, player));
+        //else if (moveType == SpecialMoveData.MoveType.DodgeRoll)
+        //    return  (new DodgeRoll(this, player));
         return null;
     }
     

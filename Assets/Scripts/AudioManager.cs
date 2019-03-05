@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
+
 public class AudioManager : MonoBehaviour {
 
 
@@ -14,11 +15,24 @@ public class AudioManager : MonoBehaviour {
 
     public AudioMixer audioMixer; //global audio settings
 
+    public static AudioManager instance;
+
+    public int announcerType;
+
     public bool muted = false;
 
 	// Use this for initialization
 	void Awake () {
-        foreach(Sound s in sounds)  //initializes the array of Sounds
+
+        if (instance == null)
+        {
+            DontDestroyOnLoad(gameObject);
+            instance = this;
+        }
+        else if (instance != this)
+            Destroy(gameObject);
+
+        foreach (Sound s in sounds)  //initializes the array of Sounds
         {
             s.source = gameObject.AddComponent<AudioSource>();
             s.source.clip = s.clip;
@@ -27,7 +41,32 @@ public class AudioManager : MonoBehaviour {
             s.source.loop = s.loop;
             s.source.outputAudioMixerGroup = s.output;
         }
+
+        announcerType = UnityEngine.Random.Range(1,3);
+
+        Debug.Log("Starting with type " + announcerType);
 	}
+
+    private int randomSound;
+  
+    private int RandomSoundIndex(int max)
+    {
+        return UnityEngine.Random.Range(1, max + 1);
+    }
+
+    public void PlayRandomSound(string name) //for example use Death,3 will play either Death1, Death2, or Death3
+    {
+        switch(name)
+        {
+            case "Death":  instance.Play(name + RandomSoundIndex(4));  break;
+
+            case "Ready": instance.Play(name + announcerType); break;
+            default: Debug.LogError(name+" case not found"); break;
+        } 
+
+        //int randomIndex = UnityEngine.Random.Range(1, range + 1);
+        //Debug.Log("The chosen number is " + randomIndex);
+    }
 	
     public void Play(string name) //plays a sound if it is found
     {

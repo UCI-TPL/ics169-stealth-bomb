@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour, IHurtable {
     public WeaponParticles weaponParticles; //this script will handle playing particle effects when attacking
     //public GameObject WeaponParticles; 
 
+    
     private Player _player;
     public Player player {
         get { return _player; }
@@ -209,10 +210,13 @@ public class PlayerController : MonoBehaviour, IHurtable {
         }
 
         if (this)
+        {
             if (this.gameObject != null)
             {
                 StartCoroutine(DeathAnimation());
             }
+        }
+
     }
 
     private void UpdateCameraDirection() {
