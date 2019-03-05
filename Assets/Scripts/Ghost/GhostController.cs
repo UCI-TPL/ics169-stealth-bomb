@@ -70,6 +70,7 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
         Quaternion rotation = (transform.position.z >= transform.position.x) ? Quaternion.Euler(0f, 135, 0f) : Quaternion.Euler(0f, 315f, 0f);
 
         GhostBodyInstantiate();
+        transform.position = new Vector3(transform.position.x, 10f, transform.position.z);
         /*
         GhostBody = Instantiate(GhostPrefab, transform.position, rotation);
         

@@ -547,7 +547,7 @@ public class GameManager : MonoBehaviour {
             activePlayersControllers.Remove(killed.controller.gameObject);
             Vector3 deathPosition = killed.controller.transform.position;
             //if (deathPosition.y < 0)
-            deathPosition = new Vector3(deathPosition.x, 10f, deathPosition.z);
+            //deathPosition = new Vector3(deathPosition.x, 10f, deathPosition.z); // Why is this hardcoded??? moved it to ghost controller line 73 because i want the ghost to spawn at the player then move
             instance.StartCoroutine(InstantiateGhost(killed.playerNumber, killed, deathPosition));
             killed.controller.DisableUI();
             // Update Player Stats
@@ -563,11 +563,10 @@ public class GameManager : MonoBehaviour {
 
         public IEnumerator InstantiateGhost(int killedNum, Player killed, Vector3 deathPosition)
         {
-            if(activePlayersControllers.Count  > 1) //Don't spawn the last player as a ghost
+            if(activePlayersControllers.Count > 1) //Don't spawn the last player as a ghost
             {
-                yield return new WaitForSeconds(1.0f);
-                if (!killed.ghost) //this means that the killed player has already been made into a ghost 
-                { 
+                yield return new WaitForSeconds(0.5f);
+                if (isActive && !killed.ghost) { //this means that the killed player has already been made into a ghost 
 
                     players[killedNum].ResetHealth();
                     GameObject tempGhost = Instantiate<GameObject>(GameManager.instance.GhostPrefab.gameObject, deathPosition, Quaternion.identity);
