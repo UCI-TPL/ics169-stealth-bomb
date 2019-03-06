@@ -43,8 +43,6 @@ public class AudioManager : MonoBehaviour {
         }
 
         announcerType = UnityEngine.Random.Range(1,3);
-
-        Debug.Log("Starting with type " + announcerType);
 	}
 
     private int randomSound;

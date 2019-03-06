@@ -47,8 +47,17 @@ public class PlayerController : MonoBehaviour, IHurtable {
     [Tooltip("time it takes to go from 0 to max speed is 1 second / acceleration")]
     public float acceleration = 10f;
 
-    public Color[] Colors = new Color[4]; //The player's color is based on thier player number
-    public Color playerColor { get { return Colors[player.playerNumber]; } set { Colors[player.playerNumber] = value; } }//used for the bullettrail
+    public Color[] Colors = new Color[6]; //The player's color is based on their player number
+
+    private int colorIndex; //index for the Color array
+    public Color playerColor {
+        get {
+            return Colors[player.playerNumber];
+        }
+        set {
+            Colors[player.playerNumber] = value;
+        }
+    }
 
     public float jumpGravityMultiplier = 0.5f;
 
@@ -131,18 +140,13 @@ public class PlayerController : MonoBehaviour, IHurtable {
         }
 
         weaponParticles = new WeaponParticles();
-        //if(ShootPoint)
-        //    Circle = ChargeParticleEffects.transform.Find("Circle").GetComponent<ParticleSystem>();
     }
 
     // Set up controllers
     private void Start() {
         UpdateCameraDirection();
 
-        // rend.material.color = playerColor; //setting the player color based on playeNum 
-
         SetPlayerColor();
-        //rend.material.SetColor("Color_91A455EE", playerColor); //this is how shader properties are changed 
 
         lastPosition = transform.position;
 
@@ -159,6 +163,8 @@ public class PlayerController : MonoBehaviour, IHurtable {
 
     public void SetPlayerColor() //gives color to the various parts of the player
     {
+        playerColor = player.Color; //make sure the player uses the color from the Default Data
+
         rendTorso.material.SetColor("_Color", playerColor);
         rendTorso.material.SetColor("_Emission", playerColor / 2);
 
