@@ -479,7 +479,7 @@ public class PlayerController : MonoBehaviour, IHurtable {
         ShootPoint.transform.localPosition = ShootPointDefaultPosition;
         if (weapon.weaponData.particleEffects != null) //attach the particle effects prefab to shootpoint if it exists 
         {
-            weaponParticles.UpdateRoot( Instantiate(weapon.weaponData.particleEffects, ShootPoint.transform), playerColor ); //instantiate a particles prefab and make it the root of the weapon particles script
+            weaponParticles.UpdateRoot( Instantiate(weapon.weaponData.particleEffects, ShootPoint.transform), player.Color ); //instantiate a particles prefab and make it the root of the weapon particles script
             weaponParticles.Root.name = "WeaponParticles";
             //if (weapon.weaponData.ShootPointPosition != null)
             //    weaponParticles.Root.transform.localPosition = weapon.weaponData.ShootPointPosition;
