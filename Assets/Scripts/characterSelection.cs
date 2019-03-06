@@ -27,6 +27,7 @@ public class characterSelection : MonoBehaviour {
 			playerOpAList.Add(t.GetChild(0).GetComponent<Image>());
 			playerOpAList[i].enabled = false;
 		}
+		// Debug.Log("playerOpList length = " + playerOpList.Count);
 		// playerIs(0);
 		// playerConnected();
 
@@ -66,6 +67,7 @@ public class characterSelection : MonoBehaviour {
 
 	public void playerConnected()
 	{
+		// Debug.Log("CharacterSelection current player = " + player + ", playerOpList length = " + playerOpList.Count + ", is object/script enabled = " + this.gameObject.activeSelf);
 		if (playerJoinManager.usingNewPlayerJoinSystem)
 			playerOpList[player].text = "  get ready";
 		else
