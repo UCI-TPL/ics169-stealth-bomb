@@ -13,6 +13,7 @@ using System;
 public class GameManager : MonoBehaviour {
     public static GameManager instance;
 
+
     [Header("Managers")]
     public InputManager inputManager;
     public PlayerJoinManager playerJoinManager;
@@ -74,6 +75,10 @@ public class GameManager : MonoBehaviour {
     [HideInInspector]
     public List<Player> Winners = new List<Player>();
 
+    [HideInInspector]
+    private List<int> PlayerColors = new List<int>(new int[] { 0, 1, 2, 3, 4, 5});
+    //public List<int> PlayerColors = new List<int>(); //list of player colors that have been given out
+
 
     public void StartGame(bool[] playersReady, int[] xboxControllerNumbers) {
         // StopAllCoroutines();
@@ -113,6 +118,7 @@ public class GameManager : MonoBehaviour {
         instance.Winners.Clear();
         Time.timeScale = 1;
         Time.fixedDeltaTime = 0.02f;
+        instance.PlayerColors = new List<int>(new int[] { 0, 1, 2, 3, 4, 5 }); //reset the available colors
         foreach (GameRound round in instance.rounds)
             round.EndGame();
         GameManager.instance.audioManager.Stop("Fanfare");
@@ -251,6 +257,14 @@ public class GameManager : MonoBehaviour {
                 players[i] = new Player(i, xboxControllerNumbers[i], DefaultPlayerData);
             }
         }
+    }
+
+    public int AssignPlayerColor()
+    {
+        int randomIndex = UnityEngine.Random.Range(0, instance.PlayerColors.Count);
+        int color = instance.PlayerColors[randomIndex];
+        instance.PlayerColors.Remove(color);
+        return color;
     }
 
     

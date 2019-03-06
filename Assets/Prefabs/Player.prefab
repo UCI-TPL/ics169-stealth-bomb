@@ -1684,6 +1684,8 @@ MonoBehaviour:
   - {r: 0.16509432, g: 0.36372915, b: 1, a: 1}
   - {r: 0.9733331, g: 1, b: 0, a: 1}
   - {r: 0, g: 1, b: 0.003575325, a: 1}
+  - {r: 0.52242297, g: 0.1273585, b: 1, a: 1}
+  - {r: 0.8396226, g: 0.44753468, b: 0.77261823, a: 1}
   jumpGravityMultiplier: 0.75
   lastForwardMovement: {x: 0, y: 0}
   lastScaledVector: {x: 0, y: 0, z: 0}

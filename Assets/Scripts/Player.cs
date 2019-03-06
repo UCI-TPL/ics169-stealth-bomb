@@ -14,7 +14,9 @@ public class Player : IHurtable {
 
     public int playerNumber;
     public int inputControllerNumber;
-    public Color Color { get { return GameManager.instance.DefaultPlayerData.Colors[playerNumber]; } } // Player's color
+
+    private int colorIndex;
+    public Color Color { get { return GameManager.instance.DefaultPlayerData.Colors[colorIndex]; } } // Player's color 
 
     public float health { get; private set; }
     public int experiance { get; private set; }
@@ -51,6 +53,7 @@ public class Player : IHurtable {
         this.playerNumber = playerNumber;
         this.inputControllerNumber = xboxControllerNumber;
         this.playerData = playerData;
+        this.colorIndex = GameManager.instance.AssignPlayerColor(); //this decides what color the player will be
         stats = new PlayerStats(this); // Creates a stats profile for the player
         ResetHealth();
         ResetWeapon();
@@ -64,7 +67,6 @@ public class Player : IHurtable {
         this.controller = controller;
         controller.player = this;
         controller.playerColor = prevColor; //all the cursors have the playercolor to help tell them apart
-        //controller.playerColor = Color.white;
         //controller.EquipWeapon(weaponData.NewInstance(this));
         ghost = true;
     }
