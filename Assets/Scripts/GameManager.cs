@@ -80,6 +80,13 @@ public class GameManager : MonoBehaviour {
     //public List<int> PlayerColors = new List<int>(); //list of player colors that have been given out
 
 
+    /* for Music: Finale
+    whenever a player's x pis above full rank's 70%
+    change battle music to finale
+     */
+     private static string battle_music = "Battle";
+
+
     public void StartGame(bool[] playersReady, int[] xboxControllerNumbers) {
         // StopAllCoroutines();
         // string s = "Players Recieved from Main Menu: ";
@@ -122,7 +129,7 @@ public class GameManager : MonoBehaviour {
         foreach (GameRound round in instance.rounds)
             round.EndGame();
         GameManager.instance.audioManager.Stop("Fanfare");
-        GameManager.instance.audioManager.Stop("Battle");
+        GameManager.instance.audioManager.Stop(battle_music);
         GameManager.instance.audioManager.Play("Main Menu");
         SceneManager.LoadScene(instance.mainMenuSceneName);
     }
@@ -300,6 +307,10 @@ public class GameManager : MonoBehaviour {
             else if (player.experiance == highestEXP)
                 leader = null;
         }
+        if (GameManager.instance.maxRank >= 7 )
+        {
+            battle_music = "Finale";
+        }
     }
 
     // helper method to check for winner
@@ -457,7 +468,7 @@ public class GameManager : MonoBehaviour {
             GameManager.instance.UpdateRank();
             GameManager.instance.audioManager.Stop("Fanfare");
             GameManager.instance.audioManager.Stop("Main Menu");
-            GameManager.instance.audioManager.Play("Battle");
+            GameManager.instance.audioManager.Play(battle_music);
 
             ResetCurves();
 
@@ -518,7 +529,7 @@ public class GameManager : MonoBehaviour {
             foreach (KeyValuePair<Player, int> exp in CalculateExperiance())
                 exp.Key.AddExperiance(exp.Value);
 
-            GameManager.instance.audioManager.Stop("Battle");
+            GameManager.instance.audioManager.Stop(battle_music);
             GameManager.instance.audioManager.Play("Fanfare");
             State = GameState.ProgressScreen;
             // bool gameWon = false;
