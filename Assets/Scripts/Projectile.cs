@@ -5,6 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class Projectile : MonoBehaviour {
     public TrailRenderer trail;
+    public ParticleSystem particle;
 
     public new Collider collider;
     [SerializeField]
@@ -29,6 +30,8 @@ public class Projectile : MonoBehaviour {
             foreach (Collider c in player.controller.HitBox)
                 Physics.IgnoreCollision(c, collider);
         trail.material.color = player.controller.playerColor;
+        var trailModule = particle.trails;
+        trailModule.colorOverLifetime = player.controller.playerColor;
     }
 
     //private void OnTriggerEnter(Collider other) {
