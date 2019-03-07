@@ -106,9 +106,12 @@ public class PlayerJoinManager : MonoBehaviour {
 
 	private bool alreadyLoadingScene;
 
-	// Returns a list/array of player individual status on whether they will play or not. The returned array should not be able to be modified
-	// outside of this script (or at least should not have any effect on this script's variables).
-	public bool[] GetPLayerReadyStatusList() {
+
+    public Color[] Colors = new Color[6]; //this is basically hardcoding in the colors but it is quick
+
+    // Returns a list/array of player individual status on whether they will play or not. The returned array should not be able to be modified
+    // outside of this script (or at least should not have any effect on this script's variables).
+    public bool[] GetPLayerReadyStatusList() {
 		bool[] roster = new bool[playersJoined.Length];
 		if (!debugMode) 
 			for (int i = 0; i < playersJoined.Length; i++) 
@@ -327,7 +330,13 @@ public class PlayerJoinManager : MonoBehaviour {
 					Debug.Log("Player " + (i + 1) + " joined.");
 					playersJoined[i] = true;
 					joinPrompts[i].gameObject.SetActive(false);
-					playersUI[i].gameObject.SetActive(true);
+
+                    int colorIndex = GameManager.instance.AssignPlayerColor(i); //use playerNumber to receive a color
+
+                    
+
+                    playersUI[i].gameObject.SetActive(true);
+                    playersUI[i].gameObject.GetComponent<Image>().color = Colors[colorIndex];
 					//calling UI -Kyle
 					selectionOP.playerIs(i);
 					selectionOP.playerConnected();
@@ -638,6 +647,7 @@ public class PlayerJoinManager : MonoBehaviour {
 					if (!playersJoined[i]) {
 						joinPrompts[i].gameObject.SetActive(true);
 						playersUI[i].gameObject.SetActive(false);
+
 					}
 					else {
 						joinPrompts[i].gameObject.SetActive(false);
