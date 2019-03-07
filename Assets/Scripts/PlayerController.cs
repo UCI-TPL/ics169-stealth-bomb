@@ -506,30 +506,39 @@ public class PlayerController : MonoBehaviour, IHurtable {
         }
     }
 
-    private IEnumerator lastKnockback;
     public void Knockback(Vector3 direction, int? playerNumber = null, bool showEffect = true) {
         rb.AddForce(direction, ForceMode.VelocityChange); //move back in the direction of the projectile 
 
         if (showEffect) {
             // Show smoke when knockback
-            if (lastKnockback != null) {
-                StopCoroutine(lastKnockback);
-                knockbackEffect.SetActive(false, Vector3.zero);
-            }
-            knockbackEffect.SetActive(true, direction, playerNumber);
-            // Calculate the duration of the knockback
-            lastKnockback = StopKnockback(Mathf.Log(direction.magnitude, 1/(1-friction*Time.fixedDeltaTime)) * Time.fixedDeltaTime); // equation: https://www.desmos.com/calculator/2n0tww6mcp
-            StartCoroutine(lastKnockback);
-
-            IEnumerator StopKnockback(float maxDuration) {
-                float stopTime = Time.time + maxDuration;
-                while (Time.time < stopTime) {
-                    yield return null;
-                }
-                knockbackEffect.SetActive(false, Vector3.zero);
-            }
+            knockbackEffect.Activate(Mathf.Log(direction.magnitude, 1 / (1 - friction * Time.fixedDeltaTime)) * Time.fixedDeltaTime, playerNumber); // equation: https://www.desmos.com/calculator/2n0tww6mcp
         }
     }
+
+    //private IEnumerator lastKnockback;
+    //public void Knockback(Vector3 direction, int? playerNumber = null, bool showEffect = true) {
+    //    rb.AddForce(direction, ForceMode.VelocityChange); //move back in the direction of the projectile 
+
+    //    if (showEffect) {
+    //        // Show smoke when knockback
+    //        if (lastKnockback != null) {
+    //            StopCoroutine(lastKnockback);
+    //            knockbackEffect.SetActive(false, Vector3.zero);
+    //        }
+    //        knockbackEffect.SetActive(true, direction, playerNumber);
+    //        // Calculate the duration of the knockback
+    //        lastKnockback = StopKnockback(Mathf.Log(direction.magnitude, 1/(1-friction*Time.fixedDeltaTime)) * Time.fixedDeltaTime); // equation: https://www.desmos.com/calculator/2n0tww6mcp
+    //        StartCoroutine(lastKnockback);
+
+    //        IEnumerator StopKnockback(float maxDuration) {
+    //            float stopTime = Time.time + maxDuration;
+    //            while (Time.time < stopTime) {
+    //                yield return null;
+    //            }
+    //            knockbackEffect.SetActive(false, Vector3.zero);
+    //        }
+    //    }
+    //}
 
     public float Hurt(Player damageDealer, float amount) {
         input.controllers[player.inputControllerNumber].Vibrate(1.0f, 0.1f);

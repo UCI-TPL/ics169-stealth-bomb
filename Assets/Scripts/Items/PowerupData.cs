@@ -6,7 +6,7 @@ using UnityEngine.Events;
 [CreateAssetMenu(fileName = "New Powerup", menuName = "Item/Power-up", order = 0)]
 public class PowerupData : ItemData {
     
-    public static float duration = 10; // base duration for all powerups
+    public float duration = 10; // base duration for all powerups
     
     // Holds a list of all buffs in the powerup
     [SerializeField]
