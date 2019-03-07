@@ -9,6 +9,7 @@ public class AudioMenuManager : MonoBehaviour
 {
     public MainMenuManager mainMenuManager;
     public float sliderStepSize = 0.5f;
+    public string selectedButtonSound = "Bow";
     public Selectable[] AudioMenuInteractables;
     
     private bool audioPanelActive;
@@ -148,7 +149,7 @@ public class AudioMenuManager : MonoBehaviour
 
     private void ActivateButton(int controllerIdx) {
         if (PlayerCanPressButton(controllerIdx)) {
-            ((Button) AudioMenuInteractables[currentAudioMenuInteractable]).onClick.Invoke();
+            ((ButtonController) AudioMenuInteractables[currentAudioMenuInteractable]).onClick.Invoke();
         }
     }
 
@@ -189,6 +190,8 @@ public class AudioMenuManager : MonoBehaviour
     private void _buttonSelect(int i)
 	{
 		selectable = AudioMenuInteractables[i];
+        if (selectedButtonSound != null && selectedButtonSound != "")
+            GameManager.instance.audioManager.Play(selectedButtonSound);
 		selectable.Select();
 	}
 }
