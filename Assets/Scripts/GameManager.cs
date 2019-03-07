@@ -307,7 +307,7 @@ public class GameManager : MonoBehaviour {
             else if (player.experiance == highestEXP)
                 leader = null;
         }
-        if (GameManager.instance.maxRank >= 7 )
+        if (GameManager.instance.maxRank >= 3)
         {
             battle_music = "Finale";
         }
