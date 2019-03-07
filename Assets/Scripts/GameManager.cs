@@ -640,7 +640,7 @@ public class GameManager : MonoBehaviour {
                             float totalDamage = 0;
                             foreach (float damage in DamageDealt[player].Values)
                                 totalDamage += damage;
-                            BonusExperiance damageExp = GameManager.instance.ExperianceSettings.GetExperiance(BonusExperiance.ExperianceType.Damage).MulPoints(totalDamage);
+                            BonusExperiance damageExp = GameManager.instance.ExperianceSettings.GetExperiance(BonusExperiance.ExperianceType.Damage).MulPoints(totalDamage * 2);
                             if (damageExp.Points > 0)
                                 playerExpGained.Add(damageExp);
                             break;

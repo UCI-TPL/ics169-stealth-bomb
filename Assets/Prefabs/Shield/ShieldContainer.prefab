@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b63d3af6ce72ff4da7cec14c457ed9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: 90
+  rotationSpeed: 120
   shieldData: {fileID: 11400000, guid: e9935f3f6430cd14ab45145c4d75de76, type: 2}
   counterName: ShieldCount
 --- !u!1001 &1492137553083327862
@@ -57,11 +57,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7297517633923945374}
     m_Modifications:
-    - target: {fileID: 8500422702559304859, guid: 937472bee6ebf1242831a836ad4a1401,
-        type: 3}
-      propertyPath: m_Name
-      value: Shield3
-      objectReference: {fileID: 0}
     - target: {fileID: 1368908285112688743, guid: 937472bee6ebf1242831a836ad4a1401,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -127,6 +122,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8500422702559304859, guid: 937472bee6ebf1242831a836ad4a1401,
+        type: 3}
+      propertyPath: m_Name
+      value: Shield3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 937472bee6ebf1242831a836ad4a1401, type: 3}
 --- !u!4 &453304350852662545 stripped
@@ -142,11 +142,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7297517633923945374}
     m_Modifications:
-    - target: {fileID: 8500422702559304859, guid: 937472bee6ebf1242831a836ad4a1401,
-        type: 3}
-      propertyPath: m_Name
-      value: Shield1
-      objectReference: {fileID: 0}
     - target: {fileID: 1368908285112688743, guid: 937472bee6ebf1242831a836ad4a1401,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -202,6 +197,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8500422702559304859, guid: 937472bee6ebf1242831a836ad4a1401,
+        type: 3}
+      propertyPath: m_Name
+      value: Shield1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 937472bee6ebf1242831a836ad4a1401, type: 3}
 --- !u!4 &4117948313068408587 stripped
@@ -217,11 +217,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7297517633923945374}
     m_Modifications:
-    - target: {fileID: 8500422702559304859, guid: 937472bee6ebf1242831a836ad4a1401,
-        type: 3}
-      propertyPath: m_Name
-      value: Shield2
-      objectReference: {fileID: 0}
     - target: {fileID: 1368908285112688743, guid: 937472bee6ebf1242831a836ad4a1401,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -287,6 +282,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8500422702559304859, guid: 937472bee6ebf1242831a836ad4a1401,
+        type: 3}
+      propertyPath: m_Name
+      value: Shield2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 937472bee6ebf1242831a836ad4a1401, type: 3}
 --- !u!4 &3059758987178188465 stripped
@@ -302,11 +302,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7297517633923945374}
     m_Modifications:
-    - target: {fileID: 8500422702559304859, guid: 937472bee6ebf1242831a836ad4a1401,
-        type: 3}
-      propertyPath: m_Name
-      value: Shield4
-      objectReference: {fileID: 0}
     - target: {fileID: 1368908285112688743, guid: 937472bee6ebf1242831a836ad4a1401,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -371,6 +366,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8500422702559304859, guid: 937472bee6ebf1242831a836ad4a1401,
+        type: 3}
+      propertyPath: m_Name
+      value: Shield4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 937472bee6ebf1242831a836ad4a1401, type: 3}

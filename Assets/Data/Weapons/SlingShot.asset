@@ -18,8 +18,8 @@ MonoBehaviour:
   type: 2
   autoAttack: 1
   cooldown: 0.4
-  knockbackStrength: 20
-  damage: 30
+  knockbackStrength: 15
+  damage: 20
   particleEffects: {fileID: 0}
   activationEffect: {fileID: 0}
   weaponModel: {fileID: 7189202260010906160, guid: bdb336e18f6d85544b0de73f5db36c2e,
@@ -29,5 +29,5 @@ MonoBehaviour:
   buffs: []
   projectile: {fileID: 11400000, guid: cc2f39c9384a2b84ab1b8e1b7c359c8e, type: 2}
   numProj: 1
-  projSpeed: 50
+  projSpeed: 35
   SoundName: 
