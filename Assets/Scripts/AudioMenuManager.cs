@@ -147,9 +147,15 @@ public class AudioMenuManager : MonoBehaviour
 		}
 	}
 
-    private void ActivateButton(int controllerIdx) {
+    private void PressSelectedMenuOption(int controllerIdx) {
         if (PlayerCanPressButton(controllerIdx)) {
-            ((ButtonController) AudioMenuInteractables[currentAudioMenuInteractable]).onClick.Invoke();
+            ((ButtonController) AudioMenuInteractables[currentAudioMenuInteractable]).PressButton();
+        }
+    }
+
+    private void ReleaseSelectedMenuOption(int controllerIdx) {
+        if (PlayerCanPressButton(controllerIdx)) {
+            ((ButtonController) AudioMenuInteractables[currentAudioMenuInteractable]).ReleaseButton();
         }
     }
 
@@ -162,16 +168,20 @@ public class AudioMenuManager : MonoBehaviour
 		// A button, B button, and Start button has been assigned. Still need to assign Y button.
 		switch (controllerIdx) {
 			case 0:
-				input.controllers[controllerIdx].confirm.OnDown.AddListener( () => ActivateButton(0) );
+				input.controllers[controllerIdx].confirm.OnDown.AddListener( () => PressSelectedMenuOption(0) );
+                input.controllers[controllerIdx].confirm.OnUp.AddListener( () => ReleaseSelectedMenuOption(0) );
 				break;
 			case 1:
-				input.controllers[controllerIdx].confirm.OnDown.AddListener( () => ActivateButton(1) );
+				input.controllers[controllerIdx].confirm.OnDown.AddListener( () => PressSelectedMenuOption(1) );
+                input.controllers[controllerIdx].confirm.OnUp.AddListener( () => ReleaseSelectedMenuOption(1) );
 				break;
 			case 2:
-				input.controllers[controllerIdx].confirm.OnDown.AddListener( () => ActivateButton(2) );
+				input.controllers[controllerIdx].confirm.OnDown.AddListener( () => PressSelectedMenuOption(2) );
+                input.controllers[controllerIdx].confirm.OnUp.AddListener( () => ReleaseSelectedMenuOption(2) );
 				break;
 			case 3:
-				input.controllers[controllerIdx].confirm.OnDown.AddListener( () => ActivateButton(3) );
+				input.controllers[controllerIdx].confirm.OnDown.AddListener( () => PressSelectedMenuOption(3) );
+                input.controllers[controllerIdx].confirm.OnUp.AddListener( () => ReleaseSelectedMenuOption(3) );
 				break;
 			default:
 				Debug.Log("variable playerIdx out of range!");
