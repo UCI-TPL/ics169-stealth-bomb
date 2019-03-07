@@ -11,7 +11,7 @@ public class KnockbackEffect : MonoBehaviour {
     [SerializeField]
     private ParticleSystem trailPS;
     [SerializeField]
-    private ParticleSystem impactPS;
+    private ParticleSystem[] impactPS;
     private bool isActive;
 
     [SerializeField]
@@ -21,23 +21,45 @@ public class KnockbackEffect : MonoBehaviour {
         ps = GetComponent<ParticleSystem>();
     }
 
-    public void SetActive(bool active, Vector3 direction, int? playerNumber = null) {
-        if (active == isActive)
-            return;
-        isActive = active;
-        if (active) {
-            var trailmain = trailPS.main;
-            trailmain.startColor = knockbackColors[playerNumber%(knockbackColors.Length-1) ?? knockbackColors.Length-1].trailColor;
-            var impactmain = impactPS.main;
-            impactmain.startColor = knockbackColors[playerNumber%(knockbackColors.Length-1) ?? knockbackColors.Length-1].impactColor;
-            transform.forward = direction;
-            impactRenderer.lengthScale = Mathf.Max(2, Mathf.Sqrt(direction.magnitude)*2);
-            ps.Play(true);
+    public void Activate(float time, int? playerNumber = null) {
+        var trailmain = trailPS.main;
+        trailmain.startColor = knockbackColors[playerNumber % (knockbackColors.Length - 1) ?? knockbackColors.Length - 1].trailColor;
+        foreach (ParticleSystem p in impactPS) {
+            p.Clear();
+            var impactmain = p.main;
+            impactmain.startColor = knockbackColors[playerNumber % (knockbackColors.Length - 1) ?? knockbackColors.Length - 1].impactColor;
         }
-        else {
-            ps.Stop(true);
-        }
+        ps.Play(true);
+        StopAllCoroutines();
+        StartCoroutine(DelayedStop(time));
     }
+
+    private IEnumerator DelayedStop(float time) {
+        float endTime = Time.time + time;
+        while (endTime > Time.time)
+            yield return null;
+        ps.Stop();
+        foreach (ParticleSystem p in impactPS)
+            p.Clear();
+    }
+
+    //public void SetActive(bool active, Vector3 direction, int? playerNumber = null) {
+    //    if (active == isActive)
+    //        return;
+    //    isActive = active;
+    //    if (active) {
+    //        var trailmain = trailPS.main;
+    //        trailmain.startColor = knockbackColors[playerNumber%(knockbackColors.Length-1) ?? knockbackColors.Length-1].trailColor;
+    //        var impactmain = impactPS.main;
+    //        impactmain.startColor = knockbackColors[playerNumber%(knockbackColors.Length-1) ?? knockbackColors.Length-1].impactColor;
+    //        transform.forward = direction;
+    //        impactRenderer.lengthScale = Mathf.Max(2, Mathf.Sqrt(direction.magnitude)*2);
+    //        ps.Play(true);
+    //    }
+    //    else {
+    //        ps.Stop(true);
+    //    }
+    //}
 
     [System.Serializable]
     private struct KnockbackColor {
