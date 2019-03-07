@@ -20,6 +20,11 @@ MonoBehaviour:
   cooldown: 0
   knockbackStrength: 0
   damage: 0
+  particleEffects: {fileID: 0}
+  activationEffect: {fileID: 0}
+  weaponModel: {fileID: 0}
+  ShootPointPosition: {x: 0, y: 0, z: 0}
+  WeaponPosition: {x: 0, y: 0, z: 0}
   buffs: []
   shieldContainer: {fileID: 3328665903627092816, guid: 474976de328cd8140b512b899055a988,
     type: 3}
@@ -28,3 +33,5 @@ MonoBehaviour:
   - {fileID: 2100000, guid: c95715db341618c40901222a5e314ab8, type: 2}
   - {fileID: 2100000, guid: 380907e041c8263488b6a4eab057e177, type: 2}
   - {fileID: 2100000, guid: f67cf22754ccb6545ac3634caffdb58b, type: 2}
+  - {fileID: 2100000, guid: 447a10ba12a65774f9b4b341c5b67d33, type: 2}
+  - {fileID: 2100000, guid: c0856e3f23ef13b4d83f525059ea46df, type: 2}
