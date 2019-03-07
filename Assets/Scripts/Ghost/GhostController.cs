@@ -71,14 +71,7 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
 
         GhostBodyInstantiate();
         transform.position = new Vector3(transform.position.x, 10f, transform.position.z);
-        /*
-        GhostBody = Instantiate(GhostPrefab, transform.position, rotation);
-        
-        lastPosition = GhostBody.transform.position;
-        rend.material.SetColor("_Color", playerColor);
-        //GhostBody.GetComponentsInChildren<Renderer>()[1].material.color = playerColor;
-        GhostBody.GetComponentsInChildren<Renderer>()[1].material.SetColor("Color_998F7755", playerColor);
-        */
+
         GameObject Curves = GameObject.Find("GhostCurves");
 
 
@@ -96,6 +89,8 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
 
 
     }
+
+    
 
     public void GhostBodyInstantiate()
     {

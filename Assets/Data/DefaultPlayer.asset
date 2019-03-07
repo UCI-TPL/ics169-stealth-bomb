@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f129241ccb8f48447832194804c158db, type: 3}
   m_Name: DefaultPlayer
   m_EditorClassIdentifier: 
-  defaultWeapon: {fileID: 11400000, guid: bbf933dd4d37d784ab26bf44cb2ab321, type: 2}
+  defaultWeapon: {fileID: 11400000, guid: 402d85fe57f92094685452857a0715b0, type: 2}
   defaultSpecialMove: {fileID: 11400000, guid: 8f845288885848b41a628736545cc5a7, type: 2}
   Colors:
   - {r: 1, g: 0.23266676, b: 0.2216981, a: 1}
   - {r: 0.16509432, g: 0.36372915, b: 1, a: 1}
   - {r: 0.9733331, g: 1, b: 0, a: 1}
   - {r: 0, g: 1, b: 0.003575325, a: 1}
+  - {r: 0.52156866, g: 0.1254902, b: 1, a: 1}
+  - {r: 0.8392157, g: 0.44705883, b: 0.77254903, a: 1}

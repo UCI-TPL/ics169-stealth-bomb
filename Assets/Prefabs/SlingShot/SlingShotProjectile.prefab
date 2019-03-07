@@ -126,8 +126,8 @@ MonoBehaviour:
   proj: {fileID: 114721991009535130}
   projectileRenderer: {fileID: 5191129218644864486}
   rb: {fileID: 54612792617523452}
-  waitFrames: 4
-  projSpeed: 35
+  waitFrames: 1
+  projSpeed: 50
   maxBounces: 4
 --- !u!54 &54612792617523452
 Rigidbody:

@@ -13,28 +13,36 @@ public class SlingshotProjAddon : MonoBehaviour
     private int bounceNum = 0;
 
     private bool bombStop = false;
-
+    private int layerMask;
     void Awake()
     {
         if (proj == null)
             proj = gameObject.GetComponent<Projectile>();
         if (rb == null)
             rb = gameObject.GetComponent<Rigidbody>();
+        int playerMask = 1 << 9;        // Hit anything on the player layer.
+        int groundMask = 1 << 11;       // Hit anything on the ground layer.
+        layerMask = playerMask | groundMask;
     }
 
     void Update()
     {
-        
+        if (rb.velocity != transform.forward * projSpeed)
+        {
+            rb.velocity = transform.forward * projSpeed;
+        }
+
         Ray ray = new Ray(transform.position, transform.forward);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, Time.deltaTime * projSpeed + .1f))
+        if (Physics.Raycast(ray, out hit, Time.deltaTime * projSpeed + .05f, layerMask))
         {
             Vector3 reflectDir = Vector3.Reflect(ray.direction, hit.normal);
             float rot = 90 - Mathf.Atan2(reflectDir.z, reflectDir.x) * Mathf.Rad2Deg;
             transform.eulerAngles = new Vector3(0, rot, 0);
+            rb.velocity = transform.forward * projSpeed;
         }
-        
+
 
         if (!bombStop)
         {

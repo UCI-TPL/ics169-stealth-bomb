@@ -11,6 +11,8 @@ public class PlayerJoinManager : MonoBehaviour {
 
 	public bool usingNewPlayerJoinSystem = false;
 
+	public bool playersLoseTheirNumberIfTheyLeave = true;
+
 	[HideInInspector]
 	public bool PlayerJoinScreenActive = true;   // filler variable for now. Will be replaced when more of UI and menu is implemented.
 
@@ -57,11 +59,11 @@ public class PlayerJoinManager : MonoBehaviour {
 	// an array of length 4, each space stores the controller number that the player will use in the rest of the game. This is passed to the game manager.
 	// [HideInInspector]
 	// [SerializeField]
-	public int[] inputControllerNumbers = new int[4];
+	private int[] inputControllerNumbers;
 	// the inverse of inputControllerNumbers. each index represents a controller and stores int that represents which player is using that controller
 	// [HideInInspector]
 	// [SerializeField]
-	public int[] controllersToPlayers = new int[4];
+	private int[] controllersToPlayers;
 
 	[HideInInspector]
 	// [SerializeField]
@@ -150,11 +152,39 @@ public class PlayerJoinManager : MonoBehaviour {
 		players = new PlayerIndex[4];
 		currentStates = new GamePadState[4];
 		prevStates = new GamePadState[4];
+		inputControllerNumbers = new int[4];
+		controllersToPlayers = new int[4];
+
+		// assigning base values to controller arrays
+		for (int i = 0; i < inputControllerNumbers.Length; i++) {
+			inputControllerNumbers[i] = notAssignedController;
+			controllersToPlayers[i] = notAssignedController;
+		}
+
 		playerTimers = new float[4];
 		playersJoined = new bool[4];
 		playersReady = new bool[4];
 		controllersConnected = new bool[4];
-		Debug.Log("inputControllerNumbers length = " + inputControllerNumbers.Length + ", controllersToPlayers length = " + controllersToPlayers.Length);
+		Player[] playerObjects = GameManager.instance.players;
+		// if (GameManager.instance.players == null) {
+		// 	Debug.Log("GameManager players array is null.");
+		// }
+		// else {
+		// 	Debug.Log("GameManager players: " + Game)
+		// }
+		if (GameManager.instance.players != null) {
+			playerObjects = GameManager.instance.players;
+			// string playerInfo = "Players: ";
+			// for (int i = 0; i < playerObjects.Length; i++) {
+			// 	if (playerObjects[i] != null)
+			// 		playerInfo += "player " + playerObjects[i].playerNumber + " controller number = " + playerObjects[i].inputControllerNumber + " ,";
+			// }
+			// Debug.Log(playerInfo);
+		}
+		else {
+			// Debug.Log("GameManager players array is null.");
+		}
+		// Debug.Log("inputControllerNumbers length = " + inputControllerNumbers.Length + ", controllersToPlayers length = " + controllersToPlayers.Length);
 		// if (inputControllerNumbers == null || controllersToPlayers == null || inputControllerNumbers.Length == 0 || controllersToPlayers.Length == 0) {
 		// 	inputControllerNumbers = new int[4];
 		// 	controllersToPlayers = new int[4];
@@ -182,9 +212,17 @@ public class PlayerJoinManager : MonoBehaviour {
 			playerTimers[i] = 0.0f;
 			AssignControllerEvents(i);
 			if (usingNewPlayerJoinSystem) {
-				if (numOfTimesMenuLoaded <= 1) {
+				// first time in menu
+				if (GameManager.instance.players == null) {
 					inputControllerNumbers[i] = notAssignedController;   // represents they have not been assigned a controller yet
 					controllersToPlayers[i] = notAssignedController;
+				}
+				// returning to menu from gameplay
+				else {
+					if (playerObjects[i] != null) {
+						inputControllerNumbers[i] = playerObjects[i].inputControllerNumber;
+						controllersToPlayers[inputControllerNumbers[i]] = i;
+					}
 				}
 				ResetPlayer(i);
 			}
@@ -224,7 +262,7 @@ public class PlayerJoinManager : MonoBehaviour {
 			float farthestTimer = 0.0f;
 			if (PlayerJoinScreenActive) {
 				for (int i = 0; i < bButtonTimers.Length; i++) {
-					if (input.controllers[i].cancel.Pressed) {
+					if (currentStates[i].IsConnected && input.controllers[i].cancel.Pressed) {
 						bButtonTimers[i] += fillSpeed * Time.deltaTime;
 					}
 					else {
@@ -256,7 +294,9 @@ public class PlayerJoinManager : MonoBehaviour {
 	private void PlayerJoin(int controllerIdx) {
 		// Debug.Log("ReadyPlayer called for player " + playerIdx + ".");
 		// Debug.Log("input controller list before: " + inputControllerNumbers[0] + "," + inputControllerNumbers[1] + "," + inputControllerNumbers[2] + "," + inputControllerNumbers[3]);
-		if (CanPlayerPressButton(controllerIdx) && controllersToPlayers[controllerIdx] == notAssignedController /* && playersJoined[controllersToPlayers[controllerIdx]] == false */) {
+
+		// Player has been assigned a controller or has not joined yet
+		if (CanPlayerPressButton(controllerIdx) && (controllersToPlayers[controllerIdx] == notAssignedController || playersJoined[inputControllerNumbers[controllerIdx]] == false) /* && playersJoined[controllersToPlayers[controllerIdx]] == false */) {
 			// Display the UI element showing the player has confirmed he/she is ready to play.
 			// Debug.Log("Player " + players[i] + " is ready to play!");
 
@@ -268,13 +308,21 @@ public class PlayerJoinManager : MonoBehaviour {
 			}
 			else {
 				int i = 0;
-				for (; i < inputControllerNumbers.Length; i++) {
-					if (inputControllerNumbers[i] == notAssignedController) {
-						inputControllerNumbers[i] = controllerIdx;
-						controllersToPlayers[controllerIdx] = i;
-						break;
+				// if players do not have a controller.
+				if (controllersToPlayers[controllerIdx] == notAssignedController) {
+					for (; i < inputControllerNumbers.Length; i++) {
+						if (inputControllerNumbers[i] == notAssignedController) {
+							inputControllerNumbers[i] = controllerIdx;
+							controllersToPlayers[controllerIdx] = i;
+							break;
+						}
 					}
 				}
+				// the case where players have already been assigned one.
+				else {
+					i = controllersToPlayers[controllerIdx];
+				}
+
 				if (i < 4) {
 					Debug.Log("Player " + (i + 1) + " joined.");
 					playersJoined[i] = true;
@@ -313,8 +361,10 @@ public class PlayerJoinManager : MonoBehaviour {
 						playersJoined[controllersToPlayers[controllerIdx]] = false;
 						playersUI[controllersToPlayers[controllerIdx]].gameObject.SetActive(false);
 						joinPrompts[controllersToPlayers[controllerIdx]].gameObject.SetActive(false);
-						inputControllerNumbers[controllersToPlayers[controllerIdx]] = notAssignedController;
-						controllersToPlayers[controllerIdx] = notAssignedController;
+						if (playersLoseTheirNumberIfTheyLeave) {
+							inputControllerNumbers[controllersToPlayers[controllerIdx]] = notAssignedController;
+							controllersToPlayers[controllerIdx] = notAssignedController;
+						}
 					}
 				}
 				else {
@@ -705,9 +755,11 @@ public class PlayerJoinManager : MonoBehaviour {
 		}
 		else {
 			playersReady[playerIdx] = false;
-			if (inputControllerNumbers[playerIdx] != notAssignedController && numOfTimesMenuLoaded <= 1) {
-				controllersToPlayers[inputControllerNumbers[playerIdx]] = notAssignedController;
-				inputControllerNumbers[playerIdx] = notAssignedController;
+			if (playersLoseTheirNumberIfTheyLeave) {  // switchable option in inspector
+				if (inputControllerNumbers[playerIdx] != notAssignedController && GameManager.instance.players == null) {
+					controllersToPlayers[inputControllerNumbers[playerIdx]] = notAssignedController;
+					inputControllerNumbers[playerIdx] = notAssignedController;
+				}
 			}
 			ToggleControllerGuide(playerIdx, false);
 			joinPrompts[playerIdx].gameObject.SetActive(false);
