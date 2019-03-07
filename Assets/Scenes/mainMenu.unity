@@ -10887,6 +10887,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainMenuManager: {fileID: 1668276871}
+  audioManagerPrefab: {fileID: 515700660680613677, guid: 1b8c06b91df79f54482875f6e398e58a,
+    type: 3}
   backBtn: {fileID: 1507009627}
 --- !u!4 &552461834
 Transform:
@@ -15189,7 +15191,7 @@ MonoBehaviour:
   - {fileID: 209255410}
   - {fileID: 1464428104}
   - {fileID: 407206793}
-  rollSpeed: 100
+  rollSpeed: 80
 --- !u!1 &777146216
 GameObject:
   m_ObjectHideFlags: 0

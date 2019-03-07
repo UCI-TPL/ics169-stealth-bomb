@@ -9,6 +9,8 @@ using XInputDotNetPure;
 public class CreditsManager : MonoBehaviour
 {
     public MainMenuManager mainMenuManager;
+    public GameObject audioManagerPrefab;
+    private AudioManager audioManager;
 
     public GameObject backBtn;
     private ButtonController b;
@@ -24,8 +26,12 @@ public class CreditsManager : MonoBehaviour
     private float timer;
     private float buttonTimer;
 
+    private bool playing;
+
     void Awake() {
         // b = backBtn.GetComponent<ButtonController>();
+        playing = false;
+        audioManager = audioManagerPrefab.GetComponent<AudioManager>();
     }
 
     // Start is called before the first frame update
@@ -57,11 +63,31 @@ public class CreditsManager : MonoBehaviour
             UpdateControllersAndButtons();
 
             // put any you want to update while credits panel is open in this bracket
+            
+
+            if (!playing)
+            {
+                //stop all other music/
+                GameManager.instance.audioManager.Stop("Main Menu");
+                // audioManager.Stop("Main Menu");
+                //play credit music
+                GameManager.instance.audioManager.Play("Credit");
+                playing = true;
+            }
         }
         
 		else {
 			buttonTimer = 0.0f;
-		}
+
+            if (playing)
+            {
+                // stop credit music
+                GameManager.instance.audioManager.Stop("Credit");
+                // // play mainMenumusic
+                GameManager.instance.audioManager.Play("Main Menu");
+                playing = false;
+            }
+        }
     }
 
     private void UpdateControllersAndButtons() {
