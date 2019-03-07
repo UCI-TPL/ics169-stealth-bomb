@@ -15,10 +15,10 @@ MonoBehaviour:
   baseBuff:
     Modifiers:
     - name: move_speed
-      value: -0.5
+      value: -0.75
       type: 2
     - name: turn_speed
-      value: -0.5
+      value: -0.75
       type: 2
     Triggers: []
   counterName: 

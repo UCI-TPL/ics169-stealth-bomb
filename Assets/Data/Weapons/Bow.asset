@@ -19,7 +19,7 @@ MonoBehaviour:
   autoAttack: 0
   cooldown: 0.25
   knockbackStrength: 30
-  damage: 20
+  damage: 25
   particleEffects: {fileID: 2697296058055973653, guid: 704692142a673ae44b5fc3f0018abcae,
     type: 3}
   activationEffect: {fileID: 0}

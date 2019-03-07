@@ -18,11 +18,16 @@ MonoBehaviour:
   type: 2
   autoAttack: 0
   cooldown: 0.25
-  knockbackStrength: 4
-  damage: 6
+  knockbackStrength: 8
+  damage: 10
+  particleEffects: {fileID: 0}
+  activationEffect: {fileID: 0}
+  weaponModel: {fileID: 0}
+  ShootPointPosition: {x: 0, y: 0, z: 0}
+  WeaponPosition: {x: 0, y: 0, z: 0}
   buffs: []
   maxChargeTime: 1
-  maxLength: 13
+  maxLength: 18
   maxWidth: 1.2
   minWidth: 0.2
   hitCooldown: 0.1
