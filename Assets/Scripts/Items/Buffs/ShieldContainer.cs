@@ -43,6 +43,6 @@ public class ShieldContainer : MonoBehaviour
         this.targetPlayer = targetPlayer;
 
         foreach (Shield s in shields)
-            s.SetMaterial(shieldData.PlayerColorMaterials[targetPlayer.player.playerNumber % shieldData.PlayerColorMaterials.Length]); // We mod the index to to make sure there is never out of index error, instead it fails in a more acceptable manner, by using the wrong color
+            s.SetMaterial(shieldData.PlayerColorMaterials[targetPlayer.player.colorIndex % shieldData.PlayerColorMaterials.Length]); // We mod the index to to make sure there is never out of index error, instead it fails in a more acceptable manner, by using the wrong color
     }
 }

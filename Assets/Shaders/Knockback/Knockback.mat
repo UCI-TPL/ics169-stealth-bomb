@@ -23,13 +23,14 @@ Material:
     - Vector1_1A36FD9: 2.5
     - Vector1_317CDFAF: 0.6
     - Vector1_646E3CB1: 2
-    - Vector1_7310E40F: 0.5
+    - Vector1_7310E40F: 0.75
     - Vector1_832160FC: 0.75
     - Vector1_A39228A8: 1.2
     - Vector1_A526863: 2
     - Vector1_B1924B3E: 10
     - Vector1_B252E43E: 1
     - Vector1_E7FDA38D: 0
+    - Vector1_F747EAE9: 1.5
     - Vector1_FE90640C: 0
     - _SpeedScale: 0.05
     m_Colors:

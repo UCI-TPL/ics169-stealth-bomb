@@ -15,7 +15,7 @@ public class Player : IHurtable {
     public int playerNumber;
     public int inputControllerNumber;
 
-    private int colorIndex;
+    public int colorIndex { get; private set; }
     public Color Color { get { return GameManager.instance.DefaultPlayerData.Colors[colorIndex]; } } // Player's color 
 
     public float health { get; private set; }

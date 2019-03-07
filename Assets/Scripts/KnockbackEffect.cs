@@ -28,6 +28,7 @@ public class KnockbackEffect : MonoBehaviour {
             p.Clear();
             var impactmain = p.main;
             impactmain.startColor = knockbackColors[playerNumber % (knockbackColors.Length - 1) ?? knockbackColors.Length - 1].impactColor;
+            impactmain.startLifetime = time - 0.1f;
         }
         ps.Play(true);
         StopAllCoroutines();
@@ -39,27 +40,9 @@ public class KnockbackEffect : MonoBehaviour {
         while (endTime > Time.time)
             yield return null;
         ps.Stop();
-        foreach (ParticleSystem p in impactPS)
-            p.Clear();
+        //foreach (ParticleSystem p in impactPS)
+        //    p.Clear();
     }
-
-    //public void SetActive(bool active, Vector3 direction, int? playerNumber = null) {
-    //    if (active == isActive)
-    //        return;
-    //    isActive = active;
-    //    if (active) {
-    //        var trailmain = trailPS.main;
-    //        trailmain.startColor = knockbackColors[playerNumber%(knockbackColors.Length-1) ?? knockbackColors.Length-1].trailColor;
-    //        var impactmain = impactPS.main;
-    //        impactmain.startColor = knockbackColors[playerNumber%(knockbackColors.Length-1) ?? knockbackColors.Length-1].impactColor;
-    //        transform.forward = direction;
-    //        impactRenderer.lengthScale = Mathf.Max(2, Mathf.Sqrt(direction.magnitude)*2);
-    //        ps.Play(true);
-    //    }
-    //    else {
-    //        ps.Stop(true);
-    //    }
-    //}
 
     [System.Serializable]
     private struct KnockbackColor {
