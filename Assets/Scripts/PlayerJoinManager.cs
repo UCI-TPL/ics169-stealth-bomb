@@ -336,7 +336,8 @@ public class PlayerJoinManager : MonoBehaviour {
                     
 
                     playersUI[i].gameObject.SetActive(true);
-                    playersUI[i].gameObject.GetComponent<Image>().color = Colors[colorIndex];
+                    playersUI[i].gameObject.GetComponent<Image>().color = Colors[colorIndex]; //changing the color of the player panel
+                    playersUI[i].Find("newish Xbox controller guide").GetComponent<Image>().color = Colors[colorIndex];
 					//calling UI -Kyle
 					selectionOP.playerIs(i);
 					selectionOP.playerConnected();

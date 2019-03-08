@@ -297,6 +297,12 @@ public class GameManager : MonoBehaviour {
 
     }
     
+    public bool CanPause() //lets the Pause UI know if it is ok to pause, to prevent it from pausing when leaving the progress screeen or in any scene
+    {
+        int state = (int) instance.rounds[rounds.Count - 1].State; //converting enum to int
+        return (state == 3 || state == 4) ? true : false; //return true if the game is in Battle or HurryUp
+    }
+
 
     private IEnumerator StartGameAfterLoad(GameRound round) {
         while (round.State != GameRound.GameState.Ready)
