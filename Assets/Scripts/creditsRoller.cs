@@ -48,10 +48,6 @@ public class creditsRoller : MonoBehaviour
 
     private void Update()
     {
-        // if (creditCounter != numOfCredit)
-        // {
-        //     print(creditCounter);
-        // }
 
         if (!rolling && creditCounter != numOfCredit)
         {
@@ -79,10 +75,6 @@ public class creditsRoller : MonoBehaviour
                 rolling = false;
             }
         }
-        // if there is next credit AND rolling flag is OFF
-        //     set rolling flag ON
-        //     set the next credit initial position
-        //     roll the next credit
     }
 
     
