@@ -340,10 +340,9 @@ public class PlayerJoinManager : MonoBehaviour {
                     
 
                     playersUI[i].gameObject.SetActive(true);
-                    playersUI[i].gameObject.GetComponent<Image>().color = Colors[colorIndex]; //changing the color of the player panel
-                    playersUI[i].Find("newish Xbox controller guide").GetComponent<Image>().color = Colors[colorIndex];
-					//calling UI -Kyle
-					selectionOP.playerIs(i);
+                    SetUIColor(i, colorIndex);
+                    //calling UI -Kyle
+                    selectionOP.playerIs(i);
 					selectionOP.playerConnected();
 				}
 			}
@@ -422,6 +421,20 @@ public class PlayerJoinManager : MonoBehaviour {
 		}
 	}
 
+    public void SetUIColor(int i, int colorIndex) // i is player number
+    {
+        playersUI[i].gameObject.GetComponent<Image>().color = Colors[colorIndex]; //changing the color of the player panel
+        playersUI[i].Find("newish Xbox controller guide").GetComponent<Image>().color = Colors[colorIndex];
+    }
+
+    public void SwitchColors(int i) //player number as a parameter
+    {
+        int colorIndex = GameManager.instance.ExchangeColors(i);
+        if (colorIndex == -1) //this means that the player was not assigned a color yet!
+            return;
+        SetUIColor(i, colorIndex);
+    }
+
 	// helper callback method that starts the game if the player and others are ready (old update() version).
 	private void StartGame(int playerIdx) {
 		if (CanPlayerPressButton(playerIdx) && playersJoined[playerIdx] == true) {
@@ -477,7 +490,8 @@ public class PlayerJoinManager : MonoBehaviour {
 				input.controllers[controllerIdx].confirm.OnDown.AddListener( () => PlayerJoin(0) );
 				input.controllers[controllerIdx].cancel.OnDown.AddListener( () => SetPlayerBack(0) );
 				input.controllers[controllerIdx].Switch.OnDown.AddListener( () => ShowPlayerControls(0) );
-				if (!usingNewPlayerJoinSystem)
+                input.controllers[controllerIdx].xbutton.OnDown.AddListener(() => SwitchColors(0));
+                if (!usingNewPlayerJoinSystem)
 					input.controllers[controllerIdx].start.OnDown.AddListener( () => StartGame(0) );
 				// else 
 					// input.controllers[controllerIdx].start.OnDown.AddListener( () => ReadyPlayer(0) );
@@ -486,7 +500,8 @@ public class PlayerJoinManager : MonoBehaviour {
 				input.controllers[controllerIdx].confirm.OnDown.AddListener( () => PlayerJoin(1) );
 				input.controllers[controllerIdx].cancel.OnDown.AddListener( () => SetPlayerBack(1) );
 				input.controllers[controllerIdx].Switch.OnDown.AddListener( () => ShowPlayerControls(1) );
-				if (!usingNewPlayerJoinSystem)
+                input.controllers[controllerIdx].xbutton.OnDown.AddListener(() => SwitchColors(1));
+                if (!usingNewPlayerJoinSystem)
 					input.controllers[controllerIdx].start.OnDown.AddListener( () => StartGame(1) );
 				// else 
 					// input.controllers[controllerIdx].start.OnDown.AddListener( () => ReadyPlayer(1) );
@@ -495,7 +510,8 @@ public class PlayerJoinManager : MonoBehaviour {
 				input.controllers[controllerIdx].confirm.OnDown.AddListener( () => PlayerJoin(2) );
 				input.controllers[controllerIdx].cancel.OnDown.AddListener( () => SetPlayerBack(2) );
 				input.controllers[controllerIdx].Switch.OnDown.AddListener( () => ShowPlayerControls(2) );
-				if (!usingNewPlayerJoinSystem)
+                input.controllers[controllerIdx].xbutton.OnDown.AddListener(() => SwitchColors(2));
+                if (!usingNewPlayerJoinSystem)
 					input.controllers[controllerIdx].start.OnDown.AddListener( () => StartGame(2) );
 				// else 
 					// input.controllers[controllerIdx].start.OnDown.AddListener( () => ReadyPlayer(2) );
@@ -504,7 +520,8 @@ public class PlayerJoinManager : MonoBehaviour {
 				input.controllers[controllerIdx].confirm.OnDown.AddListener( () => PlayerJoin(3) );
 				input.controllers[controllerIdx].cancel.OnDown.AddListener( () => SetPlayerBack(3) );
 				input.controllers[controllerIdx].Switch.OnDown.AddListener( () => ShowPlayerControls(3) );
-				if (!usingNewPlayerJoinSystem)
+                input.controllers[controllerIdx].xbutton.OnDown.AddListener(() => SwitchColors(3));
+                if (!usingNewPlayerJoinSystem)
 					input.controllers[controllerIdx].start.OnDown.AddListener( () => StartGame(3) );
 				// else 
 					// input.controllers[controllerIdx].start.OnDown.AddListener( () => ReadyPlayer(3) );

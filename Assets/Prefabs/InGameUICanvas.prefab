@@ -335,6 +335,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pause Menu
       objectReference: {fileID: 0}
+    - target: {fileID: 5477746741517649179, guid: 22277d2bd49435849bc2d05e8950c1bd,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5477746741517649176, guid: 22277d2bd49435849bc2d05e8950c1bd,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -393,42 +398,42 @@ PrefabInstance:
     - target: {fileID: 5477746741517649176, guid: 22277d2bd49435849bc2d05e8950c1bd,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5477746741517649176, guid: 22277d2bd49435849bc2d05e8950c1bd,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: 5.699997
       objectReference: {fileID: 0}
     - target: {fileID: 5477746741517649176, guid: 22277d2bd49435849bc2d05e8950c1bd,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 100
+      value: -2.2000122
       objectReference: {fileID: 0}
     - target: {fileID: 5477746741517649176, guid: 22277d2bd49435849bc2d05e8950c1bd,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 100
+      value: -2.399994
       objectReference: {fileID: 0}
     - target: {fileID: 5477746741517649176, guid: 22277d2bd49435849bc2d05e8950c1bd,
         type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.5
+      value: 0.3185926
       objectReference: {fileID: 0}
     - target: {fileID: 5477746741517649176, guid: 22277d2bd49435849bc2d05e8950c1bd,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0.5
+      value: 0.012481204
       objectReference: {fileID: 0}
     - target: {fileID: 5477746741517649176, guid: 22277d2bd49435849bc2d05e8950c1bd,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 0.68200004
       objectReference: {fileID: 0}
     - target: {fileID: 5477746741517649176, guid: 22277d2bd49435849bc2d05e8950c1bd,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0.5
+      value: 0.88136095
       objectReference: {fileID: 0}
     - target: {fileID: 5477746741517649176, guid: 22277d2bd49435849bc2d05e8950c1bd,
         type: 3}
@@ -460,11 +465,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 224711724056024470}
     m_Modifications:
-    - target: {fileID: 2489146479369555737, guid: 58583ebe1ee89ad468f6bfdc181efd7f,
-        type: 3}
-      propertyPath: m_Name
-      value: Progress Screen
-      objectReference: {fileID: 0}
     - target: {fileID: 2419155855270471217, guid: 58583ebe1ee89ad468f6bfdc181efd7f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -569,6 +569,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2489146479369555737, guid: 58583ebe1ee89ad468f6bfdc181efd7f,
+        type: 3}
+      propertyPath: m_Name
+      value: Progress Screen
       objectReference: {fileID: 0}
     - target: {fileID: 2418941117291969251, guid: 58583ebe1ee89ad468f6bfdc181efd7f,
         type: 3}

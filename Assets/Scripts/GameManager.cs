@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviour {
     [HideInInspector]
     public Dictionary<int,int> PlayerColor = new Dictionary<int,int>(); //meant to store player color, color index. This is set in the menu 
     [HideInInspector]
-    private List<int> ColorIndexes = new List<int>(new int[] { 0, 1, 2, 3, 4, 5});
+    private List<int> ColorIndexes = new List<int>(new int[] { 0, 1, 2, 3, 4, 5, 6, 7});
     //public List<int> PlayerColors = new List<int>(); //list of player colors that have been given out
 
 
@@ -132,7 +132,7 @@ public class GameManager : MonoBehaviour {
         instance.Winners.Clear();
         Time.timeScale = 1;
         Time.fixedDeltaTime = 0.02f;
-        instance.ColorIndexes = new List<int>(new int[] { 0, 1, 2, 3, 4, 5 }); //reset the available colors
+        instance.ColorIndexes = new List<int>(new int[] { 0, 1, 2, 3, 4, 5, 6, 7 }); //reset the available colors
         foreach (GameRound round in instance.rounds)
             round.EndGame();
         GameManager.instance.audioManager.Stop("Fanfare");
@@ -288,18 +288,24 @@ public class GameManager : MonoBehaviour {
         return colorIndex;
     }
 
+    public int ExchangeColors(int playerNum) //for players to switch colors in the menu
+    {
+        if (!PlayerColor.ContainsKey(playerNum)) //if the player does not have a color just assign one and return that
+            return AssignPlayerColor(playerNum);
+        int randomIndex = UnityEngine.Random.Range(0, instance.ColorIndexes.Count);
+        int colorIndex = instance.ColorIndexes[randomIndex];
+        instance.ColorIndexes.Remove(colorIndex); //take a new color out for player
+        instance.ColorIndexes.Add(PlayerColor[playerNum]); //return the current color to the list
+        PlayerColor[playerNum] = colorIndex; //update dictionary with the new color
+        return colorIndex;
+    }
+
     public int GetPlayerColor(int playerNum)
     {
-        if(PlayerColor.ContainsKey(playerNum))
-        {
+        if(PlayerColor.ContainsKey(playerNum)) //if the player has a color return that index, or get a new color and return that. 
             return PlayerColor[playerNum];
-        }
         else
-        {
             return AssignPlayerColor(playerNum);
-        }
-
-
     }
     
     public bool CanPause() //lets the Pause UI know if it is ok to pause, to prevent it from pausing when leaving the progress screeen or in any scene

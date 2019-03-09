@@ -246,6 +246,8 @@ public class InputManager : MonoBehaviour {
                 start.OnDown.Invoke();
             if (Input.GetKeyDown(KeyCode.LeftAlt)) 
                 Switch.OnDown.Invoke();
+
+            
         }
 
         public MouseKeyboard(int playerIndex) {
@@ -277,7 +279,7 @@ public class InputManager : MonoBehaviour {
         private readonly ButtonTest DodgeTest = new ButtonTest();
         private readonly ButtonTest StartTest = new ButtonTest();
         private readonly ButtonTest SwitchTest = new ButtonTest();
-
+        private readonly ButtonTest XButtonTest = new ButtonTest();
         private readonly ButtonTest ConfirmTest = new ButtonTest();
         private readonly ButtonTest CancelTest = new ButtonTest();
 
@@ -348,6 +350,8 @@ public class InputManager : MonoBehaviour {
                     return ConfirmTest;
                 case ActionCode.Cancel:
                     return CancelTest;
+                case ActionCode.XButton:
+                    return XButtonTest;
                 default:
                     return AttackTest;
             }
@@ -374,6 +378,7 @@ public class InputManager : MonoBehaviour {
             AddButtonMapping(ActionCode.Switch, ButtonCode.Y);
             AddButtonMapping(ActionCode.Confirm, ButtonCode.A);
             AddButtonMapping(ActionCode.Cancel, ButtonCode.B);
+            AddButtonMapping(ActionCode.XButton, ButtonCode.X);
             SetMoveJoyStick(JoyStickCode.Left);
             SetAimJoyStick(JoyStickCode.Right);
         }
@@ -429,6 +434,13 @@ public class InputManager : MonoBehaviour {
                 testAll = testAll || del();
             cancel.Pressed = testAll;
 
+            XButtonTest.Down(delegate { xbutton.OnDown.Invoke(); });
+            XButtonTest.Up(delegate { xbutton.OnUp.Invoke(); });
+            testAll = false;
+            foreach (TestEvent del in XButtonTest.Pressed)
+                testAll = testAll || del();
+            xbutton.Pressed = testAll;
+
         }
 
         // Create a new Xbox controller with the specified player number
@@ -467,6 +479,7 @@ public class InputManager : MonoBehaviour {
             ButtonMaps.Add(ActionCode.Switch, new HashSet<ButtonCode>());
             ButtonMaps.Add(ActionCode.Confirm, new HashSet<ButtonCode>());
             ButtonMaps.Add(ActionCode.Cancel, new HashSet<ButtonCode>());
+            ButtonMaps.Add(ActionCode.XButton, new HashSet<ButtonCode>());
             SetDefaultMapping();
 #endif
         }
@@ -1072,6 +1085,7 @@ public class InputManager : MonoBehaviour {
         public readonly ButtonEvent Switch = new ButtonEvent();
         public readonly ButtonEvent confirm = new ButtonEvent();
         public readonly ButtonEvent cancel = new ButtonEvent();
+        public readonly ButtonEvent xbutton = new ButtonEvent();
         public abstract Vector2 MoveVector();
         public abstract Vector2 AimVector();
 
@@ -1084,7 +1098,7 @@ public class InputManager : MonoBehaviour {
 
         // List of every PlayerAction available
         public enum ActionCode {
-            Attack, Jump, Dodge, Start, Switch, /*testymode,*/ Confirm, Cancel
+            Attack, Jump, Dodge, Start, Switch, /*testymode,*/ Confirm, Cancel, XButton
         }
 
         // Type of Controller
