@@ -57,6 +57,15 @@ public class TileManager : MonoBehaviour {
 
     private Texture2D tileDamageMap;
 
+    // used for threading tile map damage editing
+    NativeArray<Color> pixels;
+
+    private void OnDestroy() {
+        // Ensure pixels array is destroyed to prevent memory leaks
+        if (pixels != null && pixels.IsCreated)
+            pixels.Dispose();
+    }
+
     public void StartGame() {
         tileMap = ReadTileMap(); // Read Tile Map currently in scene into memory
         if (tileMap == null || tileMap.Tiles.Length == 0) { // If no map, create a random map
@@ -79,7 +88,7 @@ public class TileManager : MonoBehaviour {
         tileDamageMap = CreateTexture3D(tileMap.Size.x, tileMap.Size.y, tileMap.Size.z, Color.black);
         Shader.SetGlobalTexture(Shader.PropertyToID("_TileDamageMap"), tileDamageMap);
         Shader.SetGlobalVector(Shader.PropertyToID("_TileMapSize"), (Vector3)tileMap.Size);
-        StartCoroutine(raiseMap(1.7f));
+        StartCoroutine(raiseMap(2f));
     }
 
     struct VelocityJob : IJobParallelFor {
@@ -101,7 +110,10 @@ public class TileManager : MonoBehaviour {
     private IEnumerator raiseMap(float duration) {
         float endTime = Time.time + duration;
         Color[] colors = tileDamageMap.GetPixels();
-        NativeArray<Color> pixels = new NativeArray<Color>(colors.Length, Allocator.Persistent);
+        // Ensure pixels array is destroyed to prevent memory leaks
+        if (pixels != null && pixels.IsCreated)
+            pixels.Dispose();
+        pixels = new NativeArray<Color>(colors.Length, Allocator.Persistent);
         VelocityJob job;
         JobHandle jobHandle;
         while (endTime > Time.time) {
@@ -148,7 +160,7 @@ public class TileManager : MonoBehaviour {
     Texture2D CreateTexture3D(int xSize, int ySize, int zSize, Color color) {
         Color[] colorArray = new Color[xSize * ySize * zSize];
         for (int i = 0; i < colorArray.Length; ++i) {
-            color.a = UnityEngine.Random.Range(0f, 0.5f);
+            color.a = UnityEngine.Random.Range(0f, 0.65f);
             colorArray[i] = color;
         }
         Texture2D t = new Texture2D(xSize, ySize * zSize, TextureFormat.RGBA32, false, false);

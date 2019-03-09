@@ -91,7 +91,32 @@ ModelImporter:
     2300000: polySurface17
     3300000: polySurface17
     4300000: polySurface17
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: phong1
+    second: {fileID: 2100000, guid: 4a349a5eb6733c94eac02150ef0ac93b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: phongE1
+    second: {fileID: 2100000, guid: 793425e8ca962b9459fa166b11fe12b2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: phongE2
+    second: {fileID: 2100000, guid: 5ae4d09a0b75dec44aec2b21c5de9703, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: phongE3
+    second: {fileID: 2100000, guid: 04e881c5a960121469af537f3b853491, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: phongE4
+    second: {fileID: 2100000, guid: a4fd7e71fc6f74048ab05c6b19244957, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
