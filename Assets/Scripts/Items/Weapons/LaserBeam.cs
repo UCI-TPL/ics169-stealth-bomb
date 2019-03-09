@@ -18,6 +18,8 @@ public class LaserBeam : MonoBehaviour {
     public float hitCooldown = 0.2f;
     [HideInInspector]
     public GameObject IgnoreCollision;
+    [HideInInspector]
+    public PlayerController player;
     public float baseAlphaCutoff = 0.6f;
     private float alphaCutoff;
     private float AlphaCutoff {
@@ -74,7 +76,15 @@ public class LaserBeam : MonoBehaviour {
 
         RaycastHit hit;
         float length;
-        if (Physics.Raycast(transform.position, transform.forward, out hit, MaxLength * mainEffect.transform.lossyScale.z, CollideMask, QueryTriggerInteraction.Ignore)) {
+        bool hasHit;
+        if (hasHit = Physics.Raycast(transform.position, transform.forward, out hit, MaxLength * mainEffect.transform.lossyScale.z, CollideMask, QueryTriggerInteraction.Ignore)) {
+            while (player?.HitBox.Contains(hit.collider) ?? false) // repeat untill hit is not the player
+                if (!Physics.Raycast(hit.point + transform.forward * 0.1f, transform.forward, out hit, (MaxLength * mainEffect.transform.lossyScale.z) - Vector3.Distance(transform.position, hit.point), CollideMask, QueryTriggerInteraction.Ignore)) {
+                    hasHit = false;
+                    break;
+                }
+        }
+        if (hasHit) {
             end.transform.position = hit.point;
             length = Vector3.Distance(front.transform.localPosition, end.transform.localPosition); // length is distance betwen beginning point(front) and end point(end)
 

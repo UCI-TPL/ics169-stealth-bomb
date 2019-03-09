@@ -69,6 +69,7 @@ public class LaserWeapon : Weapon {
     }
 
     private void SetUpLaser(LaserBeam laserBeam) {
+        laserBeam.player = player.controller;
         laserBeam.transform.parent = player.controller.transform;
         laserBeam.transform.forward = player.controller.transform.forward;
         laserBeam.transform.position = player.controller.transform.position + laserBeam.transform.forward * 0.5f;
