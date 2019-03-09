@@ -8,7 +8,7 @@ public class GroundEffect : MonoBehaviour {
     [HideInInspector]
     public float HitCooldown { get; private set; }
     [HideInInspector]
-    public object Source { get; private set; }
+    public Player Source { get; private set; }
     public Collider hitBox;
     private List<Collider> IgnoreCollision;
     [SerializeField]
@@ -69,11 +69,11 @@ public class GroundEffect : MonoBehaviour {
         newInstance.Source = source;
         newInstance.HitCooldown = hitCooldown;
         newInstance.IgnoreCollision = ignoreCollision;
-        if (ignoreCollision != null) {
-            foreach (Collider c in ignoreCollision)
-                if (c != null)
-                    Physics.IgnoreCollision(c, newInstance.hitBox);
-        }
+        //if (ignoreCollision != null) {
+        //    foreach (Collider c in ignoreCollision)
+        //        if (c != null)
+        //            Physics.IgnoreCollision(c, newInstance.hitBox);
+        //}
 
         newInstance.endTime = Time.time + duration;
     }
@@ -129,7 +129,8 @@ public class GroundEffect : MonoBehaviour {
     }
 
     private void OnTriggerStay(Collider other) {
-        if (!CooldownSet[Source].Contains(other.gameObject)) {
+        Player p = other.GetComponentInParent<PlayerController>()?.player;
+        if (p != null && p != Source && !CooldownSet[Source].Contains(other.gameObject)) {
             CooldownSet[Source].Add(other.gameObject);
             CooldownQueue[Source].Enqueue(new CooldownObject(other.gameObject, HitCooldown));
             OnHit(transform.position, other.gameObject);
