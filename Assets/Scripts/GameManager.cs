@@ -397,7 +397,7 @@ public class GameManager : MonoBehaviour {
             new string[] { "LoadLevel" }
         };
 
-        private string[] testLevels = { "Map3A_T_Arena", "LoadLevel" };
+        private string[] testLevels = { "Map1_TownMarket", "Map3A_T_Arena", "Map2A_T_PitCircle", "Map4A_T_Islands" };
 
         // A random number generator, used to pick a stage from an array in levelNames.
         System.Random rng = new System.Random();

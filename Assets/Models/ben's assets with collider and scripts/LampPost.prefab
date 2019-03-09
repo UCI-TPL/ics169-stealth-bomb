@@ -527,7 +527,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46cd9f9f5f631f44ea3ad19d5ed0031e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 0
+  maxHealth: 1
   shakeCooldown: 0.02
   destroyEffDuration: 0.85
   particles: {fileID: 1951624619801250, guid: 708f4849a0de89348b0f4dc761d0091c, type: 3}
