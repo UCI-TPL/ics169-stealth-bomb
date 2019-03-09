@@ -19642,7 +19642,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMenuManager: {fileID: 1668276871}
   sliderStepSize: 0.5
-  selectedButtonSound: Bow
+  selectedButtonSound: MenuNav
   AudioMenuInteractables:
   - {fileID: 457114381}
   - {fileID: 2049921185}
