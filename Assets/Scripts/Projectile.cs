@@ -24,14 +24,17 @@ public class Projectile : MonoBehaviour {
     [HideInInspector]
     public GameObject hitEffect;
 
-    void Start () {
+    protected virtual void Start () {
         origin = transform.position;
         if (player.controller.HitBox != null)
             foreach (Collider c in player.controller.HitBox)
                 Physics.IgnoreCollision(c, collider);
-        trail.material.color = player.controller.playerColor;
-        var trailModule = particle.trails;
-        trailModule.colorOverLifetime = player.controller.playerColor;
+        if (trail != null)
+            trail.material.color = player.controller.playerColor;
+        if (particle != null) {
+            var trailModule = particle.trails;
+            trailModule.colorOverLifetime = player.controller.playerColor;
+        }
     }
 
     //private void OnTriggerEnter(Collider other) {

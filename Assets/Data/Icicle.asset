@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b710d28ec94f3e344a5a88f4144051a0, type: 3}
   m_Name: Icicle
   m_EditorClassIdentifier: 
-  projectile: {fileID: 114721991009535130, guid: 95a6a99576e0ac64ab009e3fbd92559b,
+  projectile: {fileID: 7156068899915677817, guid: 95a6a99576e0ac64ab009e3fbd92559b,
     type: 3}
   hitEffect: {fileID: 5779502672186677134, guid: 75c38493b1ef2844685172829b6cf2f9,
     type: 3}

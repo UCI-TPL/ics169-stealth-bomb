@@ -150,10 +150,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4805648756126296}
   - component: {fileID: 65851718138537896}
-  - component: {fileID: 114721991009535130}
   - component: {fileID: 54612792617523452}
+  - component: {fileID: 7156068899915677817}
   m_Layer: 12
-  m_Name: TEST WAVE
+  m_Name: Icicle
   m_TagString: Arrow
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -190,23 +190,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &114721991009535130
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1944683509401604}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70b170e231376454abd8783b791304ed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  trail: {fileID: 4041607968834209054}
-  collider: {fileID: 65851718138537896}
-  projectileRenderer: {fileID: 6767339437657433960}
-  damageMultiplier: 0
-  hitEffect: {fileID: 0}
 --- !u!54 &54612792617523452
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -223,6 +206,26 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 1
+--- !u!114 &7156068899915677817
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1944683509401604}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f743337c529734c4da6ff4eb74af0f7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trail: {fileID: 4041607968834209054}
+  particle: {fileID: 0}
+  collider: {fileID: 65851718138537896}
+  projectileRenderer: {fileID: 6767339437657433960}
+  damageMultiplier: 0
+  hitEffect: {fileID: 0}
+  accelerationTime: 0.5
+  accelerationPower: 3.5
 --- !u!1 &4382180452587874870
 GameObject:
   m_ObjectHideFlags: 0
