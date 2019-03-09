@@ -31,7 +31,7 @@ public class BlackHole : MonoBehaviour {
 
 	private float z = 14.72f;
 
-	private float defaultCenterScale = 0.5f;
+	private float defaultCenterScale = 0.35f;
 	private float defaultParticleSize = 0.1f;
 
 	void Awake() {
