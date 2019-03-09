@@ -53,7 +53,7 @@ public class Player : IHurtable {
         this.playerNumber = playerNumber;
         this.inputControllerNumber = xboxControllerNumber;
         this.playerData = playerData;
-        this.colorIndex = GameManager.instance.AssignPlayerColor(); //this decides what color the player will be
+        this.colorIndex = GameManager.instance.GetPlayerColor(playerNumber);//  GameManager.instance.AssignPlayerColor(); //this decides what color the player will be
         stats = new PlayerStats(this); // Creates a stats profile for the player
         ResetHealth();
         ResetWeapon();

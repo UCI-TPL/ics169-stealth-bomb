@@ -156,9 +156,18 @@ public class PlayerController : MonoBehaviour, IHurtable {
         input.controllers[player.inputControllerNumber].dodge.OnDown.AddListener(ActivateSpecialMove);
         input.controllers[player.inputControllerNumber].dodge.OnUp.AddListener(ReleaseSpecialMove);
         input.controllers[player.inputControllerNumber].Switch.OnDown.AddListener(SwitchWeapon);
+        input.controllers[player.inputControllerNumber].start.OnDown.AddListener(PauseGame);
+
+        //time to add paude I guess
 
         //ShootPointDefaultPosition = ShootPoint.transform.localPosition;
         //StartCoroutine(StartAnimation());
+    }
+
+    public void PauseGame()
+    {
+        Debug.Log("It has been pressed");
+        PauseMenuUI.Instance.Pause(player.playerNumber);
     }
 
     public void SetPlayerColor() //gives color to the various parts of the player

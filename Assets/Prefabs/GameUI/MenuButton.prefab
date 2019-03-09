@@ -222,8 +222,8 @@ MonoBehaviour:
       Culture=neutral, PublicKeyToken=null
   selectedScale: 1.2
   playPressedButtonSFX: 1
-  selectedButtonSound: Bow
-  pressedButtonSound: Bow
+  selectedButtonSound: MenuNav
+  pressedButtonSound: ButtonActivation
 --- !u!114 &8165526707480251332
 MonoBehaviour:
   m_ObjectHideFlags: 0

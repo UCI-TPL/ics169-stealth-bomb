@@ -22,6 +22,8 @@ public class CrumbleTile : Tile, IHurtable {
     [HideInInspector]
     public bool crumbling = false;
 
+    private bool isDead = false;
+
     private void Awake() {
         if (ParticlePoolParent == null) {
             ParticlePoolParent = new GameObject("CrumbleParticlePool").transform;
@@ -113,6 +115,12 @@ public class CrumbleTile : Tile, IHurtable {
             yield return null;
         }
         TileManager.tileManager.SetTileDamage(position, 1, 1, 1-HealthPercent); // Set shader dissolve level
+        isDead = true;
         Destroy(gameObject);
+    }
+
+    private void Update() {
+        if (isDead)
+            Destroy(gameObject);
     }
 }

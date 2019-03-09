@@ -50,7 +50,9 @@ public class AudioMenuManager : MonoBehaviour
     public void ResetAudioPanel() {
         currentAudioMenuInteractable = 0;
         prevAudioMenuInteractable = currentAudioMenuInteractable;
-        // audioMenuButtons(currentAudioMenuInteractable);
+        if (mainMenuManager.getCurrentPanel() == 5)
+            _buttonSelect(currentAudioMenuInteractable);
+            // audioMenuButtons(currentAudioMenuInteractable);
     }
 
     // Update is called once per frame
@@ -76,7 +78,7 @@ public class AudioMenuManager : MonoBehaviour
                                 currentAudioMenuInteractable--;
                                 CheckAndMoveCursorToBottom();
                                 // CheckForAndSkipDeactivatedButtons(true);
-                                // audioMenuButtons(currentAudioMenuInteractable);
+                                audioMenuButtons(currentAudioMenuInteractable);
                                 // Debug.Log("cursor moved up to " + currentAudioMenuInteractable);
                                 hasMoved = true;
                             }
@@ -84,12 +86,12 @@ public class AudioMenuManager : MonoBehaviour
                                 currentAudioMenuInteractable++;
                                 CheckAndMoveCursorToTop();
                                 // CheckForAndSkipDeactivatedButtons(false);
-                                // audioMenuButtons(currentAudioMenuInteractable);
+                                audioMenuButtons(currentAudioMenuInteractable);
                                 // Debug.Log("cursor moved down to " + currentAudioMenuInteractable);
                                 hasMoved = true;
                             }
 
-                            audioMenuButtons(currentAudioMenuInteractable);
+                            // audioMenuButtons(currentAudioMenuInteractable);
 
                             if (currentAudioMenuInteractable < AudioMenuInteractables.Length - 1) {
                                 if (currentStates[i].ThumbSticks.Left.X > mainMenuManager.controllerStickDeadZone) {
@@ -194,14 +196,16 @@ public class AudioMenuManager : MonoBehaviour
 		// btn = mainMenuPanel.transform.GetChild(i).gameObject;
 		// if (prevAudioMenuInteractable != currentAudioMenuInteractable)
 		// 	Debug.Log("audio menu interactable selected: " + btn.name);
+        if (selectedButtonSound != null && selectedButtonSound != "")
+            GameManager.instance.audioManager.Play(selectedButtonSound);
 		_buttonSelect(i);
 	}
 
     private void _buttonSelect(int i)
 	{
 		selectable = AudioMenuInteractables[i];
-        if (selectedButtonSound != null && selectedButtonSound != "")
-            GameManager.instance.audioManager.Play(selectedButtonSound);
+        // if (selectedButtonSound != null && selectedButtonSound != "")
+        //     GameManager.instance.audioManager.Play(selectedButtonSound);
 		selectable.Select();
 	}
 }

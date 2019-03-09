@@ -17,6 +17,9 @@ public class ProjectileData : ScriptableObject {
         for (int i = 0; i < numberOfProjectile; ++i)
             SpawnProjectile(player.controller.ShootPoint.transform.position, player.controller.ShootPoint.transform.rotation * Quaternion.AngleAxis(((numberOfProjectile - 1) * spreadAngle / -2) + i * spreadAngle, player.controller.ShootPoint.transform.up), speed, Onhit, player);
     }
+    public void Shoot(Player player, float speed, Vector3 origin, Quaternion direction, Projectile.HitAction Onhit) {
+        SpawnProjectile(origin, direction, speed, Onhit, player);
+    }
 
     private void SpawnProjectile(Vector3 origin, Quaternion direction, float speed, Projectile.HitAction Onhit, Player player) {
 

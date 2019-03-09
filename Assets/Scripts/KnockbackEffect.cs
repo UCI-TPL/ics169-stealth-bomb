@@ -28,7 +28,7 @@ public class KnockbackEffect : MonoBehaviour {
             p.Clear();
             var impactmain = p.main;
             impactmain.startColor = knockbackColors[playerNumber % (knockbackColors.Length - 1) ?? knockbackColors.Length - 1].impactColor;
-            impactmain.startLifetime = time - 0.1f;
+            impactmain.startLifetime = time - 0.01f;
         }
         ps.Play(true);
         StopAllCoroutines();

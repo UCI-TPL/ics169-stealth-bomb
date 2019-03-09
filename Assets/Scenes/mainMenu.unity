@@ -4412,6 +4412,13 @@ MonoBehaviour:
   - {fileID: 1785240546}
   countdownText: {fileID: 1582573484}
   numOfTimesMenuLoaded: 0
+  Colors:
+  - {r: 1, g: 0.23137255, b: 0.22352941, a: 1}
+  - {r: 0.16470589, g: 0.3647059, b: 1, a: 1}
+  - {r: 0.972549, g: 1, b: 0, a: 1}
+  - {r: 0, g: 1, b: 0.003921569, a: 1}
+  - {r: 0.52156866, g: 0.1254902, b: 1, a: 1}
+  - {r: 0.8392157, g: 0.44705883, b: 0.77254903, a: 1}
 --- !u!4 &200392769
 Transform:
   m_ObjectHideFlags: 0
@@ -10004,14 +10011,14 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 1244001726344458, guid: 40632a0e2689da549ac1d33e92138743, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 114380574983239810, guid: 40632a0e2689da549ac1d33e92138743,
         type: 3}
       propertyPath: maxRank
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1244001726344458, guid: 40632a0e2689da549ac1d33e92138743, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 40632a0e2689da549ac1d33e92138743, type: 3}
@@ -19635,7 +19642,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMenuManager: {fileID: 1668276871}
   sliderStepSize: 0.5
-  selectedButtonSound: Bow
+  selectedButtonSound: MenuNav
   AudioMenuInteractables:
   - {fileID: 457114381}
   - {fileID: 2049921185}
@@ -28737,7 +28744,6 @@ GameObject:
   - component: {fileID: 1582573481}
   - component: {fileID: 1582573485}
   - component: {fileID: 1582573484}
-  - component: {fileID: 1582573483}
   - component: {fileID: 1582573482}
   m_Layer: 5
   m_Name: countdownText
@@ -28764,67 +28770,23 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -171}
-  m_SizeDelta: {x: 600, y: 30}
+  m_SizeDelta: {x: 600, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!102 &1582573482
-TextMesh:
-  serializedVersion: 3
+--- !u!114 &1582573482
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1582573480}
-  m_Text: 
-  m_OffsetZ: 0
-  m_CharacterSize: 25
-  m_LineSpacing: 1
-  m_Anchor: 0
-  m_Alignment: 1
-  m_TabSize: 4
-  m_FontSize: 25
-  m_FontStyle: 1
-  m_RichText: 1
-  m_Font: {fileID: 12800000, guid: 429f351db53f71f47bfa963b6985302c, type: 3}
-  m_Color:
-    serializedVersion: 2
-    rgba: 4278219995
---- !u!23 &1582573483
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1582573480}
-  m_Enabled: 0
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 429f351db53f71f47bfa963b6985302c, type: 3}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 0
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -900027084, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 1, g: 1, b: 1, a: 0.5}
+  m_EffectDistance: {x: 1, y: -2}
+  m_UseGraphicAlpha: 1
 --- !u!114 &1582573484
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28838,7 +28800,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9843137, g: 0.52156866, b: 0, a: 1}
+  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -28847,10 +28809,10 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: 429f351db53f71f47bfa963b6985302c, type: 3}
-    m_FontSize: 25
-    m_FontStyle: 1
+    m_FontSize: 30
+    m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 7
+    m_MinSize: 0
     m_MaxSize: 94
     m_Alignment: 4
     m_AlignByGeometry: 0

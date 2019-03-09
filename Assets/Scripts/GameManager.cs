@@ -76,7 +76,9 @@ public class GameManager : MonoBehaviour {
     public List<Player> Winners = new List<Player>();
 
     [HideInInspector]
-    private List<int> PlayerColors = new List<int>(new int[] { 0, 1, 2, 3, 4, 5});
+    public Dictionary<int,int> PlayerColor = new Dictionary<int,int>(); //meant to store player color, color index. This is set in the menu 
+    [HideInInspector]
+    private List<int> ColorIndexes = new List<int>(new int[] { 0, 1, 2, 3, 4, 5});
     //public List<int> PlayerColors = new List<int>(); //list of player colors that have been given out
 
 
@@ -98,6 +100,7 @@ public class GameManager : MonoBehaviour {
         //   s += "player " + i.ToString() + ": " + playersReady[i].ToString() + "  ";
         // }
         // Debug.Log(s);
+      
         rounds.Clear();
         SetUpPlayers(playersReady, xboxControllerNumbers);
         leader = null;
@@ -129,7 +132,7 @@ public class GameManager : MonoBehaviour {
         instance.Winners.Clear();
         Time.timeScale = 1;
         Time.fixedDeltaTime = 0.02f;
-        instance.PlayerColors = new List<int>(new int[] { 0, 1, 2, 3, 4, 5 }); //reset the available colors
+        instance.ColorIndexes = new List<int>(new int[] { 0, 1, 2, 3, 4, 5 }); //reset the available colors
         foreach (GameRound round in instance.rounds)
             round.EndGame();
         GameManager.instance.audioManager.Stop("Fanfare");
@@ -272,15 +275,39 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    public int AssignPlayerColor()
+    public int AssignPlayerColor(int playerNum)
     {
-        int randomIndex = UnityEngine.Random.Range(0, instance.PlayerColors.Count);
-        int color = instance.PlayerColors[randomIndex];
-        instance.PlayerColors.Remove(color);
-        return color;
+        if(PlayerColor.ContainsKey(playerNum))
+        {
+            return PlayerColor[playerNum];
+        }
+        int randomIndex = UnityEngine.Random.Range(0, instance.ColorIndexes.Count);
+        int colorIndex = instance.ColorIndexes[randomIndex];
+        instance.ColorIndexes.Remove(colorIndex);
+        PlayerColor[playerNum] = colorIndex;
+        return colorIndex;
     }
 
+    public int GetPlayerColor(int playerNum)
+    {
+        if(PlayerColor.ContainsKey(playerNum))
+        {
+            return PlayerColor[playerNum];
+        }
+        else
+        {
+            return AssignPlayerColor(playerNum);
+        }
+
+
+    }
     
+    public bool CanPause() //lets the Pause UI know if it is ok to pause, to prevent it from pausing when leaving the progress screeen or in any scene
+    {
+        int state = (int) instance.rounds[rounds.Count - 1].State; //converting enum to int
+        return (state == 3 || state == 4) ? true : false; //return true if the game is in Battle or HurryUp
+    }
+
 
     private IEnumerator StartGameAfterLoad(GameRound round) {
         while (round.State != GameRound.GameState.Ready)
