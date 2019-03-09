@@ -13,6 +13,8 @@ public class AudioManager : MonoBehaviour {
 
     public Sound[] sounds; //all the sounds in the game
 
+    public Sound[] WinnerAnnouncement;
+
     public AudioMixer audioMixer; //global audio settings
 
     public static AudioManager instance;
@@ -42,7 +44,17 @@ public class AudioManager : MonoBehaviour {
             s.source.outputAudioMixerGroup = s.output;
         }
 
-        announcerType = UnityEngine.Random.Range(1,3);
+        foreach (Sound s in WinnerAnnouncement)  //initializes the array of Sounds for the win announcement
+        {
+            s.source = gameObject.AddComponent<AudioSource>();
+            s.source.clip = s.clip;
+            s.source.volume = s.volume;
+            s.source.pitch = s.pitch;
+            s.source.loop = s.loop;
+            s.source.outputAudioMixerGroup = s.output;
+        }
+
+        announcerType = 2;//UnityEngine.Random.Range(1,3); //mickey mouse, old man, etc
 	}
 
     private int randomSound;
@@ -61,9 +73,25 @@ public class AudioManager : MonoBehaviour {
             case "Ready": instance.Play(name + announcerType); break;
             default: Debug.LogError(name+" case not found"); break;
         } 
+    }
 
-        //int randomIndex = UnityEngine.Random.Range(1, range + 1);
-        //Debug.Log("The chosen number is " + randomIndex);
+    public void AnnounceWinner(int pNumber)
+    {
+        string name = "";
+        switch(GameManager.instance.GetPlayerColor(pNumber))
+        {
+            case 0: name = "Red" + announcerType.ToString();  break; //change this to work with not just playernumber
+            case 1: name = "Blue" + announcerType.ToString(); break;
+            case 2: name = "Yellow" + announcerType.ToString(); break;
+            case 3: name = "Yellow" + announcerType.ToString(); break;
+            case 4: name = "Purple" + announcerType.ToString(); break;
+            case 5: name = "Pink" + announcerType.ToString(); break;
+            case 6: name = "Blue" + announcerType.ToString(); break;
+            case 7: name = "Green" + announcerType.ToString(); break;
+            default: break;
+        }
+         if(name != "")
+            Array.Find(WinnerAnnouncement, sound => sound.name == name).source.Play();
     }
 	
     public void Play(string name) //plays a sound if it is found

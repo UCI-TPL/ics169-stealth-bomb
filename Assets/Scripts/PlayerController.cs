@@ -166,7 +166,6 @@ public class PlayerController : MonoBehaviour, IHurtable {
 
     public void PauseGame()
     {
-        Debug.Log("It has been pressed");
         PauseMenuUI.Instance.Pause(player.playerNumber);
     }
 

@@ -359,9 +359,15 @@ public class GameManager : MonoBehaviour {
         for (int i = 0; i < players.Length; i++) {
             if (players[i] != null && players[i].rank >= maxRank && !Winners.Contains(players[i])) {
                 Winners.Add(players[i]);
+                instance.audioManager.AnnounceWinner(i);
             }
         }
         //Debug.Log("number of winners in game manager = " + Winners.Count);
+    }
+
+    public void AnnounceWinner(int pNumber) //players the "PLAYER WINS" audio
+    {
+
     }
 
     public class GameRound {

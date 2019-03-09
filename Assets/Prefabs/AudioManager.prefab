@@ -184,6 +184,91 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     output: {fileID: 243314870721836108, guid: 8fb7316e453bb03438b7782f518b5c48, type: 2}
+  WinnerAnnouncement:
+  - clip: {fileID: 8300000, guid: 50c72df83ff386e4990d4158d8e9cd1f, type: 3}
+    name: Blue1
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+    output: {fileID: 0}
+  - clip: {fileID: 8300000, guid: 05a0c52039889384fbf5b8bcdf2fd59d, type: 3}
+    name: Blue2
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+    output: {fileID: 0}
+  - clip: {fileID: 8300000, guid: 2ad44247f5ef2f2448cf60907361c2c4, type: 3}
+    name: Green1
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+    output: {fileID: 0}
+  - clip: {fileID: 8300000, guid: 1540ef9edd7846f489ba3617a89969b6, type: 3}
+    name: Green2
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+    output: {fileID: 0}
+  - clip: {fileID: 8300000, guid: ee91574f75ac1854eb4d187b7aff545d, type: 3}
+    name: Pink1
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+    output: {fileID: 0}
+  - clip: {fileID: 8300000, guid: e1002376a0bff0646a4a28872c17bcd4, type: 3}
+    name: Pink2
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+    output: {fileID: 0}
+  - clip: {fileID: 8300000, guid: 51db28edbc3e26b43b2d3d1079fe0841, type: 3}
+    name: Purple1
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+    output: {fileID: 0}
+  - clip: {fileID: 8300000, guid: 0cf9c458cb1bf1b4a8d5dc8dd196ca97, type: 3}
+    name: Purple2
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+    output: {fileID: 0}
+  - clip: {fileID: 8300000, guid: 1901ed5ea9d62fb438160a8479125838, type: 3}
+    name: Red1
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+    output: {fileID: 0}
+  - clip: {fileID: 8300000, guid: 5df45ed90cfb3f7468e8caea0f95233e, type: 3}
+    name: Red2
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+    output: {fileID: 0}
+  - clip: {fileID: 8300000, guid: 78e829e5a29c42a4a8ebdc20f82e86be, type: 3}
+    name: Yellow1
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+    output: {fileID: 0}
+  - clip: {fileID: 8300000, guid: f91387809d208c04b8ca883c48d22a5b, type: 3}
+    name: Yellow2
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+    output: {fileID: 0}
   audioMixer: {fileID: 24100000, guid: 8fb7316e453bb03438b7782f518b5c48, type: 2}
   announcerType: 0
   muted: 0
