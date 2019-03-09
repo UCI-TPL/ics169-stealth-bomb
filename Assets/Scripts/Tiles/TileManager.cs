@@ -76,10 +76,10 @@ public class TileManager : MonoBehaviour {
 
         StopAllCoroutines(); // Stop updates from previous round
 
-        tileDamageMap = CreateTexture3D(tileMap.Size.x, tileMap.Size.y, tileMap.Size.z, new Color(0, 0, 0, 0));
+        tileDamageMap = CreateTexture3D(tileMap.Size.x, tileMap.Size.y, tileMap.Size.z, Color.black);
         Shader.SetGlobalTexture(Shader.PropertyToID("_TileDamageMap"), tileDamageMap);
         Shader.SetGlobalVector(Shader.PropertyToID("_TileMapSize"), (Vector3)tileMap.Size);
-        StartCoroutine(raiseMap(1.75f));
+        StartCoroutine(raiseMap(1.7f));
     }
 
     struct VelocityJob : IJobParallelFor {
@@ -148,7 +148,7 @@ public class TileManager : MonoBehaviour {
     Texture2D CreateTexture3D(int xSize, int ySize, int zSize, Color color) {
         Color[] colorArray = new Color[xSize * ySize * zSize];
         for (int i = 0; i < colorArray.Length; ++i) {
-            color.a = UnityEngine.Random.Range(0f, 0.8f);
+            color.a = UnityEngine.Random.Range(0f, 0.5f);
             colorArray[i] = color;
         }
         Texture2D t = new Texture2D(xSize, ySize * zSize, TextureFormat.RGBA32, false, false);
