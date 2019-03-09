@@ -78,7 +78,7 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
         GhostParabola1 = Curves.transform.Find("Curve 1").gameObject.GetComponent<ParabolaController>();
         GhostParabola2 = Curves.transform.Find("Curve 2").gameObject.GetComponent<ParabolaController>();
 
-        input.controllers[player.playerNumber].attack.OnDown.AddListener(Activate);
+        input.controllers[player.inputControllerNumber].attack.OnDown.AddListener(Activate);
 
 
         StartCoroutine("SpawnCursor");
