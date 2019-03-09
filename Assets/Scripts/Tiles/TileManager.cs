@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
+using Unity.Jobs;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -74,9 +76,66 @@ public class TileManager : MonoBehaviour {
 
         StopAllCoroutines(); // Stop updates from previous round
 
-        tileDamageMap = CreateTexture3D(tileMap.Size.x, tileMap.Size.y, tileMap.Size.z, Color.black);
+        tileDamageMap = CreateTexture3D(tileMap.Size.x, tileMap.Size.y, tileMap.Size.z, new Color(0, 0, 0, 0));
         Shader.SetGlobalTexture(Shader.PropertyToID("_TileDamageMap"), tileDamageMap);
         Shader.SetGlobalVector(Shader.PropertyToID("_TileMapSize"), (Vector3)tileMap.Size);
+        StartCoroutine(raiseMap(1.75f));
+    }
+
+    struct VelocityJob : IJobParallelFor {
+        // By default containers are assumed to be read & write
+        public NativeArray<Color> pixels;
+
+        // Delta time must be copied to the job since jobs generally don't have concept of a frame.
+        // The main thread waits for the job same frame or next frame, but the job should do work deterministically
+        // independent on when the job happens to run on the worker threads.
+        public float deltaTime;
+
+        // The code actually running on the job
+        public void Execute(int i) {
+            // Move the positions based on delta time and velocity
+            pixels[i] = new Color(pixels[i].r, pixels[i].g, pixels[i].b, pixels[i].a + deltaTime);
+        }
+    }
+
+    private IEnumerator raiseMap(float duration) {
+        float endTime = Time.time + duration;
+        Color[] colors = tileDamageMap.GetPixels();
+        NativeArray<Color> pixels = new NativeArray<Color>(colors.Length, Allocator.Persistent);
+        VelocityJob job;
+        JobHandle jobHandle;
+        while (endTime > Time.time) {
+            colors = tileDamageMap.GetPixels();
+            pixels.CopyFrom(colors);
+
+            // Initialize the job data
+            job = new VelocityJob() {
+                deltaTime = Time.deltaTime / duration,
+                pixels = pixels
+            };
+
+            jobHandle = job.Schedule(pixels.Length, 64);
+            jobHandle.Complete();
+            job.pixels.CopyTo(colors);
+
+            tileDamageMap.SetPixels(colors);
+            yield return null;
+        }
+        colors = tileDamageMap.GetPixels();
+        pixels.CopyFrom(colors);
+
+        // Initialize the job data
+        job = new VelocityJob() {
+            deltaTime = 1,
+            pixels = pixels
+        };
+
+        jobHandle = job.Schedule(pixels.Length, 64);
+        jobHandle.Complete();
+        job.pixels.CopyTo(colors);
+
+        tileDamageMap.SetPixels(colors);
+        pixels.Dispose();
     }
 
     private void Update() {
@@ -88,8 +147,10 @@ public class TileManager : MonoBehaviour {
 
     Texture2D CreateTexture3D(int xSize, int ySize, int zSize, Color color) {
         Color[] colorArray = new Color[xSize * ySize * zSize];
-        for (int i = 0; i < colorArray.Length; ++i)
+        for (int i = 0; i < colorArray.Length; ++i) {
+            color.a = UnityEngine.Random.Range(0f, 0.8f);
             colorArray[i] = color;
+        }
         Texture2D t = new Texture2D(xSize, ySize * zSize, TextureFormat.RGBA32, false, false);
         t.SetPixels(colorArray);
         t.Apply();

@@ -159,7 +159,7 @@ public class TileMapEditorInspector : Editor {
         }
     }
 
-    private float crumbleValue = 0, dissolveValue = 0, damageValue = 0;
+    private float crumbleValue = 0, dissolveValue = 0, damageValue = 0, heightValue = 1;
 
     private void TileDamageGUI() {
         GUIStyle title = new GUIStyle(GUI.skin.label); // Text style for title
@@ -167,17 +167,20 @@ public class TileMapEditorInspector : Editor {
         title.fontStyle = FontStyle.Bold;
         GUILayout.BeginHorizontal();
         GUILayout.Label("Tile Health Visualizer", title);
-        if (GUILayout.Button("Reset Tile Health"))
+        if (GUILayout.Button("Reset Tile Health")) {
             crumbleValue = dissolveValue = damageValue = 0;
+            heightValue = 1;
+        }
         GUILayout.EndHorizontal();
         crumbleValue = EditorGUILayout.Slider("Crumble:", crumbleValue, 0, 1);
         dissolveValue = EditorGUILayout.Slider("Dissolve:", dissolveValue, 0, 1);
         damageValue = EditorGUILayout.Slider("Damage:", damageValue, 0, 1);
-        UpdateTileHealth(crumbleValue, dissolveValue, damageValue);
+        heightValue = EditorGUILayout.Slider("Height:", heightValue, 0, 1);
+        UpdateTileHealth(crumbleValue, dissolveValue, damageValue, heightValue);
     }
     
-    private static void UpdateTileHealth(float crumbleValue, float dissolveValue, float damageValue) {
-        Color[] colorArray = new Color[] {new Color(crumbleValue, dissolveValue, damageValue, 1)};
+    private static void UpdateTileHealth(float crumbleValue, float dissolveValue, float damageValue, float heightValue) {
+        Color[] colorArray = new Color[] {new Color(crumbleValue, dissolveValue, damageValue, heightValue)};
         Texture2D t = new Texture2D(1, 1, TextureFormat.RGBA32, false, true);
         t.SetPixels(colorArray);
         t.Apply();
