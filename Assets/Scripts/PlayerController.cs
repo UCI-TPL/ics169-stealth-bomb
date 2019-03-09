@@ -549,6 +549,7 @@ public class PlayerController : MonoBehaviour, IHurtable {
     //}
 
     public float Hurt(Player damageDealer, float amount) {
+        // Debug.Log("hurt vibration for player " + player.playerNumber + " called.");
         input.controllers[player.inputControllerNumber].Vibrate(1.0f, 0.1f);
         StartCoroutine("HurtIndicator");
         return player.Hurt(damageDealer, amount);

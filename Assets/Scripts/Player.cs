@@ -13,7 +13,7 @@ public class Player : IHurtable {
     public PlayerData playerData { get; private set; }
 
     public int playerNumber;
-    public int inputControllerNumber;
+    public int inputControllerNumber;     // this variable stores the index of the xbox controller the player is using. use this when indexing through input manager from here on out!!!!
 
     public int colorIndex { get; private set; }
     public Color Color { get { return GameManager.instance.DefaultPlayerData.Colors[colorIndex]; } } // Player's color 
@@ -147,7 +147,7 @@ public class Player : IHurtable {
             
             if (!ghost && alive)
             {
-                controller.input.controllers[playerNumber].Vibrate(1.0f, 1f, InputManager.Controller.VibrationMode.Diminish);
+                controller.input.controllers[inputControllerNumber].Vibrate(1.0f, 1f, InputManager.Controller.VibrationMode.Diminish);
                 alive = false; //to make sure that EXP is only awarded once 
                 OnDeath(lastHurtBy, this);
             }

@@ -48,10 +48,10 @@ public class ChargeWeapon : Weapon {
         float vibrationLevel = 0.75f;
         if (ChargeLevel >= 1 && !rumbleOnce)
         {
-            InputManager.inputManager.controllers[player.playerNumber].Vibrate(ChargeLevel * vibrationLevel, 0.15f);
+            InputManager.inputManager.controllers[player.inputControllerNumber].Vibrate(ChargeLevel * vibrationLevel, 0.15f);
             rumbleOnce = true;
         }
-        //InputManager.inputManager.controllers[player.playerNumber].Vibrate(ChargeLevel * vibrationLevel, 0.1f);
+        //InputManager.inputManager.controllers[player.inputControllerNumber].Vibrate(ChargeLevel * vibrationLevel, 0.1f);
     }
 
     // OnRelease is called once when the weapon is released
