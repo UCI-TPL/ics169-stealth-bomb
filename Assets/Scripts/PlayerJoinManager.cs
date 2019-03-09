@@ -48,6 +48,8 @@ public class PlayerJoinManager : MonoBehaviour {
 	public RectTransform[] playersUI;
 	public Text countdownText;
 
+	public string interactionNoise = "ButtonActivation";
+
 	// [Tooltip("Reference to the game controller object.")]
 	// public GameObject gameManager;
 	// public string gameManagerName = "GameController";
@@ -279,6 +281,8 @@ public class PlayerJoinManager : MonoBehaviour {
 				bButtonMask.fillAmount = farthestTimer;
 				if (farthestTimer >= 1.0f) {
 					bButtonActivated = true;
+					// may want to remove interaction noise for exiting later!!
+					PlayInteractionNoise();
 					backButton.onClick.Invoke();
 					// farthestTimer = initialFillAmount;
 				}
@@ -346,6 +350,7 @@ public class PlayerJoinManager : MonoBehaviour {
 		}
 		else if (CanPlayerPressButton(controllerIdx) && controllersToPlayers[controllerIdx] != notAssignedController) {
 			if (usingNewPlayerJoinSystem) {
+				PlayInteractionNoise();
 				ReadyPlayer(controllerIdx);
 			}
 		}
@@ -513,6 +518,11 @@ public class PlayerJoinManager : MonoBehaviour {
 
 	private void TestConfirm() {
 		Debug.Log("button A pressed.");
+	}
+
+	private void PlayInteractionNoise() {
+		if (interactionNoise != null && interactionNoise != "")
+            GameManager.instance.audioManager.Play(interactionNoise);
 	}
 
 

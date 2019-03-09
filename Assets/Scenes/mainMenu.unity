@@ -4411,6 +4411,7 @@ MonoBehaviour:
   - {fileID: 1906285549}
   - {fileID: 1785240546}
   countdownText: {fileID: 1582573484}
+  interactionNoise: ButtonActivation
   numOfTimesMenuLoaded: 0
   Colors:
   - {r: 1, g: 0.23137255, b: 0.22352941, a: 1}
@@ -17459,7 +17460,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &929809576
 RectTransform:
   m_ObjectHideFlags: 0
