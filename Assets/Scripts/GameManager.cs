@@ -84,7 +84,11 @@ public class GameManager : MonoBehaviour {
     whenever a player's x pis above full rank's 70%
     change battle music to finale
      */
+     [Header("Audio related")]
+     public float finalePercent = 0.1f;
+     private static float finaleRank = 3f;
      private static string battle_music = "Battle";
+     
 
 
     public void StartGame(bool[] playersReady, int[] xboxControllerNumbers) {
@@ -167,6 +171,8 @@ public class GameManager : MonoBehaviour {
         else if (instance != this)
             Destroy(gameObject);
         UnityEngine.SceneManagement.SceneManager.sceneLoaded += onSceneLoaded;
+        battle_music = "Battle";
+        finaleRank = finalePercent * maxRank;
     }
 
     IEnumerator Countdown()
@@ -307,7 +313,7 @@ public class GameManager : MonoBehaviour {
             else if (player.experiance == highestEXP)
                 leader = null;
         }
-        if (GameManager.instance.maxRank >= 3)
+        if (leader != null && leader.rank >= finaleRank)
         {
             battle_music = "Finale";
         }
