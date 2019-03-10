@@ -31,4 +31,4 @@ MonoBehaviour:
   projectile: {fileID: 11400000, guid: 898ef1f4503804947985ca2706909d9b, type: 2}
   numProj: 5
   projSpeed: 20
-  SoundName: 
+  SoundName: Shotgun

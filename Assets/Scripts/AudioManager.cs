@@ -102,7 +102,7 @@ public class AudioManager : MonoBehaviour {
                 Debug.LogError("Sounds " + name + " could not be found");
                 return;
             }
-            s.source.Play();
+        s.source.Play();
             // Debug.Log("name of audio mixer group for sound " + s.name + ": " + s.source.outputAudioMixerGroup.name);
     }
 

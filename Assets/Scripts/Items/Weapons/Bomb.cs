@@ -18,6 +18,9 @@ public class Bomb : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
+
+       
+
         if (other.tag == "Player")
         {
             PlayerController oPlayer = other.gameObject.GetComponent<PlayerController>();
@@ -33,7 +36,10 @@ public class Bomb : MonoBehaviour {
             if (pTransform != null)
             {
                 if (pTransform.name != "Player")
+                {
                     OnHit.Invoke(transform.position, other.transform.position, other.gameObject);
+                    GameManager.instance.audioManager.Play("Explosion");
+                }
             }
         }
     }

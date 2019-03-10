@@ -32,6 +32,7 @@ public class LaserWeapon : Weapon {
         while (laserBeamPool.Count > 0)
             GameObject.Destroy(laserBeamPool.Dequeue().gameObject);
         player.RemoveBuff(laserbuff);
+
     }
 
     // OnActivate is called once when the weapon is activated
@@ -43,6 +44,7 @@ public class LaserWeapon : Weapon {
         CurrentBeam.MaxLength = 0;
         CurrentBeam.Width = data.minWidth;
         player.AddBuff(laserbuff);
+        GameManager.instance.audioManager.Play("Laser");
     }
 
     // OnChargingUpdate is called once per frame while the weapon is charging
@@ -57,6 +59,7 @@ public class LaserWeapon : Weapon {
         CurrentBeam.TurnOffBeam(laserBeamPool, data.DecayTimePerWidth);
         CurrentBeam = null;
         player.RemoveBuff(laserbuff);
+        GameManager.instance.audioManager.Stop("Laser");
     }
     
     private LaserBeam CreateLaserBeam() {

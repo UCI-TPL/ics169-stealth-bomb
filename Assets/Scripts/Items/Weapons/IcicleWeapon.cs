@@ -28,8 +28,10 @@ public class IcicleWeapon : Weapon {
         
         IEnumerator delayedShoot(float time) {
             float startTime = Time.time;
+            GameManager.instance.audioManager.Play("Icicle");
             for (int i = 0; i < projParams.Length; ++i) {
                 data.projectile.Shoot(player, data.projSpeed, projParams[i].origin, projParams[i].direction, (Vector3 origin, Vector3 contactPoint, GameObject target) => { Hit(origin, contactPoint, target); });
+
                 while (Time.time < startTime + time * (i+1))
                     yield return null;
             }
