@@ -303,15 +303,18 @@ public class TileManager : MonoBehaviour {
         GameObject g = GameObject.Find("Tile Map");
         if (g != null)
             Destroy(g);
-        if (pastLevel.isLoaded)
-            DeleteOldLevel();
         StartCoroutine(LoadLevelAsync(name, OnFinishLoad));
         return pastLevel;
     }
 
     // Loads scene and starts game once finished
     private IEnumerator LoadLevelAsync(string name, LoadSceneAction OnFinishLoad) {
-        Application.backgroundLoadingPriority = ThreadPriority.Low;
+        if (pastLevel.isLoaded) {
+            AsyncOperation asyncUnloadLevel = SceneManager.UnloadSceneAsync(pastLevel);
+            while (!asyncUnloadLevel.isDone)
+                yield return null;
+        }
+        Application.backgroundLoadingPriority = ThreadPriority.High;
         AsyncOperation asyncLoadLevel = SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
         while (!asyncLoadLevel.isDone) {
             yield return null;
@@ -319,11 +322,6 @@ public class TileManager : MonoBehaviour {
         pastLevel = SceneManager.GetSceneByName(name);
         if (OnFinishLoad != null)
             OnFinishLoad.Invoke(pastLevel);
-    }
-
-    // Remove old scene
-    private void DeleteOldLevel() {
-        SceneManager.UnloadSceneAsync(pastLevel);
     }
 
     // Object containing calculations for determining what order tiles are destroyed in
