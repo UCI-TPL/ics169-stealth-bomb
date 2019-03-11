@@ -21,12 +21,17 @@ MonoBehaviour:
   cooldown: 0.25
   knockbackStrength: 0
   damage: 0
+  particleEffects: {fileID: 0}
+  activationEffect: {fileID: 0}
+  weaponModel: {fileID: 0}
+  ShootPointPosition: {x: 0, y: 0, z: 0}
+  WeaponPosition: {x: 0, y: 0, z: 0}
   buffs: []
   projectile: {fileID: 11400000, guid: 9df1e8c6a587d604684f97e370ea1793, type: 2}
   blackHolePrefab: {fileID: 1115368707829486, guid: 8ef09f7d829499544acb1457f7bd23b3,
     type: 3}
   blackHoleGravity: 10
-  blackHoleRadius: 3.75
+  blackHoleRadius: 5
   blackHoleDuration: 8
   projSpeed: 30
   numProj: 1
