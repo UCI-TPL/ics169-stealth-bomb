@@ -201,7 +201,7 @@ public class PlayerController : MonoBehaviour, IHurtable {
             if (Weapon.type == Weapon.Type.Temp)
             {
                 //Debug.Log("Here we are");
-                if (PreviousWeapon.type != Weapon.Type.Temp)
+                if (PreviousWeapon != null && PreviousWeapon.type != Weapon.Type.Temp)
                 {
                     Weapon = PreviousWeapon;
                 }
