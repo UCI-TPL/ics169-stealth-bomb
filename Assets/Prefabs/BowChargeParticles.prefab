@@ -79,7 +79,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1257070537721465904}
-  m_LocalRotation: {x: -0, y: -0, z: 0.85866606, w: 0.51253545}
+  m_LocalRotation: {x: -0, y: -0, z: 0.7546892, w: 0.65608245}
   m_LocalPosition: {x: 0.25, y: 0, z: 0}
   m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
   m_Children: []
@@ -2402,11 +2402,12 @@ ParticleSystem:
   ExternalForcesModule:
     enabled: 1
     multiplier: 0.08
-    influenceFilter: 0
+    influenceFilter: 1
     influenceMask:
       serializedVersion: 2
       m_Bits: 4294967295
-    influenceList: []
+    influenceList:
+    - {fileID: 6922168766697841674}
   ClampVelocityModule:
     enabled: 0
     x:
@@ -24438,7 +24439,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7705008692107755967}
-  m_LocalRotation: {x: -0, y: -0, z: 0.5211075, w: 0.85349107}
+  m_LocalRotation: {x: -0, y: -0, z: 0.9803648, w: -0.19719255}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []

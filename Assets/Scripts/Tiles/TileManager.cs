@@ -56,6 +56,19 @@ public class TileManager : MonoBehaviour {
     private Queue<TileDestroyCalc> TileDestroyQueue;
 
     private Texture2D tileDamageMap;
+    
+    private Transform _cameraObjectCached;
+    private Transform cameraObject {
+        get {
+            return _cameraObjectCached ?? FindObjectOfType<CameraShake>()?.transform;
+        }
+    }
+    private FloatingBlockParticles _floatingBlockParticlesCached;
+    private FloatingBlockParticles floatingBlockParticles {
+        get {
+            return _floatingBlockParticlesCached ?? FindObjectOfType<FloatingBlockParticles>();
+        }
+    }
 
     // used for threading tile map damage editing
     NativeArray<Color> pixels;
@@ -89,6 +102,8 @@ public class TileManager : MonoBehaviour {
         Shader.SetGlobalTexture(Shader.PropertyToID("_TileDamageMap"), tileDamageMap);
         Shader.SetGlobalVector(Shader.PropertyToID("_TileMapSize"), (Vector3)tileMap.Size);
         StartCoroutine(raiseMap(2f));
+        cameraObject.position = new Vector3(center.x, cameraObject.position.y, center.y);
+        floatingBlockParticles?.PlayParticles();
     }
 
     struct VelocityJob : IJobParallelFor {
@@ -193,6 +208,8 @@ public class TileManager : MonoBehaviour {
 
     // Begin shrinking the terrain
     public void StartCountdown() {
+        CameraShake.ShakeDiminish(5, 2);
+        floatingBlockParticles?.DisperseParticles();
         StartCoroutine("CollapseCircle", collapseTime);
         //StartCoroutine("CollapseRectangle", collapseTime);
     }
