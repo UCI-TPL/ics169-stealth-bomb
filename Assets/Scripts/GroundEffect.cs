@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using ColorExtensions;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Vector3Extensions;
@@ -19,7 +20,26 @@ public class GroundEffect : MonoBehaviour {
     private LayerMask GroundMask;
 
     [SerializeField]
-    private Material[] materialPerPlayer;
+    private Type type;
+
+    [SerializeField]
+    private static Dictionary<Type, Material> defaultMaterial = new Dictionary<Type, Material>();
+    private static Dictionary<Type, Material[]> _materialPerPlayer = new Dictionary<Type, Material[]>();
+    private Material[] materialPerPlayer {
+        get {
+            if (_materialPerPlayer.ContainsKey(type))
+                return _materialPerPlayer[type];
+            _materialPerPlayer.Add(type, new Material[GameManager.instance.DefaultPlayerData.Colors.Length]);
+            for (int i = 0; i < GameManager.instance.DefaultPlayerData.Colors.Length; ++i) {
+                Material m = new Material(defaultMaterial[type]);
+                m.SetColor("_TopColor", GameManager.instance.DefaultPlayerData.Colors[i].ScaleHSV(defaultMaterial[type].GetColor("_TopColor"), true));
+                m.SetColor("_MiddleColor", GameManager.instance.DefaultPlayerData.Colors[i].ScaleHSV(defaultMaterial[type].GetColor("_MiddleColor"), true));
+                m.SetColor("_BottomColor", GameManager.instance.DefaultPlayerData.Colors[i].ScaleHSV(defaultMaterial[type].GetColor("_BottomColor"), true));
+                _materialPerPlayer[type][i] = m;
+            }
+            return _materialPerPlayer[type];
+        }
+    }
 
     public delegate void HitAction(Vector3 position, GameObject target);
     public HitAction OnHit;
@@ -35,6 +55,9 @@ public class GroundEffect : MonoBehaviour {
 
     // Use this for initialization
     public void Create(HitAction onHit, Player source, Vector3 location, float size, float duration, float hitCooldown, List<Collider> ignoreCollision = null) {
+        if (!defaultMaterial.ContainsKey(type))
+            defaultMaterial.Add(type, renderer[0].sharedMaterial);
+
         if (!ActiveSource.ContainsKey(source)) {
             CooldownQueue.Add(source, new Queue<CooldownObject>());
             CooldownSet.Add(source, new HashSet<GameObject>());
@@ -64,7 +87,7 @@ public class GroundEffect : MonoBehaviour {
         newInstance.hitBox.enabled = true;
         newInstance.StartCoroutine(newInstance.StartAnimation(size, 0.25f));
         foreach(Renderer r in newInstance.renderer)
-            r.sharedMaterial = materialPerPlayer[source.playerNumber];
+            r.sharedMaterial = materialPerPlayer[source.colorIndex];
         newInstance.OnHit = onHit;
         newInstance.Source = source;
         newInstance.HitCooldown = hitCooldown;
@@ -152,4 +175,6 @@ public class GroundEffect : MonoBehaviour {
             endTime = Time.time + cooldown;
         }
     }
+
+    private enum Type { fire, ice }
 }
