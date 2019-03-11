@@ -20,19 +20,28 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LoadLevel.unity
     guid: 2294a7ef04358b64db1e4f55d84c7bd0
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/MAP.unity
     guid: 1c4d290c598dc6c4591d289ac9ef71dd
   - enabled: 1
-    path: Assets/Scenes/Map1_TownMarket.unity
+    path: Assets/Scenes/Map1A_TownMarket.unity
     guid: 3eff34e80fcde6145be144e83f88222d
   - enabled: 1
-    path: Assets/Scenes/Map2A_T_PitCircle.unity
+    path: Assets/Scenes/Map2A_PitCircle.unity
     guid: e9e8585317b832744a3127f42d5298da
   - enabled: 1
-    path: Assets/Scenes/Map3A_T_Arena.unity
+    path: Assets/Scenes/Map2B_PitSquare.unity
+    guid: 7f05ec53c9dd78141b0785954d3a4bcd
+  - enabled: 1
+    path: Assets/Scenes/Map3A_Arena.unity
     guid: 7c6d9e88548f5b846a0486295b91a0f4
   - enabled: 1
-    path: Assets/Scenes/Map4A_T_Islands.unity
+    path: Assets/Scenes/Map3B_ArenaRaised.unity
+    guid: 9c5abee5cf92dcc4b8a9777c01e3fc90
+  - enabled: 1
+    path: Assets/Scenes/Map4A_Islands.unity
     guid: 3c1adea1c5302b442ba519db7f148657
+  - enabled: 1
+    path: Assets/Scenes/Map4B_IslandsBridge.unity
+    guid: 8893413c0c36da74b8f4a98844a96899
   m_configObjects: {}

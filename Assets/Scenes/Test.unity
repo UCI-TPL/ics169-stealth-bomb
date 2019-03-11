@@ -2826,6 +2826,66 @@ PrefabInstance:
       propertyPath: gravity
       value: -50
       objectReference: {fileID: 0}
+    - target: {fileID: 114380574983239810, guid: 40632a0e2689da549ac1d33e92138743,
+        type: 3}
+      propertyPath: levelNames.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 114380574983239810, guid: 40632a0e2689da549ac1d33e92138743,
+        type: 3}
+      propertyPath: levelNames.Array.data[0].LevelGroup.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114380574983239810, guid: 40632a0e2689da549ac1d33e92138743,
+        type: 3}
+      propertyPath: levelNames.Array.data[1].LevelGroup.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114380574983239810, guid: 40632a0e2689da549ac1d33e92138743,
+        type: 3}
+      propertyPath: levelNames.Array.data[2].LevelGroup.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114380574983239810, guid: 40632a0e2689da549ac1d33e92138743,
+        type: 3}
+      propertyPath: levelNames.Array.data[3].LevelGroup.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114380574983239810, guid: 40632a0e2689da549ac1d33e92138743,
+        type: 3}
+      propertyPath: levelNames.Array.data[0].LevelGroup.Array.data[0]
+      value: Map1A_TownMarket
+      objectReference: {fileID: 0}
+    - target: {fileID: 114380574983239810, guid: 40632a0e2689da549ac1d33e92138743,
+        type: 3}
+      propertyPath: levelNames.Array.data[1].LevelGroup.Array.data[0]
+      value: Map2A_PitCircle
+      objectReference: {fileID: 0}
+    - target: {fileID: 114380574983239810, guid: 40632a0e2689da549ac1d33e92138743,
+        type: 3}
+      propertyPath: levelNames.Array.data[1].LevelGroup.Array.data[1]
+      value: Map2B_PitSquare
+      objectReference: {fileID: 0}
+    - target: {fileID: 114380574983239810, guid: 40632a0e2689da549ac1d33e92138743,
+        type: 3}
+      propertyPath: levelNames.Array.data[2].LevelGroup.Array.data[0]
+      value: Map3A_Arena
+      objectReference: {fileID: 0}
+    - target: {fileID: 114380574983239810, guid: 40632a0e2689da549ac1d33e92138743,
+        type: 3}
+      propertyPath: levelNames.Array.data[3].LevelGroup.Array.data[0]
+      value: Map4A_Islands
+      objectReference: {fileID: 0}
+    - target: {fileID: 114380574983239810, guid: 40632a0e2689da549ac1d33e92138743,
+        type: 3}
+      propertyPath: levelNames.Array.data[2].LevelGroup.Array.data[1]
+      value: Map3B_ArenaRaised
+      objectReference: {fileID: 0}
+    - target: {fileID: 114380574983239810, guid: 40632a0e2689da549ac1d33e92138743,
+        type: 3}
+      propertyPath: levelNames.Array.data[3].LevelGroup.Array.data[1]
+      value: Map4B_IslandsBridge
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 40632a0e2689da549ac1d33e92138743, type: 3}
 --- !u!1 &783223424
@@ -6458,6 +6518,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5033460430380140359, guid: aed479e38fe7288469b3c9b08829af20,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 5.700012
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aed479e38fe7288469b3c9b08829af20, type: 3}

@@ -26,6 +26,9 @@ public class GameManager : MonoBehaviour {
     [Header("Important Scene Names")]
     public string mainMenuSceneName;
     private string currentSceneName;
+    public LevelList[] levelNames;
+    private string[] visited;
+    private int pg_index;           // previous level group index.
     
     // Important Data from the Main Menu.
     // this is by default set to true for all values so that the players spawn as normal if we start in a level.
@@ -364,6 +367,10 @@ public class GameManager : MonoBehaviour {
         }
         //Debug.Log("number of winners in game manager = " + Winners.Count);
     }
+    [Serializable]
+    public class LevelList {
+        public string[] LevelGroup;
+    }
 
     public void AnnounceWinner(int pNumber) //players the "PLAYER WINS" audio
     {
@@ -398,18 +405,7 @@ public class GameManager : MonoBehaviour {
 
         public bool roundEnding = false;
 
-        // A jagged array which will store the scene names of the maps as strings. 
-        // This will allow us to make a different number of maps for each group.
-        // MAKE SURE THE LEVELS HERE ARE IN THE BUILD SETTINGS
-        private string[][] levelNames =
-        {
-            new string[] { "Map1_TownMarket" },
-            new string[] { "LoadLevel" },
-            new string[] { "Map1_TownMarket" },
-            new string[] { "LoadLevel" }
-        };
-
-        private string[] testLevels = { "Map1_TownMarket", "Map3A_T_Arena", "Map2A_T_PitCircle", "Map4A_T_Islands" };
+        private string[] testLevels = { "Map1A_TownMarket", "Map3A_Arena", "Map2A_PitCircle", "Map2B_PitSquare", "Map4A_Islands" };
 
         // A random number generator, used to pick a stage from an array in levelNames.
         System.Random rng = new System.Random();
@@ -455,11 +451,11 @@ public class GameManager : MonoBehaviour {
         public void LoadLevel() {
             State = GameState.Loading;
             //TileManager.tileManager.LoadLevel("LoadLevel", (Scene loadedScene) => { State = GameState.Ready; roundScene = loadedScene; });
+            //TileManager.tileManager.LoadLevel(testLevels[mapCount++ % testLevels.Length], (Scene loadedScene) => { State = GameState.Ready; roundScene = loadedScene; });
 
-            int i = PickLevelGroup();
-            TileManager.tileManager.LoadLevel(testLevels[mapCount++ % testLevels.Length], (Scene loadedScene) => { State = GameState.Ready; roundScene = loadedScene; });
-
-
+            int groupNum = PickLevelGroup();
+            string[] chosenGroup = instance.levelNames[groupNum].LevelGroup;
+            TileManager.tileManager.LoadLevel(chosenGroup[mapCount++ % chosenGroup.Length], (Scene loadedScene) => { State = GameState.Ready; roundScene = loadedScene; });
             //Resources.UnloadUnusedAssets();
         }
 
@@ -490,9 +486,27 @@ public class GameManager : MonoBehaviour {
                     pr_Groups[3]++;
             }
 
+            /*
             int pr_GroupMax = pr_Groups.Max();
             int chosenGroup = Array.IndexOf(pr_Groups, pr_GroupMax);
-            return chosenGroup;           
+            return chosenGroup;  
+            */
+
+            int index = 0;
+            int maxValue = 0;
+            for (int i = 0; i < pr_Groups.Length; i++)
+            {
+                if (pr_Groups[i] > maxValue)
+                {
+                    index = i;
+                    maxValue = pr_Groups[i];
+                }
+                else if (pr_Groups[i] == maxValue)
+                {
+                    index = i;
+                }
+            }
+            return index;
         }
 
         public void ResetCurves() //must happen every round just in case the map changes 
