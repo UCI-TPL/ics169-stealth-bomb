@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using ColorExtensions;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,6 +15,9 @@ public class IcicleProjectile : Projectile {
     private float accelerationPower = 2;
     private float startTime;
 
+    [SerializeField]
+    private ParticleSystem iceShards;
+
     protected override void Start() {
         startTime = Time.time;
         rb = GetComponent<Rigidbody>();
@@ -27,9 +31,14 @@ public class IcicleProjectile : Projectile {
         if (trail != null)
             trail.material.color = player.controller.playerColor;
         if (particle != null) {
-            var trailModule = particle.trails;
-            trailModule.colorOverLifetime = player.controller.playerColor;
+            var mainModule = particle.main;
+            mainModule.startColor = player.Color.ScaleHSV(mainModule.startColor.color);
+            //var trailModule = particle.trails;
+            //trailModule.colorOverLifetime = player.controller.playerColor;
         }
+        var shardsMainModule = iceShards.main;
+        shardsMainModule.startColor = player.Color.ScaleHSV(shardsMainModule.startColor.color, multiplyBaseValue: false);
+        particle.Play();
     }
 
     private void Update() {

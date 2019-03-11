@@ -219,13 +219,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trail: {fileID: 4041607968834209054}
-  particle: {fileID: 0}
+  particle: {fileID: 6767339437657433941}
   collider: {fileID: 65851718138537896}
   projectileRenderer: {fileID: 6767339437657433960}
   damageMultiplier: 0
   hitEffect: {fileID: 0}
   accelerationTime: 0.5
   accelerationPower: 3.5
+  iceShards: {fileID: 1205821510622646896}
 --- !u!1 &4382180452587874870
 GameObject:
   m_ObjectHideFlags: 0
@@ -4880,7 +4881,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 2d2d014d9840e164cbf424082204a3f5, type: 2}
+  - {fileID: 2100000, guid: e71684eb937f0864d96fdc6b9f81b0c0, type: 2}
   - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -4972,7 +4973,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0.5, y: 1}
   looping: 0
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -9023,8 +9024,8 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 0.6745283, g: 0.9396302, b: 1, a: 0}
-        key1: {r: 0.1462264, g: 0.8129777, b: 1, a: 1}
+        key0: {r: 1, g: 1, b: 1, a: 0}
+        key1: {r: 1, g: 1, b: 1, a: 1}
         key2: {r: 0, g: 0, b: 0, a: 1}
         key3: {r: 0, g: 0, b: 0, a: 0.19607843}
         key4: {r: 0, g: 0, b: 0, a: 0.023529412}
