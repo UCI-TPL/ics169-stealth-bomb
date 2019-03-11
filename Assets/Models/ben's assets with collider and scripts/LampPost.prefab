@@ -471,8 +471,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7905378428897315788}
-  - component: {fileID: 1316404699401901160}
   - component: {fileID: 4155524349354570802}
+  - component: {fileID: 7512115690098934844}
   m_Layer: 0
   m_Name: LampPost
   m_TagString: Untagged
@@ -502,19 +502,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!65 &1316404699401901160
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7094215789831474703}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 4.05, z: 1}
-  m_Center: {x: 0.029883802, y: 0.029999971, z: -0.007816613}
 --- !u!114 &4155524349354570802
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -532,6 +519,20 @@ MonoBehaviour:
   destroyEffDuration: 0.85
   particles: {fileID: 1951624619801250, guid: 708f4849a0de89348b0f4dc761d0091c, type: 3}
   crumbling: 0
+--- !u!136 &7512115690098934844
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7094215789831474703}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.4
+  m_Height: 5
+  m_Direction: 1
+  m_Center: {x: 0, y: 1.07, z: 0}
 --- !u!1 &7870742135676219170
 GameObject:
   m_ObjectHideFlags: 0
