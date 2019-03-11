@@ -427,12 +427,14 @@ public class PlayerJoinManager : MonoBehaviour {
         playersUI[i].Find("newish Xbox controller guide").GetComponent<Image>().color = Colors[colorIndex];
     }
 
-    public void SwitchColors(int i) //player number as a parameter
+    public void SwitchColors(int controllerIdx) // controller number as parameter
     {
-        int colorIndex = GameManager.instance.ExchangeColors(i);
-        if (colorIndex == -1) //this means that the player was not assigned a color yet!
-            return;
-        SetUIColor(i, colorIndex);
+		if (CanPlayerPressButton(controllerIdx) && playersJoined[controllersToPlayers[controllerIdx]] == true) {
+			int colorIndex = GameManager.instance.ExchangeColors(controllersToPlayers[controllerIdx]);
+			if (colorIndex == -1) //this means that the player was not assigned a color yet!
+				return;
+			SetUIColor(controllersToPlayers[controllerIdx], colorIndex);
+		}
     }
 
 	// helper callback method that starts the game if the player and others are ready (old update() version).
@@ -483,6 +485,9 @@ public class PlayerJoinManager : MonoBehaviour {
 
 
 	// helper method that assigns what functions should be called by what input/event.
+	// NOTE: when adding a new listener, the function you add needs to 
+	//       take in an int that represents the CONTROLLER NUMBER, NOT THE PLAYER NUMBER!! player number might not be assigned 
+	//       and is always in flux because controller number is not always same as player number.
 	private void AssignControllerEvents(int controllerIdx) {
 		// A button, B button, and Start button has been assigned. Still need to assign Y button.
 		switch (controllerIdx) {
@@ -548,12 +553,14 @@ public class PlayerJoinManager : MonoBehaviour {
 	void RunGameReadyChecks(int newNumOfPlayersReady, int minNumOfPlayers) {
 		// Checks if enough players have confirmed they are ready.
 		if (newNumOfPlayersReady >= minNumOfPlayers) {
+			// old logic
 			// Display the UI element showing that the game is ready to start.
 			// Debug.Log("Game is Ready to start!");
 			if (!usingNewPlayerJoinSystem) {
 				//calling UI -Kyle
 				selectionOP.gameIsReady();
 			}
+			// new logic
 			else {
 				countdownText.gameObject.SetActive(true);
 				countdownText.text = "Game starts in " + ((int) countdownTimer).ToString();
@@ -582,7 +589,7 @@ public class PlayerJoinManager : MonoBehaviour {
 			}
 		}
 
-		// if conditions met, start the match
+		// if conditions met, start the match (for old version with pc controls)
 		if (!usingNewPlayerJoinSystem) {
 			if (numOfPlayersJoined >= minNumOfPlayers) {
 				// if conditions met, start the match
@@ -736,12 +743,22 @@ public class PlayerJoinManager : MonoBehaviour {
 					newNumOfPlayersReady++;
 			}
 
+			if (usingNewPlayerJoinSystem) {
+				int newNumOfPlayersJoined = 0;
+				for (int i = 0; i < playersJoined.Length; i++) {
+					if (playersJoined[i] == true) 
+						newNumOfPlayersJoined++;
+				}
+				numOfPlayersJoined = newNumOfPlayersJoined;
+			}
+
 			// the normal conditions needed for the game to start
 			if (!debugMode) 
 			{
-				if (numOfControllersConnected > 2)
-					RunGameReadyChecks(newNumOfPlayersReady, numOfControllersConnected);
-				else 
+				// case for when you have more than 2 controllers plugged in and need more than 2 players to have joined
+				if (numOfControllersConnected > 2 && numOfPlayersJoined > 2)
+					RunGameReadyChecks(newNumOfPlayersReady, numOfPlayersJoined /* numOfControllersConnected */);
+				else // need to have at least 2 players plugged in and ready to start game
 					RunGameReadyChecks(newNumOfPlayersReady, 2);
 			}
 
@@ -750,7 +767,8 @@ public class PlayerJoinManager : MonoBehaviour {
 				RunGameReadyChecks(newNumOfPlayersReady, 1);
 			}
 
-			numOfPlayersJoined = newNumOfPlayersReady;
+			if (!usingNewPlayerJoinSystem)
+				numOfPlayersJoined = newNumOfPlayersReady;
 			inputTimer += 1.0f * Time.deltaTime;
 		}
 
