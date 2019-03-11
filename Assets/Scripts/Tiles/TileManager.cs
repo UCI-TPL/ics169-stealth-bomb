@@ -102,7 +102,7 @@ public class TileManager : MonoBehaviour {
         Shader.SetGlobalTexture(Shader.PropertyToID("_TileDamageMap"), tileDamageMap);
         Shader.SetGlobalVector(Shader.PropertyToID("_TileMapSize"), (Vector3)tileMap.Size);
         StartCoroutine(raiseMap(2f));
-        cameraObject.position = new Vector3(center.x, cameraObject.position.y, center.y);
+        CameraShake.SetPosition(new Vector3(center.x, cameraObject.position.y, center.y));
         floatingBlockParticles?.PlayParticles();
     }
 

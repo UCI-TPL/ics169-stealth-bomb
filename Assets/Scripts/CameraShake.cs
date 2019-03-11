@@ -27,6 +27,11 @@ public class CameraShake : MonoBehaviour {
         originalRight = transform.right;
     }
 
+    public static void SetPosition(Vector3 position) {
+        instance.transform.position = position;
+        instance.originalPosition = position;
+    }
+
     public static void Shake(float intensity, float duration) {
         instance.StartCoroutine(instance.ProcessShake(intensity, duration));
     }

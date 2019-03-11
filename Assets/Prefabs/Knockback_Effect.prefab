@@ -19087,6 +19087,12 @@ MonoBehaviour:
   - {fileID: 4437591888888235898}
   - {fileID: 5967531902890292837}
   - {fileID: 4452595201157798666}
+  knockbackColor:
+    trailColor: {r: 1, g: 0.71875, b: 0.7, a: 0.7490196}
+    impactColor: {r: 1, g: 0.39916414, b: 0.33490568, a: 1}
+  defaultColor:
+    trailColor: {r: 1, g: 1, b: 1, a: 0.7490196}
+    impactColor: {r: 1, g: 1, b: 1, a: 1}
   knockbackColors:
   - trailColor: {r: 1, g: 0.71875, b: 0.7, a: 0.7490196}
     impactColor: {r: 1, g: 0.39916414, b: 0.33490568, a: 1}

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using ColorExtensions;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 // using UnityEngine.ParticleSystemModule;
@@ -135,16 +136,9 @@ public class BlackHole : MonoBehaviour {
 	}
 
 	public void SetupColor(Color color) {
-        Color.RGBToHSV(color, out float targetH, out float targetS, out float targetV);
-
-        Color.RGBToHSV(vortexColor, out float H, out float S, out float V);
-        BlackholeEffects[0].GetComponent<MeshRenderer>().material.color = Color.HSVToRGB(targetH, S * targetS, V * targetV);
-
-        Color.RGBToHSV(backgroundColor, out H, out S, out V);
-        BlackholeEffects[1].GetComponent<MeshRenderer>().material.color = Color.HSVToRGB(targetH, S * targetS, V * targetV);
-
-        Color.RGBToHSV(sparksColor, out H, out S, out V);
-        BlackholeEffects[2].GetComponent<MeshRenderer>().material.SetColor("_SparkColor", Color.HSVToRGB(targetH, S * targetS, V * targetV, true));
+        BlackholeEffects[0].GetComponent<MeshRenderer>().material.color = color.ScaleHSV(vortexColor);
+        BlackholeEffects[1].GetComponent<MeshRenderer>().material.color = color.ScaleHSV(backgroundColor);
+        BlackholeEffects[2].GetComponent<MeshRenderer>().material.SetColor("_SparkColor", color.ScaleHSV(sparksColor, true));
 
 		// Debug.Log("has material = " + (particleColor != null));
         // particleColor.SetColor("Color_E025656E", HDRColor);

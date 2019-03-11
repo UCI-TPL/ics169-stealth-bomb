@@ -514,12 +514,12 @@ public class PlayerController : MonoBehaviour, IHurtable {
         }
     }
 
-    public void Knockback(Vector3 direction, int? playerNumber = null, bool showEffect = true) {
+    public void Knockback(Vector3 direction, Color? color = null, bool showEffect = true) {
         rb.AddForce(direction, ForceMode.VelocityChange); //move back in the direction of the projectile 
 
         if (showEffect) {
             // Show smoke when knockback
-            knockbackEffect.Activate(Mathf.Log(direction.magnitude, 1 / (1 - friction * Time.fixedDeltaTime)) * Time.fixedDeltaTime, playerNumber); // equation: https://www.desmos.com/calculator/2n0tww6mcp
+            knockbackEffect.Activate(Mathf.Log(direction.magnitude, 1 / (1 - friction * Time.fixedDeltaTime)) * Time.fixedDeltaTime, color); // equation: https://www.desmos.com/calculator/2n0tww6mcp
         }
     }
 
