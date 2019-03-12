@@ -19,12 +19,12 @@ public class characterSelection : MonoBehaviour {
 		/*
 		go through players and add each player's opinfo (Text) to the playerOpList
 		 */
-		playerOpList = new List<Text>();
+		//playerOpList = new List<Text>();
 		for (int i= 0; i < players.transform.childCount; i++)
 		{
-			Transform t = players.transform.GetChild(i).transform.GetChild(1);
-			playerOpList.Add(t.GetComponent<Text>());
-			playerOpAList.Add(t.GetChild(0).GetComponent<Image>());
+			//Transform t = players.transform.GetChild(i).transform.GetChild(1);
+			//playerOpList.Add(t.GetComponent<Text>());
+			//playerOpAList.Add(t.GetChild(0).GetComponent<Image>());
 			playerOpAList[i].enabled = false;
 		}
 		// Debug.Log("playerOpList length = " + playerOpList.Count);

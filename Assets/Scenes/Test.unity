@@ -89,7 +89,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ShowResolutionOverlay: 1
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -1265,7 +1265,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1589724063667816, guid: 75b5f308c529be34aaf614ece367b453, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4442278408530312, guid: 75b5f308c529be34aaf614ece367b453, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1302,17 +1302,17 @@ PrefabInstance:
     - target: {fileID: 224473012658931512, guid: 75b5f308c529be34aaf614ece367b453,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 224473012658931512, guid: 75b5f308c529be34aaf614ece367b453,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 224473012658931512, guid: 75b5f308c529be34aaf614ece367b453,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: -18.299988
       objectReference: {fileID: 0}
     - target: {fileID: 224473012658931512, guid: 75b5f308c529be34aaf614ece367b453,
         type: 3}
@@ -1322,17 +1322,17 @@ PrefabInstance:
     - target: {fileID: 224416041470867512, guid: 75b5f308c529be34aaf614ece367b453,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 224416041470867512, guid: 75b5f308c529be34aaf614ece367b453,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 224416041470867512, guid: 75b5f308c529be34aaf614ece367b453,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: -18.299988
       objectReference: {fileID: 0}
     - target: {fileID: 224416041470867512, guid: 75b5f308c529be34aaf614ece367b453,
         type: 3}
@@ -1342,27 +1342,27 @@ PrefabInstance:
     - target: {fileID: 224496860278899042, guid: 75b5f308c529be34aaf614ece367b453,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 224496860278899042, guid: 75b5f308c529be34aaf614ece367b453,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 224496860278899042, guid: 75b5f308c529be34aaf614ece367b453,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 81.399994
       objectReference: {fileID: 0}
     - target: {fileID: 224496860278899042, guid: 75b5f308c529be34aaf614ece367b453,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 162.79999
       objectReference: {fileID: 0}
     - target: {fileID: 224496860278899042, guid: 75b5f308c529be34aaf614ece367b453,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 30
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 75b5f308c529be34aaf614ece367b453, type: 3}
@@ -2825,66 +2825,6 @@ PrefabInstance:
         type: 3}
       propertyPath: gravity
       value: -50
-      objectReference: {fileID: 0}
-    - target: {fileID: 114380574983239810, guid: 40632a0e2689da549ac1d33e92138743,
-        type: 3}
-      propertyPath: levelNames.Array.size
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 114380574983239810, guid: 40632a0e2689da549ac1d33e92138743,
-        type: 3}
-      propertyPath: levelNames.Array.data[0].LevelGroup.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114380574983239810, guid: 40632a0e2689da549ac1d33e92138743,
-        type: 3}
-      propertyPath: levelNames.Array.data[1].LevelGroup.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 114380574983239810, guid: 40632a0e2689da549ac1d33e92138743,
-        type: 3}
-      propertyPath: levelNames.Array.data[2].LevelGroup.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 114380574983239810, guid: 40632a0e2689da549ac1d33e92138743,
-        type: 3}
-      propertyPath: levelNames.Array.data[3].LevelGroup.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 114380574983239810, guid: 40632a0e2689da549ac1d33e92138743,
-        type: 3}
-      propertyPath: levelNames.Array.data[0].LevelGroup.Array.data[0]
-      value: Map1A_TownMarket
-      objectReference: {fileID: 0}
-    - target: {fileID: 114380574983239810, guid: 40632a0e2689da549ac1d33e92138743,
-        type: 3}
-      propertyPath: levelNames.Array.data[1].LevelGroup.Array.data[0]
-      value: Map2A_PitCircle
-      objectReference: {fileID: 0}
-    - target: {fileID: 114380574983239810, guid: 40632a0e2689da549ac1d33e92138743,
-        type: 3}
-      propertyPath: levelNames.Array.data[1].LevelGroup.Array.data[1]
-      value: Map2B_PitSquare
-      objectReference: {fileID: 0}
-    - target: {fileID: 114380574983239810, guid: 40632a0e2689da549ac1d33e92138743,
-        type: 3}
-      propertyPath: levelNames.Array.data[2].LevelGroup.Array.data[0]
-      value: Map3A_Arena
-      objectReference: {fileID: 0}
-    - target: {fileID: 114380574983239810, guid: 40632a0e2689da549ac1d33e92138743,
-        type: 3}
-      propertyPath: levelNames.Array.data[3].LevelGroup.Array.data[0]
-      value: Map4A_Islands
-      objectReference: {fileID: 0}
-    - target: {fileID: 114380574983239810, guid: 40632a0e2689da549ac1d33e92138743,
-        type: 3}
-      propertyPath: levelNames.Array.data[2].LevelGroup.Array.data[1]
-      value: Map3B_ArenaRaised
-      objectReference: {fileID: 0}
-    - target: {fileID: 114380574983239810, guid: 40632a0e2689da549ac1d33e92138743,
-        type: 3}
-      propertyPath: levelNames.Array.data[3].LevelGroup.Array.data[1]
-      value: Map4B_IslandsBridge
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 40632a0e2689da549ac1d33e92138743, type: 3}
