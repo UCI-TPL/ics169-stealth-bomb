@@ -7,7 +7,7 @@ using Vector3Extensions;
 [CustomEditor(typeof(TileMapEditor))]
 public class TileMapEditorInspector : Editor {
     
-    private bool editing = false;
+    private static bool editing = false;
     private TileMapEditor script {
         get { return (TileMapEditor)target; }
     }

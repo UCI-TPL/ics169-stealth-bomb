@@ -25,6 +25,9 @@ public class CrumbleTile : Tile, IHurtable {
     private bool isDead = false;
 
     private void Awake() {
+        if (!GameManager.instance.inGame)
+            return;
+
         if (ParticlePoolParent == null) {
             ParticlePoolParent = new GameObject("CrumbleParticlePool").transform;
             ParticlePoolParent.SetParent(GameManager.instance.PersistBetweenRounds);

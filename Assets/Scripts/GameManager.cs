@@ -70,7 +70,7 @@ public class GameManager : MonoBehaviour {
     public GameObject countdownText;
 
     private List<GameRound> rounds = new List<GameRound>();
-    private bool inGame = false;
+    public bool inGame { get; private set; }
     public Transform PersistBetweenRounds { get; private set; }
     public readonly UnityEvent RoundReset = new UnityEvent();
 
