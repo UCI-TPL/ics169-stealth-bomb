@@ -468,7 +468,7 @@ public class PlayerJoinManager : MonoBehaviour {
 
 	// helper method that toggles player's (specified by playerIdx) controller guide on or off.
 	private void ToggleControllerGuide(int playerIdx, bool turnOn) {
-		playersUI[playerIdx].GetChild(playersUI[playerIdx].childCount - 6).gameObject.SetActive(turnOn);
+		playersUI[playerIdx].GetChild(1).gameObject.SetActive(turnOn);
 		playersControlsGuideActive[playerIdx] = turnOn;
 	}
 

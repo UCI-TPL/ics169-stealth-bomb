@@ -69,7 +69,7 @@ public class characterSelection : MonoBehaviour {
 	{
 		// Debug.Log("CharacterSelection current player = " + player + ", playerOpList length = " + playerOpList.Count + ", is object/script enabled = " + this.gameObject.activeSelf);
 		if (playerJoinManager.usingNewPlayerJoinSystem)
-			playerOpList[player].text = "  get ready";
+			playerOpList[player].text = "Ready Up";
 		else
 			playerOpList[player].text = "Press    to join";
 		
