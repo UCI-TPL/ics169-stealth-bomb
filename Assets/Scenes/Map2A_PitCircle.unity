@@ -89,7 +89,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ShowResolutionOverlay: 1
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -62606,9 +62606,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LeftCurve:
     Name: Curve 1
-    Start: {x: 26, y: 0, z: 34}
-    Middle: {x: 2, y: 0, z: 32}
-    End: {x: -5.5, y: 0, z: 0.5}
+    Start: {x: 16, y: 0, z: 28}
+    Middle: {x: -0.5, y: 0, z: 23}
+    End: {x: -2, y: 0, z: 3}
   RightCurve:
     Name: Curve 2
     Start: {x: 34, y: 0, z: 26}
