@@ -34,6 +34,7 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
 
     Vector3 latestPosition; //the position from the previous update, where ghost is lerping from
 
+
     private float travelTime = 0.3f; //how long it takes to lerp all across
 
     private Vector3 targetPosition;
@@ -44,6 +45,8 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
     private Vector3 smoothVel; //used by smoothDamp don't worry about it 
 
     private float lastGroundDistance = 4f; //the previously height of the crosshair  
+
+   // public GameObject ShootPoint;
 
     private void Start()
     {
@@ -97,16 +100,17 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
         Quaternion rotation = (transform.position.z >= transform.position.x) ? Quaternion.Euler(0f, 135, 0f) : Quaternion.Euler(0f, 315f, 0f);
         GhostBody = Instantiate(GhostPrefab, transform.position, rotation);
         targetPosition = transform.position;
-
         lastPosition = GhostBody.transform.position;
         rend.material.SetColor("_Color", playerColor);
-        //GhostBody.GetComponentsInChildren<Renderer>()[1].material.color = playerColor;
         Renderer[] ghostsRen = GhostBody.GetComponentsInChildren<Renderer>();
         foreach( Renderer ren in ghostsRen)
         {
             ren.material.SetColor("Color_998F7755", playerColor);
         }
-        //GhostBody.GetComponentsInChildren<Renderer>()[1].material.SetColor("Color_998F7755", playerColor);
+
+
+       // ShootPoint = GhostBody.transform.Find("ShootPoint");
+        
     }
 
     public IEnumerator SpawnCursor() //so the ghost player can spawn and fly away a bit before the image
@@ -148,15 +152,18 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
             destoryTileTime = Time.time + cooldown;
             int layerMask = 1 << 11; //this makes sure that it can only detect the Ground layer
             RaycastHit hit;
+            float distance;
             if (Physics.Raycast(Point.transform.position, Vector3.down, out hit, Mathf.Infinity, layerMask))
-            {
-                float distance = this.transform.position.y - hit.transform.position.y;
-                GhostBomb ghostBomb = Instantiate(GhostBombPrefab, GhostBody.transform.position, GhostBody.transform.rotation).GetComponent<GhostBomb>();
-                ghostBomb.v2 = this.transform.position;
-                ghostBomb.v3 = new Vector3(this.transform.position.x, this.transform.position.y - distance, this.transform.position.z);
-                StartCoroutine("PositionMarkerExpand",(ghostBomb.travelTime/2)); 
-            }
-            
+                distance = this.transform.position.y - hit.transform.position.y;
+            else
+                distance = this.transform.position.y - lastGroundDistance;
+            Vector3 bombPosition = GhostBody.transform.position + (2f * transform.forward);
+            //GhostBomb ghostBomb = Instantiate(GhostBombPrefab, GhostBody.transform.position, GhostBody.transform.rotation).GetComponent<GhostBomb>();
+            GhostBomb ghostBomb = Instantiate(GhostBombPrefab, bombPosition, GhostBody.transform.rotation).GetComponent<GhostBomb>();
+            ghostBomb.v2 = this.transform.position;
+            ghostBomb.v3 = new Vector3(this.transform.position.x, this.transform.position.y - distance, this.transform.position.z);
+            StartCoroutine("PositionMarkerExpand", (ghostBomb.travelTime / 2));
+
         }
     }
 

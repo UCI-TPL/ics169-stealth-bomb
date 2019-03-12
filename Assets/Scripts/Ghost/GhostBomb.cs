@@ -38,6 +38,8 @@ public class GhostBomb : MonoBehaviour
         startTravelTime = Time.time; //start time
         travelDuration = startTravelTime + actualTravelTime; //end time
         target = GetNextPoint();
+        Destroy(this.gameObject, 1f);
+        
         
     }
 
@@ -54,11 +56,22 @@ public class GhostBomb : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Tile")
+
+       // Debug.Log("Colliding with " + other.tag);
+        if (other.gameObject.layer == 11) //layer 11 is ground
         {
             Tile temp = other.GetComponent<Tile>();
             if (temp)
-                TileManager.tileManager.DamagePillar(temp.position, 50f); //takes 2 hits to kill stone, just one to kill grass
+            {
+                if (other.tag == "Tile")
+                    TileManager.tileManager.DamagePillar(temp.position, 50f); //takes 2 hits to kill stone, just one to kill grass
+                else
+                    Destroy(other.gameObject);
+            }
+            else
+            {
+                Destroy(other.gameObject);
+            }
                 //TileManager.tileManager.DestroyTiles(temp.position); //to just destory anything without caring about health
             Destroy(this.gameObject);
         }
@@ -67,7 +80,8 @@ public class GhostBomb : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Time.time <= travelDuration)
+       // Debug.Log("Going to " + target);
+        if (Time.time <= travelDuration)
         {
             float lerpPosition = (Time.time - startTravelTime) / actualTravelTime; //how far along the lerp should it be
             transform.position = Vector3.Lerp(transform.position, target, lerpPosition);
