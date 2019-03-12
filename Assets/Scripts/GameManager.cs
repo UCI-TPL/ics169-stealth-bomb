@@ -296,7 +296,7 @@ public class GameManager : MonoBehaviour {
         if (!PlayerColor.ContainsKey(playerNum)) //if the player does not have a color just assign one and return that
             return AssignPlayerColor(playerNum);
         int randomIndex = UnityEngine.Random.Range(0, instance.ColorIndexes.Count);
-        int colorIndex = instance.ColorIndexes[randomIndex];
+        int colorIndex = instance.ColorIndexes[0];
         instance.ColorIndexes.Remove(colorIndex); //take a new color out for player
         instance.ColorIndexes.Add(PlayerColor[playerNum]); //return the current color to the list
         PlayerColor[playerNum] = colorIndex; //update dictionary with the new color
