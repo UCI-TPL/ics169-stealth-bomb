@@ -26,6 +26,12 @@ public class WeaponParticles
         }
     }
 
+    public void UpdateRoot(GameObject root) //the root is the parent of all of the particle game objects;
+    {
+        Root = root;
+        Particles = Root.GetComponentsInChildren<ParticleSystem>();
+    }
+
     public void Play()
     {
         foreach (ParticleSystem part in Particles)

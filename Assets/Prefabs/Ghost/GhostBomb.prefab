@@ -113,6 +113,8 @@ MonoBehaviour:
   target2: {fileID: 0}
   v2: {x: 0, y: 0, z: 0}
   v3: {x: 0, y: 0, z: 0}
+  ExplosionParticles: {fileID: 4577853419826961215, guid: 01ebadcaed006794ea1dc578db8e293f,
+    type: 3}
 --- !u!54 &4516277662102529542
 Rigidbody:
   m_ObjectHideFlags: 0

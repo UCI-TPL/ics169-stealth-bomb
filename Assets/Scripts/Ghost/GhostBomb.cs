@@ -21,12 +21,23 @@ public class GhostBomb : MonoBehaviour
     [HideInInspector]
     public float startTravelTime;
 
-
+    [HideInInspector]
     public Transform target1;//the top of decal
+    [HideInInspector]
     public Transform target2; //where it actually hits
 
-    public Vector3 v2;
+    [HideInInspector]
+    public Vector3 v2; //travel destinations
+    [HideInInspector]
     public Vector3 v3;
+
+    // public GameObject ExplosionParticles;
+
+    private bool explosionPlayed = false; //to make sure only one explosion spawns
+
+    //  public WeaponParticles Particles;
+
+    public GameObject ExplosionParticles;
 
 
     int vertexCount = 24;
@@ -39,6 +50,8 @@ public class GhostBomb : MonoBehaviour
         travelDuration = startTravelTime + actualTravelTime; //end time
         target = GetNextPoint();
         Destroy(this.gameObject, 1f);
+        //Particles.UpdateRoot(ExplosionParticles);
+        
         
         
     }
@@ -59,6 +72,18 @@ public class GhostBomb : MonoBehaviour
     {
         if (other.gameObject.layer == 11) //layer 11 is ground
         {
+    
+
+
+
+            if (!explosionPlayed)
+            {
+                GameObject explosion = Instantiate(ExplosionParticles, transform.position, Quaternion.identity);
+                explosion.GetComponent<ParticleSystem>().Play();
+                explosionPlayed = true;
+            }
+
+
             Tile temp = other.GetComponent<Tile>();
             if (temp)
             {
