@@ -426,12 +426,14 @@ public class PlayerJoinManager : MonoBehaviour {
     {
         playersUI[i].gameObject.GetComponent<Image>().color = Colors[colorIndex]; //changing the color of the player panel
         playersUI[i].Find("Border").GetComponent<Image>().color = Colors[colorIndex];
-        playersUI[i].Find("ChangeColor").Find("Background").GetComponent<Image>().color = Colors[colorIndex];
+        playersUI[i].Find("ChangeColorBackground").Find("Background").GetComponent<Image>().color = Colors[colorIndex];
         playersUI[i].Find("newish Xbox controller guide").GetComponent<Image>().color = Colors[colorIndex] * new Color(1, 1, 1, 0.5f);
     }
 
     public void SwitchColors(int controllerIdx) // controller number as parameter
     {
+        Debug.Log("controllersToPlayers: " + controllersToPlayers.Length.ToString() + " : " + controllerIdx.ToString());
+        Debug.Log("playersJoined: " + playersJoined.Length.ToString() + " : " + controllersToPlayers[controllerIdx].ToString());
 		if (CanPlayerPressButton(controllerIdx) && playersJoined[controllersToPlayers[controllerIdx]] == true) {
 			int colorIndex = GameManager.instance.ExchangeColors(controllersToPlayers[controllerIdx]);
 			if (colorIndex == -1) //this means that the player was not assigned a color yet!
