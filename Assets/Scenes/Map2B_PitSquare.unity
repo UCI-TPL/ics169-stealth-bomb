@@ -3935,16 +3935,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LeftCurve:
     Name: Curve 1
-    Start: {x: 26, y: 0, z: 34}
-    Middle: {x: 2, y: 0, z: 32}
-    End: {x: -5.5, y: 0, z: 0.5}
+    Start: {x: 16, y: 0, z: 28}
+    Middle: {x: -0.5, y: 0, z: 23}
+    End: {x: -2, y: 0, z: 3}
   RightCurve:
     Name: Curve 2
-    Start: {x: 34, y: 0, z: 26}
-    Middle: {x: 32, y: 0, z: 2}
-    End: {x: 0.5, y: 0, z: -5.5}
-  max: 33
-  min: -2
+    Start: {x: 27, y: 0, z: 21}
+    Middle: {x: 23, y: 0, z: 2}
+    End: {x: 5.5, y: 0, z: -3}
+  max: 24
+  min: 2
 --- !u!1001 &70808022
 PrefabInstance:
   m_ObjectHideFlags: 0

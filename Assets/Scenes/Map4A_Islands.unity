@@ -890,11 +890,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fence
       objectReference: {fileID: 0}
-    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4920876191638487397, guid: 674936c2e3f2cba47bae4625e5c5981e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -954,6 +949,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 62.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 674936c2e3f2cba47bae4625e5c5981e, type: 3}
@@ -3558,11 +3558,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: FencePost
       objectReference: {fileID: 0}
-    - target: {fileID: 8766410452703454346, guid: 05e96cb08fce5dc4499676524afc9d0b,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6059848466453285911, guid: 05e96cb08fce5dc4499676524afc9d0b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3617,6 +3612,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8766410452703454346, guid: 05e96cb08fce5dc4499676524afc9d0b,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 05e96cb08fce5dc4499676524afc9d0b, type: 3}
@@ -4205,11 +4205,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: FencePost
       objectReference: {fileID: 0}
-    - target: {fileID: 8766410452703454346, guid: 05e96cb08fce5dc4499676524afc9d0b,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6059848466453285911, guid: 05e96cb08fce5dc4499676524afc9d0b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4264,6 +4259,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8766410452703454346, guid: 05e96cb08fce5dc4499676524afc9d0b,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 05e96cb08fce5dc4499676524afc9d0b, type: 3}
@@ -5797,11 +5797,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fence
       objectReference: {fileID: 0}
-    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4920876191638487397, guid: 674936c2e3f2cba47bae4625e5c5981e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5861,6 +5856,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 62.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 674936c2e3f2cba47bae4625e5c5981e, type: 3}
@@ -9737,11 +9737,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fence
       objectReference: {fileID: 0}
-    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4920876191638487397, guid: 674936c2e3f2cba47bae4625e5c5981e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -9801,6 +9796,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 62.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 674936c2e3f2cba47bae4625e5c5981e, type: 3}
@@ -11145,11 +11145,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fence
       objectReference: {fileID: 0}
-    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4920876191638487397, guid: 674936c2e3f2cba47bae4625e5c5981e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -11209,6 +11204,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 62.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 674936c2e3f2cba47bae4625e5c5981e, type: 3}
@@ -11293,11 +11293,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: FencePost
       objectReference: {fileID: 0}
-    - target: {fileID: 8766410452703454346, guid: 05e96cb08fce5dc4499676524afc9d0b,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6059848466453285911, guid: 05e96cb08fce5dc4499676524afc9d0b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -11353,6 +11348,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8766410452703454346, guid: 05e96cb08fce5dc4499676524afc9d0b,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 05e96cb08fce5dc4499676524afc9d0b, type: 3}
 --- !u!4 &386086969 stripped
@@ -11372,11 +11372,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Fence
-      objectReference: {fileID: 0}
-    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4920876191638487397, guid: 674936c2e3f2cba47bae4625e5c5981e,
         type: 3}
@@ -11437,6 +11432,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 62.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 674936c2e3f2cba47bae4625e5c5981e, type: 3}
@@ -12844,11 +12844,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: FencePost
       objectReference: {fileID: 0}
-    - target: {fileID: 8766410452703454346, guid: 05e96cb08fce5dc4499676524afc9d0b,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6059848466453285911, guid: 05e96cb08fce5dc4499676524afc9d0b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -12903,6 +12898,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8766410452703454346, guid: 05e96cb08fce5dc4499676524afc9d0b,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 05e96cb08fce5dc4499676524afc9d0b, type: 3}
@@ -13050,11 +13050,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fence
       objectReference: {fileID: 0}
-    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4920876191638487397, guid: 674936c2e3f2cba47bae4625e5c5981e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -13114,6 +13109,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 62.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 674936c2e3f2cba47bae4625e5c5981e, type: 3}
@@ -15667,11 +15667,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fence
       objectReference: {fileID: 0}
-    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4920876191638487397, guid: 674936c2e3f2cba47bae4625e5c5981e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -15731,6 +15726,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 62.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 674936c2e3f2cba47bae4625e5c5981e, type: 3}
@@ -16823,11 +16823,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: FencePost
       objectReference: {fileID: 0}
-    - target: {fileID: 8766410452703454346, guid: 05e96cb08fce5dc4499676524afc9d0b,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6059848466453285911, guid: 05e96cb08fce5dc4499676524afc9d0b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -16882,6 +16877,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8766410452703454346, guid: 05e96cb08fce5dc4499676524afc9d0b,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 05e96cb08fce5dc4499676524afc9d0b, type: 3}
@@ -18856,11 +18856,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fence
       objectReference: {fileID: 0}
-    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4920876191638487397, guid: 674936c2e3f2cba47bae4625e5c5981e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -18920,6 +18915,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 62.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 674936c2e3f2cba47bae4625e5c5981e, type: 3}
@@ -20075,11 +20075,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: FencePost
       objectReference: {fileID: 0}
-    - target: {fileID: 8766410452703454346, guid: 05e96cb08fce5dc4499676524afc9d0b,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6059848466453285911, guid: 05e96cb08fce5dc4499676524afc9d0b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -20134,6 +20129,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8766410452703454346, guid: 05e96cb08fce5dc4499676524afc9d0b,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 05e96cb08fce5dc4499676524afc9d0b, type: 3}
@@ -20596,11 +20596,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fence
       objectReference: {fileID: 0}
-    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4920876191638487397, guid: 674936c2e3f2cba47bae4625e5c5981e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -20660,6 +20655,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 62.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 674936c2e3f2cba47bae4625e5c5981e, type: 3}
@@ -21122,11 +21122,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: FencePost
       objectReference: {fileID: 0}
-    - target: {fileID: 8766410452703454346, guid: 05e96cb08fce5dc4499676524afc9d0b,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6059848466453285911, guid: 05e96cb08fce5dc4499676524afc9d0b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -21181,6 +21176,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8766410452703454346, guid: 05e96cb08fce5dc4499676524afc9d0b,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 05e96cb08fce5dc4499676524afc9d0b, type: 3}
@@ -22588,11 +22588,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fence
       objectReference: {fileID: 0}
-    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4920876191638487397, guid: 674936c2e3f2cba47bae4625e5c5981e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -22653,6 +22648,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.x
       value: 62.7
       objectReference: {fileID: 0}
+    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 674936c2e3f2cba47bae4625e5c5981e, type: 3}
 --- !u!4 &836262433 stripped
@@ -22672,11 +22672,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FencePost
-      objectReference: {fileID: 0}
-    - target: {fileID: 8766410452703454346, guid: 05e96cb08fce5dc4499676524afc9d0b,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6059848466453285911, guid: 05e96cb08fce5dc4499676524afc9d0b,
         type: 3}
@@ -22732,6 +22727,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8766410452703454346, guid: 05e96cb08fce5dc4499676524afc9d0b,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 05e96cb08fce5dc4499676524afc9d0b, type: 3}
@@ -26596,11 +26596,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fence
       objectReference: {fileID: 0}
-    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4920876191638487397, guid: 674936c2e3f2cba47bae4625e5c5981e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -26660,6 +26655,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 62.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 674936c2e3f2cba47bae4625e5c5981e, type: 3}
@@ -27437,11 +27437,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: FencePost
       objectReference: {fileID: 0}
-    - target: {fileID: 8766410452703454346, guid: 05e96cb08fce5dc4499676524afc9d0b,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6059848466453285911, guid: 05e96cb08fce5dc4499676524afc9d0b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -27496,6 +27491,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8766410452703454346, guid: 05e96cb08fce5dc4499676524afc9d0b,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 05e96cb08fce5dc4499676524afc9d0b, type: 3}
@@ -31498,11 +31498,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fence
       objectReference: {fileID: 0}
-    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4920876191638487397, guid: 674936c2e3f2cba47bae4625e5c5981e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -31562,6 +31557,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 62.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 674936c2e3f2cba47bae4625e5c5981e, type: 3}
@@ -31898,11 +31898,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: FencePost
       objectReference: {fileID: 0}
-    - target: {fileID: 8766410452703454346, guid: 05e96cb08fce5dc4499676524afc9d0b,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6059848466453285911, guid: 05e96cb08fce5dc4499676524afc9d0b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -31957,6 +31952,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8766410452703454346, guid: 05e96cb08fce5dc4499676524afc9d0b,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 05e96cb08fce5dc4499676524afc9d0b, type: 3}
@@ -32681,11 +32681,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fence
       objectReference: {fileID: 0}
-    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4920876191638487397, guid: 674936c2e3f2cba47bae4625e5c5981e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -32745,6 +32740,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 62.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 674936c2e3f2cba47bae4625e5c5981e, type: 3}
@@ -34341,11 +34341,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fence
       objectReference: {fileID: 0}
-    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4920876191638487397, guid: 674936c2e3f2cba47bae4625e5c5981e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -34405,6 +34400,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 62.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 674936c2e3f2cba47bae4625e5c5981e, type: 3}
@@ -36631,11 +36631,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fence
       objectReference: {fileID: 0}
-    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4920876191638487397, guid: 674936c2e3f2cba47bae4625e5c5981e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -36695,6 +36690,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 62.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 674936c2e3f2cba47bae4625e5c5981e, type: 3}
@@ -37232,11 +37232,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fence
       objectReference: {fileID: 0}
-    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4920876191638487397, guid: 674936c2e3f2cba47bae4625e5c5981e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -37296,6 +37291,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 62.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 674936c2e3f2cba47bae4625e5c5981e, type: 3}
@@ -37632,11 +37632,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fence
       objectReference: {fileID: 0}
-    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4920876191638487397, guid: 674936c2e3f2cba47bae4625e5c5981e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -37697,6 +37692,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.x
       value: 62.7
       objectReference: {fileID: 0}
+    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 674936c2e3f2cba47bae4625e5c5981e, type: 3}
 --- !u!4 &1290042383 stripped
@@ -37716,11 +37716,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FencePost
-      objectReference: {fileID: 0}
-    - target: {fileID: 8766410452703454346, guid: 05e96cb08fce5dc4499676524afc9d0b,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6059848466453285911, guid: 05e96cb08fce5dc4499676524afc9d0b,
         type: 3}
@@ -37776,6 +37771,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8766410452703454346, guid: 05e96cb08fce5dc4499676524afc9d0b,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 05e96cb08fce5dc4499676524afc9d0b, type: 3}
@@ -40014,11 +40014,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fence
       objectReference: {fileID: 0}
-    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4920876191638487397, guid: 674936c2e3f2cba47bae4625e5c5981e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -40078,6 +40073,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 62.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 674936c2e3f2cba47bae4625e5c5981e, type: 3}
@@ -40225,11 +40225,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fence
       objectReference: {fileID: 0}
-    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4920876191638487397, guid: 674936c2e3f2cba47bae4625e5c5981e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -40289,6 +40284,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 62.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 674936c2e3f2cba47bae4625e5c5981e, type: 3}
@@ -41066,11 +41066,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fence
       objectReference: {fileID: 0}
-    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4920876191638487397, guid: 674936c2e3f2cba47bae4625e5c5981e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -41130,6 +41125,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 62.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 674936c2e3f2cba47bae4625e5c5981e, type: 3}
@@ -41214,11 +41214,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fence
       objectReference: {fileID: 0}
-    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4920876191638487397, guid: 674936c2e3f2cba47bae4625e5c5981e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -41278,6 +41273,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 62.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 674936c2e3f2cba47bae4625e5c5981e, type: 3}
@@ -41362,11 +41362,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: FencePost
       objectReference: {fileID: 0}
-    - target: {fileID: 8766410452703454346, guid: 05e96cb08fce5dc4499676524afc9d0b,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6059848466453285911, guid: 05e96cb08fce5dc4499676524afc9d0b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -41421,6 +41416,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8766410452703454346, guid: 05e96cb08fce5dc4499676524afc9d0b,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 05e96cb08fce5dc4499676524afc9d0b, type: 3}
@@ -42576,11 +42576,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: FencePost
       objectReference: {fileID: 0}
-    - target: {fileID: 8766410452703454346, guid: 05e96cb08fce5dc4499676524afc9d0b,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6059848466453285911, guid: 05e96cb08fce5dc4499676524afc9d0b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -42635,6 +42630,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8766410452703454346, guid: 05e96cb08fce5dc4499676524afc9d0b,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 05e96cb08fce5dc4499676524afc9d0b, type: 3}
@@ -47844,11 +47844,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fence
       objectReference: {fileID: 0}
-    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4920876191638487397, guid: 674936c2e3f2cba47bae4625e5c5981e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -47909,6 +47904,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.x
       value: 62.7
       objectReference: {fileID: 0}
+    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 674936c2e3f2cba47bae4625e5c5981e, type: 3}
 --- !u!4 &1593560000 stripped
@@ -47928,11 +47928,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FencePost
-      objectReference: {fileID: 0}
-    - target: {fileID: 8766410452703454346, guid: 05e96cb08fce5dc4499676524afc9d0b,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6059848466453285911, guid: 05e96cb08fce5dc4499676524afc9d0b,
         type: 3}
@@ -47988,6 +47983,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8766410452703454346, guid: 05e96cb08fce5dc4499676524afc9d0b,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 05e96cb08fce5dc4499676524afc9d0b, type: 3}
@@ -51872,11 +51872,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fence
       objectReference: {fileID: 0}
-    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4920876191638487397, guid: 674936c2e3f2cba47bae4625e5c5981e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -51936,6 +51931,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 62.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 674936c2e3f2cba47bae4625e5c5981e, type: 3}
@@ -53406,11 +53406,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fence
       objectReference: {fileID: 0}
-    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4920876191638487397, guid: 674936c2e3f2cba47bae4625e5c5981e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -53470,6 +53465,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 62.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 674936c2e3f2cba47bae4625e5c5981e, type: 3}
@@ -53680,11 +53680,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fence
       objectReference: {fileID: 0}
-    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4920876191638487397, guid: 674936c2e3f2cba47bae4625e5c5981e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -53744,6 +53739,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 62.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 674936c2e3f2cba47bae4625e5c5981e, type: 3}
@@ -54395,11 +54395,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: FencePost
       objectReference: {fileID: 0}
-    - target: {fileID: 8766410452703454346, guid: 05e96cb08fce5dc4499676524afc9d0b,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6059848466453285911, guid: 05e96cb08fce5dc4499676524afc9d0b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -54454,6 +54449,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8766410452703454346, guid: 05e96cb08fce5dc4499676524afc9d0b,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 05e96cb08fce5dc4499676524afc9d0b, type: 3}
@@ -54737,11 +54737,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fence
       objectReference: {fileID: 0}
-    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4920876191638487397, guid: 674936c2e3f2cba47bae4625e5c5981e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -54801,6 +54796,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 62.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 674936c2e3f2cba47bae4625e5c5981e, type: 3}
@@ -55830,11 +55830,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fence
       objectReference: {fileID: 0}
-    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4920876191638487397, guid: 674936c2e3f2cba47bae4625e5c5981e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -55894,6 +55889,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 62.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 674936c2e3f2cba47bae4625e5c5981e, type: 3}
@@ -56242,11 +56242,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fence
       objectReference: {fileID: 0}
-    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4920876191638487397, guid: 674936c2e3f2cba47bae4625e5c5981e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -56306,6 +56301,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 62.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 674936c2e3f2cba47bae4625e5c5981e, type: 3}
@@ -56579,11 +56579,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fence
       objectReference: {fileID: 0}
-    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4920876191638487397, guid: 674936c2e3f2cba47bae4625e5c5981e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -56643,6 +56638,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 62.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 674936c2e3f2cba47bae4625e5c5981e, type: 3}
@@ -58050,11 +58050,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fence
       objectReference: {fileID: 0}
-    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4920876191638487397, guid: 674936c2e3f2cba47bae4625e5c5981e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -58114,6 +58109,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 62.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 674936c2e3f2cba47bae4625e5c5981e, type: 3}
@@ -58324,11 +58324,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fence
       objectReference: {fileID: 0}
-    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4920876191638487397, guid: 674936c2e3f2cba47bae4625e5c5981e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -58388,6 +58383,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 62.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 674936c2e3f2cba47bae4625e5c5981e, type: 3}
@@ -60374,11 +60374,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fence
       objectReference: {fileID: 0}
-    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4920876191638487397, guid: 674936c2e3f2cba47bae4625e5c5981e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -60438,6 +60433,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 62.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 674936c2e3f2cba47bae4625e5c5981e, type: 3}
@@ -61026,11 +61026,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: FencePost
       objectReference: {fileID: 0}
-    - target: {fileID: 8766410452703454346, guid: 05e96cb08fce5dc4499676524afc9d0b,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6059848466453285911, guid: 05e96cb08fce5dc4499676524afc9d0b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -61085,6 +61080,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8766410452703454346, guid: 05e96cb08fce5dc4499676524afc9d0b,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 05e96cb08fce5dc4499676524afc9d0b, type: 3}
@@ -61358,11 +61358,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fence
       objectReference: {fileID: 0}
-    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4920876191638487397, guid: 674936c2e3f2cba47bae4625e5c5981e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -61422,6 +61417,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 62.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 674936c2e3f2cba47bae4625e5c5981e, type: 3}
@@ -63847,16 +63847,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LeftCurve:
     Name: Curve 1
-    Start: {x: 26, y: 0, z: 34}
-    Middle: {x: 2, y: 0, z: 32}
-    End: {x: -5.5, y: 0, z: 0.5}
+    Start: {x: 28, y: 0, z: 38}
+    Middle: {x: 5, y: 0, z: 36}
+    End: {x: 0, y: 0, z: 8}
   RightCurve:
     Name: Curve 2
-    Start: {x: 34, y: 0, z: 26}
-    Middle: {x: 32, y: 0, z: 2}
-    End: {x: 0.5, y: 0, z: -5.5}
-  max: 33
-  min: -2
+    Start: {x: 38, y: 0, z: 26}
+    Middle: {x: 36, y: 0, z: 5}
+    End: {x: 8, y: 0, z: 0}
+  max: 34
+  min: 6
 --- !u!1001 &2027342749
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -65696,11 +65696,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fence
       objectReference: {fileID: 0}
-    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4920876191638487397, guid: 674936c2e3f2cba47bae4625e5c5981e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -65760,6 +65755,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 62.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 674936c2e3f2cba47bae4625e5c5981e, type: 3}
@@ -65844,11 +65844,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fence
       objectReference: {fileID: 0}
-    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4920876191638487397, guid: 674936c2e3f2cba47bae4625e5c5981e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -65908,6 +65903,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 62.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 674936c2e3f2cba47bae4625e5c5981e, type: 3}
@@ -67504,11 +67504,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fence
       objectReference: {fileID: 0}
-    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
-        type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4920876191638487397, guid: 674936c2e3f2cba47bae4625e5c5981e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -67568,6 +67563,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 62.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039988006402857680, guid: 674936c2e3f2cba47bae4625e5c5981e,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 674936c2e3f2cba47bae4625e5c5981e, type: 3}

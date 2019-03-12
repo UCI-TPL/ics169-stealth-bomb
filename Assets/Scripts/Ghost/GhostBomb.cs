@@ -34,7 +34,7 @@ public class GhostBomb : MonoBehaviour
 
     void Start()
     {
-        actualTravelTime = travelTime / vertexCount;
+        actualTravelTime = travelTime / vertexCount; //how long travelling with actually take
         startTravelTime = Time.time; //start time
         travelDuration = startTravelTime + actualTravelTime; //end time
         target = GetNextPoint();
@@ -43,7 +43,7 @@ public class GhostBomb : MonoBehaviour
         
     }
 
-    
+    /* No longer used 
     public static Vector3 Parabola(Vector3 start, Vector3 end, float height, float t)
     {
         Func<float, float> f = x => -4 * height * x * x + 4 * height * x;
@@ -52,12 +52,11 @@ public class GhostBomb : MonoBehaviour
 
         return new Vector3(mid.x, f(t) + Mathf.Lerp(start.y, end.y, t), mid.z);
     }
+    */
     
 
     private void OnTriggerEnter(Collider other)
     {
-
-       // Debug.Log("Colliding with " + other.tag);
         if (other.gameObject.layer == 11) //layer 11 is ground
         {
             Tile temp = other.GetComponent<Tile>();
@@ -80,12 +79,10 @@ public class GhostBomb : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       // Debug.Log("Going to " + target);
         if (Time.time <= travelDuration)
         {
             float lerpPosition = (Time.time - startTravelTime) / actualTravelTime; //how far along the lerp should it be
             transform.position = Vector3.Lerp(transform.position, target, lerpPosition);
-            //transform.position = GhostBomb.Parabola(transform.position, target, 2f, lerpPosition);
         }
         else
         {
@@ -106,12 +103,31 @@ public class GhostBomb : MonoBehaviour
         Vector3 v1 = transform.position;
         float distance = Vector3.Distance(v1, v2);
         Vector4 v4 = new Vector3(0f, 0f, 0f);
-        v4 = v2 + (v1.normalized * (distance/3));
+        v4 = v2 + (v1.normalized * (distance/3)); //this is there to make the curve smoother
         Vector3 tangent1 = Vector3.Lerp(v1, v4, ratio); //this is the line between the ghost body & the top of the decal object
         Vector3 tangent2 = Vector3.Lerp(v4, v3, ratio); //the line between the top of the decal object & the ground
         Vector3 point = Vector3.Lerp(tangent1, tangent2, ratio); //a point on the curve that we want to make
-        ratio += (1f /vertexCount);
+        ratio += (1f /vertexCount); //the increment
         return point;
+
+        /*
+        List<Vector3> linePoints = new List<Vector3>();
+        Vector3 v1 = GhostBody.transform.position; //this is the start point, the ghost body
+        Vector3 v2 = this.transform.position; //this is the top of the decal
+        float distance = Vector3.Distance(v1, v2);
+        Vector3 v3 = new Vector3(v2.x, v2.y - descent + 0.5f, v2.z); //this point where the crosshair is, the ground
+
+        Vector4 v4 = new Vector3(0f, 0f, 0f);
+        v4 = v2 + (v1.normalized * (distance/3));
+        
+        for(float ratio = 0; ratio <= 1; ratio += (1f/(vertexCount )))
+        {
+            Vector3 tangent1 = Vector3.Lerp(v1, v4, ratio); //this is the line between the ghost body & the top of the decal object
+            Vector3 tangent2 = Vector3.Lerp(v4, v3, ratio); //the line between the top of the decal object & the ground
+            Vector3 point = Vector3.Lerp(tangent1, tangent2, ratio); //a point on the curve that we want to make
+            linePoints.Add(point);
+        }
+        */
     }
 
 

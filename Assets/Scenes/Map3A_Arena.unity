@@ -59479,15 +59479,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LeftCurve:
     Name: Curve 1
-    Start: {x: 26, y: 0, z: 34}
-    Middle: {x: 2, y: 0, z: 32}
+    Start: {x: 20, y: 0, z: 27}
+    Middle: {x: -4, y: 0, z: 25}
     End: {x: -5.5, y: 0, z: 0.5}
   RightCurve:
     Name: Curve 2
-    Start: {x: 34, y: 0, z: 26}
-    Middle: {x: 32, y: 0, z: 2}
-    End: {x: 0.5, y: 0, z: -5.5}
-  max: 33
+    Start: {x: 27, y: 0, z: 21}
+    Middle: {x: 27, y: 0, z: 1}
+    End: {x: 0, y: 0, z: -4.5}
+  max: 25
   min: -2
 --- !u!1001 &2027120958
 PrefabInstance:

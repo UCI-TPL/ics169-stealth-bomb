@@ -106,7 +106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {x: 0, y: 0, z: 0}
-  travelTime: 0.4
+  travelTime: 0.6
   travelDuration: 0
   startTravelTime: 0
   target1: {fileID: 0}

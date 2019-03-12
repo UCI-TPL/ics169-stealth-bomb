@@ -154,13 +154,16 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
             RaycastHit hit;
             float distance;
             if (Physics.Raycast(Point.transform.position, Vector3.down, out hit, Mathf.Infinity, layerMask))
-                distance = this.transform.position.y - hit.transform.position.y;
+                distance = this.transform.position.y - hit.transform.position.y; //when above ground
             else
-                distance = this.transform.position.y - lastGroundDistance;
-            Vector3 bombPosition = GhostBody.transform.position + (2f * transform.forward);
+                distance = this.transform.position.y - lastGroundDistance; //when above air
+            distance += 4f; //just to make it follow the line 
+            Vector3 bombPosition = GhostBody.transform.position + (1f * transform.forward);
             //GhostBomb ghostBomb = Instantiate(GhostBombPrefab, GhostBody.transform.position, GhostBody.transform.rotation).GetComponent<GhostBomb>();
             GhostBomb ghostBomb = Instantiate(GhostBombPrefab, bombPosition, GhostBody.transform.rotation).GetComponent<GhostBomb>();
-            ghostBomb.v2 = this.transform.position;
+            
+            //ghostBomb.v2 = this.transform.position ;
+            ghostBomb.v2 = new Vector3(this.transform.position.x, this.transform.position.y - 1f, this.transform.position.z);
             ghostBomb.v3 = new Vector3(this.transform.position.x, this.transform.position.y - distance, this.transform.position.z);
             StartCoroutine("PositionMarkerExpand", (ghostBomb.travelTime / 2));
 
