@@ -46,7 +46,8 @@ public class PlayerJoinManager : MonoBehaviour {
 
 	public RectTransform[] joinPrompts;
 	public RectTransform[] playersUI;
-	public Text countdownText;
+    public GameObject countdown;
+    public Text countdownText;
 
 	public string interactionNoise = "ButtonActivation";
 
@@ -96,10 +97,10 @@ public class PlayerJoinManager : MonoBehaviour {
 
 	private bool[] playersControlsGuideActive;   // temp private variable to represent which player has the controller guide showing while the real UI implementation isnt ready.
 
-	private float player1X = -300;
-	private float player2X = -100;
-	private float player3X = 100;
-	private float player4X = 300;
+    private float player1X = -300;
+    private float player2X = -100;
+    private float player3X = 100;
+    private float player4X = 300;
 
 	private float fourPlayersWidth = 1000;
 	private float fourPlayersHeight = 1500;
@@ -199,7 +200,7 @@ public class PlayerJoinManager : MonoBehaviour {
 		playersControlsGuideActive = new bool[4];
 		bButtonTimers = new float[4];
 		bButtonActivated = false;
-		countdownText.gameObject.SetActive(false);
+		countdown.SetActive(false);
 		countdownTimer = 3.0f;
 		alreadyLoadingScene = false;
 		numOfTimesMenuLoaded += 1;
@@ -424,7 +425,9 @@ public class PlayerJoinManager : MonoBehaviour {
     public void SetUIColor(int i, int colorIndex) // i is player number
     {
         playersUI[i].gameObject.GetComponent<Image>().color = Colors[colorIndex]; //changing the color of the player panel
-        playersUI[i].Find("newish Xbox controller guide").GetComponent<Image>().color = Colors[colorIndex];
+        playersUI[i].Find("Border").GetComponent<Image>().color = Colors[colorIndex];
+        playersUI[i].Find("ChangeColor").Find("Background").GetComponent<Image>().color = Colors[colorIndex];
+        playersUI[i].Find("newish Xbox controller guide").GetComponent<Image>().color = Colors[colorIndex] * new Color(1, 1, 1, 0.5f);
     }
 
     public void SwitchColors(int controllerIdx) // controller number as parameter
@@ -465,7 +468,7 @@ public class PlayerJoinManager : MonoBehaviour {
 
 	// helper method that toggles player's (specified by playerIdx) controller guide on or off.
 	private void ToggleControllerGuide(int playerIdx, bool turnOn) {
-		playersUI[playerIdx].GetChild(playersUI[playerIdx].childCount - 1).gameObject.SetActive(turnOn);
+		playersUI[playerIdx].GetChild(playersUI[playerIdx].childCount - 6).gameObject.SetActive(turnOn);
 		playersControlsGuideActive[playerIdx] = turnOn;
 	}
 
@@ -562,8 +565,9 @@ public class PlayerJoinManager : MonoBehaviour {
 			}
 			// new logic
 			else {
-				countdownText.gameObject.SetActive(true);
-				countdownText.text = "Game starts in " + ((int) countdownTimer).ToString();
+				countdown.SetActive(true);
+				countdownText.text = "Starting in <color=#f7ff63>" + ((int)countdownTimer + 1).ToString() + "</color>";
+                countdownText.rectTransform.localScale = Vector3.Lerp(Vector3.one, new Vector3(1.1f, 1.1f, 1), countdownTimer - Mathf.Floor(countdownTimer));
 				countdownTimer -= 1.0f * Time.deltaTime;
 
 				if (countdownTimer <= 0.0f) {
@@ -585,7 +589,7 @@ public class PlayerJoinManager : MonoBehaviour {
 			}
 			else {
 				countdownTimer = 3.0f;
-				countdownText.gameObject.SetActive(false);
+				countdown.SetActive(false);
 			}
 		}
 
@@ -687,19 +691,19 @@ public class PlayerJoinManager : MonoBehaviour {
 					else {
 						joinPrompts[i].gameObject.SetActive(false);
 					}
-					Vector3 newPosition;
-					if (i == 0) {
-						if (numOfControllersConnected < 3) 
-							newPosition = new Vector3(-100.0f, 0.0f, 0.0f);
-						else
-							newPosition = new Vector3(-300.0f, 0.0f, 0.0f);
-					}
-					else {
-						newPosition = new Vector3(joinPrompts[i-1].transform.localPosition.x + 200.0f, 0.0f, 0.0f);
-						// joinPrompts[i].transform.localPosition = newPosition;
-					}
-					joinPrompts[i].transform.localPosition = newPosition;
-					playersUI[i].transform.localPosition = newPosition;
+					//Vector3 newPosition;
+					//if (i == 0) {
+					//	if (numOfControllersConnected < 3) 
+					//		newPosition = new Vector3(-100.0f, 0.0f, 0.0f);
+					//	else
+					//		newPosition = new Vector3(-300.0f, 0.0f, 0.0f);
+					//}
+					//else {
+					//	newPosition = new Vector3(joinPrompts[i-1].transform.localPosition.x + 200.0f, 0.0f, 0.0f);
+					//	// joinPrompts[i].transform.localPosition = newPosition;
+					//}
+					//joinPrompts[i].transform.localPosition = newPosition;
+					//playersUI[i].transform.localPosition = newPosition;
 				}
 				else {
 					joinPrompts[i].gameObject.SetActive(false);
