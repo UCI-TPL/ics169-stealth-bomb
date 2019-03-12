@@ -21,7 +21,7 @@ MonoBehaviour:
   knockbackStrength: 20
   damage: 10
   particleEffects: {fileID: 0}
-  activationEffect: {fileID: 6452504376299636866, guid: 8ea626b6594dd2d419827b46aaaef206,
+  activationEffect: {fileID: 8487895569567890319, guid: 8ea626b6594dd2d419827b46aaaef206,
     type: 3}
   weaponModel: {fileID: 2954963622644718079, guid: d9c2613605f070e4b82bba8bf7e230e5,
     type: 3}
@@ -30,5 +30,5 @@ MonoBehaviour:
   buffs: []
   projectile: {fileID: 11400000, guid: 898ef1f4503804947985ca2706909d9b, type: 2}
   numProj: 5
-  projSpeed: 20
+  projSpeed: 40
   SoundName: Shotgun

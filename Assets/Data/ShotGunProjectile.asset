@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b710d28ec94f3e344a5a88f4144051a0, type: 3}
-  m_Name: Arrow 1
+  m_Name: ShotGunProjectile
   m_EditorClassIdentifier: 
-  projectile: {fileID: 7743166598750051238, guid: b48238f4166a4ec4284f494699b21791,
+  projectile: {fileID: 114721991009535130, guid: 6e340db9b8ec4714b858edbad88d3d09,
     type: 3}
   hitEffect: {fileID: 0}
-  lifetime: 0.2
+  lifetime: 0.15
   spreadAngle: 10
-  rotate90: 1
+  rotate90: 0

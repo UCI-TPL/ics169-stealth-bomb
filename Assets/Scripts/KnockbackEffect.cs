@@ -26,11 +26,11 @@ public class KnockbackEffect : MonoBehaviour {
 
     public void Activate(float time, Color? color = null) {
         var trailmain = trailPS.main;
-        trailmain.startColor = color?.ScaleHSV(knockbackColor.trailColor) ?? defaultColor.trailColor;
+        trailmain.startColor = color?.ScaleHSV(knockbackColor.trailColor, multiplyBaseValue: false) ?? defaultColor.trailColor;
         foreach (ParticleSystem p in impactPS) {
             p.Clear();
             var impactmain = p.main;
-            impactmain.startColor = color?.ScaleHSV(knockbackColor.impactColor) ?? defaultColor.impactColor;
+            impactmain.startColor = color?.ScaleHSV(knockbackColor.impactColor, multiplyBaseValue: false) ?? defaultColor.impactColor;
             impactmain.startLifetime = time - 0.05f;
         }
         ps.Play(true);

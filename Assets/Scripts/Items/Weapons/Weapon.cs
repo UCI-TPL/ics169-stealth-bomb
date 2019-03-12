@@ -32,7 +32,7 @@ public abstract class Weapon {
     }
 
     private Buff[] weaponBuffs;
-    private ParticleSystem activationEffect;
+    private SkillEffect activationEffect;
 
     public Weapon() { }
 
@@ -51,13 +51,15 @@ public abstract class Weapon {
             weaponBuffs[i] = weaponData.buffs[i].Instance(Mathf.Infinity, this);
             player.AddBuff(weaponBuffs[i]);
         }
-        activationEffect = weaponData.activationEffect == null ? null : GameObject.Instantiate<GameObject>(weaponData.activationEffect, player.controller.ShootPoint.transform.position, player.controller.ShootPoint.transform.rotation, player.controller.ShootPoint.transform).GetComponent<ParticleSystem>();
+        activationEffect = weaponData.activationEffect == null ? null : GameObject.Instantiate<GameObject>(weaponData.activationEffect.gameObject, player.controller.ShootPoint.transform.position, player.controller.ShootPoint.transform.rotation, player.controller.ShootPoint.transform).GetComponent<SkillEffect>();
 
         Start();
     }
     
     public void UnequipWeapon() {
         Release();
+        if (activationEffect != null)
+            GameObject.Destroy(activationEffect.gameObject, 2f);
         RemoveWeapon();
     }
 
@@ -116,7 +118,7 @@ public abstract class Weapon {
     private void Attack(Vector3 start, Vector3 direction, PlayerController targetController = null) {
         OnActivate(start, direction, targetController);
         if (activationEffect != null)
-            activationEffect.Play(true);
+            activationEffect.Play(player.Color);
     }
 
     // OnActivate is called once when the weapon is activated

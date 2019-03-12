@@ -28,7 +28,7 @@ public abstract class WeaponData : ItemData {
     public float knockbackStrength = 0;
     public float damage = 0;
     public GameObject particleEffects;
-    public GameObject activationEffect;
+    public SkillEffect activationEffect;
     public GameObject weaponModel;
     public Vector3 ShootPointPosition;
     public Vector3 WeaponPosition;
