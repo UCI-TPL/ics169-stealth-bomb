@@ -12,6 +12,8 @@ public class ProgressScreen_EXPBar : MonoBehaviour {
     private RectTransform FillRect;
     [SerializeField]
     private RectTransform HandleRect;
+    [SerializeField]
+    private Image Player;
 
     public int MaxPoints { get; private set; }
     public float PointHeight {
@@ -23,7 +25,7 @@ public class ProgressScreen_EXPBar : MonoBehaviour {
     public ExperiancePoint experiancePointPrefab;
 
     public void SetColor(Color color) {
-        HandleRect.GetComponent<Image>().color = color;
+        Player.color = color;
     }
 
     private void LateUpdate() {
