@@ -60,19 +60,25 @@ public class ProgressScreenUI : MonoBehaviour {
     private GameObject pointText;
 
     [SerializeField]
-    private UnityEvent Damage;
+    private CanvasGroup SkipProgressText;
     [SerializeField]
-    private UnityEvent Kill;
-    [SerializeField]
-    private UnityEvent LastOneStanding;
-    [SerializeField]
-    private UnityEvent KillLeader;
-    [SerializeField]
-    private UnityEvent Revenge;
-    [SerializeField]
-    private UnityEvent NoDamageTaken;
-    [SerializeField]
-    private UnityEvent ComeBack;
+    private CanvasGroup ContinueText;
+    private float DisplaySpeedScale = 1;
+
+    //[SerializeField]
+    //private UnityEvent Damage;
+    //[SerializeField]
+    //private UnityEvent Kill;
+    //[SerializeField]
+    //private UnityEvent LastOneStanding;
+    //[SerializeField]
+    //private UnityEvent KillLeader;
+    //[SerializeField]
+    //private UnityEvent Revenge;
+    //[SerializeField]
+    //private UnityEvent NoDamageTaken;
+    //[SerializeField]
+    //private UnityEvent ComeBack;
 
     // Use this for initialization
     void Awake () {
@@ -106,11 +112,28 @@ public class ProgressScreenUI : MonoBehaviour {
 
         // players should only be able to reach rank 10 once per game before being forced to head back to main menu.
         //RunEndgameChecksAndSetup();
+        SkipProgressText.alpha = 0;
+        ContinueText.alpha = 0;
+        foreach (PointText p in ProgressScreenRect.GetComponentsInChildren<PointText>())
+            Destroy(p?.gameObject);
+        DisplaySpeedScale = 1;
+        InvokeUnscaled(delegate {
+            StartCoroutine(AddExperiance(round, action));
+        }, 1.5f);
+        InvokeUnscaled(delegate {
+            StartCoroutine(ChangeAlpha(SkipProgressText, 1, 0.25f));
+            StartCoroutine(InvokeOnPressStart(round.players, delegate { SpeedUpProgressScreen(); }));
+        }, 1f);
 
-        InvokeUnscaled(delegate { StartCoroutine(AddExperiance(round)); }, 1f);
+        //// Setup the closing the progress screen by pressing start
+        //StartCoroutine(InvokeOnPressStart(round.players, delegate{ PressStart(action); }));
+    }
 
-        // Setup the closing the progress screen by pressing start
-        StartCoroutine(InvokeOnPressStart(round.players, delegate{ PressStart(action); }));
+    private void SpeedUpProgressScreen() {
+        DisplaySpeedScale = 5;
+        foreach (PointText p in ProgressScreenRect.GetComponentsInChildren<PointText>())
+            p.SetSpeed(DisplaySpeedScale);
+        StartCoroutine(ChangeAlpha(SkipProgressText, -1, 0.25f));
     }
 
     private void PressStart(UnityAction action) {
@@ -122,25 +145,40 @@ public class ProgressScreenUI : MonoBehaviour {
         ProgressScreenRect.gameObject.SetActive(false);
     }
 
-    private IEnumerator AddExperiance(GameManager.GameRound round) {
+    private IEnumerator AddExperiance(GameManager.GameRound round, UnityAction action) {
         float testTime = Time.unscaledTime;
         foreach (GameManager.GameRound.BonusExperiance.ExperianceType expType in GameManager.instance.ExperianceSettings.ExperianceOrder) {
             if (round.ExperianceGained.ContainsKey(expType)) {
-                Instantiate<GameObject>(pointText, ProgressScreenRect).GetComponent<PointText>().SetText(GameManager.instance.ExperianceSettings.GetExperiance(expType).Name);
-                yield return new WaitForSecondsRealtime(0.5f);
+                PointText p = Instantiate<GameObject>(pointText, ProgressScreenRect).GetComponent<PointText>();
+                p.SetText(GameManager.instance.ExperianceSettings.GetExperiance(expType).Name);
+                p.SetSpeed(DisplaySpeedScale);
+                yield return new WaitForSecondsRealtime(0.5f / DisplaySpeedScale);
                 int biggestStack = 0;
                 foreach (KeyValuePair<Player, List<GameManager.GameRound.BonusExperiance>> keyValuePair in round.ExperianceGained[expType]) {
                     biggestStack = Mathf.Max(biggestStack, keyValuePair.Value.Count);
                     foreach (GameManager.GameRound.BonusExperiance exp in keyValuePair.Value) {
-                        PlayerUIs[keyValuePair.Key].expBar.AddPoints(exp, 0.5f);
+                        PlayerUIs[keyValuePair.Key].expBar.AddPoints(exp, 0.5f / DisplaySpeedScale);
                     }
                 }
 
 
-                yield return new WaitForSecondsRealtime(0.5f);
+                yield return new WaitForSecondsRealtime(0.5f / DisplaySpeedScale);
                 //Debug.Log(testTime - Time.unscaledTime);
             }
         }
+        StartCoroutine(ChangeAlpha(SkipProgressText, -1, 0.25f));
+        StartCoroutine(ChangeAlpha(ContinueText, 1, 0.5f));
+        // Setup the closing the progress screen by pressing start
+        StartCoroutine(InvokeOnPressStart(round.players, delegate { PressStart(action); }));
+    }
+
+    private IEnumerator ChangeAlpha(CanvasGroup canvasGroup, float value, float duration) {
+        float endTime = duration + Time.unscaledTime;
+        while (endTime > Time.unscaledTime) {
+            canvasGroup.alpha += value / duration * Time.unscaledDeltaTime;
+            yield return null;
+        }
+        canvasGroup.alpha += value;
     }
 
     /// <summary>
