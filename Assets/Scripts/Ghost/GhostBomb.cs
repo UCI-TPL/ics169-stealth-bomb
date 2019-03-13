@@ -38,12 +38,14 @@ public class GhostBomb : MonoBehaviour
     int vertexCount = 24;
     float ratio = 0f;
 
+    public bool started = false;
+
     void Start()
     {
         actualTravelTime = travelTime / vertexCount; //how long travelling with actually take
         startTravelTime = Time.time; //start time
         travelDuration = startTravelTime + actualTravelTime; //end time
-        target = GetNextPoint();   
+
     }
 
     public void Initialize(Vector3 t2, Vector3 t3) //where the two targets are set
@@ -51,16 +53,18 @@ public class GhostBomb : MonoBehaviour
         
         v2 = t2; // ghost cursor object
         v3 = t3; //the ground
+        target = GetNextPoint();
+        started = true;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-
-
-        //if (other.gameObject.layer == 11) //layer 11 is ground
-        // {
-        //   Collider[] hitColliders = Physics.OverlapSphere(transform.position, 4f);
+        if (!started)
+            return;
         LayerMask mask = LayerMask.GetMask("Ground");
+
+        if (other.gameObject.layer != 11) //prevents and funny business from going on 
+            return;
 
         Vector3 ColliderZone = new Vector3(transform.localScale.x, transform.localScale.y * 10f, transform.localScale.x);
 
@@ -84,7 +88,8 @@ public class GhostBomb : MonoBehaviour
                 {
                     Destroy(hitColliders[i].gameObject);
                 }
-               
+
+            Debug.Log("Dying after colliding with " + hitColliders[i].gameObject.name);
                 Explode(); //goodybye
                 i++;
         }
@@ -112,6 +117,10 @@ public class GhostBomb : MonoBehaviour
 
     void Explode() //the final action
     {
+
+        Debug.Log("Travel time is " + actualTravelTime);
+        if (!started)
+            return;
         if (!explosionPlayed)
         {
             GameObject explosion = Instantiate(ExplosionParticles, transform.position, Quaternion.identity);
@@ -125,6 +134,8 @@ public class GhostBomb : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!started)
+            return;
         if (Time.time > travelDuration)
         {
             Vector3 point = GetNextPoint();
@@ -132,18 +143,25 @@ public class GhostBomb : MonoBehaviour
                 target = point;
                 travelDuration = Time.time + actualTravelTime; //restart the lerp but going to a different part of the curve
             }
+            if(point == Vector3.zero)
+            {
+                Debug.Log("The journey ends now");
+            }
         }
 
 
-        if(Time.time > travelDuration)
-        {
-            //Debug.Log("My travels are over");
-            Explode();
-        }
         
 
         float lerpPosition = (Time.time - startTravelTime) / actualTravelTime; //how far along the lerp should it be
+        //Debug.Log("Target is " + target);
         transform.position = Vector3.Lerp(transform.position, target, lerpPosition);
+
+
+        if (Time.time > travelDuration)
+        {
+            Debug.Log("Travel duration is " + travelDuration);
+            Explode();
+        }
 
 
     }

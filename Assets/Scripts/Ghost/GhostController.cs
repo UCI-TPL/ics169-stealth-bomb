@@ -158,7 +158,7 @@ public class GhostController : PlayerController {   //this inherits from PlayerC
             else
                 distance = this.transform.position.y - lastGroundDistance; //when above air
             //distance += 4f; //just to make it follow the line 
-            Vector3 bombPosition = GhostBody.transform.position + (1f * transform.forward);
+            Vector3 bombPosition = GhostBody.transform.position + (1f * transform.forward); //moves the bomb spawn point so the fence does not collide with it
             //GhostBomb ghostBomb = Instantiate(GhostBombPrefab, GhostBody.transform.position, GhostBody.transform.rotation).GetComponent<GhostBomb>();
             GhostBomb ghostBomb = Instantiate(GhostBombPrefab, bombPosition, GhostBody.transform.rotation).GetComponent<GhostBomb>();
         
