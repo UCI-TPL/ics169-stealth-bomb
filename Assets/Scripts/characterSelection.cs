@@ -9,7 +9,9 @@ public class characterSelection : MonoBehaviour {
 	public PlayerJoinManager playerJoinManager;
 	public List<Text> playerOpList;
 	public List<Image> playerOpAList;
-	public Text readyText;
+    public List<Image> playerOpBList;
+    public List<Image> playerReadyOverlay;
+    public Text readyText;
 	public Image readyImage;
 
 	private int player = 0;
@@ -74,13 +76,17 @@ public class characterSelection : MonoBehaviour {
 			playerOpList[player].text = "Press    to join";
 		
 		playerOpAList[player].gameObject.SetActive(true);
+        playerOpBList[player].gameObject.SetActive(false);
+        playerReadyOverlay[player].gameObject.SetActive(false);
 	}
 
 	public void playerIsReady()
 	{
-		playerOpList[player].text = "Ready";
+		playerOpList[player].text = "Cancel";
 		playerOpAList[player].gameObject.SetActive(false);
-	}
+        playerOpBList[player].gameObject.SetActive(true);
+        playerReadyOverlay[player].gameObject.SetActive(true);
+    }
 
 	public void playerIsNotReady()
 	{
