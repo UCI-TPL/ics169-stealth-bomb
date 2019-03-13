@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using ColorExtensions;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,12 +14,21 @@ public class BombProjectileAddon : MonoBehaviour
     private float time = 0f;
     private bool bombStop = false;
 
+    [SerializeField]
+    private new ParticleSystem particleSystem;
+
     void Awake()
     {
         if (proj == null)
             proj = gameObject.GetComponent<Projectile>();
         if (rb == null)
             rb = gameObject.GetComponent<Rigidbody>();
+    }
+
+    private void Start() {
+        var main = particleSystem.main;
+        main.startColor = proj.player.Color;
+        particleSystem.Play(true);
     }
 
     void Update()

@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectile: {fileID: 114721991009535130, guid: 6e340db9b8ec4714b858edbad88d3d09,
     type: 3}
-  hitEffect: {fileID: 0}
+  hitEffect: {fileID: 5779502672186677134, guid: 75c38493b1ef2844685172829b6cf2f9,
+    type: 3}
   lifetime: 0.15
   spreadAngle: 10
   rotate90: 0

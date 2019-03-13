@@ -80,6 +80,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trail: {fileID: 8348122419703277450}
+  particle: {fileID: 0}
   collider: {fileID: 1215857097}
   projectileRenderer: {fileID: 970677083677697377}
   damageMultiplier: 0
@@ -101,6 +102,7 @@ MonoBehaviour:
   maxBounces: 4
   arcHeight: 30
   arcMoveSpeed: 12
+  particleSystem: {fileID: 1395383264923407558}
 --- !u!1 &970677083677697377
 GameObject:
   m_ObjectHideFlags: 0
@@ -196,7 +198,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &232575240194941096
 Transform:
   m_ObjectHideFlags: 0
@@ -205,7 +207,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1417057122701669789}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.849, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1215857094}
@@ -432,11 +434,22 @@ PrefabInstance:
       propertyPath: EmissionModule.rateOverTime.scalar
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6624415524150827984, guid: 3b7caaad65f08284a8ecb664ec5972d2,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3b7caaad65f08284a8ecb664ec5972d2, type: 3}
 --- !u!4 &1395383264923407559 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6624415524150827985, guid: 3b7caaad65f08284a8ecb664ec5972d2,
+    type: 3}
+  m_PrefabInstance: {fileID: 5238745737073725206}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &1395383264923407558 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 6624415524150827984, guid: 3b7caaad65f08284a8ecb664ec5972d2,
     type: 3}
   m_PrefabInstance: {fileID: 5238745737073725206}
   m_PrefabAsset: {fileID: 0}

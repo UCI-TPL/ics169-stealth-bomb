@@ -25,7 +25,7 @@ public class Projectile : MonoBehaviour {
     [HideInInspector]
     public GameObject hitEffect;
 
-    protected virtual void Start () {
+    protected virtual void Start() {
         origin = transform.position;
         if (player.controller.HitBox != null)
             foreach (Collider c in player.controller.HitBox)
