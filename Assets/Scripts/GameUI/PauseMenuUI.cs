@@ -90,6 +90,13 @@ public class PauseMenuUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (paused == true) {
+            _ButtonSelect();
+        }
+    }
+
+    private void _ButtonSelect() {
+        if (GoMenuButton.IsButtonInNormalState())
+            UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(GoMenuButton.gameObject);
     }
 }
