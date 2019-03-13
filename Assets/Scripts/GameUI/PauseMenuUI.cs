@@ -30,6 +30,9 @@ public class PauseMenuUI : MonoBehaviour
     [SerializeField]
     private RectTransform PauseMenuRect;
 
+    [SerializeField]
+    private ButtonController GoMenuButton;
+
     void Awake()
     {
         instance = this;
@@ -65,6 +68,18 @@ public class PauseMenuUI : MonoBehaviour
         Time.timeScale = 1f;
     }
 
+    public void PressGoMenuButton(int p_number) {
+        if (PauseMenuRect.gameObject.activeSelf == true && GoMenuButton.gameObject.activeSelf == true && p_number == playerWhoPaused) {
+            GoMenuButton.PressButton();
+        }
+    }
+
+    public void ReleaseGoMenuButton(int p_number) {
+        if (PauseMenuRect.gameObject.activeSelf == true && GoMenuButton.gameObject.activeSelf == true && p_number == playerWhoPaused) {
+            GoMenuButton.ReleaseButton();
+        }
+    }
+
 
     // Start is called before the first frame update
     void Start()
@@ -75,6 +90,13 @@ public class PauseMenuUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (paused == true) {
+            _ButtonSelect();
+        }
+    }
+
+    private void _ButtonSelect() {
+        if (GoMenuButton.IsButtonInNormalState())
+            UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(GoMenuButton.gameObject);
     }
 }
