@@ -31,12 +31,7 @@ public class GhostBomb : MonoBehaviour
     [HideInInspector]
     public Vector3 v3;
 
-    // public GameObject ExplosionParticles;
-
     private bool explosionPlayed = false; //to make sure only one explosion spawns
-
-    //  public WeaponParticles Particles;
-
     public GameObject ExplosionParticles;
 
 
@@ -48,42 +43,57 @@ public class GhostBomb : MonoBehaviour
         actualTravelTime = travelTime / vertexCount; //how long travelling with actually take
         startTravelTime = Time.time; //start time
         travelDuration = startTravelTime + actualTravelTime; //end time
-        target = GetNextPoint();
-        Destroy(this.gameObject, 1f);
-        //Particles.UpdateRoot(ExplosionParticles);
-        
-        
-        
+        target = GetNextPoint();   
     }
 
-    /* No longer used 
-    public static Vector3 Parabola(Vector3 start, Vector3 end, float height, float t)
+    public void Initialize(Vector3 t2, Vector3 t3) //where the two targets are set
     {
-        Func<float, float> f = x => -4 * height * x * x + 4 * height * x;
-
-        var mid = Vector3.Lerp(start, end, t);
-
-        return new Vector3(mid.x, f(t) + Mathf.Lerp(start.y, end.y, t), mid.z);
+        
+        v2 = t2; // ghost cursor object
+        v3 = t3; //the ground
     }
-    */
-    
 
     private void OnTriggerEnter(Collider other)
     {
+
+
+        //if (other.gameObject.layer == 11) //layer 11 is ground
+        // {
+        //   Collider[] hitColliders = Physics.OverlapSphere(transform.position, 4f);
+        LayerMask mask = LayerMask.GetMask("Ground");
+
+        Vector3 ColliderZone = new Vector3(transform.localScale.x, transform.localScale.y * 10f, transform.localScale.x);
+
+        Collider[] hitColliders = Physics.OverlapBox(gameObject.transform.position, ColliderZone, Quaternion.identity, mask);
+
+            int i = 0;
+
+            
+        while (i < hitColliders.Length)
+        {
+
+            Tile temp = hitColliders[i].GetComponent<Tile>();
+               if (temp)
+                {
+                    if (hitColliders[i].tag == "Tile")
+                        TileManager.tileManager.DamagePillar(temp.position, 50f); //takes 2 hits to kill stone, just one to kill grass
+                    else
+                        Destroy(hitColliders[i].gameObject);
+                }
+                else
+                {
+                    Destroy(hitColliders[i].gameObject);
+                }
+               
+                Explode(); //goodybye
+                i++;
+        }
+        //}
+
+        /*
+
         if (other.gameObject.layer == 11) //layer 11 is ground
         {
-    
-
-
-
-            if (!explosionPlayed)
-            {
-                GameObject explosion = Instantiate(ExplosionParticles, transform.position, Quaternion.identity);
-                explosion.GetComponent<ParticleSystem>().Play();
-                explosionPlayed = true;
-            }
-
-
             Tile temp = other.GetComponent<Tile>();
             if (temp)
             {
@@ -96,9 +106,20 @@ public class GhostBomb : MonoBehaviour
             {
                 Destroy(other.gameObject);
             }
-                //TileManager.tileManager.DestroyTiles(temp.position); //to just destory anything without caring about health
-            Destroy(this.gameObject);
+            Explode(); //goodybye
+        }*/
+    }
+
+    void Explode() //the final action
+    {
+        if (!explosionPlayed)
+        {
+            GameObject explosion = Instantiate(ExplosionParticles, transform.position, Quaternion.identity);
+            explosion.GetComponent<ParticleSystem>().Play();
+            explosionPlayed = true;
         }
+
+        Destroy(this.gameObject);
     }
 
     // Update is called once per frame
@@ -118,6 +139,12 @@ public class GhostBomb : MonoBehaviour
                 travelDuration = Time.time + actualTravelTime; //restart the lerp but going to a different part of the curve
             }   
         }
+
+        if(Time.time > travelDuration)
+        {
+            //Debug.Log("My travels are over");
+            Explode();
+        }
         
     }
 
@@ -134,25 +161,6 @@ public class GhostBomb : MonoBehaviour
         Vector3 point = Vector3.Lerp(tangent1, tangent2, ratio); //a point on the curve that we want to make
         ratio += (1f /vertexCount); //the increment
         return point;
-
-        /*
-        List<Vector3> linePoints = new List<Vector3>();
-        Vector3 v1 = GhostBody.transform.position; //this is the start point, the ghost body
-        Vector3 v2 = this.transform.position; //this is the top of the decal
-        float distance = Vector3.Distance(v1, v2);
-        Vector3 v3 = new Vector3(v2.x, v2.y - descent + 0.5f, v2.z); //this point where the crosshair is, the ground
-
-        Vector4 v4 = new Vector3(0f, 0f, 0f);
-        v4 = v2 + (v1.normalized * (distance/3));
-        
-        for(float ratio = 0; ratio <= 1; ratio += (1f/(vertexCount )))
-        {
-            Vector3 tangent1 = Vector3.Lerp(v1, v4, ratio); //this is the line between the ghost body & the top of the decal object
-            Vector3 tangent2 = Vector3.Lerp(v4, v3, ratio); //the line between the top of the decal object & the ground
-            Vector3 point = Vector3.Lerp(tangent1, tangent2, ratio); //a point on the curve that we want to make
-            linePoints.Add(point);
-        }
-        */
     }
 
 
