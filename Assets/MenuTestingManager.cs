@@ -7,11 +7,15 @@ public class MenuTestingManager : MonoBehaviour {
     public Player[] players;
     public PlayerData DefaultPlayerData;
     [SerializeField]
+    private GameObject[] cameras;
+    [SerializeField]
     private Transform[] spawnPoints;
 
     // Start is called before the first frame update
     void Start() {
         players = new Player[4];
+        foreach (GameObject g in cameras)
+            g.SetActive(false);
     }
 
     public void SetupPlayer(int playerNumber, int controllerNumber, int colorIndex) {
@@ -20,7 +24,7 @@ public class MenuTestingManager : MonoBehaviour {
             Debug.LogWarning("Player " + playerNumber.ToString() + " has already been created and has not been deleted.");
             return;
         }
-
+        cameras[playerNumber].SetActive(true);
         players[playerNumber] = new Player(playerNumber, controllerNumber, DefaultPlayerData, colorIndex);
         players[playerNumber].ResetForRound();
         players[playerNumber].SetController(Instantiate<GameObject>(GameManager.instance.PlayerPrefab.gameObject, spawnPoints[playerNumber].position, Quaternion.identity).GetComponent<PlayerController>());
@@ -31,7 +35,7 @@ public class MenuTestingManager : MonoBehaviour {
             Debug.LogWarning("Player " + playerNumber.ToString() + " does not exist or has already been deleted.");
             return;
         }
-
+        cameras[playerNumber].SetActive(false);
         players[playerNumber].controller.Destroy();
         players[playerNumber] = null;
     }
