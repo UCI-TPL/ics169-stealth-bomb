@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Icicle Weapon
   m_EditorClassIdentifier: 
   name: Icicle
-  image: {fileID: 21300000, guid: 6e5438fcfb89f314398fc3799824ce29, type: 3}
+  image: {fileID: 21300000, guid: 5ebd295b9a4fd854986b3442c49c58c8, type: 3}
   description: Fire a barrage of icicles at your enemies
   type: 2
   autoAttack: 1

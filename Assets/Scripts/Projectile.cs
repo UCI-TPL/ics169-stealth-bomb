@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using ColorExtensions;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -64,8 +65,14 @@ public class Projectile : MonoBehaviour {
         hasHit = true;
         if (OnHit != null)
             OnHit.Invoke(origin, other.contacts[0].point, other.gameObject);
-        if (hitEffect != null)
-            Instantiate(hitEffect, transform.position, Quaternion.identity);
+        if (hitEffect != null) {
+            GameObject g = Instantiate(hitEffect, transform.position, Quaternion.identity);
+            foreach (ParticleSystem p in g.GetComponentsInChildren<ParticleSystem>()) {
+                var main = p.main;
+                main.startColor = player.Color.ScaleHSV(main.startColor.color, multiplyBaseValue: false);
+            }
+            g.GetComponent<ParticleSystem>()?.Play(true);
+        }
         //GetComponent<MeshRenderer>().enabled = false;
         if (projectileRenderer != null)
             projectileRenderer.SetActive(false);
