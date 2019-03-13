@@ -27,3 +27,4 @@ Material:
     - Vector1_940DBDA5: 1
     m_Colors:
     - Color_52FADAA: {r: 0.0002948836, g: 0.0007314645, b: 0, a: 1}
+    - _DecalColor: {r: 0.0002948836, g: 0.0007314645, b: 0, a: 1}

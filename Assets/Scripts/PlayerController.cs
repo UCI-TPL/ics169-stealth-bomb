@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using ColorExtensions;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -34,6 +35,7 @@ public class PlayerController : MonoBehaviour, IHurtable {
     public Renderer rendHair;
     public Renderer rendBottom;
     public Renderer rendTorso;
+    public Renderer FakeLight;
     public Transform PlayerHitbox;
     public GameObject ShootPoint;
     public Collider floorCollider;
@@ -192,7 +194,7 @@ public class PlayerController : MonoBehaviour, IHurtable {
         rendHead.material.SetFloat("Vector1_F96347CF", -1f);
         rendHair.material.SetFloat("Vector1_F96347CF", -1f);
 
-
+        FakeLight.material.SetColor("_DecalColor", playerColor.ScaleHSV(FakeLight.sharedMaterial.GetColor("_DecalColor")));
     }
 
     public void Destroy() {

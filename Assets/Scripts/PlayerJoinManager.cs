@@ -432,9 +432,7 @@ public class PlayerJoinManager : MonoBehaviour {
 
     public void SwitchColors(int controllerIdx) // controller number as parameter
     {
-        Debug.Log("controllersToPlayers: " + controllersToPlayers.Length.ToString() + " : " + controllerIdx.ToString());
-        Debug.Log("playersJoined: " + playersJoined.Length.ToString() + " : " + controllersToPlayers[controllerIdx].ToString());
-		if (CanPlayerPressButton(controllerIdx) && playersJoined[controllersToPlayers[controllerIdx]] == true) {
+		if (HasPlayerJoined(controllerIdx)) {
 			int colorIndex = GameManager.instance.ExchangeColors(controllersToPlayers[controllerIdx]);
 			if (colorIndex == -1) //this means that the player was not assigned a color yet!
 				return;
@@ -463,8 +461,13 @@ public class PlayerJoinManager : MonoBehaviour {
 	// General Helper Methods //
 
 	// helper method that returns whether or not the specified player can enter input.
-	private bool CanPlayerPressButton(int playerIdx) {
-		return currentStates[playerIdx].IsConnected && PlayerJoinScreenActive && inputTimer >= cooldown;
+	private bool CanPlayerPressButton(int controllerIdx) {
+		return currentStates[controllerIdx].IsConnected && PlayerJoinScreenActive && inputTimer >= cooldown;
+	}
+
+	private bool HasPlayerJoined(int controllerIdx) {
+		return CanPlayerPressButton(controllerIdx) && controllersToPlayers[controllerIdx] != notAssignedController 
+												&& playersJoined[controllersToPlayers[controllerIdx]] == true;
 	}
 
 

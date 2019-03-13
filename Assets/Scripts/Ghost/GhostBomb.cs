@@ -125,20 +125,15 @@ public class GhostBomb : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Time.time <= travelDuration)
-        {
-            float lerpPosition = (Time.time - startTravelTime) / actualTravelTime; //how far along the lerp should it be
-            transform.position = Vector3.Lerp(transform.position, target, lerpPosition);
-        }
-        else
+        if (Time.time > travelDuration)
         {
             Vector3 point = GetNextPoint();
-            if(point != Vector3.zero)
-            {
+            if (point != Vector3.zero) {
                 target = point;
                 travelDuration = Time.time + actualTravelTime; //restart the lerp but going to a different part of the curve
-            }   
+            }
         }
+
 
         if(Time.time > travelDuration)
         {
@@ -146,6 +141,11 @@ public class GhostBomb : MonoBehaviour
             Explode();
         }
         
+
+        float lerpPosition = (Time.time - startTravelTime) / actualTravelTime; //how far along the lerp should it be
+        transform.position = Vector3.Lerp(transform.position, target, lerpPosition);
+
+
     }
 
     public Vector3 GetNextPoint() //returns the next destination on the curve
