@@ -173,15 +173,18 @@ public class PlayerController : MonoBehaviour, IHurtable {
 
     public void PauseGame()
     {
-        PauseMenuUI.Instance.Pause(player.playerNumber);
+        if (GameManager.instance.inGame == true)
+            PauseMenuUI.Instance.Pause(player.playerNumber);
     }
 
     public void PressGoMenuButton() {
-        PauseMenuUI.Instance.PressGoMenuButton(player.playerNumber);
+        if (GameManager.instance.inGame == true)
+            PauseMenuUI.Instance.PressGoMenuButton(player.playerNumber);
     }
 
     public void ReleaseGoMenuButton() {
-        PauseMenuUI.Instance.ReleaseGoMenuButton(player.playerNumber);
+        if (GameManager.instance.inGame == true)
+            PauseMenuUI.Instance.ReleaseGoMenuButton(player.playerNumber);
     }
 
     private Material fakeLightBase;

@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour {
 
     [Header("Important Scene Names")]
     public string mainMenuSceneName;
+    public string winnerSceneName;
     private string currentSceneName;
     public LevelList[] levelNames;
     private string[] visited;
@@ -131,6 +132,7 @@ public class GameManager : MonoBehaviour {
     }
 
     public static void ReturnMenu() {
+        Debug.Log("ReturnMenu() called.");
         instance.inGame = false;
         instance.Winners.Clear();
         Time.timeScale = 1;
@@ -142,6 +144,14 @@ public class GameManager : MonoBehaviour {
         GameManager.instance.audioManager.Stop(battle_music);
         GameManager.instance.audioManager.Play("Main Menu");
         SceneManager.LoadScene(instance.mainMenuSceneName);
+    }
+
+    public static void GoToWinScene() {
+        Time.timeScale = 1;
+        Time.fixedDeltaTime = 0.02f;
+        GameManager.instance.audioManager.Stop("Fanfare");
+        GameManager.instance.audioManager.Stop(battle_music);
+        SceneManager.LoadScene(instance.winnerSceneName);
     }
 
     #region Audio
@@ -236,7 +246,7 @@ public class GameManager : MonoBehaviour {
                 if (scene.name == mainMenuSceneName)
                     GameManager.instance.audioManager.Play("Main Menu");
             }
-            if(curveManager == null && scene.name != mainMenuSceneName)
+            if(curveManager == null && scene.name != mainMenuSceneName && scene.name != winnerSceneName)
             {
                 curveManager = GameObject.FindGameObjectWithTag("ghost-curve").GetComponent<CurveManager>();
                 //This will be destroyed on load because a different scene might have a different curve manager
@@ -255,7 +265,8 @@ public class GameManager : MonoBehaviour {
             if (rounds.Count <= 0 || !rounds[rounds.Count - 1].isActive) {
                 CheckForWinner();
                 if (Winners.Count != 0) {
-                    ReturnMenu();
+                    GoToWinScene();
+                    // ReturnMenu();
                     break;
                 }
 

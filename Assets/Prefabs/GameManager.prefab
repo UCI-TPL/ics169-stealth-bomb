@@ -97,6 +97,7 @@ MonoBehaviour:
   weatherManager: {fileID: 947806761363706678}
   curveManager: {fileID: 0}
   mainMenuSceneName: mainMenu
+  winnerSceneName: WinnerScene
   levelNames:
   - LevelGroup:
     - Map1A_TownMarket

@@ -1059,7 +1059,7 @@ PrefabInstance:
     - target: {fileID: 603691197012529393, guid: 67467becd7dac8b478fcd9448d153842,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -142
       objectReference: {fileID: 0}
     - target: {fileID: 603691197012529393, guid: 67467becd7dac8b478fcd9448d153842,
         type: 3}
@@ -1115,6 +1115,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 603691196035011671, guid: 67467becd7dac8b478fcd9448d153842,
+        type: 3}
+      propertyPath: m_Text
+      value: Back To Menu
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 67467becd7dac8b478fcd9448d153842, type: 3}
