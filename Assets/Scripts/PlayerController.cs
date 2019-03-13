@@ -258,7 +258,7 @@ public class PlayerController : MonoBehaviour, IHurtable {
     {
         if (transform.position.y <= 1) //if the player is falling, remove them from the camera because they will die =(
         {
-            Camera.main.GetComponentInParent<FollowTargetsCamera>().targets.Remove(gameObject); //perhaps not the most efficent 
+            Camera.main.GetComponentInParent<FollowTargetsCamera>()?.targets.Remove(gameObject); //perhaps not the most efficent 
         }
     }
 
