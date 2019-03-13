@@ -30,6 +30,7 @@ MonoBehaviour:
     type: 3}
   hitCooldown: 0.25
   duration: 4
+  size: 1.5
   checkDistance: 0
   counterName: IceBuffCount
   debuff: {fileID: 11400000, guid: 7433e8d694b6838499c9277b1fdc0388, type: 2}

@@ -23,7 +23,7 @@ public class CreateGroundEffect : Weapon {
 
     // OnActivate is called once when the weapon is activated
     protected override void OnActivate(Vector3 start, Vector3 direction, PlayerController targetController = null) {
-        float size = player.stats.GetStat(data.counterName);
+        float size = player.stats.GetStat(data.counterName) * data.size;
         if (data.checkDistance) {
             distanceMoved += direction.magnitude;
             if (distanceMoved - distanceCounter >= 0.5f * size) {

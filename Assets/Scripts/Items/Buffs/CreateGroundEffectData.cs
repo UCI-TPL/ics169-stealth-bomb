@@ -9,6 +9,7 @@ public class CreateGroundEffectData : WeaponData<CreateGroundEffect> {
     public GroundEffect groundEffectPrefab;
     public float hitCooldown = 0.1f;
     public float duration = 2f;
+    public float size;
     public bool checkDistance;
     public string counterName;
 

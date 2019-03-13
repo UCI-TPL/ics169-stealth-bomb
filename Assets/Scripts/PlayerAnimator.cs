@@ -20,11 +20,13 @@ public class PlayerAnimator : MonoBehaviour {
         previousPosition = transform.position;
     }
 
-    private void LateUpdate() {
-        Vector3 curVelocity = (transform.position - previousPosition) / Time.deltaTime;
+    private void FixedUpdate() {
+        Vector3 curVelocity = Vector3.Scale(transform.position - previousPosition, new Vector3(1, 0, 1)) / Time.fixedDeltaTime;
         previousPosition = transform.position;
 
-        avgVelocity = Vector3.SmoothDamp(avgVelocity, curVelocity, ref acceleration, smoothTime);
+        avgVelocity = Vector3.SmoothDamp(avgVelocity, curVelocity, ref acceleration, smoothTime, Mathf.Infinity, Time.fixedDeltaTime);
+        //Debug.DrawRay(transform.position, avgVelocity, Color.red);
+        //Debug.DrawRay(transform.position + Vector3.Cross(avgVelocity, Vector3.up) * 0.01f, avgVelocity.normalized * maxVelocity, Color.blue);
 
         float angle = Mathf.Lerp(0, maxAngle, Mathf.Pow(avgVelocity.magnitude / maxVelocity, velocityPower));
 

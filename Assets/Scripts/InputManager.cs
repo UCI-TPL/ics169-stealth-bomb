@@ -433,15 +433,13 @@ public class InputManager : MonoBehaviour {
             foreach (TestEvent del in CancelTest.Pressed)
                 testAll = testAll || del();
             cancel.Pressed = testAll;
-
-            Debug.Log("Looping");
+            
             XButtonTest.Down(delegate { xbutton.OnDown.Invoke(); });
             XButtonTest.Up(delegate { xbutton.OnUp.Invoke(); });
             testAll = false;
             foreach (TestEvent del in XButtonTest.Pressed)
                 testAll = testAll || del();
             xbutton.Pressed = testAll;
-            Debug.Log("GOT HERE");
         }
 
         // Create a new Xbox controller with the specified player number
