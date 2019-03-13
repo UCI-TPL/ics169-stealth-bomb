@@ -30,6 +30,9 @@ public class PauseMenuUI : MonoBehaviour
     [SerializeField]
     private RectTransform PauseMenuRect;
 
+    [SerializeField]
+    private ButtonController GoMenuButton;
+
     void Awake()
     {
         instance = this;
@@ -63,6 +66,18 @@ public class PauseMenuUI : MonoBehaviour
     {
         PauseMenuRect.gameObject.SetActive(false);
         Time.timeScale = 1f;
+    }
+
+    public void PressGoMenuButton(int p_number) {
+        if (PauseMenuRect.gameObject.activeSelf == true && GoMenuButton.gameObject.activeSelf == true && p_number == playerWhoPaused) {
+            GoMenuButton.PressButton();
+        }
+    }
+
+    public void ReleaseGoMenuButton(int p_number) {
+        if (PauseMenuRect.gameObject.activeSelf == true && GoMenuButton.gameObject.activeSelf == true && p_number == playerWhoPaused) {
+            GoMenuButton.ReleaseButton();
+        }
     }
 
 
