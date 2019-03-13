@@ -10,6 +10,9 @@ public class GhostBomb : MonoBehaviour
     [HideInInspector]
     public Vector3 target; //where it flies to
 
+    [SerializeField]
+    public int Damage;
+
   
     public float travelTime; //how long it should travel
 
@@ -35,49 +38,97 @@ public class GhostBomb : MonoBehaviour
     public GameObject ExplosionParticles;
 
 
+    private Vector3 StartPosition;
+
+
     bool hitSomething = false;
 
-    int vertexCount = 12;
+    int vertexCount = 24;
     float ratio = 0f;
 
     public bool started = false;
+
+    private Rigidbody rb;
+
+    private float timeElapsed = 0f;
+
+    private Keyframe[] XKeys;
+    private AnimationCurve X;
+
+    private Keyframe[] ZKeys;
+    private AnimationCurve Z;
+
+    private Keyframe[] YKeys;
+    private AnimationCurve Y;
+
+    private Vector3 forward;
+    private Vector3 right;
+
 
     void Start()
     {
         actualTravelTime = travelTime / vertexCount; //how long travelling with actually take
         startTravelTime = Time.time; //start time
         travelDuration = startTravelTime + actualTravelTime; //end time
+        rb = GetComponent<Rigidbody>();
+        StartPosition = transform.position;
 
     }
 
     public void Initialize(Vector3 t2, Vector3 t3) //where the two targets are set
     {
-        
         v2 = t2; // ghost cursor object
         v3 = t3; //the ground
         target = GetNextPoint();
         started = true;
+
+        XKeys = new Keyframe[2];
+        XKeys[0] = new Keyframe(0f, StartPosition.x);
+        XKeys[1] = new Keyframe(1f, t3.x);
+
+        ZKeys = new Keyframe[2];
+        ZKeys[0] = new Keyframe(0f, StartPosition.z);
+        ZKeys[1] = new Keyframe(1f, t3.z);
+
+        YKeys = new Keyframe[2];
+        YKeys[0] = new Keyframe(0f, StartPosition.y);
+        YKeys[1] = new Keyframe(1f, t3.y);
+
+
+
+
+        timeElapsed = 0f;
+
+        X = new AnimationCurve(XKeys);
+        Z = new AnimationCurve(ZKeys);
+        Y = new AnimationCurve(YKeys);
+
+        
     }
 
     private void OnTriggerEnter(Collider other)
     {
 
-        if (!started) //not sure if this does anything but whatever
-            return;
+        //if (!started) //not sure if this does anything but whatever
+        //    return;
         LayerMask mask = LayerMask.GetMask("Ground");
 
         if (other.gameObject.layer == 11) //prevents and funny business from going on 
         {
-            hitSomething = true;
+            
             DamageTiles();
         }
     }
 
     public void DamageTiles(float explosionDepth = 1f)
     {
+        if (hitSomething) //prevents this function from being called twice. This is final
+            return;
+        hitSomething = true;
         LayerMask mask = LayerMask.GetMask("Ground");
         Vector3 ColliderZone = new Vector3(transform.localScale.x, 1f, transform.localScale.x);
         Collider[] hitColliders = Physics.OverlapBox(gameObject.transform.position, ColliderZone, Quaternion.identity, mask);
+
         int i = 0;
         while (i < hitColliders.Length)
         {
@@ -85,8 +136,8 @@ public class GhostBomb : MonoBehaviour
             Tile temp = hitColliders[i].GetComponent<Tile>();
             if (temp != null)
             {
-                //TileManager.tileManager.DamagePillar(temp.position, 50f);
-                temp.ApplyDamage(50f);
+                temp.ApplyDamage(Damage);
+             
             }
             else
             {
@@ -97,6 +148,7 @@ public class GhostBomb : MonoBehaviour
             
             i++;
         }
+        
         //SecondaryDamage();
         Explode();
     }
@@ -128,11 +180,24 @@ public class GhostBomb : MonoBehaviour
         Destroy(this.gameObject);
     }
 
-    // Update is called once per frame
-    void Update()
+
+
+    private void UpdateCameraDirection()
     {
+        forward = Camera.main.transform.forward;
+        forward.Scale(new Vector3(1, 0, 1));
+        forward.Normalize();
+        right = Camera.main.transform.right;
+        right.Scale(new Vector3(1, 0, 1));
+        right.Normalize();
+    }
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        
         if (!started)
-            return;
+            return;   
         if (Time.time > travelDuration)
         {
             Vector3 point = GetNextPoint();
@@ -147,19 +212,27 @@ public class GhostBomb : MonoBehaviour
                 //Destroy(this.gameObject);
             }
         }
-
-
+        float lerpPosition = (Time.time - startTravelTime) / actualTravelTime; //how far along the lerp should it be
+        rb.position = Vector3.Lerp(transform.position, target, lerpPosition);
         
 
-        float lerpPosition = (Time.time - startTravelTime) / actualTravelTime; //how far along the lerp should it be
-        transform.position = Vector3.Lerp(transform.position, target, lerpPosition);
 
-        /*
-        if (Time.time > travelDuration)
-        {
-          
-            DamageTiles();
-        }
+        /*  trying and failing to use animation curves
+        UpdateCameraDirection();
+        timeElapsed += Time.deltaTime; //tried to move thigs with animation cureves
+
+        float moveX = X.Evaluate(timeElapsed);
+        float moveZ = Z.Evaluate(timeElapsed);
+        float moveY = Y.Evaluate(timeElapsed);
+
+        Vector3 pos = new Vector3(StartPosition.x + moveX, StartPosition.y + moveY, StartPosition.z + moveZ);
+
+        Vector3 scaledVector = (pos.y * forward) + (pos.x * right);
+
+        Debug.Log("We got " + pos);
+        Debug.Log("And scaled vecotr " + scaledVector);
+
+        rb.MovePosition(scaledVector);
         */
 
     }

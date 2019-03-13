@@ -11,7 +11,9 @@ public class CrumbleTile : Tile, IHurtable {
     [Header("Destruction Properties")]
     [SerializeField]
     private float maxHealth;
+    [SerializeField]
     public float HealthPercent { get { return Health / maxHealth; } }
+    [SerializeField]
     public float Health { get; private set; }
 
     [Header("Material Properties")]
@@ -72,6 +74,7 @@ public class CrumbleTile : Tile, IHurtable {
             return;
         Health = Mathf.Max(0, Health - amount);
         TileManager.tileManager.SetTileDamage(position, 0, 0, 1 - HealthPercent);
+        //Debug.Log("Health is " + Health);
         if (Health <= 0)
             DestroyEffect();
     }

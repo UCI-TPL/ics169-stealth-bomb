@@ -71,6 +71,7 @@ MonoBehaviour:
   rendHair: {fileID: 0}
   rendBottom: {fileID: 0}
   rendTorso: {fileID: 0}
+  FakeLight: {fileID: 0}
   PlayerHitbox: {fileID: 0}
   ShootPoint: {fileID: 0}
   floorCollider: {fileID: 0}
@@ -104,7 +105,7 @@ MonoBehaviour:
   GhostPrefab: {fileID: 1898897230688304, guid: 87ded8867057d76408927d062b0a927f,
     type: 3}
   GhostBody: {fileID: 0}
-  GhostBombPrefab: {fileID: 5982061567151588068, guid: 73dbddfbcb754634a82130015cc8e363,
+  GhostBombPrefab: {fileID: 4246895676930834701, guid: 1de62900c42419c4eb97e58ee788ef33,
     type: 3}
   GhostParabola1: {fileID: 0}
   GhostParabola2: {fileID: 0}
