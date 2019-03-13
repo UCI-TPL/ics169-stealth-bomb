@@ -432,8 +432,6 @@ public class PlayerJoinManager : MonoBehaviour {
 
     public void SwitchColors(int controllerIdx) // controller number as parameter
     {
-        Debug.Log("controllersToPlayers: " + controllersToPlayers.Length.ToString() + " : " + controllerIdx.ToString());
-        Debug.Log("playersJoined: " + playersJoined.Length.ToString() + " : " + controllersToPlayers[controllerIdx].ToString());
 		if (CanPlayerPressButton(controllerIdx) && playersJoined[controllersToPlayers[controllerIdx]] == true) {
 			int colorIndex = GameManager.instance.ExchangeColors(controllersToPlayers[controllerIdx]);
 			if (colorIndex == -1) //this means that the player was not assigned a color yet!

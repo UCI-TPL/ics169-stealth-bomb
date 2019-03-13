@@ -1650,6 +1650,7 @@ MonoBehaviour:
   rendHair: {fileID: 2998027562450054607}
   rendBottom: {fileID: 2998027562450054603}
   rendTorso: {fileID: 2998027562450054619}
+  FakeLight: {fileID: 414453455742535980}
   PlayerHitbox: {fileID: 4290687003326676}
   ShootPoint: {fileID: 1406199181580888}
   floorCollider: {fileID: 135181991345102188}
@@ -2047,9 +2048,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df738f8d7eadb064d8e7efc23a9c060c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  smoothTime: 0.15
+  smoothTime: 0.25
   maxAngle: 60
-  maxVelocity: 7.5
+  maxVelocity: 8
   velocityPower: 3
 --- !u!1 &2998027562447860481
 GameObject:
