@@ -20,7 +20,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs: []
     m_Floats:
-    - Vector1_6325E8F5: 0.5
+    - Vector1_6325E8F5: 0.25
     - Vector1_F10C5CB1: 10
     m_Colors:
     - _Albedo: {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 0.7490196}

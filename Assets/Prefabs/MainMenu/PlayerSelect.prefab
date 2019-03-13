@@ -86,7 +86,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AspectMode: 2
-  m_AspectRatio: 3.5
+  m_AspectRatio: 1.75
 --- !u!1 &107865789154251750
 GameObject:
   m_ObjectHideFlags: 0
@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 5701950579585222625}
   - component: {fileID: 1943218998}
   m_Layer: 5
-  m_Name: Image
+  m_Name: PlayRenderer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1267,6 +1267,8 @@ GameObject:
   - component: {fileID: 2271394901302036869}
   - component: {fileID: 7644581337911282663}
   - component: {fileID: 1855936100358152667}
+  - component: {fileID: 2043482791339939520}
+  - component: {fileID: 1383290862400857428}
   m_Layer: 5
   m_Name: PlayerSelect
   m_TagString: Untagged
@@ -1356,6 +1358,40 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   radius: {x: 30, y: 0, z: 0, w: 0}
+--- !u!114 &2043482791339939520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2271394901302036870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1679637790, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: 460.80002
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: 1
+  m_LayoutPriority: 1
+--- !u!114 &1383290862400857428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2271394901302036870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33014ae42833656418ae0195bc9a4edc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AspectMode: 2
+  AspectRatio: 1.44
 --- !u!1 &2271394901394574964
 GameObject:
   m_ObjectHideFlags: 0
