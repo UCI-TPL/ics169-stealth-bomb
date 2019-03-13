@@ -30,4 +30,4 @@ MonoBehaviour:
   projectile: {fileID: 11400000, guid: cc2f39c9384a2b84ab1b8e1b7c359c8e, type: 2}
   numProj: 1
   projSpeed: 35
-  SoundName: 
+  SoundName: Slingshot

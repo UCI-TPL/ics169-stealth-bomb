@@ -35,7 +35,9 @@ public class GhostBomb : MonoBehaviour
     public GameObject ExplosionParticles;
 
 
-    int vertexCount = 24;
+    bool hitSomething = false;
+
+    int vertexCount = 12;
     float ratio = 0f;
 
     public bool started = false;
@@ -59,66 +61,61 @@ public class GhostBomb : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!started)
+
+        if (!started) //not sure if this does anything but whatever
             return;
         LayerMask mask = LayerMask.GetMask("Ground");
 
-        if (other.gameObject.layer != 11) //prevents and funny business from going on 
-            return;
+        if (other.gameObject.layer == 11) //prevents and funny business from going on 
+        {
+            hitSomething = true;
+            DamageTiles();
+        }
+    }
 
-        Vector3 ColliderZone = new Vector3(transform.localScale.x, transform.localScale.y * 10f, transform.localScale.x);
-
+    public void DamageTiles(float explosionDepth = 1f)
+    {
+        LayerMask mask = LayerMask.GetMask("Ground");
+        Vector3 ColliderZone = new Vector3(transform.localScale.x, 1f, transform.localScale.x);
         Collider[] hitColliders = Physics.OverlapBox(gameObject.transform.position, ColliderZone, Quaternion.identity, mask);
-
-            int i = 0;
-
-            
+        int i = 0;
         while (i < hitColliders.Length)
         {
 
             Tile temp = hitColliders[i].GetComponent<Tile>();
-               if (temp)
-                {
-                    if (hitColliders[i].tag == "Tile")
-                        TileManager.tileManager.DamagePillar(temp.position, 50f); //takes 2 hits to kill stone, just one to kill grass
-                    else
-                        Destroy(hitColliders[i].gameObject);
-                }
-                else
-                {
-                    Destroy(hitColliders[i].gameObject);
-                }
-
-            Debug.Log("Dying after colliding with " + hitColliders[i].gameObject.name);
-                Explode(); //goodybye
-                i++;
-        }
-        //}
-
-        /*
-
-        if (other.gameObject.layer == 11) //layer 11 is ground
-        {
-            Tile temp = other.GetComponent<Tile>();
-            if (temp)
+            if (temp != null)
             {
-                if (other.tag == "Tile")
-                    TileManager.tileManager.DamagePillar(temp.position, 50f); //takes 2 hits to kill stone, just one to kill grass
-                else
-                    Destroy(other.gameObject);
+                //TileManager.tileManager.DamagePillar(temp.position, 50f);
+                temp.ApplyDamage(50f);
             }
             else
             {
-                Destroy(other.gameObject);
+                //Debug.Log("Temp is null? Why can't the tile be found  : "+hitColliders[i].gameObject.name);
+                Destroy(hitColliders[i].gameObject);
             }
-            Explode(); //goodybye
-        }*/
+
+            
+            i++;
+        }
+        //SecondaryDamage();
+        Explode();
     }
 
-    void Explode() //the final action
+    public void SecondaryDamage() //for some reasons tiles weren't getting damaged when exploding next to it. This is a smaller explosion that DELETES THINGS
     {
+        LayerMask mask = LayerMask.GetMask("Ground");
+        Vector3 ColliderZone = new Vector3(2f, 2f, 2f);
+        Collider[] hitColliders = Physics.OverlapBox(gameObject.transform.position, ColliderZone, Quaternion.identity, mask);
+        int i = 0;
+        while (i < hitColliders.Length)
+        {
+            //Destroy(hitColliders[i].gameObject); //kill it all
+            i++;
+        }
+    }
 
-        Debug.Log("Travel time is " + actualTravelTime);
+    public void Explode() //the final action
+    {
         if (!started)
             return;
         if (!explosionPlayed)
@@ -145,7 +142,9 @@ public class GhostBomb : MonoBehaviour
             }
             if(point == Vector3.zero)
             {
-                Debug.Log("The journey ends now");
+                if(!hitSomething)
+                    DamageTiles();
+                //Destroy(this.gameObject);
             }
         }
 
@@ -153,16 +152,15 @@ public class GhostBomb : MonoBehaviour
         
 
         float lerpPosition = (Time.time - startTravelTime) / actualTravelTime; //how far along the lerp should it be
-        //Debug.Log("Target is " + target);
         transform.position = Vector3.Lerp(transform.position, target, lerpPosition);
 
-
+        /*
         if (Time.time > travelDuration)
         {
-            Debug.Log("Travel duration is " + travelDuration);
-            Explode();
+          
+            DamageTiles();
         }
-
+        */
 
     }
 
