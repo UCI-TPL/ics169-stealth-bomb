@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using ColorExtensions;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,8 +14,27 @@ public class ShieldContainer : MonoBehaviour
     [SerializeField]
     private string counterName;
 
+    [SerializeField]
+    private static Material defaultMaterial;
+    private static Material[] _materialPerPlayer;
+    private Material[] materialPerPlayer {
+        get {
+            if (_materialPerPlayer != null)
+                return _materialPerPlayer;
+            _materialPerPlayer = new Material[GameManager.instance.DefaultPlayerData.Colors.Length];
+            for (int i = 0; i < GameManager.instance.DefaultPlayerData.Colors.Length; ++i) {
+                Material m = new Material(defaultMaterial);
+                m.SetColor("Color_2C42FCDA", GameManager.instance.DefaultPlayerData.Colors[i].ScaleHSV(defaultMaterial.GetColor("Color_2C42FCDA"), true));
+                _materialPerPlayer[i] = m;
+            }
+            return _materialPerPlayer;
+        }
+    }
+
     private void Awake() {
         shields = GetComponentsInChildren<Shield>();
+        if (defaultMaterial == null)
+            defaultMaterial = shields[0].meshRenderer.sharedMaterial;
     }
 
     // Update is called once per frame
@@ -43,6 +63,6 @@ public class ShieldContainer : MonoBehaviour
         this.targetPlayer = targetPlayer;
 
         foreach (Shield s in shields)
-            s.SetMaterial(shieldData.PlayerColorMaterials[targetPlayer.player.colorIndex % shieldData.PlayerColorMaterials.Length]); // We mod the index to to make sure there is never out of index error, instead it fails in a more acceptable manner, by using the wrong color
+            s.SetMaterial(materialPerPlayer[targetPlayer.player.colorIndex]);//shieldData.PlayerColorMaterials[targetPlayer.player.colorIndex % shieldData.PlayerColorMaterials.Length]); // We mod the index to to make sure there is never out of index error, instead it fails in a more acceptable manner, by using the wrong color
     }
 }

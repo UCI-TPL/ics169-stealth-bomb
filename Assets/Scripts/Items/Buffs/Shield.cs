@@ -18,7 +18,7 @@ public class Shield : MonoBehaviour, IHurtable {
     private GameObject container;
     public Collider[] colliders;
     [SerializeField]
-    private MeshRenderer meshRenderer;
+    public MeshRenderer meshRenderer;
 
     private void Start() {
         ResetHealth();
