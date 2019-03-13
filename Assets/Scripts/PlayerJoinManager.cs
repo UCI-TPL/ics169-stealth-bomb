@@ -48,6 +48,8 @@ public class PlayerJoinManager : MonoBehaviour {
 	public RectTransform[] playersUI;
     public GameObject countdown;
     public Text countdownText;
+    [SerializeField]
+    private GameObject MinPlayersWarning;
 
 	public string interactionNoise = "ButtonActivation";
 
@@ -288,6 +290,8 @@ public class PlayerJoinManager : MonoBehaviour {
 					// farthestTimer = initialFillAmount;
 				}
 			}
+            
+            MinPlayersWarning.SetActive(numOfPlayersJoined == 1);
 		}
 	}
 

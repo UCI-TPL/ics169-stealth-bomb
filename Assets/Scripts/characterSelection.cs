@@ -25,7 +25,7 @@ public class characterSelection : MonoBehaviour {
 			//Transform t = players.transform.GetChild(i).transform.GetChild(1);
 			//playerOpList.Add(t.GetComponent<Text>());
 			//playerOpAList.Add(t.GetChild(0).GetComponent<Image>());
-			playerOpAList[i].enabled = false;
+			playerOpAList[i].gameObject.SetActive(false);
 		}
 		// Debug.Log("playerOpList length = " + playerOpList.Count);
 		// playerIs(0);
@@ -62,7 +62,7 @@ public class characterSelection : MonoBehaviour {
 	public void playerDisconnected()
 	{
 		playerOpList[player].text = "Disconnected";
-		playerOpAList[player].enabled = false;
+		playerOpAList[player].gameObject.SetActive(false);
 	}
 
 	public void playerConnected()
@@ -73,13 +73,13 @@ public class characterSelection : MonoBehaviour {
 		else
 			playerOpList[player].text = "Press    to join";
 		
-		playerOpAList[player].enabled = true;
+		playerOpAList[player].gameObject.SetActive(true);
 	}
 
 	public void playerIsReady()
 	{
 		playerOpList[player].text = "Ready";
-		playerOpAList[player].enabled = false;
+		playerOpAList[player].gameObject.SetActive(false);
 	}
 
 	public void playerIsNotReady()
