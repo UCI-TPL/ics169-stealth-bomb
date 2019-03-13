@@ -32,9 +32,10 @@ public class WinSceneManager : MonoBehaviour
 
         string winners = "";
         foreach (Player p in GameManager.instance.Winners) {
-            winText.color = p.Color;
-            winners += "Player " + (p.playerNumber + 1) + " Wins!\n";
+            // winText.color = p.Color;
+            winners += "<color=#" + ColorUtility.ToHtmlStringRGBA(p.Color) + ">Player " + (p.playerNumber + 1) + " Wins!</color>\n";
         }
+        // ColorUtility.
         winText.text = winners;
     }
 
