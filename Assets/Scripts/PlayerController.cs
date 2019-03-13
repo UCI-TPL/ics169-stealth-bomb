@@ -157,6 +157,8 @@ public class PlayerController : MonoBehaviour, IHurtable {
         input.controllers[player.inputControllerNumber].dodge.OnUp.AddListener(ReleaseSpecialMove);
         input.controllers[player.inputControllerNumber].Switch.OnDown.AddListener(SwitchWeapon);
         input.controllers[player.inputControllerNumber].start.OnDown.AddListener(PauseGame);
+        input.controllers[player.inputControllerNumber].confirm.OnDown.AddListener(PressGoMenuButton);
+        input.controllers[player.inputControllerNumber].confirm.OnUp.AddListener(ReleaseGoMenuButton);
 
         //time to add paude I guess
 
@@ -167,6 +169,14 @@ public class PlayerController : MonoBehaviour, IHurtable {
     public void PauseGame()
     {
         PauseMenuUI.Instance.Pause(player.playerNumber);
+    }
+
+    public void PressGoMenuButton() {
+        PauseMenuUI.Instance.PressGoMenuButton(player.playerNumber);
+    }
+
+    public void ReleaseGoMenuButton() {
+        PauseMenuUI.Instance.ReleaseGoMenuButton(player.playerNumber);
     }
 
     public void SetPlayerColor() //gives color to the various parts of the player
