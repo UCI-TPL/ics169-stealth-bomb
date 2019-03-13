@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using XInputDotNetPure;                   // this package and all methods/classes used by us are not our own. reference this!!!!
+using ColorExtensions;
 
 
 // NOTE: what do we do when more than 1 controller are connected at first, but the 2nd or a controller that wasnt the last one to connect disconnects?
@@ -431,7 +432,7 @@ public class PlayerJoinManager : MonoBehaviour {
         playersUI[i].gameObject.GetComponent<Image>().color = Colors[colorIndex]; //changing the color of the player panel
         playersUI[i].Find("Border").GetComponent<Image>().color = Colors[colorIndex];
         playersUI[i].Find("ChangeColorBackground").Find("Background").GetComponent<Image>().color = Colors[colorIndex];
-        playersUI[i].Find("newish Xbox controller guide").GetComponent<Image>().color = Colors[colorIndex] * new Color(1, 1, 1, 0.5f);
+        playersUI[i].Find("newish Xbox controller guide").Find("Controller").GetComponent<Image>().color = Colors[colorIndex].ScaleHSV(Color.HSVToRGB(1, 0.35f, 1), multiplyBaseValue: false) * new Color(1, 1, 1, 0.65f);
     }
 
     public void SwitchColors(int controllerIdx) // controller number as parameter
