@@ -30,6 +30,7 @@ MonoBehaviour:
     type: 3}
   hitCooldown: 0.1
   duration: 4
+  size: 1.5
   checkDistance: 0
   counterName: FireBuffCount
   debuff: {fileID: 0}
