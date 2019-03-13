@@ -4,32 +4,35 @@ using UnityEngine;
 
 public class MenuTestingManager : MonoBehaviour {
 
-    private Player[] players;
+    public Player[] players;
     public PlayerData DefaultPlayerData;
     [SerializeField]
     private Transform[] spawnPoints;
 
     // Start is called before the first frame update
     void Start() {
-        players = SetupPlayers(4);
-
-        for (int i = 0; i < players.Length; ++i) {
-            players[i].ResetForRound();
-            players[i].SetController(Instantiate<GameObject>(GameManager.instance.PlayerPrefab.gameObject, spawnPoints[i].position, Quaternion.identity).GetComponent<PlayerController>());
-        }
+        players = new Player[4];
     }
 
-    private Player[] SetupPlayers(int count) {
-        Player[] result = new Player[count];
-        for (int i = 0; i < count; ++i) {
-            result[i] = new Player(i, i, DefaultPlayerData);
+    public void SetupPlayer(int playerNumber, int controllerNumber, int colorIndex) {
+        Debug.Log("Creating player " + playerNumber.ToString() + " with controller " + controllerNumber.ToString());
+        if (players[playerNumber] != null) {
+            Debug.LogWarning("Player " + playerNumber.ToString() + " has already been created and has not been deleted.");
+            return;
         }
-        return result;
+
+        players[playerNumber] = new Player(playerNumber, controllerNumber, DefaultPlayerData, colorIndex);
+        players[playerNumber].ResetForRound();
+        players[playerNumber].SetController(Instantiate<GameObject>(GameManager.instance.PlayerPrefab.gameObject, spawnPoints[playerNumber].position, Quaternion.identity).GetComponent<PlayerController>());
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public void RemovePlayer(int playerNumber) {
+        if (players[playerNumber] == null) {
+            Debug.LogWarning("Player " + playerNumber.ToString() + " does not exist or has already been deleted.");
+            return;
+        }
+
+        players[playerNumber].controller.Destroy();
+        players[playerNumber] = null;
     }
 }

@@ -166,6 +166,9 @@ public class PlayerController : MonoBehaviour, IHurtable {
 
         //ShootPointDefaultPosition = ShootPoint.transform.localPosition;
         //StartCoroutine(StartAnimation());
+
+        if (crown != null)
+            crown.SetActive(player == GameManager.instance.leader);
     }
 
     public void PauseGame()
@@ -181,6 +184,7 @@ public class PlayerController : MonoBehaviour, IHurtable {
         PauseMenuUI.Instance.ReleaseGoMenuButton(player.playerNumber);
     }
 
+    private Material fakeLightBase;
     public void SetPlayerColor() //gives color to the various parts of the player
     {
         playerColor = player.Color; //make sure the player uses the color from the Default Data
@@ -204,7 +208,9 @@ public class PlayerController : MonoBehaviour, IHurtable {
         rendHead.material.SetFloat("Vector1_F96347CF", -1f);
         rendHair.material.SetFloat("Vector1_F96347CF", -1f);
 
-        FakeLight.material.SetColor("_DecalColor", playerColor.ScaleHSV(FakeLight.sharedMaterial.GetColor("_DecalColor")));
+        if (fakeLightBase == null)
+            fakeLightBase = FakeLight.sharedMaterial;
+        FakeLight.material.SetColor("_DecalColor", playerColor.ScaleHSV(fakeLightBase.GetColor("_DecalColor")));
     }
 
     public void Destroy() {

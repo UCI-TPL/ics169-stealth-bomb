@@ -51,8 +51,10 @@ public class PlayerJoinManager : MonoBehaviour {
     public Text countdownText;
     [SerializeField]
     private GameObject MinPlayersWarning;
+    [SerializeField]
+    private MenuTestingManager menuControlsTestingManager;
 
-	public string interactionNoise = "ButtonActivation";
+    public string interactionNoise = "ButtonActivation";
 
 	// [Tooltip("Reference to the game controller object.")]
 	// public GameObject gameManager;
@@ -343,7 +345,8 @@ public class PlayerJoinManager : MonoBehaviour {
 
                     int colorIndex = GameManager.instance.AssignPlayerColor(i); //use playerNumber to receive a color
 
-                    
+                    // Create the player;
+                    menuControlsTestingManager.SetupPlayer(i, controllerIdx, colorIndex);
 
                     playersUI[i].gameObject.SetActive(true);
                     SetUIColor(i, colorIndex);
@@ -381,7 +384,9 @@ public class PlayerJoinManager : MonoBehaviour {
 						playersJoined[controllersToPlayers[controllerIdx]] = false;
 						playersUI[controllersToPlayers[controllerIdx]].gameObject.SetActive(false);
 						joinPrompts[controllersToPlayers[controllerIdx]].gameObject.SetActive(false);
-						if (playersLoseTheirNumberIfTheyLeave) {
+                        // Delete the player
+                        menuControlsTestingManager.RemovePlayer(controllersToPlayers[controllerIdx]);
+                        if (playersLoseTheirNumberIfTheyLeave) {
 							inputControllerNumbers[controllersToPlayers[controllerIdx]] = notAssignedController;
 							controllersToPlayers[controllerIdx] = notAssignedController;
 						}
@@ -442,7 +447,12 @@ public class PlayerJoinManager : MonoBehaviour {
 			if (colorIndex == -1) //this means that the player was not assigned a color yet!
 				return;
 			SetUIColor(controllersToPlayers[controllerIdx], colorIndex);
-		}
+
+            // Delete the player
+            menuControlsTestingManager.RemovePlayer(controllersToPlayers[controllerIdx]);
+            // Create the player;
+            menuControlsTestingManager.SetupPlayer(controllersToPlayers[controllerIdx], controllerIdx, colorIndex);
+        }
     }
 
 	// helper callback method that starts the game if the player and others are ready (old update() version).

@@ -61,6 +61,18 @@ public class Player : IHurtable {
         experiance = 0;
     }
 
+    public Player(int playerNumber, int xboxControllerNumber, PlayerData playerData, int colorIndex) {
+        this.playerNumber = playerNumber;
+        this.inputControllerNumber = xboxControllerNumber;
+        this.playerData = playerData;
+        this.colorIndex = colorIndex;
+        stats = new PlayerStats(this); // Creates a stats profile for the player
+        ResetHealth();
+        ResetWeapon();
+        ResetSpecialMove();
+        experiance = 0;
+    }
+
     public void SetGhost(PlayerController controller)
     {
         Color prevColor = this.controller.playerColor;
