@@ -309,9 +309,10 @@ public class PlayerJoinManager : MonoBehaviour {
 	private void PlayerJoin(int controllerIdx) {
 		// Debug.Log("ReadyPlayer called for player " + playerIdx + ".");
 		// Debug.Log("input controller list before: " + inputControllerNumbers[0] + "," + inputControllerNumbers[1] + "," + inputControllerNumbers[2] + "," + inputControllerNumbers[3]);
+		Debug.Log("input controller list before: " + controllersToPlayers[0] + "," + controllersToPlayers[1] + "," + controllersToPlayers[2] + "," + controllersToPlayers[3]);
 
 		// Player has been assigned a controller or has not joined yet
-		if (CanPlayerPressButton(controllerIdx) && (controllersToPlayers[controllerIdx] == notAssignedController || playersJoined[inputControllerNumbers[controllerIdx]] == false) /* && playersJoined[controllersToPlayers[controllerIdx]] == false */) {
+		if (CanPlayerPressButton(controllerIdx) && (controllersToPlayers[controllerIdx] == notAssignedController || playersJoined[inputControllerNumbers[controllersToPlayers[controllerIdx]]] == false) /* && playersJoined[controllersToPlayers[controllerIdx]] == false */) {
 			// Display the UI element showing the player has confirmed he/she is ready to play.
 			// Debug.Log("Player " + players[i] + " is ready to play!");
 

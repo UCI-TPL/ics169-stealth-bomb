@@ -91,8 +91,8 @@ public class GameManager : MonoBehaviour {
     change battle music to finale
      */
      [Header("Audio related")]
-     public float finalePercent = 0.1f;
-     private static float finaleRank = 3f;
+     public float finalePercent = 0.8f;
+     private static float finaleRank = 4f;
      private static string battle_music = "Battle";
      
 

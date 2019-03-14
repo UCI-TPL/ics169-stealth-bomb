@@ -328,7 +328,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {x: 0, y: 0, z: 0}
-  Damage: 35
+  Damage: 50
   travelTime: 0.75
   travelDuration: 0
   startTravelTime: 0
