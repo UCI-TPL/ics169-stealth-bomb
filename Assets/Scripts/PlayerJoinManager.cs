@@ -185,15 +185,15 @@ public class PlayerJoinManager : MonoBehaviour {
 		// }
 		if (GameManager.instance.players != null) {
 			playerObjects = GameManager.instance.players;
-			// string playerInfo = "Players: ";
-			// for (int i = 0; i < playerObjects.Length; i++) {
-			// 	if (playerObjects[i] != null)
-			// 		playerInfo += "player " + playerObjects[i].playerNumber + " controller number = " + playerObjects[i].inputControllerNumber + " ,";
-			// }
-			// Debug.Log(playerInfo);
+			string playerInfo = "Players: ";
+			for (int i = 0; i < playerObjects.Length; i++) {
+				if (playerObjects[i] != null)
+					playerInfo += "player " + playerObjects[i].playerNumber + " controller number = " + playerObjects[i].inputControllerNumber + " ,";
+			}
+			Debug.Log(playerInfo);
 		}
 		else {
-			// Debug.Log("GameManager players array is null.");
+			Debug.Log("GameManager players array is null.");
 		}
 		// Debug.Log("inputControllerNumbers length = " + inputControllerNumbers.Length + ", controllersToPlayers length = " + controllersToPlayers.Length);
 		// if (inputControllerNumbers == null || controllersToPlayers == null || inputControllerNumbers.Length == 0 || controllersToPlayers.Length == 0) {
@@ -307,12 +307,14 @@ public class PlayerJoinManager : MonoBehaviour {
 	// helper callback method that readies the player using the controller specified by the parameter/index.
 	//Problem!!!!! Rejoining kicks controller to next player instead of getting the same one back
 	private void PlayerJoin(int controllerIdx) {
+		Debug.Log("Controller " + controllerIdx + " pressed A.");
 		// Debug.Log("ReadyPlayer called for player " + playerIdx + ".");
 		// Debug.Log("input controller list before: " + inputControllerNumbers[0] + "," + inputControllerNumbers[1] + "," + inputControllerNumbers[2] + "," + inputControllerNumbers[3]);
 		Debug.Log("input controller list before: " + controllersToPlayers[0] + "," + controllersToPlayers[1] + "," + controllersToPlayers[2] + "," + controllersToPlayers[3]);
 
 		// Player has been assigned a controller or has not joined yet
-		if (CanPlayerPressButton(controllerIdx) && (controllersToPlayers[controllerIdx] == notAssignedController || playersJoined[inputControllerNumbers[controllersToPlayers[controllerIdx]]] == false) /* && playersJoined[controllersToPlayers[controllerIdx]] == false */) {
+		if (CanPlayerPressButton(controllerIdx) && (controllersToPlayers[controllerIdx] == notAssignedController || playersJoined[controllersToPlayers[controllerIdx]] == false) /* && playersJoined[controllersToPlayers[controllerIdx]] == false */) {
+			Debug.Log("Controller " + controllerIdx + "going through join case of PlayerJoin().");
 			// Display the UI element showing the player has confirmed he/she is ready to play.
 			// Debug.Log("Player " + players[i] + " is ready to play!");
 
@@ -339,6 +341,7 @@ public class PlayerJoinManager : MonoBehaviour {
 					i = controllersToPlayers[controllerIdx];
 				}
 
+				// continue to perform joining actions if finding a player number worked successfully.
 				if (i < 4) {
 					Debug.Log("Player " + (i + 1) + " joined.");
 					playersJoined[i] = true;
@@ -358,6 +361,7 @@ public class PlayerJoinManager : MonoBehaviour {
 			}
 		}
 		else if (CanPlayerPressButton(controllerIdx) && controllersToPlayers[controllerIdx] != notAssignedController) {
+			Debug.Log("Player " + controllersToPlayers[controllerIdx] + " with controller " + controllerIdx + " went through ready up case of PlayerJoin().");
 			if (usingNewPlayerJoinSystem) {
 				PlayInteractionNoise();
 				ReadyPlayer(controllerIdx);
@@ -470,6 +474,7 @@ public class PlayerJoinManager : MonoBehaviour {
 			playersReady[controllersToPlayers[controllerIdx]] = true;
 			selectionOP.playerIs(controllersToPlayers[controllerIdx]);
 			selectionOP.playerIsReady();
+			Debug.Log("Player " + controllersToPlayers[controllerIdx] + " with controller " + controllerIdx + " successfully went through ReadyPlayer().");
 		}
 	}
 
