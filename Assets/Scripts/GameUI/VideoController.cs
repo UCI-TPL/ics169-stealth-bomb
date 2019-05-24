@@ -12,11 +12,12 @@ public class VideoController : MonoBehaviour
 {
     public RawImage image;
     public VideoPlayer vidPlayer;
+    public MainMenuManager mMManager;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        image.gameObject.SetActive(true);
     }
 
     // Update is called once per frame
@@ -36,6 +37,17 @@ public class VideoController : MonoBehaviour
         }
 
         image.texture = vidPlayer.texture;
-        vidPlayer.Play();
+
+        // stops or starts/turns on video player and display texture depending on if player selection screen is active
+        // hopefully will stop/cut down on stuttering when playing video and using localized cameras at the same time
+        if (mMManager.getCurrentPanel() == 1 || mMManager.selectionMenuPanel.activeSelf != true) {
+            if (!vidPlayer.isPlaying)
+                vidPlayer.Play();
+            image.gameObject.SetActive(true);
+        }     
+        else {
+            vidPlayer.Pause();
+            image.gameObject.SetActive(false);
+        }
     }
 }
