@@ -343,8 +343,9 @@ GameObject:
   - component: {fileID: 1215857095}
   - component: {fileID: 1215857097}
   - component: {fileID: 7743166598750051238}
+  - component: {fileID: 4350194043348572411}
   m_Layer: 12
-  m_Name: NewArrow
+  m_Name: Arrow
   m_TagString: Arrow
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -365,7 +366,6 @@ Transform:
   - {fileID: 539810220}
   - {fileID: 259129716}
   - {fileID: 696569057}
-  - {fileID: 232575240194941096}
   - {fileID: 2181697169490929061}
   - {fileID: 140954624094077042}
   m_Father: {fileID: 0}
@@ -517,10 +517,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trail: {fileID: 8348122419703277450}
+  particle: {fileID: 0}
   collider: {fileID: 1215857097}
   projectileRenderer: {fileID: 970677083677697377}
   damageMultiplier: 0
   hitEffect: {fileID: 0}
+--- !u!114 &4350194043348572411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1215857093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 452b135c79c8acc4988f5ffd6cf46bd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderer: {fileID: 140954624094077042}
+  rotationSpeed: 3
 --- !u!1 &1216569940
 GameObject:
   m_ObjectHideFlags: 0
@@ -732,9 +747,10 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 232575240194941096}
   m_Father: {fileID: 1215857094}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4746456878451436330
 MeshFilter:
@@ -807,12 +823,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1417057122701669789}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1.849, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1215857094}
-  m_RootOrder: 4
+  m_Father: {fileID: 140954624094077042}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!96 &8348122419703277450
 TrailRenderer:
@@ -947,7 +963,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1215857094}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &2342429841182654825
 CapsuleCollider:
