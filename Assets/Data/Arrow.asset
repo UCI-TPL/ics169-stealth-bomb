@@ -16,6 +16,6 @@ MonoBehaviour:
     type: 3}
   hitEffect: {fileID: 5779502672186677134, guid: 75c38493b1ef2844685172829b6cf2f9,
     type: 3}
-  lifetime: 0.35
+  lifetime: 2
   spreadAngle: 10
   rotate90: 1
