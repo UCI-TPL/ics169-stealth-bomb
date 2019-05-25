@@ -13,6 +13,7 @@ public class MenuTestingManager : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start() {
+        Shader.SetGlobalTexture(Shader.PropertyToID("_TileDamageMap"), Texture2D.blackTexture);
         players = new Player[4];
         foreach (GameObject g in cameras)
             g.SetActive(false);
