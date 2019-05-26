@@ -435,7 +435,7 @@ public class GameManager : MonoBehaviour {
 
         public bool roundEnding = false;
 
-        private string[] testLevels = { "Map1A_TownMarket", "Map3A_Arena", "Map2A_PitCircle", "Map2B_PitSquare", "Map4A_Islands" };
+        private static string prevLevel = "";
 
         // A random number generator, used to pick a stage from an array in levelNames.
         System.Random rng = new System.Random();
@@ -480,13 +480,22 @@ public class GameManager : MonoBehaviour {
         // Make sure that the levels that are made have only the tile maps before being uploaded.
         public void LoadLevel() {
             State = GameState.Loading;
-            //TileManager.tileManager.LoadLevel("LoadLevel", (Scene loadedScene) => { State = GameState.Ready; roundScene = loadedScene; });
-            //TileManager.tileManager.LoadLevel(testLevels[mapCount++ % testLevels.Length], (Scene loadedScene) => { State = GameState.Ready; roundScene = loadedScene; });
 
-            int groupNum = PickLevelGroup();
-            string[] chosenGroup = instance.levelNames[groupNum].LevelGroup;
-            TileManager.tileManager.LoadLevel(chosenGroup[mapCount++ % chosenGroup.Length], (Scene loadedScene) => { State = GameState.Ready; roundScene = loadedScene; });
-            //Resources.UnloadUnusedAssets();
+            //int groupNum = PickLevelGroup();
+            //string[] chosenGroup = instance.levelNames[groupNum].LevelGroup;
+            //TileManager.tileManager.LoadLevel(chosenGroup[mapCount++ % chosenGroup.Length], (Scene loadedScene) => { State = GameState.Ready; roundScene = loadedScene; });
+
+            List<string> availableLevels = new List<string>();
+            for (int i = Mathf.Min(1, GameManager.instance.rounds.Count / 2); i <= GameManager.instance.rounds.Count / 2; ++i) {
+                availableLevels.AddRange(instance.levelNames[i].LevelGroup);
+            }
+            string ChosenLevel;
+            do {
+                ChosenLevel = availableLevels[UnityEngine.Random.Range(0, availableLevels.Count)];
+            } while (ChosenLevel == prevLevel);
+            prevLevel = ChosenLevel;
+            TileManager.tileManager.LoadLevel(ChosenLevel, (Scene loadedScene) => { State = GameState.Ready; roundScene = loadedScene; });
+            Resources.UnloadUnusedAssets();
         }
 
         // This returns an integer that corresponds to a level group that LoadLevel will load a level
