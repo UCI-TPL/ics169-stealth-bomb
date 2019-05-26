@@ -82,7 +82,7 @@ MonoBehaviour:
   - clip: {fileID: 8300000, guid: 1a35efb791b91954fb6d7d4a3beb0390, type: 3}
     name: Explosion
     volume: 0.1
-    pitch: 1
+    pitch: 0.56
     loop: 0
     source: {fileID: 0}
     output: {fileID: 243211916268380884, guid: 8fb7316e453bb03438b7782f518b5c48, type: 2}
@@ -123,14 +123,14 @@ MonoBehaviour:
     output: {fileID: 243314870721836108, guid: 8fb7316e453bb03438b7782f518b5c48, type: 2}
   - clip: {fileID: 8300000, guid: baea614e6927c8b4fafe8a0a4406bd61, type: 3}
     name: Death2
-    volume: 0.519
+    volume: 0.449
     pitch: 1
     loop: 0
     source: {fileID: 0}
     output: {fileID: 243314870721836108, guid: 8fb7316e453bb03438b7782f518b5c48, type: 2}
   - clip: {fileID: 8300000, guid: cbd281d2de300cd40bc86cf1e0743ebf, type: 3}
     name: Death3
-    volume: 0.301
+    volume: 0.362
     pitch: 1
     loop: 0
     source: {fileID: 0}
@@ -193,7 +193,7 @@ MonoBehaviour:
     output: {fileID: 243314870721836108, guid: 8fb7316e453bb03438b7782f518b5c48, type: 2}
   - clip: {fileID: 8300000, guid: 565c90aee282e13438adccd4799405fe, type: 3}
     name: Icicle
-    volume: 0.5
+    volume: 0.544
     pitch: 1
     loop: 0
     source: {fileID: 0}

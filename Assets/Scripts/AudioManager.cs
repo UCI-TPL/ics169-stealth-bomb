@@ -23,7 +23,10 @@ public class AudioManager : MonoBehaviour {
 
     public bool muted = false;
 
-	// Use this for initialization
+
+    public int[] PlayerBitMap; //will be 0 if the player is not making a sound, will be 1 is
+    
+    // Use this for initialization
 	void Awake () {
 
         if (instance == null)
@@ -52,6 +55,13 @@ public class AudioManager : MonoBehaviour {
             s.source.pitch = s.pitch;
             s.source.loop = s.loop;
             s.source.outputAudioMixerGroup = s.output;
+        }
+        
+        PlayerBitMap = new int[GameManager.instance.players.Length]; //
+
+        for (int i = 0; i < PlayerBitMap.Length; i++) // 0 means that player is not playing any noise
+        {
+            PlayerBitMap[i] = 0;
         }
 
         announcerType = 2;//UnityEngine.Random.Range(1,3); //mickey mouse, old man, etc
@@ -105,6 +115,27 @@ public class AudioManager : MonoBehaviour {
         s.source.Play();
             // Debug.Log("name of audio mixer group for sound " + s.name + ": " + s.source.outputAudioMixerGroup.name);
     }
+    
+    public void Play(string name, int playerNumber) //plays a song specific to a character that should not be interupted
+    {
+        Sound s = Array.Find(sounds, sound => sound.name == name); //this is kinda cool 
+        if (s == null) //error checking, only play a sound if you can find it
+        {
+            Debug.LogError("Sounds " + name + " could not be found");
+            return;
+        }
+        if (!s.source.isPlaying)
+        {
+            s.source.Play();
+            Debug.Log("Turning on this player "+playerNumber);
+        }
+        else
+        {
+            Debug.Log("Nope not today");
+        }
+        PlayerBitMap[playerNumber] = 1;
+        // Debug.Log("name of audio mixer group for sound " + s.name + ": " + s.source.outputAudioMixerGroup.name);
+    }
 
     public void Stop(string name)
     {
@@ -115,6 +146,30 @@ public class AudioManager : MonoBehaviour {
             return;
         }
         s.source.Stop();
+    }
+    
+    
+    public void Stop(string name, int playerNumber) //this is for the laser. A player can only stop their own laser noise
+    {
+        Sound s = Array.Find(sounds, sound => sound.name == name); //this is kinda cool 
+        if (s == null) //error checking, only play a sound if you can find it
+        {
+            Debug.LogError("Sounds " + name + " could not be found");
+            return;
+        }
+        if (PlayerBitMap[playerNumber] == 1) // a player can only stop a sound if that player started it
+        {
+            PlayerBitMap[playerNumber] = 0;
+            bool noOneIsPlaying = true;
+            for (int i = 0; i < PlayerBitMap.Length; i++)
+            {
+                if (PlayerBitMap[i] == 1)
+                    noOneIsPlaying = false;
+                   
+            }
+            if (noOneIsPlaying)
+                s.source.Stop();            
+        }
     }
 
     public void Mute()

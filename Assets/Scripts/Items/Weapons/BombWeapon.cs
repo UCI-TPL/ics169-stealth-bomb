@@ -62,6 +62,7 @@ public class BombWeapon : Weapon {
         if (!alreadyHit)
         {
             GameObject.Instantiate(data.bombPrefab, contactPoint, Quaternion.identity);
+            Debug.Log("Blowing the fuck up");
             alreadyHit = true;
         }
     }
@@ -74,6 +75,8 @@ public class BombWeapon : Weapon {
 
     protected void CreateBomb(Vector3 originBW, Vector3 spawnPoint)
     {
+       // Debug.Log("Creating a bomb");
+       
         Bomb bomb = GameObject.Instantiate(data.bombPrefab, spawnPoint, Quaternion.identity).GetComponent<Bomb>();
         bomb.SetUpBomb(data.explosionSize, data.growthRate);
         // BombWeapon defines Hit. Bomb has an event, which Bomb adds a lambda(?) to as a listener, which is a wrapper for the Hit method defined by Weapon.
