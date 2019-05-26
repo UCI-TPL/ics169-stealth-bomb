@@ -166,7 +166,7 @@ public class TileManager : MonoBehaviour {
     }
 
     private void Update() {
-        if (tileDamageMap != null) {
+        if (GameManager.instance.inGame && tileDamageMap != null) {
             tileDamageMap.Apply();
             Shader.SetGlobalTexture(Shader.PropertyToID("_TileDamageMap"), tileDamageMap);
         }
