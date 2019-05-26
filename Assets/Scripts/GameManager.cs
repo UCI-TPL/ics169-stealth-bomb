@@ -198,7 +198,14 @@ public class GameManager : MonoBehaviour {
             DisablePlayersMovement(1f);
             Text cText = countdownText.GetComponent<Text>();
             countdownText.SetActive(true);
-            cText.text = "READY";
+            switch(rounds[rounds.Count - 1].type) {
+                case GameRound.RoundType.Normal:
+                    cText.text = "READY";
+                    break;
+                case GameRound.RoundType.SuddenDeath:
+                    cText.text = "Sudden Death!";
+                    break;
+            }
             yield return new WaitForSeconds(1f);
             cText.text = "GO!";
             yield return new WaitForSeconds(1f);
@@ -262,9 +269,22 @@ public class GameManager : MonoBehaviour {
         while (inGame) {
             if (rounds.Count <= 0 || !rounds[rounds.Count - 1].isActive) {
                 CheckForWinner();
-                if (Winners.Count > 0) {
+                if (Winners.Count == 1) {
                     GoToWinScene();
                     break;
+                }
+                else if (Winners.Count > 1) {
+                    SuddenDeathRound suddenDeath = new SuddenDeathRound(Winners.ToArray(), rounds.Count);
+                    rounds.Add(suddenDeath);
+                    suddenDeath.LoadLevel();
+                    StartCoroutine(StartGameAfterLoad(suddenDeath));
+                    while (inGame) {
+                        if (rounds.Count <= 0 || !rounds[rounds.Count - 1].isActive) {
+                            GoToWinScene();
+                            yield break;
+                        }
+                        yield return null;
+                    }
                 }
 
                 GameRound newRound = new GameRound(GetActivePlayers(players), rounds.Count);
@@ -386,6 +406,7 @@ public class GameManager : MonoBehaviour {
     }
 
     public class GameRound {
+        public RoundType type = RoundType.Normal;
         public readonly int RoundNumber;
         public Player[] players;
         private Dictionary<BonusExperiance.ExperianceType, Dictionary<Player, List<BonusExperiance>>> experianceGained;
@@ -399,7 +420,7 @@ public class GameManager : MonoBehaviour {
         public bool isActive {
             get { return State != GameState.Finished && State != GameState.Created; }
         }
-        public GameState State { get; private set; }
+        public GameState State { get; protected set; }
         public float StartTime { get; private set; }
         public float ElapsedTime { get { return Time.time - StartTime; } }
         public float RoundEndTime = 0.5f; //time for the camera to focus on the surviving player before the round starts
@@ -616,7 +637,7 @@ public class GameManager : MonoBehaviour {
 
         }
 
-        private void Reset() {
+        protected void Reset() {
             foreach (GameObject g in activePlayersControllers)
                 g.GetComponent<PlayerController>().Destroy();
             foreach (GameObject g in ghostPlayerControllers)
@@ -785,6 +806,21 @@ public class GameManager : MonoBehaviour {
 
         public enum GameState {
             Created, Loading, Ready, Battle, HurryUp, ProgressScreen, Finished
+        }
+
+        public enum RoundType { Normal, SuddenDeath }
+    }
+
+    public class SuddenDeathRound : GameRound {
+        public SuddenDeathRound(Player[] players, int roundNumber) : base(players, roundNumber) {
+            type = RoundType.SuddenDeath;
+        }
+
+        protected override void GameOver() {
+            GameManager.instance.audioManager.Stop(battle_music);
+            GameManager.instance.audioManager.Play("Fanfare");
+            GameManager.instance.Winners = new List<Player> { activePlayersControllers.FirstOrDefault().GetComponent<PlayerController>().player };
+            Reset();
         }
     }
 }

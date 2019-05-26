@@ -105,8 +105,10 @@ public class Player : IHurtable {
     }
 
     public void DisablePlayer(float duration) { //this exists for GameController to access PlayerController
-        controller.DisableMovement(duration);
-        controller.DisableAttack(duration);
+        if (controller != null) {
+            controller.DisableMovement(duration);
+            controller.DisableAttack(duration);
+        }
     }
 
     public void ResetSpecialMove()    { 

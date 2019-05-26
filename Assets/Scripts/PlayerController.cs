@@ -571,6 +571,11 @@ public class PlayerController : MonoBehaviour, IHurtable {
     //    }
     //}
 
+    public void Kill() {
+        if (!invinsible)
+            player.Kill();
+    }
+
     public float Hurt(Player damageDealer, float amount) {
         if (invinsible)
             return 0;
