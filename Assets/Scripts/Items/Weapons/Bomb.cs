@@ -18,9 +18,6 @@ public class Bomb : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
-
-       
-
         if (other.tag == "Player")
         {
             PlayerController oPlayer = other.gameObject.GetComponent<PlayerController>();
@@ -38,7 +35,6 @@ public class Bomb : MonoBehaviour {
                 if (pTransform.name != "Player")
                 {
                     OnHit.Invoke(transform.position, other.transform.position, other.gameObject);
-                    GameManager.instance.audioManager.Play("Explosion");
                 }
             }
         }
@@ -50,5 +46,7 @@ public class Bomb : MonoBehaviour {
         growthRate = g_Rate;
         transform.localScale = Vector3.zero;
         currentGrowth = 0f;
+        Debug.Log("Here we are at "+e_Size + " and "+g_Rate);
+       GameManager.instance.audioManager.Play("Explosion");
     }
 }

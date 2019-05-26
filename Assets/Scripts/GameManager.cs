@@ -187,6 +187,7 @@ public class GameManager : MonoBehaviour {
             Destroy(gameObject);
         UnityEngine.SceneManagement.SceneManager.sceneLoaded += onSceneLoaded;
         battle_music = "Battle";
+        
     }
 
     IEnumerator Countdown()

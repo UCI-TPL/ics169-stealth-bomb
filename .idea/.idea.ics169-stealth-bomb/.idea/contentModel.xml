@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\Nikhil-PC\.Rider2018.3\system\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\Nikhil-PC\.Rider2018.3\system\resharper-host\local\Transient\ReSharperHost\v183\SolutionCaches\_ics169-stealth-bomb.-1720948131.00" t="ExcludeRecursive" />
+    <e p="D:\Projects\Github\ics169-stealth-bomb" t="IncludeRecursive">
+      <e p="Assembly-CSharp-Editor.csproj" t="IncludeRecursive" />
+      <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
+      <e p="Assets" t="Include">
+        <e p="GOBACKTOMENU.cs" t="Include" />
+        <e p="KillPlane.cs" t="Include" />
+        <e p="MainMenuTileMap.cs" t="Include" />
+        <e p="MenuTestingManager.cs" t="Include" />
+        <e p="PointText.cs" t="Include" />
+        <e p="Post-process LWRP AO" t="Include">
+          <e p="Runtime" t="Include">
+            <e p="LWRPAO.cs" t="Include" />
+            <e p="Post-process LWRP AO.Runtime.asmdef" t="Include" />
+          </e>
+        </e>
+        <e p="ProceduralUIImage" t="Include">
+          <e p="Editor" t="Include">
+            <e p="FreeModifierEditor.cs" t="Include" />
+            <e p="ModifierUtility.cs" t="Include" />
+            <e p="ProceduralImageEditor.cs" t="Include" />
+            <e p="ProceduralImageEditorUtility.cs" t="Include" />
+          </e>
+          <e p="Scripts" t="Include">
+            <e p="Attributes" t="Include">
+              <e p="ModifierID.cs" t="Include" />
+            </e>
+            <e p="EmptySprite.cs" t="Include" />
+            <e p="MaterialHelper.cs" t="Include" />
+            <e p="Modifiers" t="Include">
+              <e p="CustomPremadeModifier.cs" t="Include" />
+              <e p="FreeModifier.cs" t="Include" />
+              <e p="OnlyOneEdgeModifier.cs" t="Include" />
+              <e p="RoundModifier.cs" t="Include" />
+              <e p="UniformModifier.cs" t="Include" />
+            </e>
+            <e p="ProceduralImage.cs" t="Include" />
+            <e p="ProceduralImageModifier.cs" t="Include" />
+          </e>
+          <e p="Shaders" t="Include">
+            <e p="ProceduralImageRuntime.shader" t="Include" />
+          </e>
+        </e>
+        <e p="QuickOutline" t="Include">
+          <e p="Readme.txt" t="Include" />
+          <e p="Resources" t="Include">
+            <e p="Shaders" t="Include">
+              <e p="OutlineFill.shader" t="Include" />
+              <e p="OutlineMask.shader" t="Include" />
+            </e>
+          </e>
+          <e p="Scripts" t="Include">
+            <e p="QuickOutline.cs" t="Include" />
+          </e>
+        </e>
+        <e p="Scripts" t="Include">
+          <e p="ActivePlayerManager.cs" t="Include" />
+          <e p="AudioManager.cs" t="Include" />
+          <e p="AudioMenuManager.cs" t="Include" />
+          <e p="Billboard.cs" t="Include" />
+          <e p="BombProjectileAddon.cs" t="Include" />
+          <e p="Buff.cs" t="Include" />
+          <e p="BuffData.cs" t="Include" />
+          <e p="CameraShake.cs" t="Include" />
+          <e p="characterDisplay.cs" t="Include" />
+          <e p="characterSelection.cs" t="Include" />
+          <e p="ColorExtension.cs" t="Include" />
+          <e p="CreateRandomTerrain.cs" t="Include" />
+          <e p="CreditsManager.cs" t="Include" />
+          <e p="creditsRoller.cs" t="Include" />
+          <e p="DashEffect.cs" t="Include" />
+          <e p="Destroy.cs" t="Include" />
+          <e p="Editor" t="Include">
+            <e p="BuffEditor.cs" t="Include" />
+            <e p="CaptureScreenshot.cs" t="Include" />
+            <e p="GravityEditor.cs" t="Include" />
+            <e p="StackingBuffEditor.cs" t="Include" />
+          </e>
+          <e p="FloatingBlockParticles.cs" t="Include" />
+          <e p="FollowTargetsCamera.cs" t="Include" />
+          <e p="GameManager.cs" t="Include" />
+          <e p="GameUI" t="Include">
+            <e p="ButtonController.cs" t="Include" />
+            <e p="Editor" t="Include">
+              <e p="ButtonControllerEditor.cs" t="Include" />
+              <e p="ExperianceSettingsEditor.cs" t="Include" />
+            </e>
+            <e p="ExperiancePoint.cs" t="Include" />
+            <e p="ExperianceSettings.cs" t="Include" />
+            <e p="LayoutElementAspectRatioFitter.cs" t="Include" />
+            <e p="NextRoundInstructionsController.cs" t="Include" />
+            <e p="PauseMenuUI.cs" t="Include" />
+            <e p="PlayerUI.cs" t="Include" />
+            <e p="PowerupDisplayUI.cs" t="Include" />
+            <e p="PowerupShelfUI.cs" t="Include" />
+            <e p="ProgressBarAlphaController.cs" t="Include" />
+            <e p="ProgressBarWinTextController.cs" t="Include" />
+            <e p="ProgressScreen_EXPBar.cs" t="Include" />
+            <e p="ProgressScreenUI.cs" t="Include" />
+            <e p="RankRulerUI.cs" t="Include" />
+            <e p="TouchControlsUI.cs" t="Include" />
+            <e p="UI_FitInParent.cs" t="Include" />
+            <e p="UI_LayoutGroupPercentPadding.cs" t="Include" />
+            <e p="UI_VerticalSpacing.cs" t="Include" />
+            <e p="VideoController.cs" t="Include" />
+          </e>
+          <e p="GameUI.cs" t="Include" />
+          <e p="Ghost" t="Include">
+            <e p="CurveManager.cs" t="Include" />
+            <e p="GhostBomb.cs" t="Include" />
+            <e p="GhostController.cs" t="Include" />
+            <e p="ParabolaController.cs" t="Include" />
+          </e>
+          <e p="GravityController.cs" t="Include" />
+          <e p="GroundEffect.cs" t="Include" />
+          <e p="IHurtable.cs" t="Include" />
+          <e p="InputManager.cs" t="Include" />
+          <e p="ItemContainer.cs" t="Include" />
+          <e p="ItemDebuger.cs" t="Include" />
+          <e p="Items" t="Include">
+            <e p="Buffs" t="Include">
+              <e p="CreateGroundEffect.cs" t="Include" />
+              <e p="CreateGroundEffectData.cs" t="Include" />
+              <e p="CreateShield.cs" t="Include" />
+              <e p="CreateShieldData.cs" t="Include" />
+              <e p="Shield.cs" t="Include" />
+              <e p="ShieldContainer.cs" t="Include" />
+            </e>
+            <e p="Editor" t="Include">
+              <e p="ItemListEditor.cs" t="Include" />
+              <e p="PowerupEditor.cs" t="Include" />
+            </e>
+            <e p="HealthPotionData.cs" t="Include" />
+            <e p="ItemData.cs" t="Include" />
+            <e p="ItemList.cs" t="Include" />
+            <e p="PowerupData.cs" t="Include" />
+            <e p="Weapons" t="Include">
+              <e p="ArrowTiltRenderer.cs" t="Include" />
+              <e p="BlackHole.cs" t="Include" />
+              <e p="BlackHoleWeapon.cs" t="Include" />
+              <e p="BlackHoleWeaponData.cs" t="Include" />
+              <e p="Bomb.cs" t="Include" />
+              <e p="BombWeapon.cs" t="Include" />
+              <e p="BombWeaponData.cs" t="Include" />
+              <e p="Burning.cs" t="Include" />
+              <e p="BurningDamage.cs" t="Include" />
+              <e p="BurningDamageData.cs" t="Include" />
+              <e p="ChargeWeapon.cs" t="Include" />
+              <e p="ChargeWeaponData.cs" t="Include" />
+              <e p="IcicleProjectile.cs" t="Include" />
+              <e p="IcicleWeapon.cs" t="Include" />
+              <e p="IcicleWeaponData.cs" t="Include" />
+              <e p="LaserBeam.cs" t="Include" />
+              <e p="LaserWeapon.cs" t="Include" />
+              <e p="LaserWeaponData.cs" t="Include" />
+              <e p="ProjectileWeapon.cs" t="Include" />
+              <e p="ProjectileWeaponData.cs" t="Include" />
+              <e p="ShotGunEffect.cs" t="Include" />
+              <e p="SkillEffect.cs" t="Include" />
+              <e p="Weapon.cs" t="Include" />
+              <e p="WeaponData.cs" t="Include" />
+              <e p="WeaponParticleRotation.cs" t="Include" />
+              <e p="WeaponParticles.cs" t="Include" />
+            </e>
+          </e>
+          <e p="ItemSpawner.cs" t="Include" />
+          <e p="ItemSpawnIndicator.cs" t="Include" />
+          <e p="KnockbackEffect.cs" t="Include" />
+          <e p="MainMenuManager.cs" t="Include" />
+          <e p="MathHelper.cs" t="Include" />
+          <e p="Moves" t="Include">
+            <e p="DodgeDash.cs" t="Include" />
+            <e p="DodgeData.cs" t="Include" />
+            <e p="SpecialMoveData.cs" t="Include" />
+            <e p="SummonData.cs" t="Include" />
+            <e p="SummonWall.cs" t="Include" />
+          </e>
+          <e p="NormalBuff.cs" t="Include" />
+          <e p="Player.cs" t="Include" />
+          <e p="PlayerAnimator.cs" t="Include" />
+          <e p="PlayerController.cs" t="Include" />
+          <e p="PlayerData.cs" t="Include" />
+          <e p="PlayerJoinManager.cs" t="Include" />
+          <e p="PlayerStats.cs" t="Include" />
+          <e p="PlayerUI_inGame.cs" t="Include" />
+          <e p="populateList.cs" t="Include" />
+          <e p="PositionMarker.cs" t="Include" />
+          <e p="Projectile.cs" t="Include" />
+          <e p="ProjectileData.cs" t="Include" />
+          <e p="SlingshotProjAddon.cs" t="Include" />
+          <e p="StackingBuff.cs" t="Include" />
+          <e p="StackingBuffData.cs" t="Include" />
+          <e p="Tiles" t="Include">
+            <e p="CrumbleTile.cs" t="Include" />
+            <e p="Editor" t="Include">
+              <e p="FixTileDamageEditor.cs" t="Include" />
+              <e p="TileMapEditorInspector.cs" t="Include" />
+            </e>
+            <e p="ItemTile.cs" t="Include" />
+            <e p="MapInfo.cs" t="Include" />
+            <e p="SpawnTile.cs" t="Include" />
+            <e p="Tile.cs" t="Include" />
+            <e p="TileList.cs" t="Include" />
+            <e p="TileManager.cs" t="Include" />
+            <e p="TileManager1.cs" t="Include" />
+            <e p="TileMap.cs" t="Include" />
+            <e p="TileMapEditor.cs" t="Include" />
+            <e p="WaterTile.cs" t="Include" />
+          </e>
+          <e p="Vector3Extension.cs" t="Include" />
+          <e p="WeatherManager.cs" t="Include" />
+          <e p="WinSceneManager.cs" t="Include" />
+        </e>
+        <e p="Shaders" t="Include">
+          <e p="Default_uiOverlay.shader" t="Include" />
+          <e p="Editor" t="Include">
+            <e p="ClassicNoise3D.cs" t="Include" />
+            <e p="MainLightDataNode.cs" t="Include" />
+            <e p="VoronoiNoise3D.cs" t="Include" />
+          </e>
+        </e>
+        <e p="XInputDotNet" t="Include">
+          <e p="Docs.txt" t="Include" />
+          <e p="Examples" t="Include">
+            <e p="XInputTestCS.cs" t="Include" />
+          </e>
+          <e p="MITLicense.txt" t="Include" />
+        </e>
+      </e>
+      <e p="ics169-stealth-bomb.sln" t="IncludeFlat" />
+      <e p="Kino.Postprocessing.csproj" t="IncludeRecursive" />
+      <e p="Kino.Postprocessing.Editor.csproj" t="IncludeRecursive" />
+      <e p="Library" t="ExcludeRecursive" />
+      <e p="obj" t="ExcludeRecursive" />
+      <e p="Packages" t="ExcludeRecursive">
+        <e p="Kino-upm" t="Include">
+          <e p="Editor" t="Include">
+            <e p="IsolineEditor.cs" t="Include" />
+            <e p="Kino.Postprocessing.Editor.asmdef" t="Include" />
+            <e p="OverlayEditor.cs" t="Include" />
+            <e p="RecolorEditor.cs" t="Include" />
+          </e>
+          <e p="Runtime" t="Include">
+            <e p="Invert.cs" t="Include" />
+            <e p="Isoline.cs" t="Include" />
+            <e p="Kino.Postprocessing.asmdef" t="Include" />
+            <e p="Overlay.cs" t="Include" />
+            <e p="PreStackOverlay.cs" t="Include" />
+            <e p="Recolor.cs" t="Include" />
+            <e p="Sharpen.cs" t="Include" />
+            <e p="Streak.cs" t="Include" />
+            <e p="Utility.cs" t="Include" />
+          </e>
+        </e>
+      </e>
+      <e p="Post-processLWRPAO.csproj" t="IncludeRecursive" />
+      <e p="Temp" t="ExcludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+      </e>
+    </e>
+  </component>
+</project>
