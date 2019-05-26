@@ -42,6 +42,8 @@ public class PlayerController : MonoBehaviour, IHurtable {
     public List<Collider> HitBox;
     public GameObject crown;
 
+    public bool invinsible = false;
+
     public float friction = 1f;
     public float airResistance = 1f;
     public float terminalVelocity = 1f;
@@ -570,6 +572,8 @@ public class PlayerController : MonoBehaviour, IHurtable {
     //}
 
     public float Hurt(Player damageDealer, float amount) {
+        if (invinsible)
+            return 0;
         // Debug.Log("hurt vibration for player " + player.playerNumber + " called.");
         input.controllers[player.inputControllerNumber].Vibrate(1.0f, 0.1f);
         StartCoroutine("HurtIndicator");

@@ -262,9 +262,8 @@ public class GameManager : MonoBehaviour {
         while (inGame) {
             if (rounds.Count <= 0 || !rounds[rounds.Count - 1].isActive) {
                 CheckForWinner();
-                if (Winners.Count != 0) {
+                if (Winners.Count > 0) {
                     GoToWinScene();
-                    // ReturnMenu();
                     break;
                 }
 
@@ -576,6 +575,7 @@ public class GameManager : MonoBehaviour {
                         if(g.GetComponent<PlayerController>().gameObject)
                             moveCamera.targets.Remove(g.GetComponent<PlayerController>().gameObject);
                     }
+                    activePlayersControllers.FirstOrDefault().GetComponent<PlayerController>().invinsible = true;
                     yield return new WaitForSeconds(RoundEndTime);
                     
                     GameOver();
@@ -592,7 +592,10 @@ public class GameManager : MonoBehaviour {
             }
         }
 
-        private void GameOver() {
+        /// <summary>
+        /// Invoked when a round ends. Should save all events that happened during the round and prep for the next round
+        /// </summary>
+        protected virtual void GameOver() {
             // Recalculate Experiance Gained
             foreach (KeyValuePair<Player, int> exp in CalculateExperiance())
                 exp.Key.AddExperiance(exp.Value);
